@@ -22,7 +22,7 @@ public class DialogueEntry
 }
 
 [System.Serializable]
-private class DialogueList
+public class DialogueList
 {
     public DialogueEntry[] items;
 }
@@ -30,17 +30,21 @@ private class DialogueList
 public class Episode1Dialogue : MonoBehaviour
 {
     [Header("UI Elements")]
-    public TextMeshProUGUI mainDialogueText;      // Для автора
-    public TextMeshProUGUI aynazDialogueText;     // Для мыслей Айназ
-    public TextMeshProUGUI characterText;         // Имя говорящего
+    public GameObject AuthorDialoguePanel;      // Панель автора (Image + TextMeshPro)
+    public TextMeshProUGUI AuthorCommentText;
+
+    public GameObject AinazDialoguePanel;       // Панель Айназ (Image + TextMeshPro)
+    public TextMeshProUGUI AinazDialogueText;
+    public TextMeshProUGUI AinazNameText;       // Имя сверху панели Айназ
+
     public Button[] choiceButtons;
 
     [Header("Character Controller")]
     public EmotionsController characterController;
 
     [Header("Text Colors")]
-    public Color authorTextColor = Color.gray;
-    public Color aynazTextColor = Color.white;
+    public Color AuthorTextColor = Color.gray;
+    public Color AinazTextColor = Color.white;
 
     private List<DialogueEntry> dialogueEntries;
     private int currentIndex = 0;
@@ -71,33 +75,35 @@ public class Episode1Dialogue : MonoBehaviour
 
         DialogueEntry entry = dialogueEntries[index];
 
-        // Устанавливаем имя говорящего
-        characterText.text = entry.character;
-
-        // Выбираем TextMeshPro для текущего текста
+        // Выбираем панель и текст для текущего персонажа
+        GameObject currentPanel;
+        GameObject otherPanel;
         TextMeshProUGUI currentTextUI;
-        TextMeshProUGUI otherTextUI;
 
         if (entry.character == "Айназ")
         {
-            currentTextUI = aynazDialogueText;
-            otherTextUI = mainDialogueText;
-            currentTextUI.color = aynazTextColor;
+            currentPanel = AinazDialoguePanel;
+            otherPanel = AuthorDialoguePanel;
+            currentTextUI = AinazDialogueText;
+            currentTextUI.color = AinazTextColor;
+
+            // Имя сверху панели Айназ
+            AinazNameText.text = entry.character;
         }
         else
         {
-            currentTextUI = mainDialogueText;
-            otherTextUI = aynazDialogueText;
-            currentTextUI.color = authorTextColor;
+            currentPanel = AuthorDialoguePanel;
+            otherPanel = AinazDialoguePanel;
+            currentTextUI = AuthorCommentText;
+            currentTextUI.color = AuthorTextColor;
         }
 
-        currentTextUI.gameObject.SetActive(true);
-        otherTextUI.gameObject.SetActive(false);
+        currentPanel.SetActive(true);
+        otherPanel.SetActive(false);
 
-        // Устанавливаем позицию текста
-        SetTextPosition(currentTextUI, entry.character);
+        SetPanelPosition(currentPanel.GetComponent<RectTransform>(), entry.character);
 
-        // Устанавливаем эмоцию только для Айназ
+        // Эмоции только для Айназ
         if (entry.character == "Айназ")
         {
             switch (entry.emotion)
@@ -132,7 +138,7 @@ public class Episode1Dialogue : MonoBehaviour
             }
         }
 
-        // Печатаем текст с эффектом печати
+        // Эффект печатающего текста
         yield return StartCoroutine(TypewriterEffect(currentTextUI, entry.text));
 
         // Если нет выбора, ждем рассчитанное время и продолжаем
@@ -145,7 +151,6 @@ public class Episode1Dialogue : MonoBehaviour
         }
     }
 
-    // Эффект печатающего текста
     IEnumerator TypewriterEffect(TextMeshProUGUI textUI, string fullText, float charDelay = 0.02f)
     {
         textUI.text = "";
@@ -156,7 +161,6 @@ public class Episode1Dialogue : MonoBehaviour
         }
     }
 
-    // Расчет времени текста по словам и эмоции
     float CalculateDuration(string text, string emotion)
     {
         int wordCount = text.Split(' ').Length;
@@ -173,22 +177,18 @@ public class Episode1Dialogue : MonoBehaviour
         return Mathf.Clamp(baseTime, 2f, 12f);
     }
 
-    // Установка позиции текста
-    void SetTextPosition(TextMeshProUGUI textUI, string character)
+    void SetPanelPosition(RectTransform rect, string character)
     {
-        RectTransform rect = textUI.GetComponent<RectTransform>();
-
         if (character == "Айназ")
         {
-            rect.anchorMin = new Vector2(0.7f, 0.3f); // справа
+            rect.anchorMin = new Vector2(0.7f, 0.3f); 
             rect.anchorMax = new Vector2(0.95f, 0.6f);
         }
         else
         {
-            rect.anchorMin = new Vector2(0.3f, 0.3f); // по центру
+            rect.anchorMin = new Vector2(0.3f, 0.3f);
             rect.anchorMax = new Vector2(0.7f, 0.6f);
         }
-
         rect.anchoredPosition = Vector2.zero;
     }
 }

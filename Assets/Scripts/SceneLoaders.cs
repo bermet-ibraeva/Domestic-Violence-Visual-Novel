@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -8,13 +9,21 @@ public class SceneLoader : MonoBehaviour
     // Start the game → load Episode1
     public void StartGame()
     {
-        SceneManager.LoadScene(sceneToLoad);
+        Debug.Log("StartGame called! Loading scene: " + sceneToLoad);
+        StartCoroutine(LoadSceneNextFrame(sceneToLoad));
     }
 
     // Restart current scene
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        StartCoroutine(LoadSceneNextFrame(SceneManager.GetActiveScene().name));
+    }
+
+    // Coroutine to load scene safely
+    private IEnumerator LoadSceneNextFrame(string sceneName)
+    {
+        yield return null; // Wait one frame so EventSystem finishes
+        SceneManager.LoadScene(sceneName);
     }
 
     // Quit application
