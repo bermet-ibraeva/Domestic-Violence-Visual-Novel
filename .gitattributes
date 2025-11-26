@@ -1,0 +1,14 @@
+# Unity generated files
+*.cs text diff=csharp
+*.shader text
+*.txt text
+*.json text
+*.md text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.fbx binary
+*.prefab binary
+*.unity binary
+*.mat binary
