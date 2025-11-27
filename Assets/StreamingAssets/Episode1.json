@@ -1,36 +1,108 @@
-[
-  {
-    "character": "Айназ",
-    "text": "Опять… Они ссорятся почти каждый вечер. Может, просто поругались? Но это звучит так страшно?",
-    "emotion": "Calm",
-    "options": []
+{
+  "episode": "Тихие крики",
+  "variables": {
+    "Сострадание": 0,
+    "Послушание": 0,
+    "Сопротивление": 0,
+    "Тревога": 0
   },
-  {
-    "character": "Айназ",
-    "text": "Слышен крик Ильяза и плач Жамили. Айназ замирает.",
-    "emotion": "Scared",
-    "options": [
-      {"text": "Прислушаться внимательнее", "nextIndex": 2},
-      {"text": "Сделать вид, что не слышала", "nextIndex": 3},
-      {"text": "Позвонить Гулдане", "nextIndex": 4}
-    ]
-  },
-  {
-    "character": "Айназ",
-    "text": "Она ускоряет шаг и старается не смотреть на дом.",
-    "emotion": "Calm",
-    "options": []
-  },
-  {
-    "character": "Айназ",
-    "text": "Звонок не отвечает, потом короткий гудок.",
-    "emotion": "Sad",
-    "options": []
-  },
-  {
-    "character": "Автор",
-    "text": "Айназ решает, что нужно действовать осторожно.",
-    "emotion": "Calm",
-    "options": []
-  }
-]
+  "nodes": [
+    {
+      "nodeId": "scene_1_start",
+      "background": "evening_street",
+      "character": "Айназ",
+      "emotion": "Sad",
+      "text": "«Опять… Они ссорятся почти каждый вечер. Может, просто поругались? Но почему мне страшно?»",
+      "choices": [
+        { "text": "Прислушаться внимательнее", "nextNode": "scene_1_listen" },
+        { "text": "Пройти мимо", "nextNode": "scene_1_ignore" },
+        { "text": "Позвонить Гулдане", "nextNode": "scene_1_call" }
+      ]
+    },
+
+    {
+      "nodeId": "scene_1_listen",
+      "text": "Слышен крик Ильяза и плач Жамили. Айназ замирает.",
+      "emotion": "Scared",
+      "effects": { "Сострадание": 1 },
+      "nextNode": "scene_2_start"
+    },
+    {
+      "nodeId": "scene_1_ignore",
+      "text": "Она ускоряет шаг и старается не смотреть на дом.",
+      "emotion": "Calm",
+      "effects": { "Послушание": 1 },
+      "nextNode": "scene_2_start"
+    },
+    {
+      "nodeId": "scene_1_call",
+      "text": "Звонок не отвечает, потом короткий гудок.",
+      "emotion": "Sad",
+      "effects": { "Сострадание": 1, "Тревога": 1 },
+      "nextNode": "scene_2_start"
+    },
+
+    {
+      "nodeId": "scene_2_start",
+      "background": "school_yard",
+      "character": "Айназ",
+      "emotion": "Sad",
+      "text": "«Ты в порядке? Ты плакала?»",
+      "choices": [
+        { "text": "Это неправильно", "nextNode": "scene_2_wrong" },
+        { "text": "Я помогу", "nextNode": "scene_2_help" },
+        { "text": "Пойдём поедим", "nextNode": "scene_2_ignore" }
+      ]
+    },
+
+    {
+      "nodeId": "scene_2_wrong",
+      "character": "Гулдана",
+      "text": "«Ты ничего не понимаешь. Это их дело.»",
+      "emotion": "Calm",
+      "effects": { "Сопротивление": 1 },
+      "nextNode": "scene_3_start"
+    },
+    {
+      "nodeId": "scene_2_help",
+      "character": "Гулдана",
+      "text": "Она долго молчит, потом кивает.",
+      "emotion": "Sad",
+      "effects": { "Сострадание": 1, "Доверие": 1 },
+      "nextNode": "scene_3_start"
+    },
+    {
+      "nodeId": "scene_2_ignore",
+      "character": "Гулдана",
+      "text": "Гулдана выдыхает, тема закрыта.",
+      "emotion": "Calm",
+      "effects": { "Послушание": 1 },
+      "nextNode": "scene_3_start"
+    },
+
+    {
+      "nodeId": "scene_5_phone",
+      "text": "Она ждёт долго, ответа нет, но поступила правильно.",
+      "emotion": "Calm",
+      "effects": { "Сопротивление": 2, "Сострадание": 1 },
+      "nextNode": "ending"
+    },
+    {
+      "nodeId": "ending",
+      "background": "morning_yard",
+      "character": "Айназ",
+      "text": "«Если все будут молчать — ничего не изменится.»",
+      "emotion": "Calm",
+      "requirements": [
+        {
+          "condition": "Сопротивление >= Послушание",
+          "ending": "good_ending"
+        },
+        {
+          "condition": "Послушание > Сопротивление",
+          "ending": "silent_ending"
+        }
+      ]
+    }
+  ]
+}

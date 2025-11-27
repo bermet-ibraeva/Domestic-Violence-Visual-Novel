@@ -30,12 +30,12 @@ public class DialogueList
 public class Episode1Dialogue : MonoBehaviour
 {
     [Header("UI Elements")]
-    public GameObject AuthorDialoguePanel;      // Панель автора (Image + TextMeshPro)
+    public GameObject AuthorDialoguePanel;
     public TextMeshProUGUI AuthorCommentText;
 
-    public GameObject AinazDialoguePanel;       // Панель Айназ (Image + TextMeshPro)
+    public GameObject AinazDialoguePanel;
     public TextMeshProUGUI AinazDialogueText;
-    public TextMeshProUGUI AinazNameText;       // Имя сверху панели Айназ
+    public TextMeshProUGUI AinazNameText;
 
     public Button[] choiceButtons;
 
@@ -76,35 +76,34 @@ public class Episode1Dialogue : MonoBehaviour
         DialogueEntry entry = dialogueEntries[index];
 
         // Выбираем панель и текст для текущего персонажа
-        GameObject currentPanel;
-        GameObject otherPanel;
-        TextMeshProUGUI currentTextUI;
+        GameObject currentPanel = null;
+        GameObject otherPanel = null;
+        TextMeshProUGUI currentTextUI = null;
 
         if (entry.character == "Айназ")
         {
             currentPanel = AinazDialoguePanel;
             otherPanel = AuthorDialoguePanel;
             currentTextUI = AinazDialogueText;
-            currentTextUI.color = AinazTextColor;
-
-            // Имя сверху панели Айназ
-            AinazNameText.text = entry.character;
+            if(currentTextUI != null) currentTextUI.color = AinazTextColor;
+            if(AinazNameText != null) AinazNameText.text = entry.character;
         }
         else
         {
             currentPanel = AuthorDialoguePanel;
             otherPanel = AinazDialoguePanel;
             currentTextUI = AuthorCommentText;
-            currentTextUI.color = AuthorTextColor;
+            if(currentTextUI != null) currentTextUI.color = AuthorTextColor;
         }
 
-        currentPanel.SetActive(true);
-        otherPanel.SetActive(false);
+        if(currentPanel != null) currentPanel.SetActive(true);
+        if(otherPanel != null) otherPanel.SetActive(false);
 
-        SetPanelPosition(currentPanel.GetComponent<RectTransform>(), entry.character);
+        if(currentPanel != null)
+            SetPanelPosition(currentPanel.GetComponent<RectTransform>(), entry.character);
 
         // Эмоции только для Айназ
-        if (entry.character == "Айназ")
+        if (entry.character == "Айназ" && characterController != null)
         {
             switch (entry.emotion)
             {
@@ -120,10 +119,17 @@ public class Episode1Dialogue : MonoBehaviour
         bool hasOptions = entry.options != null && entry.options.Count > 0;
         for (int i = 0; i < choiceButtons.Length; i++)
         {
+            if (choiceButtons[i] == null) continue;
+
+            TextMeshProUGUI buttonText = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+
             if (hasOptions && i < entry.options.Count)
             {
                 choiceButtons[i].gameObject.SetActive(true);
-                choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = entry.options[i].text;
+
+                if(buttonText != null)
+                    buttonText.text = entry.options[i].text;
+
                 int nextIndex = entry.options[i].nextIndex;
                 choiceButtons[i].onClick.RemoveAllListeners();
                 choiceButtons[i].onClick.AddListener(() =>
@@ -136,10 +142,18 @@ public class Episode1Dialogue : MonoBehaviour
             {
                 choiceButtons[i].gameObject.SetActive(false);
             }
+
+            // Обеспечиваем, что кнопка имеет Image для Raycast
+            if(choiceButtons[i].GetComponent<Image>() == null)
+            {
+                Image img = choiceButtons[i].gameObject.AddComponent<Image>();
+                img.color = new Color(1,1,1,0); // прозрачная
+            }
         }
 
         // Эффект печатающего текста
-        yield return StartCoroutine(TypewriterEffect(currentTextUI, entry.text));
+        if(currentTextUI != null)
+            yield return StartCoroutine(TypewriterEffect(currentTextUI, entry.text));
 
         // Если нет выбора, ждем рассчитанное время и продолжаем
         if (!hasOptions)
@@ -153,6 +167,8 @@ public class Episode1Dialogue : MonoBehaviour
 
     IEnumerator TypewriterEffect(TextMeshProUGUI textUI, string fullText, float charDelay = 0.02f)
     {
+        if(textUI == null) yield break;
+
         textUI.text = "";
         foreach (char c in fullText)
         {
@@ -179,6 +195,8 @@ public class Episode1Dialogue : MonoBehaviour
 
     void SetPanelPosition(RectTransform rect, string character)
     {
+        if(rect == null) return;
+
         if (character == "Айназ")
         {
             rect.anchorMin = new Vector2(0.7f, 0.3f); 

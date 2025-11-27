@@ -9,7 +9,7 @@ public class SceneLoader : MonoBehaviour
     // Start the game → load Episode1
     public void StartGame()
     {
-        Debug.Log("StartGame called! Loading scene: " + sceneToLoad);
+        StopAllCoroutines();
         StartCoroutine(LoadSceneNextFrame(sceneToLoad));
     }
 
@@ -22,7 +22,7 @@ public class SceneLoader : MonoBehaviour
     // Coroutine to load scene safely
     private IEnumerator LoadSceneNextFrame(string sceneName)
     {
-        yield return null; // Wait one frame so EventSystem finishes
+        yield return null; // wait one frame to let EventSystem finish
         SceneManager.LoadScene(sceneName);
     }
 
@@ -30,6 +30,6 @@ public class SceneLoader : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-        Debug.Log("Game quit requested"); 
+        Debug.Log("Game quit requested");
     }
 }
