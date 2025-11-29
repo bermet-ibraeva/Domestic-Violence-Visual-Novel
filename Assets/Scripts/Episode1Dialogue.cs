@@ -96,6 +96,9 @@ public class Episode1Dialogue : MonoBehaviour
     public Color AinazColor = Color.white;
     public Color OtherColor = Color.white;
 
+    [Header("Backgrounds")]
+    public BackgroundController backgroundController;
+
     [Header("Episode")]
     public string jsonFileName = "episode1.json";
     public string startNodeId = "scene_1_start";
@@ -111,6 +114,13 @@ public class Episode1Dialogue : MonoBehaviour
     void Start()
     {
         LoadEpisode();
+
+        if (nodeDict == null || nodeDict.Count == 0)
+        {
+            Debug.LogError("Episode1Dialogue: nodeDict is empty, cannot start dialogue");
+            return;
+        }
+
         ShowNode(startNodeId);
     }
 
@@ -183,7 +193,15 @@ public class Episode1Dialogue : MonoBehaviour
         currentNode = node;
         waitingForAdvance = false;
 
+        Debug.Log($"[DIALOGUE] ShowNode: {nodeId}, background = {node.background}");
+
         ApplyEffects(node);
+
+        // ---------- ФОН ----------
+        if (backgroundController != null && !string.IsNullOrEmpty(node.background))
+        {
+            backgroundController.SetBackground(node.background);
+        }
 
         // Скрываем всё
         AuthorPanel?.SetActive(false);
@@ -202,7 +220,6 @@ public class Episode1Dialogue : MonoBehaviour
             var auto = AuthorPanel.GetComponent<AutoResizePanel>();
             if (auto != null) auto.RefreshSize();
         }
-
         // ---------- АЙНАЗ ----------
         else if (node.character == "Айназ")
         {
@@ -218,7 +235,6 @@ public class Episode1Dialogue : MonoBehaviour
 
             ApplyEmotion(LeftEmotions, node.emotion);
         }
-
         // ---------- ДРУГОЙ ПЕРСОНАЖ ----------
         else
         {

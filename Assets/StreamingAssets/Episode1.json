@@ -11,7 +11,7 @@
 
     {
       "nodeId": "scene_1_start",
-      "background": "evening_street",
+      "background": "1",
       "character": "Автор",
       "emotion": "Calm",
       "text": "Вечер. Холодный воздух. Айназ идёт домой из школы. Из соседнего дома доносится звук разбитой тарелки и женский плач.",
@@ -20,6 +20,7 @@
 
     {
       "nodeId": "scene_1_ainaz_thoughts",
+      "background": "1",
       "character": "Айназ",
       "emotion": "Sad",
       "text": "Опять… Они ссорятся почти каждый вечер. Может, просто поругались?",
@@ -32,6 +33,7 @@
 
     {
       "nodeId": "scene_1_listen",
+      "background": "1",
       "character": "Автор",
       "emotion": "Scared",
       "text": "Сквозь стены слышен крик Ильяза и плач Жамили. Айназ замирает.",
@@ -41,6 +43,7 @@
 
     {
       "nodeId": "scene_1_ignore",
+      "background": "1",
       "character": "Автор",
       "emotion": "Calm",
       "text": "Айназ ускоряет шаг и старается не смотреть на дом. Сердце всё равно бьётся быстрее.",
@@ -50,6 +53,7 @@
 
     {
       "nodeId": "scene_1_call",
+      "background": "1",
       "character": "Автор",
       "emotion": "Sad",
       "text": "Звонок Гулдане долго не отвечает. Потом — короткий гудок.",
@@ -59,7 +63,7 @@
 
     {
       "nodeId": "scene_2_start",
-      "background": "school_yard",
+      "background": "2",
       "character": "Автор",
       "emotion": "Calm",
       "text": "Утро. Школьный двор. На перемене Айназ замечает Гулдану — глаза красные, она стоит в стороне.",
@@ -68,6 +72,7 @@
 
     {
       "nodeId": "scene_2_dialogue1",
+      "background": "2",
       "character": "Айназ",
       "emotion": "Sad",
       "text": "Ты в порядке? Ты плакала?",
@@ -76,6 +81,7 @@
 
     {
       "nodeId": "scene_2_guldana_reply",
+      "background": "2",
       "character": "Гулдана",
       "emotion": "Sad",
       "text": "Ничего… просто мама с папой опять поругались. Он ходит злой.",
@@ -88,6 +94,7 @@
 
     {
       "nodeId": "scene_2_wrong",
+      "background": "2",
       "character": "Айназ",
       "emotion": "Calm",
       "text": "Это неправильно, если он её бьёт.",
@@ -96,6 +103,7 @@
 
     {
       "nodeId": "scene_2_wrong_guldana",
+      "background": "2",
       "character": "Гулдана",
       "emotion": "Calm",
       "text": "Ты ничего не понимаешь. Это их дело.",
@@ -105,6 +113,7 @@
 
     {
       "nodeId": "scene_2_help",
+      "background": "2",
       "character": "Айназ",
       "emotion": "Sad",
       "text": "Хочешь, я помогу? Можно ведь поговорить с кем-то…",
@@ -113,6 +122,7 @@
 
     {
       "nodeId": "scene_2_help_guldana",
+      "background": "2",
       "character": "Гулдана",
       "emotion": "Sad",
       "text": "Гулдана долго молчит, потом слегка кивает.",
@@ -122,6 +132,7 @@
 
     {
       "nodeId": "scene_2_ignore",
+      "background": "2",
       "character": "Айназ",
       "emotion": "Calm",
       "text": "Пойдём в столовую, поедим… забудь об этом.",
@@ -130,6 +141,7 @@
 
     {
       "nodeId": "scene_2_ignore_guldana",
+      "background": "2",
       "character": "Гулдана",
       "emotion": "Calm",
       "text": "Гулдана выдыхает, пытаясь улыбнуться: «Ладно… Давай просто поедим.»",
@@ -139,9 +151,229 @@
 
     {
       "nodeId": "scene_3_start",
+      "background": "3",
       "character": "Автор",
       "emotion": "Calm",
-      "text": "Продолжение эпизода скоро будет добавлено.",
+      "text": "После уроков в полутёмной раздевалке Айназ собирает вещи. К ней тихо подходит Гулдана, глядя в пол.",
+      "nextNode": "scene_3_guldana_confess"
+    },
+
+    {
+      "nodeId": "scene_3_guldana_confess",
+      "background": "3",
+      "character": "Гулдана",
+      "emotion": "Sad",
+      "text": "Он вчера ударил маму… сильно. Она сказала, чтобы я никому не рассказывала. Если кто узнает — будет стыдно, люди начнут говорить.",
+      "choices": [
+        { "text": "Нужно рассказать взрослым. Это не позор, это опасно", "nextNode": "scene_3_tell_adults" },
+        { "text": "Хочешь, я просто побуду с тобой? Не нужно решать сейчас", "nextNode": "scene_3_stay_with" },
+        { "text": "Может, лучше не вмешиваться, всё равно никто не поверит", "nextNode": "scene_3_not_involve" }
+      ]
+    },
+
+    {
+      "nodeId": "scene_3_tell_adults",
+      "background": "3",
+      "character": "Айназ",
+      "emotion": "Calm",
+      "text": "Нужно рассказать взрослым. Это не позор, это опасно.",
+      "nextNode": "scene_3_tell_adults_guldana"
+    },
+
+    {
+      "nodeId": "scene_3_tell_adults_guldana",
+      "background": "3",
+      "character": "Гулдана",
+      "emotion": "Sad",
+      "text": "Мама скажет, что это дела семьи… но, может, ты права.",
+      "effects": { "Сопротивление": 1, "Сострадание": 1 },
+      "nextNode": "scene_4_start"
+    },
+
+    {
+      "nodeId": "scene_3_stay_with",
+      "background": "3",
+      "character": "Айназ",
+      "emotion": "Sad",
+      "text": "Хочешь, я просто побуду с тобой? Не нужно решать сейчас. Мы можем просто посидеть вместе.",
+      "nextNode": "scene_3_stay_with_guldana"
+    },
+
+    {
+      "nodeId": "scene_3_stay_with_guldana",
+      "background": "3",
+      "character": "Гулдана",
+      "emotion": "Sad",
+      "text": "Гулдана выдыхает, плечи немного расслабляются: «Спасибо… Останься чуть-чуть.»",
+      "effects": { "Сострадание": 1 },
+      "nextNode": "scene_4_start"
+    },
+
+    {
+      "nodeId": "scene_3_not_involve",
+      "background": "3",
+      "character": "Айназ",
+      "emotion": "Calm",
+      "text": "Может, лучше не вмешиваться… Всё равно никто не поверит.",
+      "nextNode": "scene_3_not_involve_guldana"
+    },
+
+    {
+      "nodeId": "scene_3_not_involve_guldana",
+      "background": "3",
+      "character": "Гулдана",
+      "emotion": "Sad",
+      "text": "Гулдана грустно улыбается: «Вот и ты так…»",
+      "effects": { "Послушание": 1 },
+      "nextNode": "scene_4_start"
+    },
+
+    {
+      "nodeId": "scene_4_start",
+      "background": "4",
+      "character": "Автор",
+      "emotion": "Calm",
+      "text": "Позже, в пустом классе, учительница собирает бумаги. Айназ колеблется у двери, потом решается зайти.",
+      "nextNode": "scene_4_ainaz_start"
+    },
+
+    {
+      "nodeId": "scene_4_ainaz_start",
+      "background": "4",
+      "character": "Айназ",
+      "emotion": "Sad",
+      "text": "Можно поговорить? У Гулданы дома что-то происходит. Кажется, там насилие.",
+      "nextNode": "scene_4_teacher_reply"
+    },
+
+    {
+      "nodeId": "scene_4_teacher_reply",
+      "background": "4",
+      "character": "Анара Айзатовна",
+      "emotion": "Calm",
+      "text": "Ты уверена? Иногда дети всё преувеличивают. Это семейное дело. Не вмешивайся, они помирятся, а ты станешь крайней.",
+      "choices": [
+        { "text": "Но если молчать, всё станет хуже", "nextNode": "scene_4_speak_up" },
+        { "text": "Наверное, вы правы…", "nextNode": "scene_4_agree" },
+        { "text": "Кивнуть и уйти молча", "nextNode": "scene_4_silent_leave" }
+      ]
+    },
+
+    {
+      "nodeId": "scene_4_speak_up",
+      "background": "4",
+      "character": "Айназ",
+      "emotion": "Calm",
+      "text": "Но если молчать, всё станет хуже.",
+      "nextNode": "scene_4_speak_up_teacher"
+    },
+
+    {
+      "nodeId": "scene_4_speak_up_teacher",
+      "background": "4",
+      "character": "Анара Айзатовна",
+      "emotion": "Calm",
+      "text": "Учительница вздыхает: «Хорошо, я подумаю, что можно сделать.»",
+      "effects": { "Сопротивление": 1, "Сострадание": 1 },
+      "nextNode": "scene_5_start"
+    },
+
+    {
+      "nodeId": "scene_4_agree",
+      "background": "4",
+      "character": "Айназ",
+      "emotion": "Sad",
+      "text": "Наверное, вы правы…",
+      "nextNode": "scene_4_agree_teacher"
+    },
+
+    {
+      "nodeId": "scene_4_agree_teacher",
+      "background": "4",
+      "character": "Анара Айзатовна",
+      "emotion": "Calm",
+      "text": "Вот и правильно. Не выноси сор из избы.",
+      "effects": { "Послушание": 1 },
+      "nextNode": "scene_5_start"
+    },
+
+    {
+      "nodeId": "scene_4_silent_leave",
+      "background": "4",
+      "character": "Автор",
+      "emotion": "Sad",
+      "text": "Айназ только кивает, не находя слов, и быстро выходит из класса. В груди тяжело.",
+      "effects": { "Послушание": 1 },
+      "nextNode": "scene_5_start"
+    },
+
+    {
+      "nodeId": "scene_5_start",
+      "background": "5",
+      "character": "Автор",
+      "emotion": "Sad",
+      "text": "Ночью в комнате Айназ темно. За окном виден дом Гулданы. Сквозь стекло доносятся приглушённые крики и рыдания.",
+      "nextNode": "scene_5_thoughts"
+    },
+
+    {
+      "nodeId": "scene_5_thoughts",
+      "background": "5",
+      "character": "Айназ",
+      "emotion": "Sad",
+      "text": "Учитель сказала — не вмешивайся. Но если все будут молчать, что тогда?",
+      "choices": [
+        { "text": "Позвонить в полицию или на горячую линию", "nextNode": "scene_5_call_police" },
+        { "text": "Написать Гулдане: «Ты в порядке?»", "nextNode": "scene_5_text_guldana" },
+        { "text": "Сделать вид, что не слышит", "nextNode": "scene_5_ignore" }
+      ]
+    },
+
+    {
+      "nodeId": "scene_5_call_police",
+      "background": "5",
+      "character": "Автор",
+      "emotion": "Scared",
+      "text": "Айназ дрожащими руками набирает номер полиции или горячей линии. Она долго слушает гудки. Ответа нет, но внутри остаётся чувство, что она попыталась помочь.",
+      "effects": { "Сопротивление": 2, "Сострадание": 1 },
+      "nextNode": "episode_1_morning"
+    },
+
+    {
+      "nodeId": "scene_5_text_guldana",
+      "background": "5",
+      "character": "Автор",
+      "emotion": "Sad",
+      "text": "Айназ пишет сообщение: «Ты в порядке?» Ответ приходит почти сразу: «Всё нормально». Но точку в конце предложения словно давит тяжёлый камень.",
+      "effects": { "Сострадание": 1 },
+      "nextNode": "episode_1_morning"
+    },
+
+    {
+      "nodeId": "scene_5_ignore",
+      "background": "5",
+      "character": "Автор",
+      "emotion": "Sad",
+      "text": "Айназ отворачивается от окна, надевает наушники и делает звук громче, стараясь не слышать происходящее.",
+      "effects": { "Послушание": 2 },
+      "nextNode": "episode_1_morning"
+    },
+
+    {
+      "nodeId": "episode_1_morning",
+      "background": "2",
+      "character": "Автор",
+      "emotion": "Calm",
+      "text": "Утро. Двор тихий, солнце медленно встаёт над крышами. Дом Гулданы снаружи выглядит как обычно — будто ночью ничего не случилось.",
+      "nextNode": "episode_1_final_thoughts"
+    },
+
+    {
+      "nodeId": "episode_1_final_thoughts",
+      "background": "2",
+      "character": "Айназ",
+      "emotion": "Sad",
+      "text": "Люди говорят: «Не вмешивайся, не позорься, что скажет народ». Но если все будут молчать — ничего не изменится.",
       "nextNode": ""
     }
 
