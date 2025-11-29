@@ -4,66 +4,6 @@ using TMPro;
 using UnityEngine.UI;
 using System.IO;
 
-#region JSON STRUCTURES
-
-[System.Serializable]
-public class EpisodeData
-{
-    public string episode;
-    public Variables variables;
-    public List<DialogueNode> nodes;
-}
-
-[System.Serializable]
-public class Variables
-{
-    public int Сострадание;
-    public int Послушание;
-    public int Сопротивление;
-    public int Тревога;
-    public int Доверие;
-}
-
-[System.Serializable]
-public class DialogueNode
-{
-    public string nodeId;
-    public string background;
-    public string character;
-    public string emotion;
-    public string text;
-    public List<Choice> choices;
-    public Effects effects;
-    public string nextNode;
-    public Requirement[] requirements;
-}
-
-[System.Serializable]
-public class Choice
-{
-    public string text;
-    public string nextNode;
-}
-
-[System.Serializable]
-public class Effects
-{
-    public int Сострадание;
-    public int Послушание;
-    public int Сопротивление;
-    public int Тревога;
-    public int Доверие;
-}
-
-[System.Serializable]
-public class Requirement
-{
-    public string condition;
-    public string ending;
-}
-
-#endregion
-
 public class Episode1Dialogue : MonoBehaviour
 {
     [Header("Author UI (центр, без имени)")]
@@ -85,10 +25,10 @@ public class Episode1Dialogue : MonoBehaviour
     public Button[] choiceButtons;
 
     [Header("Characters")]
-    public GameObject LeftCharacter;
+    public GameObject LeftCharacter;          // Айназ
     public EmotionsController LeftEmotions;
 
-    public GameObject RightCharacter;
+    public GameObject RightCharacter;        // другие персонажи
     public EmotionsController RightEmotions;
 
     [Header("Text Colors")]

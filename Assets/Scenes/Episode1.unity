@@ -324,6 +324,7 @@ MonoBehaviour:
   AuthorColor: {r: 0.0037735105, g: 0.0035527959, b: 0.0035527959, a: 1}
   AinazColor: {r: 0.03396219, g: 0.031463083, b: 0.031463083, a: 1}
   OtherColor: {r: 0.05660379, g: 0.0541474, b: 0.0541474, a: 1}
+  backgroundController: {fileID: 2009236193}
   jsonFileName: episode1.json
   startNodeId: scene_1_start
 --- !u!1 &251045528
@@ -2481,7 +2482,7 @@ MonoBehaviour:
   - id: 3
     sprite: {fileID: 21300000, guid: 943c1223a38b3964e90565b07dd9f92d, type: 3}
   - id: 4
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: d45ad68d985162044a1e388a815f61b5, type: 3}
   - id: 5
     sprite: {fileID: 21300000, guid: 77271d54960309043a8aaad9867591d9, type: 3}
 --- !u!1660057539 &9223372036854775807

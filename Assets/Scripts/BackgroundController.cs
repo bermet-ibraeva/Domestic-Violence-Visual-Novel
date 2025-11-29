@@ -7,12 +7,12 @@ public class BackgroundController : MonoBehaviour
     [System.Serializable]
     public class BackgroundSprite
     {
-        public string id;       // "evening_street", "school_yard" и т.д.
-        public Sprite sprite;   // сам спрайт
+        public string id;      // "1", "2", "3", "4", "5"
+        public Sprite sprite;
     }
 
-    public Image backgroundImage;               // Image на Canvas
-    public List<BackgroundSprite> backgrounds;  // список id → sprite
+    public Image backgroundImage;
+    public List<BackgroundSprite> backgrounds;
 
     private Dictionary<string, Sprite> bgDict;
 
@@ -41,7 +41,10 @@ public class BackgroundController : MonoBehaviour
 
         if (bgDict.TryGetValue(id, out Sprite sprite))
         {
-            backgroundImage.sprite = sprite;
+            if (backgroundImage != null)
+                backgroundImage.sprite = sprite;
+            else
+                Debug.LogWarning("[BG] backgroundImage is NULL");
         }
         else
         {
