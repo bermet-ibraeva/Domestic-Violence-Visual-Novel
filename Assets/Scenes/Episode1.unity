@@ -487,8 +487,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -302.91, y: -12.785}
-  m_SizeDelta: {x: 605.82, y: 548.43}
+  m_AnchoredPosition: {x: -286, y: 78.351}
+  m_SizeDelta: {x: 435.4318, y: 472.702}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &394096380
 MonoBehaviour:
@@ -510,7 +510,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 92b394d5746315248b4907007ac63b38, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4534424c151e00f49b3084c071297e1c, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -654,7 +654,7 @@ MonoBehaviour:
   happySprite: {fileID: 21300000, guid: f6a8f6b7737b2df4ea3bc6f615eb242e, type: 3}
   sadSprite: {fileID: 21300000, guid: 7cd4e09aa85d28a4dbc97389348846b8, type: 3}
   scaredSprite: {fileID: 21300000, guid: 888db20710444444690aceb45f48c0c9, type: 3}
-  calmSprite: {fileID: 21300000, guid: 92b394d5746315248b4907007ac63b38, type: 3}
+  calmSprite: {fileID: 21300000, guid: 4534424c151e00f49b3084c071297e1c, type: 3}
 --- !u!114 &603450852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1805,7 +1805,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b6e90103db531ec47aade15763e62935, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 620c03ba5690fc3419d26ac04691d931, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -3,29 +3,36 @@ using UnityEngine.UI;
 
 public class EmotionsController : MonoBehaviour
 {
-    public Image characterImage;      // UI Image на Canvas
-    public Sprite happySprite;
+    [Header("UI Image для отображения персонажа")]
+    public Image characterImage;
+
+    [Header("Спрайты эмоций")]
+    public Sprite calmSprite;
     public Sprite sadSprite;
     public Sprite scaredSprite;
-    public Sprite calmSprite;
+    public Sprite happySprite;
+
+    public void SetCalm()
+    {
+        if (characterImage != null && calmSprite != null)
+            characterImage.sprite = calmSprite;
+    }
 
     public void SetSad()
     {
-        characterImage.sprite = sadSprite;
-    }
-
-    public void SetHappy()
-    {
-        characterImage.sprite = happySprite;
+        if (characterImage != null && sadSprite != null)
+            characterImage.sprite = sadSprite;
     }
 
     public void SetScared()
     {
-        characterImage.sprite = scaredSprite;
+        if (characterImage != null && scaredSprite != null)
+            characterImage.sprite = scaredSprite;
     }
 
-    public void SetCalm()
+    public void SetHappy()
     {
-        characterImage.sprite = calmSprite; // дефолтное состояние
+        if (characterImage != null && happySprite != null)
+            characterImage.sprite = happySprite;
     }
 }

@@ -4,40 +4,55 @@
     "Сострадание": 0,
     "Послушание": 0,
     "Сопротивление": 0,
-    "Тревога": 0
+    "Тревога": 0,
+    "Доверие": 0
   },
   "nodes": [
+
     {
       "nodeId": "scene_1_start",
       "background": "evening_street",
+      "character": "Автор",
+      "emotion": "Calm",
+      "text": "Вечер. Холодный воздух. Айназ идёт домой из школы. Где-то лает собака. Из соседнего дома доносится шум, затем — звук разбитой тарелки и женский плач.",
+      "nextNode": "scene_1_ainaz_thoughts"
+    },
+
+    {
+      "nodeId": "scene_1_ainaz_thoughts",
       "character": "Айназ",
       "emotion": "Sad",
       "text": "«Опять… Они ссорятся почти каждый вечер. Может, просто поругались? Но почему мне страшно?»",
       "choices": [
         { "text": "Прислушаться внимательнее", "nextNode": "scene_1_listen" },
-        { "text": "Пройти мимо", "nextNode": "scene_1_ignore" },
+        { "text": "Сделать вид, что не слышала, и пройти дальше", "nextNode": "scene_1_ignore" },
         { "text": "Позвонить Гулдане", "nextNode": "scene_1_call" }
       ]
     },
 
     {
       "nodeId": "scene_1_listen",
-      "text": "Слышен крик Ильяза и плач Жамили. Айназ замирает.",
+      "character": "Автор",
       "emotion": "Scared",
+      "text": "Сквозь стены слышен крик Ильяза и плач Жамили. Айназ замирает.",
       "effects": { "Сострадание": 1 },
       "nextNode": "scene_2_start"
     },
+
     {
       "nodeId": "scene_1_ignore",
-      "text": "Она ускоряет шаг и старается не смотреть на дом.",
+      "character": "Автор",
       "emotion": "Calm",
+      "text": "Айназ ускоряет шаг и старается не смотреть на дом. Сердце всё равно бьётся быстрее.",
       "effects": { "Послушание": 1 },
       "nextNode": "scene_2_start"
     },
+
     {
       "nodeId": "scene_1_call",
-      "text": "Звонок не отвечает, потом короткий гудок.",
+      "character": "Автор",
       "emotion": "Sad",
+      "text": "Звонок Гулдане долго не отвечает. Потом — короткий гудок.",
       "effects": { "Сострадание": 1, "Тревога": 1 },
       "nextNode": "scene_2_start"
     },
@@ -45,64 +60,90 @@
     {
       "nodeId": "scene_2_start",
       "background": "school_yard",
+      "character": "Автор",
+      "emotion": "Calm",
+      "text": "Утро. Школьный двор. На перемене Айназ замечает Гулдану — глаза красные, она стоит в стороне.",
+      "nextNode": "scene_2_dialogue1"
+    },
+
+    {
+      "nodeId": "scene_2_dialogue1",
       "character": "Айназ",
       "emotion": "Sad",
       "text": "«Ты в порядке? Ты плакала?»",
+      "nextNode": "scene_2_guldana_reply"
+    },
+
+    {
+      "nodeId": "scene_2_guldana_reply",
+      "character": "Гулдана",
+      "emotion": "Sad",
+      "text": "«Ничего… просто мама с папой опять поругались. Он был злой.»",
       "choices": [
-        { "text": "Это неправильно", "nextNode": "scene_2_wrong" },
-        { "text": "Я помогу", "nextNode": "scene_2_help" },
-        { "text": "Пойдём поедим", "nextNode": "scene_2_ignore" }
+        { "text": "Это неправильно, если он её бьёт", "nextNode": "scene_2_wrong" },
+        { "text": "Хочешь, я помогу? Можно поговорить с кем-то", "nextNode": "scene_2_help" },
+        { "text": "Пойдём в столовую, поедим, забудь об этом", "nextNode": "scene_2_ignore" }
       ]
     },
 
     {
       "nodeId": "scene_2_wrong",
-      "character": "Гулдана",
-      "text": "«Ты ничего не понимаешь. Это их дело.»",
+      "character": "Айназ",
       "emotion": "Calm",
+      "text": "«Это неправильно, если он её бьёт.»",
+      "nextNode": "scene_2_wrong_guldana"
+    },
+
+    {
+      "nodeId": "scene_2_wrong_guldana",
+      "character": "Гулдана",
+      "emotion": "Calm",
+      "text": "«Ты ничего не понимаешь. Это их дело.»",
       "effects": { "Сопротивление": 1 },
       "nextNode": "scene_3_start"
     },
+
     {
       "nodeId": "scene_2_help",
-      "character": "Гулдана",
-      "text": "Она долго молчит, потом кивает.",
+      "character": "Айназ",
       "emotion": "Sad",
+      "text": "«Хочешь, я помогу? Можно поговорить с кем-то…»",
+      "nextNode": "scene_2_help_guldana"
+    },
+
+    {
+      "nodeId": "scene_2_help_guldana",
+      "character": "Гулдана",
+      "emotion": "Sad",
+      "text": "Гулдана долго молчит, потом слегка кивает.",
       "effects": { "Сострадание": 1, "Доверие": 1 },
       "nextNode": "scene_3_start"
     },
+
     {
       "nodeId": "scene_2_ignore",
-      "character": "Гулдана",
-      "text": "Гулдана выдыхает, тема закрыта.",
+      "character": "Айназ",
       "emotion": "Calm",
+      "text": "«Пойдём в столовую, поедим… забудь об этом.»",
+      "nextNode": "scene_2_ignore_guldana"
+    },
+
+    {
+      "nodeId": "scene_2_ignore_guldana",
+      "character": "Гулдана",
+      "emotion": "Calm",
+      "text": "Гулдана выдыхает, пытаясь улыбнуться: «Ладно… Давай просто поедим.»",
       "effects": { "Послушание": 1 },
       "nextNode": "scene_3_start"
     },
 
     {
-      "nodeId": "scene_5_phone",
-      "text": "Она ждёт долго, ответа нет, но поступила правильно.",
+      "nodeId": "scene_3_start",
+      "character": "Автор",
       "emotion": "Calm",
-      "effects": { "Сопротивление": 2, "Сострадание": 1 },
-      "nextNode": "ending"
-    },
-    {
-      "nodeId": "ending",
-      "background": "morning_yard",
-      "character": "Айназ",
-      "text": "«Если все будут молчать — ничего не изменится.»",
-      "emotion": "Calm",
-      "requirements": [
-        {
-          "condition": "Сопротивление >= Послушание",
-          "ending": "good_ending"
-        },
-        {
-          "condition": "Послушание > Сопротивление",
-          "ending": "silent_ending"
-        }
-      ]
+      "text": "Продолжение эпизода скоро будет добавлено.",
+      "nextNode": ""
     }
+
   ]
 }
