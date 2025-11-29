@@ -70,12 +70,12 @@ public class Episode1Dialogue : MonoBehaviour
     public GameObject AuthorPanel;
     public TextMeshProUGUI AuthorText;
 
-    [Header("Ainaz UI (центр, форма для Айназ)")]
+    [Header("Ainaz UI")]
     public GameObject AinazPanel;
     public TextMeshProUGUI AinazNameText;
     public TextMeshProUGUI AinazDialogueText;
 
-    [Header("Other Character UI (центр, форма для других)")]
+    [Header("Other Character UI")]
     public GameObject OtherPanel;
     public TextMeshProUGUI OtherNameText;
     public TextMeshProUGUI OtherDialogueText;
@@ -84,11 +84,11 @@ public class Episode1Dialogue : MonoBehaviour
     public GameObject ChoicesPanel;
     public Button[] choiceButtons;
 
-    [Header("Characters Sprites")]
-    public GameObject LeftCharacter;          // Айназ слева
+    [Header("Characters")]
+    public GameObject LeftCharacter;
     public EmotionsController LeftEmotions;
 
-    public GameObject RightCharacter;         // любые другие справа
+    public GameObject RightCharacter;
     public EmotionsController RightEmotions;
 
     [Header("Text Colors")]
@@ -107,6 +107,7 @@ public class Episode1Dialogue : MonoBehaviour
     private DialogueNode currentNode;
     private bool waitingForAdvance = false;
 
+
     void Start()
     {
         LoadEpisode();
@@ -115,7 +116,6 @@ public class Episode1Dialogue : MonoBehaviour
 
     void Update()
     {
-        // Клик ЛКМ — переход, если нет выборов
         if (waitingForAdvance && Input.GetMouseButtonDown(0))
         {
             waitingForAdvance = false;
@@ -123,14 +123,12 @@ public class Episode1Dialogue : MonoBehaviour
             if (currentNode == null)
                 return;
 
-            // Если есть requirements — считаем концовку
             if (currentNode.requirements != null && currentNode.requirements.Length > 0)
             {
                 HandleEnding(currentNode);
                 return;
             }
 
-            // Переход по nextNode
             if (!string.IsNullOrEmpty(currentNode.nextNode))
             {
                 ShowNode(currentNode.nextNode);
@@ -142,7 +140,7 @@ public class Episode1Dialogue : MonoBehaviour
         }
     }
 
-    // =================== LOAD JSON ===================
+    // ================= LOAD EPISODE =================
     void LoadEpisode()
     {
         string path = Path.Combine(Application.streamingAssetsPath, jsonFileName);
@@ -172,7 +170,7 @@ public class Episode1Dialogue : MonoBehaviour
         }
     }
 
-    // =================== SHOW NODE ===================
+    // ================= SHOW NODE =================
     void ShowNode(string nodeId)
     {
         if (!nodeDict.ContainsKey(nodeId))
@@ -187,115 +185,114 @@ public class Episode1Dialogue : MonoBehaviour
 
         ApplyEffects(node);
 
-        // Сначала всё прячем
-        if (AuthorPanel != null) AuthorPanel.SetActive(false);
-        if (AinazPanel  != null) AinazPanel.SetActive(false);
-        if (OtherPanel  != null) OtherPanel.SetActive(false);
-        if (LeftCharacter  != null) LeftCharacter.SetActive(false);
-        if (RightCharacter != null) RightCharacter.SetActive(false);
+        // Скрываем всё
+        AuthorPanel?.SetActive(false);
+        AinazPanel?.SetActive(false);
+        OtherPanel?.SetActive(false);
+        LeftCharacter?.SetActive(false);
+        RightCharacter?.SetActive(false);
 
-        // Выбираем режим по character
+        // ---------- АВТОР ----------
         if (node.character == "Автор" || string.IsNullOrEmpty(node.character))
         {
-            // Авторские мысли / описания
-            if (AuthorPanel != null) AuthorPanel.SetActive(true);
-            if (AuthorText != null)
-            {
-                AuthorText.color = AuthorColor;
-                AuthorText.text = node.text;
-            }
+            AuthorPanel.SetActive(true);
+            AuthorText.color = AuthorColor;
+            AuthorText.text = node.text;
+
+            var auto = AuthorPanel.GetComponent<AutoResizePanel>();
+            if (auto != null) auto.RefreshSize();
         }
+
+        // ---------- АЙНАЗ ----------
         else if (node.character == "Айназ")
         {
-            // Айназ: панель для Айназ, персонаж слева
-            if (AinazPanel != null) AinazPanel.SetActive(true);
-            if (LeftCharacter != null) LeftCharacter.SetActive(true);
+            AinazPanel.SetActive(true);
+            LeftCharacter.SetActive(true);
 
-            if (AinazNameText != null)
-                AinazNameText.text = node.character;
+            AinazNameText.text = node.character;
+            AinazDialogueText.color = AinazColor;
+            AinazDialogueText.text = node.text;
 
-            if (AinazDialogueText != null)
-            {
-                AinazDialogueText.color = AinazColor;
-                AinazDialogueText.text = node.text;
-            }
+            var auto = AinazPanel.GetComponent<AutoResizePanel>();
+            if (auto != null) auto.RefreshSize();
 
             ApplyEmotion(LeftEmotions, node.emotion);
         }
+
+        // ---------- ДРУГОЙ ПЕРСОНАЖ ----------
         else
         {
-            // Любой другой персонаж: панель для других, персонаж справа
-            if (OtherPanel != null) OtherPanel.SetActive(true);
-            if (RightCharacter != null) RightCharacter.SetActive(true);
+            OtherPanel.SetActive(true);
+            RightCharacter.SetActive(true);
 
-            if (OtherNameText != null)
-                OtherNameText.text = node.character;
+            OtherNameText.text = node.character;
+            OtherDialogueText.color = OtherColor;
+            OtherDialogueText.text = node.text;
 
-            if (OtherDialogueText != null)
-            {
-                OtherDialogueText.color = OtherColor;
-                OtherDialogueText.text = node.text;
-            }
+            var auto = OtherPanel.GetComponent<AutoResizePanel>();
+            if (auto != null) auto.RefreshSize();
 
             ApplyEmotion(RightEmotions, node.emotion);
         }
 
-        // TODO: тут можно добавить смену фона по node.background
-
-        // Настраиваем выборы
         SetupChoices(node);
     }
 
-    // =================== APPLY EMOTION ===================
+
+    // ================= EMOTIONS =================
     void ApplyEmotion(EmotionsController controller, string emotion)
     {
-        if (controller == null) return;
+        if (controller == null)
+        {
+            Debug.LogWarning("ApplyEmotion: controller is NULL");
+            return;
+        }
+
+        Debug.Log("ApplyEmotion: " + emotion);
 
         switch (emotion)
         {
-            case "Calm":   controller.SetCalm();   break;
-            case "Sad":    controller.SetSad();    break;
-            case "Scared": controller.SetScared(); break;
-            case "Happy":  controller.SetHappy();  break;
-            default:       controller.SetCalm();   break;
+            case "Calm":
+                controller.SetCalm();
+                break;
+            case "Sad":
+                controller.SetSad();
+                break;
+            case "Scared":
+                controller.SetScared();
+                break;
+            case "Happy":
+                controller.SetHappy();
+                break;
+            default:
+                controller.SetCalm();
+                break;
         }
     }
 
-    // =================== CHOICE BUTTONS ===================
+
+    // ================= CHOICES =================
     void SetupChoices(DialogueNode node)
     {
         bool hasChoices = node.choices != null && node.choices.Count > 0;
 
-        if (ChoicesPanel != null)
-            ChoicesPanel.SetActive(hasChoices);
+        ChoicesPanel.SetActive(hasChoices);
 
         for (int i = 0; i < choiceButtons.Length; i++)
         {
             Button btn = choiceButtons[i];
-            if (btn == null) continue;
 
             if (hasChoices && i < node.choices.Count)
             {
                 btn.gameObject.SetActive(true);
 
-                TextMeshProUGUI btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
-                if (btnText != null)
-                    btnText.text = node.choices[i].text;
+                var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
+                btnText.text = node.choices[i].text;
 
-                string targetNodeId = node.choices[i].nextNode;
+                string next = node.choices[i].nextNode;
 
                 btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() =>
-                {
-                    ShowNode(targetNodeId);
-                });
-
-                // Гарантия, что есть Image для Raycast
-                if (btn.GetComponent<Image>() == null)
-                {
-                    Image img = btn.gameObject.AddComponent<Image>();
-                    img.color = new Color(1, 1, 1, 0);
-                }
+                btn.onClick.AddListener(() => ShowNode(next));
             }
             else
             {
@@ -303,46 +300,30 @@ public class Episode1Dialogue : MonoBehaviour
             }
         }
 
-        // если нет вариантов — ждём клик по экрану
         if (!hasChoices)
             waitingForAdvance = true;
     }
 
-    // =================== STATS EFFECTS ===================
+    // ================= EFFECTS =================
     void ApplyEffects(DialogueNode node)
     {
         if (node.effects == null) return;
 
-        vars.Сострадание   += node.effects.Сострадание;
-        vars.Послушание    += node.effects.Послушание;
+        vars.Сострадание += node.effects.Сострадание;
+        vars.Послушание += node.effects.Послушание;
         vars.Сопротивление += node.effects.Сопротивление;
-        vars.Тревога       += node.effects.Тревога;
-        vars.Доверие       += node.effects.Доверие;
+        vars.Тревога += node.effects.Тревога;
+        vars.Доверие += node.effects.Доверие;
     }
 
-    // =================== ENDINGS ===================
+    // ================= ENDINGS =================
     void HandleEnding(DialogueNode node)
     {
-        if (node.requirements == null || node.requirements.Length == 0)
-        {
-            Debug.Log("ENDING: no requirements configured");
-            return;
-        }
-
         if (vars.Сопротивление >= vars.Послушание)
-        {
             Debug.Log("GOOD ENDING: " + node.requirements[0].ending);
-        }
         else
-        {
-            if (node.requirements.Length > 1)
-                Debug.Log("SILENT ENDING: " + node.requirements[1].ending);
-            else
-                Debug.Log("ENDING: " + node.requirements[0].ending);
-        }
+            Debug.Log("SILENT ENDING: " + node.requirements[1].ending);
 
-        if (ChoicesPanel != null)
-            ChoicesPanel.SetActive(false);
-        // Тут потом можно открыть финальный экран
+        ChoicesPanel.SetActive(false);
     }
 }
