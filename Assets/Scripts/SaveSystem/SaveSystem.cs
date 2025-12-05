@@ -1,13 +1,5 @@
 using UnityEngine;
 
-[System.Serializable]
-public class SaveData
-{
-    public string episodePath;
-    public string nodeId;
-    public int chapterNumber;
-}
-
 public static class SaveSystem
 {
     const string KEY = "VN_SAVE";
@@ -21,7 +13,8 @@ public static class SaveSystem
             chapterNumber = GameContext.chapterNumber
         };
 
-        PlayerPrefs.SetString(KEY, JsonUtility.ToJson(data));
+        string json = JsonUtility.ToJson(data, true);
+        PlayerPrefs.SetString(KEY, json);
         PlayerPrefs.Save();
     }
 
@@ -29,7 +22,8 @@ public static class SaveSystem
 
     public static SaveData Load()
     {
-        if (!HasSave()) return null;
+        if (!HasSave())
+            return null;
 
         return JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(KEY));
     }
