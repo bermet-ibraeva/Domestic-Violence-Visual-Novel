@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using System.IO;  // ВАЖНО: для File.ReadAllText
 
 [System.Serializable]
 public class EpisodeHeader
@@ -11,8 +10,8 @@ public class EpisodeHeader
 public class ChapterInfoFromJson : MonoBehaviour
 {
     [Header("UI элементы")]
-    public TextMeshProUGUI chapterNumberText; // "Глава 1"
-    public TextMeshProUGUI chapterTitleText;  // "Тихие крики"
+    public TextMeshProUGUI chapterNumberText; 
+    public TextMeshProUGUI chapterTitleText;  
 
     /// <summary>
     /// Выводит главу и название эпизода на основе сейва
@@ -25,43 +24,39 @@ public class ChapterInfoFromJson : MonoBehaviour
             return;
         }
 
-        // Сборка полного пути: StreamingAssets + относительный путь из сейва
-        string fullPath = Path.Combine(Application.streamingAssetsPath, saveData.episodeJsonPath);
+        // Загружаем TextAsset из Resources
+        TextAsset jsonAsset = Resources.Load<TextAsset>(saveData.episodeJsonPath);
 
-        if (!File.Exists(fullPath))
+        if (jsonAsset == null)
         {
-            Debug.LogError($"JSON файл НЕ найден в StreamingAssets: {fullPath}");
+            Debug.LogError(
+                $"JSON НЕ найден в Resources: {saveData.episodeJsonPath}\n" +
+                $"Убедись, что файл лежит по пути: Assets/Resources/{saveData.episodeJsonPath}.json\n" +
+                $"И загружается как Resources.Load<TextAsset>(\"{saveData.episodeJsonPath}\")"
+            );
+
             return;
         }
 
-        string jsonText;
-        try
-        {
-            jsonText = File.ReadAllText(fullPath);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Ошибка чтения JSON ({fullPath}): {ex.Message}");
-            return;
-        }
+        EpisodeHeader header = null;
 
-        EpisodeHeader header;
         try
         {
-            header = JsonUtility.FromJson<EpisodeHeader>(jsonText);
+            header = JsonUtility.FromJson<EpisodeHeader>(jsonAsset.text);
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"Ошибка парсинга EpisodeHeader: {ex.Message}");
+            Debug.LogError($"Ошибка парсинга JSON: {ex.Message}");
             return;
         }
 
         if (header == null)
         {
-            Debug.LogError("JsonUtility.FromJson вернул null (EpisodeHeader)");
+            Debug.LogError("FromJson вернул null — JSON структура неправильная");
             return;
         }
 
+        // Устанавливаем UI
         if (chapterNumberText != null)
             chapterNumberText.text = $"Глава {saveData.chapterNumber}";
 

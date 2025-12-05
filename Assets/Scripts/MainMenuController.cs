@@ -7,10 +7,10 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("UI")]
     public ChapterInfoFromJson chapterInfoUI;
-    public TextMeshProUGUI playButtonText;   // текст на кнопке "ИГРАТЬ / ПРОДОЛЖИТЬ"
+    public TextMeshProUGUI playButtonText;
 
     [Header("Сцена с эпизодом")]
-    public string sceneToLoad = "Episode1";  // имя Scene
+    public string sceneToLoad = "Episode1";  
 
     private SaveData currentSave;
 
@@ -19,9 +19,10 @@ public class MainMenuController : MonoBehaviour
         if (SaveManager.HasSave())
         {
             currentSave = SaveManager.Load();
+
             if (currentSave == null)
             {
-                Debug.LogWarning("HasSave() = true, но Load() вернул null. Создаём дефолтный сейв.");
+                Debug.LogWarning("HasSave() = true, но Load() вернул null. Создаем дефолтный сейв.");
                 CreateDefaultSave();
                 SaveManager.Save(currentSave);
             }
@@ -43,12 +44,9 @@ public class MainMenuController : MonoBehaviour
 
     private void CreateDefaultSave()
     {
-        // ВАЖНО: путь относительно StreamingAssets.
-        // Если файл: Assets/StreamingAssets/Episode1.json → "Episode1.json"
-        // Если:    Assets/StreamingAssets/Episodes/episode_1.json → "Episodes/episode_1.json"
         currentSave = new SaveData
         {
-            episodeJsonPath = "Episode1.json",
+            episodeJsonPath = "Episodes/episode_1", // теперь путь для Resources
             chapterNumber = 1,
             currentNodeId = "scene_1_start"
         };
