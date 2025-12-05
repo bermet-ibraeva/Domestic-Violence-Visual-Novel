@@ -2,30 +2,26 @@ using UnityEngine;
 
 public static class SaveSystem
 {
-    const string KEY = "VN_SAVE";
+    private const string KEY = "VN_SAVE";
 
-    public static void Save()
+    public static void Save(SaveData data)
     {
-        SaveData data = new SaveData
-        {
-            episodePath = GameContext.currentEpisodePath,
-            nodeId = GameContext.currentNodeId,
-            chapterNumber = GameContext.chapterNumber
-        };
-
-        string json = JsonUtility.ToJson(data, true);
+        string json = JsonUtility.ToJson(data);
         PlayerPrefs.SetString(KEY, json);
         PlayerPrefs.Save();
     }
 
-    public static bool HasSave() => PlayerPrefs.HasKey(KEY);
+    public static bool HasSave()
+    {
+        return PlayerPrefs.HasKey(KEY);
+    }
 
     public static SaveData Load()
     {
-        if (!HasSave())
-            return null;
+        if (!HasSave()) return null;
 
-        return JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(KEY));
+        string json = PlayerPrefs.GetString(KEY);
+        return JsonUtility.FromJson<SaveData>(json);
     }
 
     public static void Clear()

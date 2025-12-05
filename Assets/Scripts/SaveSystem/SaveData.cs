@@ -3,7 +3,7 @@ using System;
 [Serializable]
 public class SaveData
 {
-    public string episodePath;
-    public string nodeId;
-    public int chapterNumber;
+    public string episodePath;        // Например "Episodes/episode_1"
+    public string currentNodeId;      // Например "scene_3_start"
+    public int chapterNumber;         // Номер главы
 }

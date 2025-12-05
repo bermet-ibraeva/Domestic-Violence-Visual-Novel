@@ -19,58 +19,57 @@ public class MainMenuController : MonoBehaviour
         // =========================
         // 1. Проверяем наличие сейва
         // =========================
-        if (SaveManager.HasSave())
+        if (SaveSystem.HasSave())
         {
-            currentSave = SaveManager.Load();
+            currentSave = SaveSystem.Load();
 
             if (currentSave == null)
             {
-                Debug.LogWarning("HasSave = true, но Load() вернул null. Пересоздаем сейв.");
+                Debug.LogWarning("Save exists, but Load() returned null. Recreating save.");
                 CreateDefaultSave();
-                SaveManager.Save(currentSave);
+                SaveSystem.Save(currentSave);
             }
 
             playButtonText.text = "ПРОДОЛЖИТЬ";
         }
         else
         {
-            // Нет сохранений → игра начинается как новая
+            // Нет сохранений → новая игра
             CreateDefaultSave();
             playButtonText.text = "ИГРАТЬ";
         }
 
-        // Показ информации о главе
         if (chapterInfoUI != null)
             chapterInfoUI.ShowFromSave(currentSave);
     }
 
     // ======================================================
-    // СОЗДАНИЕ ДЕФОЛТНОГО СЕЙВА (для новой игры)
+    // СОЗДАЁМ ДЕФОЛТНЫЙ СЕЙВ ДЛЯ НОВОЙ ИГРЫ
     // ======================================================
     private void CreateDefaultSave()
     {
         currentSave = new SaveData
         {
-            episodePath = "Episodes/episode_1", // путь в Resources (БЕЗ .json)
-            chapterNumber = 1,
-            currentNodeId = "scene_1_start"
+            episodePath = "Episodes/episode_1",   // Resources path
+            currentNodeId = "scene_1_start",
+            chapterNumber = 1
         };
     }
 
     // ======================================================
-    // КНОПКА "ИГРАТЬ" / "ПРОДОЛЖИТЬ"
+    // НАЖАТИЕ КНОПКИ "ИГРАТЬ / ПРОДОЛЖИТЬ"
     // ======================================================
     public void OnPlayButton()
     {
-        // Если кнопка "ИГРАТЬ" — значит пользователь хочет начать заново.
+        // Если это новая игра
         if (playButtonText.text == "ИГРАТЬ")
         {
-            SaveManager.Delete();  // Удаляем старый сейв
-            CreateDefaultSave();   // Создаем новый
-            SaveManager.Save(currentSave);
+            SaveSystem.Clear();   // Удаляем старый прогресс полностью
+            CreateDefaultSave();  // Создаём новый сейв
+            SaveSystem.Save(currentSave);
         }
 
-        // Передаём сейв в следующую сцену
+        // Передаём сейв в диалоговую сцену
         TempGameContext.saveToLoad = currentSave;
 
         StartCoroutine(LoadSceneNextFrame(sceneToLoad));

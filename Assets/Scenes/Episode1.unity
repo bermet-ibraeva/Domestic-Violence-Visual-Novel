@@ -162,7 +162,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 76e0341efbd9d4b41b0f1d68dd5c514a, type: 2}
   m_sharedMaterial: {fileID: -5189976439576517811, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &20882766
@@ -265,7 +265,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 59373663}
-  - component: {fileID: 59373664}
   m_Layer: 5
   m_Name: EpisodeController
   m_TagString: Untagged
@@ -292,41 +291,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &59373664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 59373662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7a9b92715d38f648b016b12a861a312, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AuthorPanel: {fileID: 1176912193}
-  AuthorText: {fileID: 725673670}
-  AinazPanel: {fileID: 696655967}
-  AinazNameText: {fileID: 810316209}
-  AinazDialogueText: {fileID: 945748389}
-  OtherPanel: {fileID: 251045528}
-  OtherNameText: {fileID: 20882765}
-  OtherDialogueText: {fileID: 1295646654}
-  ChoicesPanel: {fileID: 789645529}
-  choiceButtons:
-  - {fileID: 1062144742}
-  - {fileID: 615870095}
-  - {fileID: 376438211}
-  LeftCharacter: {fileID: 394096378}
-  LeftEmotions: {fileID: 394096382}
-  RightCharacter: {fileID: 950463527}
-  RightEmotions: {fileID: 950463528}
-  AuthorColor: {r: 0.0037735105, g: 0.0035527959, b: 0.0035527959, a: 1}
-  AinazColor: {r: 0.03396219, g: 0.031463083, b: 0.031463083, a: 1}
-  OtherColor: {r: 0.05660379, g: 0.0541474, b: 0.0541474, a: 1}
-  backgroundController: {fileID: 2009236193}
-  jsonFileName: episode1.json
-  startNodeId: scene_1_start
 --- !u!1 &251045528
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,7 +448,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1cac62ee70ebbda4cb472afebca5c439, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -548,7 +512,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &278667335
@@ -769,10 +733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterImage: {fileID: 394096380}
-  calmSprite: {fileID: 21300000, guid: 4534424c151e00f49b3084c071297e1c, type: 3}
-  sadSprite: {fileID: 21300000, guid: ea79a51fe2c3f244f95ea1ec32bbb6e4, type: 3}
-  scaredSprite: {fileID: 21300000, guid: 2554dc0fd6cbdf14faeeef75e513ef0c, type: 3}
-  happySprite: {fileID: 21300000, guid: 1dec6b9df1c99d44486b8a0e4f1ac2bb, type: 3}
+  emotions: []
 --- !u!1 &603450846
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,7 +983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &696655968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1119,7 +1080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &725673670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1142,8 +1103,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
-  m_sharedMaterial: {fileID: -5189976439576517811, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1cac62ee70ebbda4cb472afebca5c439, type: 2}
+  m_sharedMaterial: {fileID: 6818454181836674738, guid: 1cac62ee70ebbda4cb472afebca5c439, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1432,8 +1393,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
-  m_sharedMaterial: {fileID: -5189976439576517811, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 76e0341efbd9d4b41b0f1d68dd5c514a, type: 2}
+  m_sharedMaterial: {fileID: 6326275127611215842, guid: 76e0341efbd9d4b41b0f1d68dd5c514a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1558,8 +1519,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
-  m_sharedMaterial: {fileID: -5189976439576517811, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1cac62ee70ebbda4cb472afebca5c439, type: 2}
+  m_sharedMaterial: {fileID: 6818454181836674738, guid: 1cac62ee70ebbda4cb472afebca5c439, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1665,10 +1626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterImage: {fileID: 950463529}
-  calmSprite: {fileID: 21300000, guid: d3f9b415904a699429649fe98f8384ad, type: 3}
-  sadSprite: {fileID: 21300000, guid: fabc4021953987049891763de71f6998, type: 3}
-  scaredSprite: {fileID: 21300000, guid: e6d205c1035dbcb4ba9583e0ef85cb5e, type: 3}
-  happySprite: {fileID: 21300000, guid: ed07fa8a5422ccc4fa3ea7713b64e468, type: 3}
+  emotions: []
 --- !u!114 &950463529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1877,7 +1835,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1176912194
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2014,7 +1972,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1cac62ee70ebbda4cb472afebca5c439, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2078,7 +2036,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1238853266
@@ -2129,7 +2087,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1cac62ee70ebbda4cb472afebca5c439, type: 2}
   m_sharedMaterial: {fileID: -5189976439576517811, guid: b6ee404f03fdfb747b2cc80b65669f9e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2193,7 +2151,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: -10.610168}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1295646655
@@ -2282,7 +2240,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1cac62ee70ebbda4cb472afebca5c439, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2346,7 +2304,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1453623183

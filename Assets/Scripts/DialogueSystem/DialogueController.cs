@@ -16,7 +16,6 @@ public class DialogueController : MonoBehaviour
 
     void Start()
     {
-        // получаем сейв
         save = TempGameContext.saveToLoad;
 
         if (save == null)
@@ -28,10 +27,9 @@ public class DialogueController : MonoBehaviour
                 currentNodeId = "scene_1_start",
                 chapterNumber = 1
             };
-            SaveManager.Save(save);
+            SaveSystem.Save(save);
         }
 
-        // загружаем эпизод
         episode = EpisodeLoader.LoadEpisode(save.episodePath, out nodeDict);
 
         if (episode == null)
@@ -51,18 +49,16 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        // Автосейв
+        // Авто-сейв
         save.currentNodeId = id;
-        SaveManager.Save(save);
+        SaveSystem.Save(save);
 
-        // Скрываем UI перед отображением нового
         ui.HideAll();
 
-        // Фон
         if (!string.IsNullOrEmpty(currentNode.background))
             bg.SetBackground(currentNode.background);
 
-        // ===== ОБРАБОТКА АВТОРА =====
+        // Автор
         if (currentNode.character == "Автор" || string.IsNullOrEmpty(currentNode.character))
         {
             ui.authorPanel.SetActive(true);
@@ -71,30 +67,30 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        // ===== АЙНАЗ =====
+        // Айназ
         if (currentNode.character == "Айназ")
         {
             ui.ainazPanel.SetActive(true);
             ui.ainazName.text = "Айназ";
             ui.ainazText.text = currentNode.text;
-            leftEmotions.Set(currentNode.emotion);
+
+            leftEmotions.SetEmotion(currentNode.emotion);
             SetupChoices();
             return;
         }
 
-        // ===== ЛЮБОЙ ДРУГОЙ ПЕРСОНАЖ =====
+        // Другой персонаж
         ui.otherPanel.SetActive(true);
         ui.otherName.text = currentNode.character;
         ui.otherText.text = currentNode.text;
-        rightEmotions.Set(currentNode.emotion);
 
+        rightEmotions.SetEmotion(currentNode.emotion);
         SetupChoices();
     }
 
     private void SetupChoices()
     {
-        // Если есть choices → показываем кнопки
-        if (currentNode.choices != null && currentNode.choices.Length > 0)
+        if (currentNode.choices != null && currentNode.choices.Count > 0)
         {
             ui.ShowChoices(currentNode.choices, OnChoicePicked);
         }
@@ -111,10 +107,7 @@ public class DialogueController : MonoBehaviour
 
     public void Next()
     {
-        // Если нет nextNode — конец сцены
-        if (string.IsNullOrEmpty(currentNode.nextNode))
-            return;
-
-        ShowNode(currentNode.nextNode);
+        if (!string.IsNullOrEmpty(currentNode.nextNode))
+            ShowNode(currentNode.nextNode);
     }
 }
