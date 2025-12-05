@@ -65,7 +65,7 @@
         "nodeId": "scene_2_dialogue",
         "background": "5",
         "character": "Ильяз",
-        "emotion": "Scared",
+        "emotion": "Angry",
         "text": "— Ты опять всё выносишь на всеобщее обозрение!",
         "choices": [
           { "text": "Я не могу сидеть сложа руки… нужно помочь", "nextNode": "scene_2_help" },
@@ -159,7 +159,7 @@
       {
         "nodeId": "scene_4_start",
         "background": "2",
-        "character": "Айnaz",
+        "character": "Айназ",
         "emotion": "Warm",
         "text": "Оператор назначил встречу завтра. Давай пойдём вместе, так безопаснее.",
         "nextNode": "scene_4_guldana"
@@ -252,4 +252,5 @@
       }
   
     ]
-}  
+  }
+  

@@ -1,38 +1,49 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class EmotionsController : MonoBehaviour
 {
-    [Header("UI Image для отображения персонажа")]
+    [Header("UI Image персонажа")]
     public Image characterImage;
 
-    [Header("Спрайты эмоций")]
-    public Sprite calmSprite;
-    public Sprite sadSprite;
-    public Sprite scaredSprite;
-    public Sprite happySprite;
+    [Header("Список эмоций персонажа")]
+    public List<EmotionSprite> emotions = new List<EmotionSprite>();
 
-    public void SetCalm()
+    private Dictionary<string, Sprite> emotionDict;
+
+    void Awake()
     {
-        if (characterImage != null && calmSprite != null)
-            characterImage.sprite = calmSprite;
+        emotionDict = new Dictionary<string, Sprite>();
+
+        foreach (var e in emotions)
+        {
+            if (!emotionDict.ContainsKey(e.emotionName))
+                emotionDict.Add(e.emotionName, e.sprite);
+        }
     }
 
-    public void SetSad()
+    public void SetEmotion(string emotion)
     {
-        if (characterImage != null && sadSprite != null)
-            characterImage.sprite = sadSprite;
-    }
+        if (characterImage == null) return;
 
-    public void SetScared()
-    {
-        if (characterImage != null && scaredSprite != null)
-            characterImage.sprite = scaredSprite;
-    }
+        if (emotionDict.ContainsKey(emotion))
+        {
+            characterImage.sprite = emotionDict[emotion];
+        }
+        else
+        {
+            Debug.LogWarning($"Эмоция '{emotion}' не найдена у персонажа {gameObject.name}. Ставлю Calm.");
 
-    public void SetHappy()
-    {
-        if (characterImage != null && happySprite != null)
-            characterImage.sprite = happySprite;
+            if (emotionDict.ContainsKey("Calm"))
+                characterImage.sprite = emotionDict["Calm"];
+        }
     }
+}
+
+[System.Serializable]
+public class EmotionSprite
+{
+    public string emotionName; // например: "Sad", "Warm", "Tense"
+    public Sprite sprite;
 }
