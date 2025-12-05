@@ -3,8 +3,11 @@ using System.Collections.Generic;
 
 public static class EpisodeLoader
 {
-    public static EpisodeData LoadEpisode(string episodePath)
+    public static EpisodeData LoadEpisode(string episodePath, out Dictionary<string, DialogueNode> nodeDict)
     {
+        nodeDict = null;
+
+        // Загружаем JSON из Resources
         TextAsset asset = Resources.Load<TextAsset>(episodePath);
 
         if (asset == null)
@@ -13,20 +16,23 @@ public static class EpisodeLoader
             return null;
         }
 
-        EpisodeData ep = JsonUtility.FromJson<EpisodeData>(asset.text);
-        if (ep == null)
+        // Парсим JSON
+        EpisodeData episode = JsonUtility.FromJson<EpisodeData>(asset.text);
+
+        if (episode == null)
         {
             Debug.LogError("EpisodeLoader: Failed to parse JSON");
             return null;
         }
 
-        // Словарь нод
-        ep.nodeDict = new Dictionary<string, DialogueNode>();
-        foreach (var n in ep.nodes)
+        // Создаем словарь нод
+        nodeDict = new Dictionary<string, DialogueNode>();
+        foreach (DialogueNode node in episode.nodes)
         {
-            ep.nodeDict[n.nodeId] = n;
+            if (!nodeDict.ContainsKey(node.nodeId))
+                nodeDict.Add(node.nodeId, node);
         }
 
-        return ep;
+        return episode;
     }
 }

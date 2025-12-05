@@ -1,76 +1,120 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class DialogueController : MonoBehaviour
 {
+    [Header("Controllers")]
     public UIController ui;
     public BackgroundController bg;
     public EmotionsController leftEmotions;
     public EmotionsController rightEmotions;
 
-    EpisodeData ep;
-    DialogueNode node;
+    private EpisodeData episode;
+    private Dictionary<string, DialogueNode> nodeDict;
+    private DialogueNode currentNode;
+    private SaveData save;
 
     void Start()
     {
-        ep = EpisodeLoader.LoadEpisode(GameContext.currentEpisodePath);
+        // получаем сейв
+        save = TempGameContext.saveToLoad;
 
-        if (ep == null)
+        if (save == null)
+        {
+            Debug.LogWarning("DialogueController: save was null, creating default");
+            save = new SaveData
+            {
+                episodePath = "Episodes/episode_1",
+                currentNodeId = "scene_1_start",
+                chapterNumber = 1
+            };
+            SaveManager.Save(save);
+        }
+
+        // загружаем эпизод
+        episode = EpisodeLoader.LoadEpisode(save.episodePath, out nodeDict);
+
+        if (episode == null)
         {
             Debug.LogError("DialogueController: episode failed to load");
             return;
         }
 
-        ShowNode(GameContext.currentNodeId);
+        ShowNode(save.currentNodeId);
     }
 
     public void ShowNode(string id)
     {
-        if (!ep.nodeDict.TryGetValue(id, out node))
+        if (!nodeDict.TryGetValue(id, out currentNode))
         {
-            Debug.LogError("NODE NOT FOUND: " + id);
+            Debug.LogError("DialogueController: NODE NOT FOUND: " + id);
             return;
         }
 
-        GameContext.currentNodeId = id;
-        SaveSystem.Save();
+        // Автосейв
+        save.currentNodeId = id;
+        SaveManager.Save(save);
 
+        // Скрываем UI перед отображением нового
         ui.HideAll();
 
         // Фон
-        if (!string.IsNullOrEmpty(node.background))
-            bg.SetBackground(node.background);
+        if (!string.IsNullOrEmpty(currentNode.background))
+            bg.SetBackground(currentNode.background);
 
-        // Автор
-        if (node.character == "Автор" || string.IsNullOrEmpty(node.character))
+        // ===== ОБРАБОТКА АВТОРА =====
+        if (currentNode.character == "Автор" || string.IsNullOrEmpty(currentNode.character))
         {
             ui.authorPanel.SetActive(true);
-            ui.authorText.text = node.text;
+            ui.authorText.text = currentNode.text;
+            ui.HideChoices();
             return;
         }
 
-        // Айназ
-        if (node.character == "Айназ")
+        // ===== АЙНАЗ =====
+        if (currentNode.character == "Айназ")
         {
             ui.ainazPanel.SetActive(true);
             ui.ainazName.text = "Айназ";
-            ui.ainazText.text = node.text;
-
-            leftEmotions.Set(node.emotion);
+            ui.ainazText.text = currentNode.text;
+            leftEmotions.Set(currentNode.emotion);
+            SetupChoices();
             return;
         }
 
-        // Другой
+        // ===== ЛЮБОЙ ДРУГОЙ ПЕРСОНАЖ =====
         ui.otherPanel.SetActive(true);
-        ui.otherName.text = node.character;
-        ui.otherText.text = node.text;
-        rightEmotions.Set(node.emotion);
+        ui.otherName.text = currentNode.character;
+        ui.otherText.text = currentNode.text;
+        rightEmotions.Set(currentNode.emotion);
+
+        SetupChoices();
+    }
+
+    private void SetupChoices()
+    {
+        // Если есть choices → показываем кнопки
+        if (currentNode.choices != null && currentNode.choices.Length > 0)
+        {
+            ui.ShowChoices(currentNode.choices, OnChoicePicked);
+        }
+        else
+        {
+            ui.HideChoices();
+        }
+    }
+
+    public void OnChoicePicked(string nextNodeId)
+    {
+        ShowNode(nextNodeId);
     }
 
     public void Next()
     {
-        if (!string.IsNullOrEmpty(node.nextNode))
-        {
-            ShowNode(node.nextNode);
-        }
+        // Если нет nextNode — конец сцены
+        if (string.IsNullOrEmpty(currentNode.nextNode))
+            return;
+
+        ShowNode(currentNode.nextNode);
     }
 }
