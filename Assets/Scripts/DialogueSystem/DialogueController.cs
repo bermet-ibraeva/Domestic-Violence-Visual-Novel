@@ -25,6 +25,9 @@ public class DialogueController : MonoBehaviour
     public string episodePath = "Episodes/episode_1";
     public string startNodeId = "scene_1_start";
 
+    [Header("Chapter")]
+    public int chapterNumber = 1;
+
     private EpisodeData episode;
     private Variables vars;
     private Dictionary<string, DialogueNode> nodeDict;
@@ -35,6 +38,26 @@ public class DialogueController : MonoBehaviour
 
     void Start()
     {
+        // 1. Пробуем взять сейв из TempGameContext (от меню),
+        //    если его нет – из SaveSystem
+        SaveData save = TempGameContext.saveToLoad ?? SaveSystem.Load();
+
+        if (save != null)
+        {
+            // Берём путь эпизода и ноду из сейва
+            episodePath = save.episodePath;
+            startNodeId = string.IsNullOrEmpty(save.currentNodeId)
+                ? "scene_1_start"
+                : save.currentNodeId;
+            // chapterNumber можешь куда-нибудь сохранить, если нужно
+        }
+        else
+        {
+            // Вообще нет сейва – используем дефолтные значения,
+            // которые ты уже указал в инспекторе
+        }
+
+        // 2. Грузим эпизод
         LoadEpisode();
 
         if (nodeDict == null || nodeDict.Count == 0)
@@ -43,6 +66,7 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
+        // 3. Показываем НОДУ ИЗ СЕЙВА, а не всегда первую
         ShowNode(startNodeId);
     }
 
@@ -148,10 +172,8 @@ public class DialogueController : MonoBehaviour
 
             RightCharacter?.SetActive(true);
 
-            // вместо EmotionsController справа
             if (RightCharacterCtrl != null)
             {
-                // подставляем нужного персонажа и эмоцию
                 RightCharacterCtrl.Show(node.character, node.emotion);
             }
             else
@@ -161,6 +183,17 @@ public class DialogueController : MonoBehaviour
         }
 
         SetupChoices(node);
+
+        // ---------------------------------
+        // АВТОСЕЙВ ТЕКУЩЕЙ НОДЫ
+        // ---------------------------------
+        var data = new SaveData
+        {
+            episodePath   = episodePath,
+            currentNodeId = nodeId,
+            chapterNumber = chapterNumber
+        };
+        SaveSystem.Save(data);
     }
 
     //--------------------------------------

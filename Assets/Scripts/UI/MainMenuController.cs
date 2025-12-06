@@ -14,11 +14,13 @@ public class MainMenuController : MonoBehaviour
 
     private SaveData currentSave;
 
+    // Значения "по умолчанию" для НОВОЙ игры
+    private const string DEFAULT_EPISODE_PATH = "Episodes/episode_1";
+    private const string DEFAULT_NODE_ID      = "scene_1_start";
+    private const int    DEFAULT_CHAPTER      = 1;
+
     void Start()
     {
-        // =========================
-        // 1. Проверяем наличие сейва
-        // =========================
         if (SaveSystem.HasSave())
         {
             currentSave = SaveSystem.Load();
@@ -26,16 +28,26 @@ public class MainMenuController : MonoBehaviour
             if (currentSave == null)
             {
                 Debug.LogWarning("Save exists, but Load() returned null. Recreating save.");
-                CreateDefaultSave();
+                currentSave = CreateDefaultSave();
                 SaveSystem.Save(currentSave);
             }
 
-            playButtonText.text = "ПРОДОЛЖИТЬ";
+            // ⬇⬇⬇ КЛЮЧЕВОЙ МОМЕНТ ⬇⬇⬇
+            if (IsDefaultSave(currentSave))
+            {
+                // Сейв есть, но он на самом старте → считаем НОВОЙ ИГРОЙ
+                playButtonText.text = "ИГРАТЬ";
+            }
+            else
+            {
+                // Есть реальный прогресс → можно продолжать
+                playButtonText.text = "ПРОДОЛЖИТЬ";
+            }
         }
         else
         {
-            // Нет сохранений → новая игра
-            CreateDefaultSave();
+            // Вообще нет сейва → создаём дефолт, но считаем это НОВОЙ ИГРОЙ
+            currentSave = CreateDefaultSave();
             playButtonText.text = "ИГРАТЬ";
         }
 
@@ -43,33 +55,39 @@ public class MainMenuController : MonoBehaviour
             chapterInfoUI.ShowFromSave(currentSave);
     }
 
-    // ======================================================
-    // СОЗДАЁМ ДЕФОЛТНЫЙ СЕЙВ ДЛЯ НОВОЙ ИГРЫ
-    // ======================================================
-    private void CreateDefaultSave()
+    // Создаём объект сейва для НОВОЙ игры
+    private SaveData CreateDefaultSave()
     {
-        currentSave = new SaveData
+        return new SaveData
         {
-            episodePath = "Episodes/episode_1",   // Resources path
-            currentNodeId = "scene_1_start",
-            chapterNumber = 1
+            episodePath   = DEFAULT_EPISODE_PATH,
+            currentNodeId = DEFAULT_NODE_ID,
+            chapterNumber = DEFAULT_CHAPTER
         };
     }
 
-    // ======================================================
-    // НАЖАТИЕ КНОПКИ "ИГРАТЬ / ПРОДОЛЖИТЬ"
-    // ======================================================
+    // Проверяем, "на самом ли старте" сейв
+    private bool IsDefaultSave(SaveData data)
+    {
+        if (data == null) return true;
+
+        return data.episodePath   == DEFAULT_EPISODE_PATH &&
+               data.currentNodeId == DEFAULT_NODE_ID &&
+               data.chapterNumber == DEFAULT_CHAPTER;
+    }
+
     public void OnPlayButton()
     {
-        // Если это новая игра
+        // Если на кнопке "ИГРАТЬ" → начинаем НОВУЮ игру,
+        // независимо от того, что там сейчас лежит в сейве
         if (playButtonText.text == "ИГРАТЬ")
         {
-            SaveSystem.Clear();   // Удаляем старый прогресс полностью
-            CreateDefaultSave();  // Создаём новый сейв
+            SaveSystem.Clear();               // старый прогресс полностью убрать
+            currentSave = CreateDefaultSave();
             SaveSystem.Save(currentSave);
         }
 
-        // Передаём сейв в диалоговую сцену
+        // Передаём сейв в сцену эпизода
         TempGameContext.saveToLoad = currentSave;
 
         StartCoroutine(LoadSceneNextFrame(sceneToLoad));
