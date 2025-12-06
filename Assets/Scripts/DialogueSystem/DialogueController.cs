@@ -7,11 +7,11 @@ public class DialogueController : MonoBehaviour
     public UIController ui;
 
     [Header("Characters (спрайты)")]
-    public GameObject LeftCharacter;
-    public EmotionsController LeftEmotions;
+    public GameObject LeftCharacter;              // Айназ
+    public EmotionsController LeftEmotions;       // эмоции Айназ
 
-    public GameObject RightCharacter;
-    public EmotionsController RightEmotions;
+    public GameObject RightCharacter;             // контейнер справа
+    public RightCharacterController RightCharacterCtrl; // НОВЫЙ контроллер справа
 
     [Header("Text Colors")]
     public Color AuthorColor = Color.gray;
@@ -46,9 +46,8 @@ public class DialogueController : MonoBehaviour
         ShowNode(startNodeId);
     }
 
-
     //--------------------------------------
-    // UPDATE — простая версия без таймеров
+    // UPDATE — простая версия
     //--------------------------------------
     void Update()
     {
@@ -80,7 +79,6 @@ public class DialogueController : MonoBehaviour
         }
     }
 
-
     //--------------------------------------
     void LoadEpisode()
     {
@@ -94,7 +92,6 @@ public class DialogueController : MonoBehaviour
 
         vars = episode.variables ?? new Variables();
     }
-
 
     //--------------------------------------
     void ShowNode(string nodeId)
@@ -142,7 +139,7 @@ public class DialogueController : MonoBehaviour
             ApplyEmotion(LeftEmotions, node.emotion);
         }
         //----------------------------
-        // Другой персонаж
+        // Другой персонаж (справа)
         //----------------------------
         else
         {
@@ -150,20 +147,28 @@ public class DialogueController : MonoBehaviour
             ui.otherText.color = OtherColor;
 
             RightCharacter?.SetActive(true);
-            ApplyEmotion(RightEmotions, node.emotion);
+
+            // вместо EmotionsController справа
+            if (RightCharacterCtrl != null)
+            {
+                // подставляем нужного персонажа и эмоцию
+                RightCharacterCtrl.Show(node.character, node.emotion);
+            }
+            else
+            {
+                Debug.LogWarning("[DialogueController] RightCharacterCtrl не назначен в инспекторе.");
+            }
         }
 
         SetupChoices(node);
     }
 
-
     //--------------------------------------
     void ApplyEmotion(EmotionsController controller, string emotion)
     {
         if (controller == null) return;
-        controller.SetEmotion(emotion); // простой вызов, без таймеров
+        controller.SetEmotion(emotion);
     }
-
 
     //--------------------------------------
     void SetupChoices(DialogueNode node)
@@ -192,7 +197,6 @@ public class DialogueController : MonoBehaviour
             ui.HideChoices();
     }
 
-
     //--------------------------------------
     void ApplyEffects(DialogueNode node)
     {
@@ -204,7 +208,6 @@ public class DialogueController : MonoBehaviour
         vars.Тревога       += node.effects.Тревога;
         vars.Доверие       += node.effects.Доверие;
     }
-
 
     //--------------------------------------
     void HandleEnding(DialogueNode node)
