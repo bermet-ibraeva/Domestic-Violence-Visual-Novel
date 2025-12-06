@@ -361,7 +361,7 @@
 
     {
       "nodeId": "episode_1_morning",
-      "background": "2",
+      "background": "6",
       "character": "Автор",
       "emotion": "Calm",
       "text": "Утро. Двор тихий. Дом Гулданы выглядит так, будто ночью ничего не случилось.",
@@ -370,7 +370,7 @@
 
     {
       "nodeId": "episode_1_final_thoughts",
-      "background": "2",
+      "background": "6",
       "character": "Айназ",
       "emotion": "Determined",
       "text": "Все говорят: «Не вмешивайся, не позорься, что скажет народ». Но если все будут молчать — ничего не изменится.",

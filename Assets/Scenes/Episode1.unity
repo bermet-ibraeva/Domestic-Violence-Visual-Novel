@@ -315,6 +315,7 @@ MonoBehaviour:
   backgroundController: {fileID: 2009236193}
   episodePath: Episodes/episode_1
   startNodeId: scene_1_start
+  chapterNumber: 1
 --- !u!1 &251045528
 GameObject:
   m_ObjectHideFlags: 0
@@ -2307,7 +2308,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4677f2a4483221d4e8ddb8d873fb586a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: MainScene
 --- !u!114 &1317869462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2807,6 +2807,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: d45ad68d985162044a1e388a815f61b5, type: 3}
   - id: 5
     sprite: {fileID: 21300000, guid: 77271d54960309043a8aaad9867591d9, type: 3}
+  - id: 6
+    sprite: {fileID: 21300000, guid: 006c987cbc34fa14daec515911a947fc, type: 3}
 --- !u!1 &2026779788
 GameObject:
   m_ObjectHideFlags: 0
