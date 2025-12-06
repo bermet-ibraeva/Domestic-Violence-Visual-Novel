@@ -1,113 +1,226 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class DialogueController : MonoBehaviour
 {
-    [Header("Controllers")]
+    [Header("UI")]
     public UIController ui;
-    public BackgroundController bg;
-    public EmotionsController leftEmotions;
-    public EmotionsController rightEmotions;
+
+    [Header("Characters (спрайты)")]
+    public GameObject LeftCharacter;
+    public EmotionsController LeftEmotions;
+
+    public GameObject RightCharacter;
+    public EmotionsController RightEmotions;
+
+    [Header("Text Colors")]
+    public Color AuthorColor = Color.gray;
+    public Color AinazColor = Color.white;
+    public Color OtherColor = Color.white;
+
+    [Header("Backgrounds")]
+    public BackgroundController backgroundController;
+
+    [Header("Episode Settings")]
+    public string episodePath = "Episodes/episode_1";
+    public string startNodeId = "scene_1_start";
 
     private EpisodeData episode;
+    private Variables vars;
     private Dictionary<string, DialogueNode> nodeDict;
+
     private DialogueNode currentNode;
-    private SaveData save;
+    private bool waitingForAdvance = false;
+
 
     void Start()
     {
-        save = TempGameContext.saveToLoad;
+        LoadEpisode();
 
-        if (save == null)
+        if (nodeDict == null || nodeDict.Count == 0)
         {
-            Debug.LogWarning("DialogueController: save was null, creating default");
-            save = new SaveData
-            {
-                episodePath = "Episodes/episode_1",
-                currentNodeId = "scene_1_start",
-                chapterNumber = 1
-            };
-            SaveSystem.Save(save);
+            Debug.LogError("DialogueController: nodeDict is empty, cannot start dialogue");
+            return;
         }
 
-        episode = EpisodeLoader.LoadEpisode(save.episodePath, out nodeDict);
+        ShowNode(startNodeId);
+    }
+
+
+    //--------------------------------------
+    // UPDATE — простая версия без таймеров
+    //--------------------------------------
+    void Update()
+    {
+        if (waitingForAdvance && Input.GetMouseButtonDown(0))
+        {
+            waitingForAdvance = false;
+
+            if (currentNode == null)
+                return;
+
+            // Концовка
+            if (currentNode.requirements != null &&
+                currentNode.requirements.Length > 0 &&
+                string.IsNullOrEmpty(currentNode.nextNode))
+            {
+                HandleEnding(currentNode);
+                return;
+            }
+
+            // Следующая нода
+            if (!string.IsNullOrEmpty(currentNode.nextNode))
+            {
+                ShowNode(currentNode.nextNode);
+            }
+            else
+            {
+                ui.HideChoices();
+            }
+        }
+    }
+
+
+    //--------------------------------------
+    void LoadEpisode()
+    {
+        episode = EpisodeLoader.LoadEpisode(episodePath, out nodeDict);
 
         if (episode == null)
         {
-            Debug.LogError("DialogueController: episode failed to load");
+            Debug.LogError("DialogueController: Episode failed to load");
             return;
         }
 
-        ShowNode(save.currentNodeId);
+        vars = episode.variables ?? new Variables();
     }
 
-    public void ShowNode(string id)
+
+    //--------------------------------------
+    void ShowNode(string nodeId)
     {
-        if (!nodeDict.TryGetValue(id, out currentNode))
+        if (!nodeDict.ContainsKey(nodeId))
         {
-            Debug.LogError("DialogueController: NODE NOT FOUND: " + id);
+            Debug.LogError("Node not found: " + nodeId);
             return;
         }
 
-        // Авто-сейв
-        save.currentNodeId = id;
-        SaveSystem.Save(save);
+        DialogueNode node = nodeDict[nodeId];
+        currentNode = node;
+        waitingForAdvance = false;
 
-        ui.HideAll();
+        Debug.Log($"[DIALOGUE] ShowNode: {nodeId}, background = {node.background}");
 
-        if (!string.IsNullOrEmpty(currentNode.background))
-            bg.SetBackground(currentNode.background);
+        // Эффекты
+        ApplyEffects(node);
 
+        // Фон
+        if (backgroundController != null && !string.IsNullOrEmpty(node.background))
+            backgroundController.SetBackground(node.background);
+
+        // Скрыть спрайты
+        LeftCharacter?.SetActive(false);
+        RightCharacter?.SetActive(false);
+
+        //----------------------------
         // Автор
-        if (currentNode.character == "Автор" || string.IsNullOrEmpty(currentNode.character))
+        //----------------------------
+        if (node.character == "Автор" || string.IsNullOrEmpty(node.character))
         {
-            ui.authorPanel.SetActive(true);
-            ui.authorText.text = currentNode.text;
-            ui.HideChoices();
-            return;
+            ui.ShowAuthor(node.text);
+            ui.authorText.color = AuthorColor;
         }
-
+        //----------------------------
         // Айназ
-        if (currentNode.character == "Айназ")
+        //----------------------------
+        else if (node.character == "Айназ")
         {
-            ui.ainazPanel.SetActive(true);
-            ui.ainazName.text = "Айназ";
-            ui.ainazText.text = currentNode.text;
+            ui.ShowAinaz(node.character, node.text);
+            ui.ainazText.color = AinazColor;
 
-            leftEmotions.SetEmotion(currentNode.emotion);
-            SetupChoices();
-            return;
+            LeftCharacter?.SetActive(true);
+            ApplyEmotion(LeftEmotions, node.emotion);
+        }
+        //----------------------------
+        // Другой персонаж
+        //----------------------------
+        else
+        {
+            ui.ShowOther(node.character, node.text);
+            ui.otherText.color = OtherColor;
+
+            RightCharacter?.SetActive(true);
+            ApplyEmotion(RightEmotions, node.emotion);
         }
 
-        // Другой персонаж
-        ui.otherPanel.SetActive(true);
-        ui.otherName.text = currentNode.character;
-        ui.otherText.text = currentNode.text;
-
-        rightEmotions.SetEmotion(currentNode.emotion);
-        SetupChoices();
+        SetupChoices(node);
     }
 
-    private void SetupChoices()
+
+    //--------------------------------------
+    void ApplyEmotion(EmotionsController controller, string emotion)
     {
-        if (currentNode.choices != null && currentNode.choices.Count > 0)
+        if (controller == null) return;
+        controller.SetEmotion(emotion); // простой вызов, без таймеров
+    }
+
+
+    //--------------------------------------
+    void SetupChoices(DialogueNode node)
+    {
+        bool hasChoices = node.choices != null && node.choices.Count > 0;
+
+        if (hasChoices)
         {
-            ui.ShowChoices(currentNode.choices, OnChoicePicked);
+            ui.ShowChoices(node.choices, OnChoicePicked);
+            waitingForAdvance = false;
         }
         else
         {
             ui.HideChoices();
+            waitingForAdvance = true;
         }
     }
 
-    public void OnChoicePicked(string nextNodeId)
+    void OnChoicePicked(string nextNodeId)
     {
-        ShowNode(nextNodeId);
+        waitingForAdvance = false;
+
+        if (!string.IsNullOrEmpty(nextNodeId))
+            ShowNode(nextNodeId);
+        else
+            ui.HideChoices();
     }
 
-    public void Next()
+
+    //--------------------------------------
+    void ApplyEffects(DialogueNode node)
     {
-        if (!string.IsNullOrEmpty(currentNode.nextNode))
-            ShowNode(currentNode.nextNode);
+        if (node.effects == null) return;
+
+        vars.Сострадание   += node.effects.Сострадание;
+        vars.Послушание    += node.effects.Послушание;
+        vars.Сопротивление += node.effects.Сопротивление;
+        vars.Тревога       += node.effects.Тревога;
+        vars.Доверие       += node.effects.Доверие;
+    }
+
+
+    //--------------------------------------
+    void HandleEnding(DialogueNode node)
+    {
+        if (node.requirements == null || node.requirements.Length == 0)
+        {
+            Debug.Log("ENDING: no requirements");
+            ui.HideChoices();
+            return;
+        }
+
+        if (vars.Сопротивление >= vars.Послушание)
+            Debug.Log("GOOD ENDING: " + node.requirements[0].ending);
+        else
+            Debug.Log("SILENT ENDING: " + node.requirements[1].ending);
+
+        ui.HideChoices();
     }
 }
