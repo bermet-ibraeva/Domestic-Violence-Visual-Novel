@@ -12,6 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Episode1.unity
     guid: d78626e3978a34f41b72b9f33b63b167
   - enabled: 1
-    path: Assets/Scenes/Episode2.unity
-    guid: 6db232d403703a147bc90ef633ee46c4
+    path: Assets/Scenes/AboutPage.unity
+    guid: 37a7395098cfa944fb5e6c5abbd9086a
+  - enabled: 1
+    path: Assets/Scenes/SettingsPage.unity
+    guid: 9e9a327e97f19c941a909870339a4abd
+  - enabled: 1
+    path: Assets/Scenes/NotesPage.unity
+    guid: 5c378efd7fe90364c98de84cab1cf784
   m_configObjects: {}
