@@ -31,8 +31,6 @@ public class BackgroundController : MonoBehaviour
 
     public void SetBackground(string id)
     {
-        Debug.Log("[BG] SetBackground called with id = " + id);
-
         if (string.IsNullOrEmpty(id))
         {
             Debug.LogWarning("[BG] Empty id");

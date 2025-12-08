@@ -5,7 +5,7 @@ using TMPro;
 [RequireComponent(typeof(VerticalLayoutGroup))]
 public class AutoHeightChoicesGroup : MonoBehaviour
 {
-    [Header("Кнопки с вариантами выбора")]
+    [Header("Кнопки с варианами выбора")]
     public Button[] choiceButtons;
 
     [Header("Фиксированный размер по X")]
@@ -79,7 +79,7 @@ public class AutoHeightChoicesGroup : MonoBehaviour
         else
         {
             int extraLines = maxLines - 2;
-            targetHeight = twoLinesHeight + extraLines * extraLineStep;
+            targetHeight = twoLinesHeight + extraLineStep * extraLines;
         }
 
         targetHeight = Mathf.Clamp(targetHeight, minHeight, maxHeight);
@@ -99,5 +99,10 @@ public class AutoHeightChoicesGroup : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(
             GetComponent<RectTransform>()
         );
+    }
+
+    public void Refresh()
+    {
+        RefreshLayout();
     }
 }

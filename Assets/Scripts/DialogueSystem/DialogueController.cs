@@ -13,6 +13,9 @@ public class DialogueController : MonoBehaviour
     public GameObject RightCharacter;             // контейнер справа
     public RightCharacterController RightCharacterCtrl; // НОВЫЙ контроллер справа
 
+    [Header("Layout")]
+    public LayoutController layout;
+
     [Header("Text Colors")]
     public Color AuthorColor = Color.gray;
     public Color AinazColor = Color.white;
@@ -143,17 +146,12 @@ public class DialogueController : MonoBehaviour
         LeftCharacter?.SetActive(false);
         RightCharacter?.SetActive(false);
 
-        //----------------------------
-        // Автор
-        //----------------------------
+        // ---------- ПОКАЗ ТЕКСТА И СПРАЙТОВ ----------
         if (node.character == "Автор" || string.IsNullOrEmpty(node.character))
         {
             ui.ShowAuthor(node.text);
             ui.authorText.color = AuthorColor;
         }
-        //----------------------------
-        // Айназ
-        //----------------------------
         else if (node.character == "Айназ")
         {
             ui.ShowAinaz(node.character, node.text);
@@ -162,39 +160,35 @@ public class DialogueController : MonoBehaviour
             LeftCharacter?.SetActive(true);
             ApplyEmotion(LeftEmotions, node.emotion);
         }
-        //----------------------------
-        // Другой персонаж (справа)
-        //----------------------------
-        else
+        else // другой персонаж справа
         {
             ui.ShowOther(node.character, node.text);
             ui.otherText.color = OtherColor;
 
             RightCharacter?.SetActive(true);
-
-            if (RightCharacterCtrl != null)
-            {
-                RightCharacterCtrl.Show(node.character, node.emotion);
-            }
-            else
-            {
-                Debug.LogWarning("[DialogueController] RightCharacterCtrl не назначен в инспекторе.");
-            }
+            RightCharacterCtrl?.Show(node.character, node.emotion);
         }
 
+        // ---------- ВЫБОРЫ ----------
         SetupChoices(node);
 
-        // ---------------------------------
-        // АВТОСЕЙВ ТЕКУЩЕЙ НОДЫ
-        // ---------------------------------
-        var data = new SaveData
+        // ---------- ЛЕЙАУТ (после того как текст и кнопки уже обновлены) ----------
+        if (layout != null)
+        {
+            // если character пустой → считаем, что это Автор
+            string ch = string.IsNullOrEmpty(node.character) ? "Автор" : node.character;
+            layout.ApplyLayout(ch);
+        }
+
+        // ---------- АВТОСЕЙВ ----------
+        SaveSystem.Save(new SaveData
         {
             episodePath   = episodePath,
             currentNodeId = nodeId,
             chapterNumber = chapterNumber
-        };
-        SaveSystem.Save(data);
+        });
     }
+
 
     //--------------------------------------
     void ApplyEmotion(EmotionsController controller, string emotion)
