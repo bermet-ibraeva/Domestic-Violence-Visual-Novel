@@ -11,13 +11,13 @@ public class AutoResizePanel : MonoBehaviour
     public float fixedWidth = 900f;
 
     [Header("Высоты для центра (автор)")]
-    public float oneLineHeight = 170f;   // ~1 строка
-    public float twoLinesHeight = 220f;  // ~2 строки
+    public float oneLineHeight = 260f;   // ~1 строка
+    public float twoLinesHeight = 260f;  // ~2 строки
     public float extraLineStep = 40f;    // на каждую строку сверху (3+, если вдруг)
 
     [Header("Ограничения")]
-    public float minHeight = 160f;
-    public float maxHeight = 600f;
+    public float minHeight = 260f;
+    public float maxHeight = 400f;
 
     [Header("Вертикальные отступы")]
     public float paddingY = 0f;          // если хочешь ещё добавить сверху/снизу

@@ -11,13 +11,13 @@ public class AuthorResizePanel : MonoBehaviour
     public float fixedWidth = 900f;
 
     [Header("Высоты")]
-    public float oneLineHeight = 150f;   // однострочный текст
-    public float twoLinesHeight = 220f;  // две строки
-    public float extraLineStep = 40f;    // на каждую строку сверху
+    public float oneLineHeight = 250f;   // однострочный текст
+    public float twoLinesHeight = 300f;  // две строки
+    public float extraLineStep = 60f;    // на каждую строку сверху
 
     [Header("Ограничения")]
-    public float minHeight = 130f;
-    public float maxHeight = 600f;
+    public float minHeight = 250f;
+    public float maxHeight = 500f;
 
     private RectTransform rect;
 
