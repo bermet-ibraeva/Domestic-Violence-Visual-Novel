@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public class SaveData
 {
     // 🔹 Progress tracking
-    public string episodePath;        
-    public string currentNodeId;      
-    public int chapterNumber;         
+    public string episodePath;
+    public string currentNodeId;
+    public int chapterNumber;
 
     // Spark system (global)
     public int sparksTotal;
@@ -35,4 +35,6 @@ public class SaveData
 
     // 🔹 Snapshot for restart logic
     public EpisodeSnapshot episodeStartSnapshot;
+    public List<string> appliedEffectNodes = new List<string>();
+
 }

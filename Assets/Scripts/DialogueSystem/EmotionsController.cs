@@ -1,70 +1,112 @@
-using UnityEngine;
-using UnityEngine.UI;
-using System.Collections.Generic;
-
 public class EmotionsController : MonoBehaviour
 {
     [Header("UI Image персонажа")]
-    public Image characterImage;
+    [SerializeField] private Image characterImage;
 
-    [Header("Список эмоций персонажа (emotionName -> sprite)")]
-    public List<EmotionSprite> emotions = new List<EmotionSprite>();
+    [Header("Список эмоций (emotionName -> sprite)")]
+    [SerializeField] private List<EmotionSprite> emotions = new List<EmotionSprite>();
+
+    [Header("Fallback emotion key")]
+    [SerializeField] private string fallbackEmotion = "Calm";
 
     private Dictionary<string, Sprite> emotionDict;
-    private Sprite fallbackCalmSprite;   // запасной Calm
+    private Sprite fallbackSprite;
 
-    void Awake()
+    private static readonly StringComparer Cmp = StringComparer.OrdinalIgnoreCase;
+
+    private void Awake()
     {
-        emotionDict = new Dictionary<string, Sprite>();
+        BuildDictionary();
+    }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        // Чтобы в редакторе словарь обновлялся при правках списка
+        BuildDictionary();
+    }
+#endif
+
+    private void BuildDictionary()
+    {
+        if (emotionDict == null)
+            emotionDict = new Dictionary<string, Sprite>(Cmp);
+        else
+            emotionDict.Clear();
+
+        fallbackSprite = null;
+        Sprite firstValid = null;
 
         foreach (var e in emotions)
         {
-            if (!emotionDict.ContainsKey(e.emotionName))
-                emotionDict.Add(e.emotionName, e.sprite);
+            if (e == null || e.sprite == null) continue;
 
-            if (e.emotionName == "Calm")
-                fallbackCalmSprite = e.sprite;
+            var key = Normalize(e.emotionName);
+            if (string.IsNullOrEmpty(key)) continue;
+
+            if (firstValid == null) firstValid = e.sprite;
+
+            if (!emotionDict.ContainsKey(key))
+                emotionDict.Add(key, e.sprite);
+            else
+                Debug.LogWarning($"[EmotionsController] Duplicate emotion '{key}' on '{gameObject.name}'. Using the first one.");
+
+            if (fallbackSprite == null && Cmp.Equals(key, Normalize(fallbackEmotion)))
+                fallbackSprite = e.sprite;
         }
 
-        if (fallbackCalmSprite == null)
+        // Если Calm (или fallbackEmotion) не найден — берём первый валидный спрайт как запасной
+        if (fallbackSprite == null)
+            fallbackSprite = firstValid;
+
+        if (fallbackSprite == null)
         {
-            Debug.LogWarning($"[EmotionsController] У персонажа '{gameObject.name}' нет эмоции Calm! " +
-                             $"Добавь Calm в список, иначе fallback будет пустой.");
+            Debug.LogWarning($"[EmotionsController] No valid emotion sprites on '{gameObject.name}'.");
         }
     }
 
     /// <summary>
-    /// Устанавливает эмоцию персонажа по имени. Если эмоции нет – ставит Calm.
+    /// Set emotion by name. If not found -> fallback.
     /// </summary>
     public void SetEmotion(string emotion)
     {
         if (characterImage == null)
         {
-            Debug.LogError("[EmotionsController] characterImage = NULL, прикрепи Image!");
+            Debug.LogError($"[EmotionsController] characterImage is NULL on '{gameObject.name}'. Assign Image!");
             return;
         }
 
-        if (string.IsNullOrEmpty(emotion))
-        {
-            ApplySprite(fallbackCalmSprite);
-            return;
-        }
+        // На случай если вызвали SetEmotion до Awake()
+        if (emotionDict == null || emotionDict.Count == 0)
+            BuildDictionary();
 
-        if (emotionDict.TryGetValue(emotion, out Sprite sprite))
+        var key = Normalize(emotion);
+
+        if (!string.IsNullOrEmpty(key) && emotionDict.TryGetValue(key, out var sprite) && sprite != null)
         {
             ApplySprite(sprite);
+            return;
+        }
+
+        // fallback
+        if (fallbackSprite != null)
+        {
+            if (!string.IsNullOrEmpty(key))
+                Debug.LogWarning($"[EmotionsController] Emotion '{emotion}' not found on '{gameObject.name}'. -> {fallbackEmotion}");
+
+            ApplySprite(fallbackSprite);
         }
         else
         {
-            Debug.LogWarning($"[EmotionsController] Эмоция '{emotion}' не найдена у '{gameObject.name}'. → Calm");
-
-            ApplySprite(fallbackCalmSprite);
+            Debug.LogWarning($"[EmotionsController] Fallback sprite is NULL on '{gameObject.name}'. Nothing to apply.");
         }
     }
 
-    /// <summary>
-    /// Устанавливает спрайт моментально (готово к будущему fade-эффекту).
-    /// </summary>
+    private static string Normalize(string s)
+    {
+        return string.IsNullOrWhiteSpace(s) ? string.Empty : s.Trim();
+    }
+
     private void ApplySprite(Sprite sprite)
     {
         if (sprite == null) return;
@@ -72,9 +114,9 @@ public class EmotionsController : MonoBehaviour
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class EmotionSprite
 {
-    public string emotionName; // например: "Calm", "Sad", "Scared", "Happy"
+    public string emotionName; // "Calm", "Happy", "Sad", ...
     public Sprite sprite;
 }

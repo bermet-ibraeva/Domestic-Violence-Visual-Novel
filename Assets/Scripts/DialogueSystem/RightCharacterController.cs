@@ -10,7 +10,7 @@ public class RightCharacterController : MonoBehaviour
     [System.Serializable]
     public class EmotionSprite
     {
-        public string emotionName;  // "Calm", "Sad", "Tense" и т.д.
+        public string emotionName;  
         public Sprite sprite;
     }
 

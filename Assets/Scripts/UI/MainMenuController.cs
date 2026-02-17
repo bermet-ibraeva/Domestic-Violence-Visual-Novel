@@ -16,8 +16,8 @@ public class MainMenuController : MonoBehaviour
 
     // Значения "по умолчанию" для НОВОЙ игры
     private const string DEFAULT_EPISODE_PATH = "Episodes/episode_1";
-    private const string DEFAULT_NODE_ID      = "scene_1_start";
-    private const int    DEFAULT_CHAPTER      = 1;
+    private const string DEFAULT_NODE_ID = "scene_1_start";
+    private const int DEFAULT_CHAPTER = 1;
 
     void Start()
     {

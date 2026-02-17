@@ -1,58 +1,39 @@
-using System;
-using System.Collections.Generic;
-
-[Serializable]
-public class EpisodeData
+public static class EpisodeLoader
 {
-    public string episode;
-    public Variables variables;
-    public List<DialogueNode> nodes;
-}
+    public static EpisodeData LoadEpisode(string episodePath, out Dictionary<string, DialogueNode> nodeDict)
+    {
+        nodeDict = null;
 
-[Serializable]
-public class Variables
-{
-    public int Сострадание;
-    public int Послушание;
-    public int Сопротивление;
-    public int Тревога;
-    public int Доверие;
-}
+        TextAsset asset = Resources.Load<TextAsset>(episodePath);
 
-[Serializable]
-public class DialogueNode
-{
-    public string nodeId;
-    public string background;   // "1", "2", "3", "4", "5"
-    public string character;    // "Автор", "Айназ", ...
-    public string emotion;      // "Calm", "Sad", "Scared", "Happy"
-    public string text;
-    public List<Choice> choices;
-    public Effects effects;
-    public string nextNode;
-    public Requirement[] requirements;
-}
+        if (asset == null)
+        {
+            Debug.LogError("EpisodeLoader: JSON not found at Resources/" + episodePath);
+            return null;
+        }
 
-[Serializable]
-public class Choice
-{
-    public string text;
-    public string nextNode;
-}
+        EpisodeData episode = JsonUtility.FromJson<EpisodeData>(asset.text);
 
-[Serializable]
-public class Effects
-{
-    public int Сострадание;
-    public int Послушание;
-    public int Сопротивление;
-    public int Тревога;
-    public int Доверие;
-}
+        if (episode == null)
+        {
+            Debug.LogError("EpisodeLoader: Failed to parse JSON");
+            return null;
+        }
 
-[Serializable]
-public class Requirement
-{
-    public string condition;
-    public string ending;
+        nodeDict = new Dictionary<string, DialogueNode>();
+        if (episode.nodes != null)
+        {
+            foreach (var node in episode.nodes)
+            {
+                if (node == null || string.IsNullOrEmpty(node.nodeId)) continue;
+
+                if (!nodeDict.ContainsKey(node.nodeId))
+                    nodeDict.Add(node.nodeId, node);
+                else
+                    Debug.LogWarning($"EpisodeLoader: Duplicate nodeId '{node.nodeId}' in {episodePath}");
+            }
+        }
+
+        return episode;
+    }
 }

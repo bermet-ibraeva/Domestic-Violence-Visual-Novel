@@ -7,46 +7,47 @@ public class BackgroundController : MonoBehaviour
     [System.Serializable]
     public class BackgroundSprite
     {
-        public string id;      // "1", "2", "3", "4", "5"
         public Sprite sprite;
     }
 
     public Image backgroundImage;
     public List<BackgroundSprite> backgrounds;
 
-    private Dictionary<string, Sprite> bgDict;
+    private Dictionary<string, Sprite> bgDict = new();
+    private string currentBackgroundName;
 
-    void Awake()
+    private void Awake()
     {
-        bgDict = new Dictionary<string, Sprite>();
+        bgDict.Clear();
 
         foreach (var b in backgrounds)
         {
-            if (b.sprite != null)
-            {
-                bgDict[b.id] = b.sprite;
-            }
+            if (b == null || b.sprite == null) continue;
+
+            string key = b.sprite.name; // <-- имя спрайта
+
+            // перезапишет если одинаковые спрайты
+            bgDict[key] = b.sprite;
         }
     }
 
-    public void SetBackground(string id)
+    public void SetBackground(string nameFromJson)
     {
-        if (string.IsNullOrEmpty(id))
-        {
-            Debug.LogWarning("[BG] Empty id");
+        if (string.IsNullOrEmpty(nameFromJson) || backgroundImage == null)
             return;
-        }
 
-        if (bgDict.TryGetValue(id, out Sprite sprite))
+        if (nameFromJson == currentBackgroundName)
+            return;
+
+        if (bgDict.TryGetValue(nameFromJson, out var sprite))
         {
-            if (backgroundImage != null)
-                backgroundImage.sprite = sprite;
-            else
-                Debug.LogWarning("[BG] backgroundImage is NULL");
+            backgroundImage.sprite = sprite;
+            currentBackgroundName = nameFromJson;
         }
         else
         {
-            Debug.LogWarning("[BG] Background not found: " + id);
+            Debug.LogWarning($"[BG] Background not found by name: {nameFromJson}. " +
+                             "Проверь: sprite.name должен совпадать с JSON.");
         }
     }
 }

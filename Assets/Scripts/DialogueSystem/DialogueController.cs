@@ -6,12 +6,12 @@ public class DialogueController : MonoBehaviour
     [Header("UI")]
     public UIController ui;
 
-    [Header("Characters (спрайты)")]
-    public GameObject LeftCharacter;              // Айназ
-    public EmotionsController LeftEmotions;       // эмоции Айназ
+    [Header("Characters")]
+    public GameObject LeftCharacter;
+    public EmotionsController LeftEmotions;
 
-    public GameObject RightCharacter;             // контейнер справа
-    public RightCharacterController RightCharacterCtrl; // НОВЫЙ контроллер справа
+    public GameObject RightCharacter;
+    public RightCharacterController RightCharacterCtrl;
 
     [Header("Layout")]
     public LayoutController layout;
@@ -32,60 +32,45 @@ public class DialogueController : MonoBehaviour
     public int chapterNumber = 1;
 
     private EpisodeData episode;
-    private Variables vars;
     private Dictionary<string, DialogueNode> nodeDict;
 
     private DialogueNode currentNode;
     private bool waitingForAdvance = false;
 
+    private SaveData save;
 
     void Start()
     {
-        // 1. Пробуем взять сейв из TempGameContext (от меню),
-        //    если его нет – из SaveSystem
-        SaveData save = TempGameContext.saveToLoad ?? SaveSystem.Load();
+        save = TempGameContext.saveToLoad ?? SaveSystem.Load();
+        if (save == null) save = new SaveData();
 
-        if (save != null)
-        {
-            // Берём путь эпизода и ноду из сейва
+        if (save.appliedEffectNodes == null) save.appliedEffectNodes = new List<string>();
+
+        if (!string.IsNullOrEmpty(save.episodePath))
             episodePath = save.episodePath;
-            startNodeId = string.IsNullOrEmpty(save.currentNodeId)
-                ? "scene_1_start"
-                : save.currentNodeId;
-            // chapterNumber можешь куда-нибудь сохранить, если нужно
-        }
-        else
-        {
-            // Вообще нет сейва – используем дефолтные значения,
-            // которые ты уже указал в инспекторе
-        }
 
-        // 2. Грузим эпизод
+        startNodeId = string.IsNullOrEmpty(save.currentNodeId) ? startNodeId : save.currentNodeId;
+
         LoadEpisode();
 
         if (nodeDict == null || nodeDict.Count == 0)
         {
-            Debug.LogError("DialogueController: nodeDict is empty, cannot start dialogue");
+            Debug.LogError("DialogueController: nodeDict empty");
             return;
         }
 
-        // 3. Показываем НОДУ ИЗ СЕЙВА, а не всегда первую
         ShowNode(startNodeId);
     }
 
-    //--------------------------------------
-    // UPDATE — простая версия
-    //--------------------------------------
     void Update()
     {
         if (waitingForAdvance && Input.GetMouseButtonDown(0))
         {
             waitingForAdvance = false;
 
-            if (currentNode == null)
-                return;
+            if (currentNode == null) return;
 
-            // Концовка
+            // Ending node: has requirements & no next
             if (currentNode.requirements != null &&
                 currentNode.requirements.Length > 0 &&
                 string.IsNullOrEmpty(currentNode.nextNode))
@@ -94,59 +79,43 @@ public class DialogueController : MonoBehaviour
                 return;
             }
 
-            // Следующая нода
             if (!string.IsNullOrEmpty(currentNode.nextNode))
-            {
                 ShowNode(currentNode.nextNode);
-            }
             else
-            {
                 ui.HideChoices();
-            }
         }
     }
 
-    //--------------------------------------
     void LoadEpisode()
     {
         episode = EpisodeLoader.LoadEpisode(episodePath, out nodeDict);
-
         if (episode == null)
-        {
             Debug.LogError("DialogueController: Episode failed to load");
-            return;
-        }
-
-        vars = episode.variables ?? new Variables();
     }
 
-    //--------------------------------------
     void ShowNode(string nodeId)
     {
-        if (!nodeDict.ContainsKey(nodeId))
+        if (nodeDict == null || !nodeDict.TryGetValue(nodeId, out var node))
         {
             Debug.LogError("Node not found: " + nodeId);
             return;
         }
 
-        DialogueNode node = nodeDict[nodeId];
         currentNode = node;
         waitingForAdvance = false;
 
-        Debug.Log($"[DIALOGUE] ShowNode: {nodeId}, background = {node.background}");
+        // ✅ Apply effects once
+        ApplyEffectsOnce(nodeId, node);
 
-        // Эффекты
-        ApplyEffects(node);
-
-        // Фон
+        // Background
         if (backgroundController != null && !string.IsNullOrEmpty(node.background))
             backgroundController.SetBackground(node.background);
 
-        // Скрыть спрайты
-        LeftCharacter?.SetActive(false);
-        RightCharacter?.SetActive(false);
+        // Hide characters
+        if (LeftCharacter != null) LeftCharacter.SetActive(false);
+        if (RightCharacter != null) RightCharacter.SetActive(false);
 
-        // ---------- ПОКАЗ ТЕКСТА И СПРАЙТОВ ----------
+        // Text + sprites
         if (node.character == "Автор" || string.IsNullOrEmpty(node.character))
         {
             ui.ShowAuthor(node.text);
@@ -157,47 +126,34 @@ public class DialogueController : MonoBehaviour
             ui.ShowAinaz(node.character, node.text);
             ui.ainazText.color = AinazColor;
 
-            LeftCharacter?.SetActive(true);
-            ApplyEmotion(LeftEmotions, node.emotion);
+            if (LeftCharacter != null) LeftCharacter.SetActive(true);
+            LeftEmotions?.SetEmotion(node.emotion);
         }
-        else // другой персонаж справа
+        else
         {
             ui.ShowOther(node.character, node.text);
             ui.otherText.color = OtherColor;
 
-            RightCharacter?.SetActive(true);
+            if (RightCharacter != null) RightCharacter.SetActive(true);
             RightCharacterCtrl?.Show(node.character, node.emotion);
         }
 
-        // ---------- ВЫБОРЫ ----------
         SetupChoices(node);
 
-        // ---------- ЛЕЙАУТ (после того как текст и кнопки уже обновлены) ----------
         if (layout != null)
         {
-            // если character пустой → считаем, что это Автор
             string ch = string.IsNullOrEmpty(node.character) ? "Автор" : node.character;
             layout.ApplyLayout(ch);
         }
 
-        // ---------- АВТОСЕЙВ ----------
-        SaveSystem.Save(new SaveData
-        {
-            episodePath   = episodePath,
-            currentNodeId = nodeId,
-            chapterNumber = chapterNumber
-        });
+        // Autosave pointers
+        save.episodePath = episodePath;
+        save.currentNodeId = nodeId;
+        save.chapterNumber = chapterNumber;
+
+        SaveSystem.Save(save);
     }
 
-
-    //--------------------------------------
-    void ApplyEmotion(EmotionsController controller, string emotion)
-    {
-        if (controller == null) return;
-        controller.SetEmotion(emotion);
-    }
-
-    //--------------------------------------
     void SetupChoices(DialogueNode node)
     {
         bool hasChoices = node.choices != null && node.choices.Count > 0;
@@ -224,33 +180,42 @@ public class DialogueController : MonoBehaviour
             ui.HideChoices();
     }
 
-    //--------------------------------------
-    void ApplyEffects(DialogueNode node)
+    // -------- Effects (NEW) --------
+    void ApplyEffectsOnce(string nodeId, DialogueNode node)
     {
-        if (node.effects == null) return;
+        if (node == null || node.effects == null) return;
 
-        vars.Сострадание   += node.effects.Сострадание;
-        vars.Послушание    += node.effects.Послушание;
-        vars.Сопротивление += node.effects.Сопротивление;
-        vars.Тревога       += node.effects.Тревога;
-        vars.Доверие       += node.effects.Доверие;
+        string key = $"{episodePath}:{nodeId}";
+        if (save.appliedEffectNodes.Contains(key)) return;
+
+        ApplyEffects(node.effects);
+        save.appliedEffectNodes.Add(key);
     }
 
-    //--------------------------------------
+    void ApplyEffects(NodeEffects e)
+    {
+        save.trustAG += e.trustAG;
+        save.trustJA += e.trustJA;
+
+        save.riskTotal += e.risk;
+        save.safetyTotal += e.safety;
+
+        save.episodeRisk += e.risk;
+        save.episodeSafety += e.safety;
+
+        save.sparksTotal += e.sparks;
+    }
+
     void HandleEnding(DialogueNode node)
     {
+        // пока просто выводим ending текста (логику условий добавим потом)
         if (node.requirements == null || node.requirements.Length == 0)
         {
-            Debug.Log("ENDING: no requirements");
             ui.HideChoices();
             return;
         }
 
-        if (vars.Сопротивление >= vars.Послушание)
-            Debug.Log("GOOD ENDING: " + node.requirements[0].ending);
-        else
-            Debug.Log("SILENT ENDING: " + node.requirements[1].ending);
-
+        Debug.Log("ENDING: " + node.requirements[0].ending);
         ui.HideChoices();
     }
 }
