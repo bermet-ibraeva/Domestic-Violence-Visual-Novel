@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+
 public class EmotionsController : MonoBehaviour
 {
     [Header("UI Image персонажа")]

@@ -1,39 +1,48 @@
-public static class EpisodeLoader
+using System;
+using System.Collections.Generic;
+
+[Serializable]
+public class EpisodeData
 {
-    public static EpisodeData LoadEpisode(string episodePath, out Dictionary<string, DialogueNode> nodeDict)
-    {
-        nodeDict = null;
+    public string episode;
+    public List<DialogueNode> nodes;
+}
 
-        TextAsset asset = Resources.Load<TextAsset>(episodePath);
+[Serializable]
+public class DialogueNode
+{
+    public string nodeId;
+    public string background;
+    public string character;
+    public string emotion;
+    public string text;
+    public string nextNode;
 
-        if (asset == null)
-        {
-            Debug.LogError("EpisodeLoader: JSON not found at Resources/" + episodePath);
-            return null;
-        }
+    public List<Choice> choices;
 
-        EpisodeData episode = JsonUtility.FromJson<EpisodeData>(asset.text);
+    public NodeEffects effects;
+    public RequirementData[] requirements;
+}
 
-        if (episode == null)
-        {
-            Debug.LogError("EpisodeLoader: Failed to parse JSON");
-            return null;
-        }
+[Serializable]
+public class Choice
+{
+    public string text;
+    public string nextNode;
+}
 
-        nodeDict = new Dictionary<string, DialogueNode>();
-        if (episode.nodes != null)
-        {
-            foreach (var node in episode.nodes)
-            {
-                if (node == null || string.IsNullOrEmpty(node.nodeId)) continue;
+[Serializable]
+public class RequirementData
+{
+    public string ending;
+}
 
-                if (!nodeDict.ContainsKey(node.nodeId))
-                    nodeDict.Add(node.nodeId, node);
-                else
-                    Debug.LogWarning($"EpisodeLoader: Duplicate nodeId '{node.nodeId}' in {episodePath}");
-            }
-        }
-
-        return episode;
-    }
+[Serializable]
+public class NodeEffects
+{
+    public int trustAG;
+    public int trustJA;
+    public int risk;
+    public int safety;
+    public int sparks;
 }

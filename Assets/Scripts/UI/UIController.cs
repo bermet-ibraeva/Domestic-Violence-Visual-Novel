@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using TMPro;
+
 
 public class UIController : MonoBehaviour
 {
@@ -22,7 +24,6 @@ public class UIController : MonoBehaviour
     [Header("Choices UI")]
     public GameObject choicesPanel;
     public ChoiceButton[] choiceButtons;
-
 
     // ---------------------- HIDE ----------------------
 
