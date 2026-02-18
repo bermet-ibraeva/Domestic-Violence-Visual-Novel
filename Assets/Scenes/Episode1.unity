@@ -813,6 +813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterImage: {fileID: 394096380}
   emotions: []
+  fallbackEmotion: Calm
 --- !u!1 &603450846
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,7 +2196,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1176912194
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3110,7 +3111,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c3612ef57da9f034f904b761d4d52a01, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 960d23ec9a821064ca196c3acef8ee6e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3206,18 +3207,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundImage: {fileID: 2004443271}
   backgrounds:
-  - id: 1
-    sprite: {fileID: 21300000, guid: c3612ef57da9f034f904b761d4d52a01, type: 3}
-  - id: 2
-    sprite: {fileID: 21300000, guid: 145edc3e71c5e5b44939edaa7ce7a6ae, type: 3}
-  - id: 3
-    sprite: {fileID: 21300000, guid: 943c1223a38b3964e90565b07dd9f92d, type: 3}
-  - id: 4
-    sprite: {fileID: 21300000, guid: d45ad68d985162044a1e388a815f61b5, type: 3}
-  - id: 5
-    sprite: {fileID: 21300000, guid: 77271d54960309043a8aaad9867591d9, type: 3}
-  - id: 6
-    sprite: {fileID: 21300000, guid: 006c987cbc34fa14daec515911a947fc, type: 3}
+  - key: street_crossroad_morning
+    sprite: {fileID: 21300000, guid: 960d23ec9a821064ca196c3acef8ee6e, type: 3}
+  - key: street_street_to_school_morning
+    sprite: {fileID: 21300000, guid: a5c325f6464968c4ba2b19348e6b4a2c, type: 3}
+  - key: school_hall_day
+    sprite: {fileID: 21300000, guid: bd425301e2b89d2408a01b14157c696b, type: 3}
+  - key: classroom_empty
+    sprite: {fileID: 21300000, guid: 07823adbe9df6584d9078e9ca197aa43, type: 3}
+  - key: ainaz_kitchen
+    sprite: {fileID: 21300000, guid: 60a1adb4048343f43969d6f1adf6bfbb, type: 3}
+  - key: ainaz_room_dark
+    sprite: {fileID: 21300000, guid: 849b94d5909cef046a1f30213a2e3868, type: 3}
+  - key: ainaz_room_night
+    sprite: {fileID: 21300000, guid: 463a5bee058e78e46bb88c7b91ba33e3, type: 3}
+  - key: street_night_empty
+    sprite: {fileID: 21300000, guid: ae236e63abc524d4496e9dbd18b6788f, type: 3}
+  - key: guldana_house_night
+    sprite: {fileID: 21300000, guid: 2161c7da9a358ec4b9735d5a18ecd335, type: 3}
+  - key: black_fade
+    sprite: {fileID: 21300000, guid: f00e4d4a66c8ae249856dd31545a3a5e, type: 3}
 --- !u!1 &2026779788
 GameObject:
   m_ObjectHideFlags: 0

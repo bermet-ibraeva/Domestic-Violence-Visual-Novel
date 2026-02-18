@@ -4,50 +4,44 @@ using UnityEngine.UI;
 
 public class BackgroundController : MonoBehaviour
 {
-    [System.Serializable]
-    public class BackgroundSprite
-    {
-        public Sprite sprite;
-    }
+    [SerializeField] private Image backgroundImage;
+    [SerializeField] private List<BackgroundEntry> backgrounds;
 
-    public Image backgroundImage;
-    public List<BackgroundSprite> backgrounds;
-
-    private Dictionary<string, Sprite> bgDict = new();
-    private string currentBackgroundName;
+    private Dictionary<string, Sprite> bgDict;
 
     private void Awake()
     {
-        bgDict.Clear();
+        bgDict = new Dictionary<string, Sprite>();
 
         foreach (var b in backgrounds)
         {
-            if (b == null || b.sprite == null) continue;
+            if (b == null || string.IsNullOrEmpty(b.key) || b.sprite == null)
+                continue;
 
-            string key = b.sprite.name; // <-- имя спрайта
-
-            // перезапишет если одинаковые спрайты
-            bgDict[key] = b.sprite;
+            if (!bgDict.ContainsKey(b.key))
+                bgDict.Add(b.key, b.sprite);
         }
     }
 
-    public void SetBackground(string nameFromJson)
+    public void SetBackground(string key)
     {
-        if (string.IsNullOrEmpty(nameFromJson) || backgroundImage == null)
+        if (string.IsNullOrEmpty(key))
             return;
 
-        if (nameFromJson == currentBackgroundName)
-            return;
-
-        if (bgDict.TryGetValue(nameFromJson, out var sprite))
+        if (bgDict.TryGetValue(key, out var sprite))
         {
             backgroundImage.sprite = sprite;
-            currentBackgroundName = nameFromJson;
         }
         else
         {
-            Debug.LogWarning($"[BG] Background not found by name: {nameFromJson}. " +
-                             "Проверь: sprite.name должен совпадать с JSON.");
+            Debug.LogWarning($"Background '{key}' not found in BackgroundController.");
         }
     }
+}
+
+[System.Serializable]
+public class BackgroundEntry
+{
+    public string key;
+    public Sprite sprite;
 }

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class EmotionsController : MonoBehaviour
 {
     [Header("UI Image персонажа")]
     [SerializeField] private Image characterImage;
 
-    [Header("Список эмоций (emotionName -> sprite)")]
+    [Header("Список эмоций (emotion -> sprite)")]
     [SerializeField] private List<EmotionSprite> emotions = new List<EmotionSprite>();
 
     [Header("Fallback emotion key")]
@@ -28,7 +27,6 @@ public class EmotionsController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        // Чтобы в редакторе словарь обновлялся при правках списка
         BuildDictionary();
     }
 #endif
@@ -47,7 +45,8 @@ public class EmotionsController : MonoBehaviour
         {
             if (e == null || e.sprite == null) continue;
 
-            var key = Normalize(e.emotionName);
+            // ✅ тут главное исправление
+            var key = Normalize(e.emotion);
             if (string.IsNullOrEmpty(key)) continue;
 
             if (firstValid == null) firstValid = e.sprite;
@@ -61,19 +60,13 @@ public class EmotionsController : MonoBehaviour
                 fallbackSprite = e.sprite;
         }
 
-        // Если Calm (или fallbackEmotion) не найден — берём первый валидный спрайт как запасной
         if (fallbackSprite == null)
             fallbackSprite = firstValid;
 
         if (fallbackSprite == null)
-        {
             Debug.LogWarning($"[EmotionsController] No valid emotion sprites on '{gameObject.name}'.");
-        }
     }
 
-    /// <summary>
-    /// Set emotion by name. If not found -> fallback.
-    /// </summary>
     public void SetEmotion(string emotion)
     {
         if (characterImage == null)
@@ -82,7 +75,6 @@ public class EmotionsController : MonoBehaviour
             return;
         }
 
-        // На случай если вызвали SetEmotion до Awake()
         if (emotionDict == null || emotionDict.Count == 0)
             BuildDictionary();
 
@@ -118,11 +110,4 @@ public class EmotionsController : MonoBehaviour
         if (sprite == null) return;
         characterImage.sprite = sprite;
     }
-}
-
-[Serializable]
-public class EmotionSprite
-{
-    public string emotionName; // "Calm", "Happy", "Sad", ...
-    public Sprite sprite;
 }
