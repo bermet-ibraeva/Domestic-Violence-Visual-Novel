@@ -1,10 +1,12 @@
 using UnityEngine;
 using TMPro;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class EpisodeHeader
 {
-    public string episode;   // название эпизода из JSON
+    public string episodeId;
+    public string episodeTitle;  
 }
 
 public class ChapterInfoFromJson : MonoBehaviour
@@ -21,31 +23,24 @@ public class ChapterInfoFromJson : MonoBehaviour
             return;
         }
 
-        // Загружаем JSON по episodePath
         TextAsset jsonAsset = Resources.Load<TextAsset>(saveData.episodePath);
-
         if (jsonAsset == null)
         {
-            Debug.LogError(
-                $"JSON НЕ найден в Resources: {saveData.episodePath}\n" +
-                $"Убедись, что файл лежит по пути: Assets/Resources/{saveData.episodePath}.json"
-            );
+            Debug.LogError($"JSON НЕ найден в Resources: {saveData.episodePath}");
             return;
         }
 
         EpisodeHeader header = JsonUtility.FromJson<EpisodeHeader>(jsonAsset.text);
-
         if (header == null)
         {
             Debug.LogError("Ошибка парсинга: header == null");
             return;
         }
 
-        // Обновляем UI
         if (chapterNumberText != null)
-            chapterNumberText.text = $"Глава {saveData.chapterNumber}";
+            chapterNumberText.text = $"Эпизод {saveData.chapterNumber}";
 
         if (chapterTitleText != null)
-            chapterTitleText.text = header.episode;
+            chapterTitleText.text = header.episodeTitle; 
     }
 }

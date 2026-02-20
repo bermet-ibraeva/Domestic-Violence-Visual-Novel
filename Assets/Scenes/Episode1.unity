@@ -308,7 +308,7 @@ MonoBehaviour:
   LeftCharacter: {fileID: 394096378}
   LeftEmotions: {fileID: 394096382}
   RightCharacter: {fileID: 950463527}
-  RightCharacterCtrl: {fileID: 950463532}
+  RightCharacterCtrl: {fileID: 0}
   layout: {fileID: 0}
   AuthorColor: {r: 0.18039216, g: 0.16470589, b: 0.21176471, a: 1}
   AinazColor: {r: 0.18039216, g: 0.16470589, b: 0.21176471, a: 1}
@@ -741,7 +741,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &394096379
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1135,12 +1135,12 @@ GameObject:
   - component: {fileID: 696655968}
   - component: {fileID: 696655971}
   m_Layer: 5
-  m_Name: DialoguePanel_Ainaz
+  m_Name: DialoguePanel_LeftCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &696655968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1366,7 +1366,7 @@ GameObject:
   - component: {fileID: 757713040}
   - component: {fileID: 757713039}
   m_Layer: 0
-  m_Name: AinazNamePanel
+  m_Name: LeftCharacterNamePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1665,7 +1665,7 @@ GameObject:
   - component: {fileID: 945748390}
   - component: {fileID: 945748389}
   m_Layer: 5
-  m_Name: AinazDialogueText
+  m_Name: LeftCharacterDialogueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1798,7 +1798,6 @@ GameObject:
   - component: {fileID: 950463531}
   - component: {fileID: 950463530}
   - component: {fileID: 950463529}
-  - component: {fileID: 950463532}
   m_Layer: 5
   m_Name: RightCharacter
   m_TagString: Untagged
@@ -1863,26 +1862,6 @@ RectTransform:
   m_AnchoredPosition: {x: 263, y: 183}
   m_SizeDelta: {x: 500, y: 502.716}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &950463532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 950463527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70d5e42ea308b6a458b497f228921b95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterImage: {fileID: 950463529}
-  characters:
-  - characterName: "\u0413\u0443\u043B\u0434\u0430\u043D\u0430"
-    defaultSprite: {fileID: 21300000, guid: d3f9b415904a699429649fe98f8384ad, type: 3}
-    emotions: []
-  - characterName: "\u0423\u0447\u0438\u0442\u0435\u043B\u044C"
-    defaultSprite: {fileID: 21300000, guid: 64eca54a586351c4aae13e8614a88cfa, type: 3}
-    emotions: []
 --- !u!1 &1062144738
 GameObject:
   m_ObjectHideFlags: 0
@@ -2191,12 +2170,12 @@ GameObject:
   - component: {fileID: 1176912195}
   - component: {fileID: 1176912197}
   m_Layer: 5
-  m_Name: DialoguePanel_Author
+  m_Name: DialoguePanel_Narrator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1176912194
 RectTransform:
   m_ObjectHideFlags: 0

@@ -182,7 +182,6 @@ public class DialogueController : MonoBehaviour
     }
 
     // ---------------- Main ----------------
-
     void ShowNode(string nodeId)
     {
         if (nodeDict == null || !nodeDict.TryGetValue(nodeId, out var node) || node == null)
