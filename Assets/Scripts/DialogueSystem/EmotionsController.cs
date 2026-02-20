@@ -68,37 +68,38 @@ public class EmotionsController : MonoBehaviour
     }
 
     public void SetEmotion(string emotion)
+{
+    if (characterImage == null)
     {
-        if (characterImage == null)
-        {
-            Debug.LogError($"[EmotionsController] characterImage is NULL on '{gameObject.name}'. Assign Image!");
-            return;
-        }
-
-        if (emotionDict == null || emotionDict.Count == 0)
-            BuildDictionary();
-
-        var key = Normalize(emotion);
-
-        if (!string.IsNullOrEmpty(key) && emotionDict.TryGetValue(key, out var sprite) && sprite != null)
-        {
-            ApplySprite(sprite);
-            return;
-        }
-
-        // fallback
-        if (fallbackSprite != null)
-        {
-            if (!string.IsNullOrEmpty(key))
-                Debug.LogWarning($"[EmotionsController] Emotion '{emotion}' not found on '{gameObject.name}'. -> {fallbackEmotion}");
-
-            ApplySprite(fallbackSprite);
-        }
-        else
-        {
-            Debug.LogWarning($"[EmotionsController] Fallback sprite is NULL on '{gameObject.name}'. Nothing to apply.");
-        }
+        Debug.LogError($"[EmotionsController] characterImage is NULL on '{gameObject.name}'. Assign Image!");
+        return;
     }
+
+    if (emotionDict == null || emotionDict.Count == 0)
+        BuildDictionary();
+
+    string key = Normalize(string.IsNullOrWhiteSpace(emotion) ? fallbackEmotion : emotion);
+
+    if (!string.IsNullOrEmpty(key) &&
+        emotionDict.TryGetValue(key, out var sprite) &&
+        sprite != null)
+    {
+        ApplySprite(sprite);
+        return;
+    }
+
+    // если конкретная эмоция не найдена — пробуем fallback
+    if (!Cmp.Equals(key, Normalize(fallbackEmotion)) &&
+        emotionDict.TryGetValue(Normalize(fallbackEmotion), out var fallback) &&
+        fallback != null)
+    {
+        Debug.LogWarning($"[EmotionsController] Emotion '{emotion}' not found on '{gameObject.name}'. Using fallback '{fallbackEmotion}'.");
+        ApplySprite(fallback);
+        return;
+    }
+
+    Debug.LogWarning($"[EmotionsController] No valid emotion sprite on '{gameObject.name}'.");
+}
 
     private static string Normalize(string s)
     {

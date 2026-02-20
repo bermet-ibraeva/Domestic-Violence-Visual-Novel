@@ -29,7 +29,7 @@ public class DialogueController : MonoBehaviour
 
     [Header("Text Colors")]
     public Color AuthorColor = Color.gray;
-    public Color AinazColor = Color.white;
+    public Color LeftCharacterColor = Color.white;
     public Color OtherColor = Color.white;
 
     [Header("Backgrounds")]
@@ -196,7 +196,7 @@ public class DialogueController : MonoBehaviour
         currentNode = node;
         waitingForAdvance = false;
 
-        // ✅ Apply node effects once (old system kept)
+        //  Apply node effects once (old system kept)
         ApplyEffectsOnce(nodeId, node);
 
         // 2) Background override by node
@@ -216,8 +216,8 @@ public class DialogueController : MonoBehaviour
         else if (IsLeftCharacter(node.character))
         {
             // Text (left slot text UI)
-            ui.ShowAinaz(node.character, node.text);
-            if (ui.ainazText != null) ui.ainazText.color = AinazColor;
+            ui.ShowLeftCharacter(node.character, node.text);
+            if (ui.LeftCharacterText != null) ui.LeftCharacterText.color = LeftCharacterColor;
 
             // Visuals: left
             if (LeftCharacter != null) LeftCharacter.SetActive(true);

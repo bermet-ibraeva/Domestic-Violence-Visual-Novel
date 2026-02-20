@@ -304,18 +304,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d802a46f261a3c4381152f81ab4f25c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui: {fileID: 1327904983}
+  ui: {fileID: 1327904985}
   LeftCharacter: {fileID: 394096378}
   LeftEmotions: {fileID: 394096382}
   RightCharacter: {fileID: 950463527}
-  RightCharacterCtrl: {fileID: 0}
-  layout: {fileID: 0}
-  AuthorColor: {r: 0.18039216, g: 0.16470589, b: 0.21176471, a: 1}
-  AinazColor: {r: 0.18039216, g: 0.16470589, b: 0.21176471, a: 1}
-  OtherColor: {r: 0.18039216, g: 0.16470589, b: 0.21176471, a: 1}
+  RightCharacterCtrl: {fileID: 950463532}
+  layout: {fileID: 648468932}
+  AuthorColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
+  LeftCharacterColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
+  OtherColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
   backgroundController: {fileID: 2009236193}
   episodePath: Episodes/episode_1
-  startNodeId: scene_1_start
+  startNodeId: E01_S01_start
   chapterNumber: 1
 --- !u!1 &251045528
 GameObject:
@@ -733,8 +733,9 @@ GameObject:
   m_Component:
   - component: {fileID: 394096379}
   - component: {fileID: 394096381}
-  - component: {fileID: 394096380}
   - component: {fileID: 394096382}
+  - component: {fileID: 394096384}
+  - component: {fileID: 394096383}
   m_Layer: 5
   m_Name: LeftCharacter
   m_TagString: Untagged
@@ -758,39 +759,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -237, y: 183}
-  m_SizeDelta: {x: 500, y: 502.7162}
+  m_AnchoredPosition: {x: -276.45, y: 183}
+  m_SizeDelta: {x: 346.6, y: 502.72}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &394096380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 394096378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4534424c151e00f49b3084c071297e1c, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &394096381
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -811,9 +782,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d00d9731f36ee54d99f0bc0a254df66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterImage: {fileID: 394096380}
+  characterImage: {fileID: 0}
   emotions: []
   fallbackEmotion: Calm
+--- !u!114 &394096383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394096378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 1b8e27bc21bc7d648b6e7cc26490f657, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &394096384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394096378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70d5e42ea308b6a458b497f228921b95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterImage: {fileID: 0}
+  characters:
+  - characterName: Ainaz
+    defaultSprite: {fileID: 21300000, guid: 1b8e27bc21bc7d648b6e7cc26490f657, type: 3}
+    emotions: []
 --- !u!1 &603450846
 GameObject:
   m_ObjectHideFlags: 0
@@ -1798,6 +1816,7 @@ GameObject:
   - component: {fileID: 950463531}
   - component: {fileID: 950463530}
   - component: {fileID: 950463529}
+  - component: {fileID: 950463532}
   m_Layer: 5
   m_Name: RightCharacter
   m_TagString: Untagged
@@ -1859,9 +1878,38 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 263, y: 183}
-  m_SizeDelta: {x: 500, y: 502.716}
+  m_AnchoredPosition: {x: 269.6939, y: 183}
+  m_SizeDelta: {x: 486.6122, y: 502.716}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &950463532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950463527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70d5e42ea308b6a458b497f228921b95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterImage: {fileID: 0}
+  characters:
+  - characterName: Guldana
+    defaultSprite: {fileID: 21300000, guid: d3f9b415904a699429649fe98f8384ad, type: 3}
+    emotions: []
+  - characterName: Aigul
+    defaultSprite: {fileID: 21300000, guid: acbc71c6aa2a2ac45a3616007d8d3b97, type: 3}
+    emotions: []
+  - characterName: TImur
+    defaultSprite: {fileID: 21300000, guid: 45abd3d62846dbb4f80d71c9f351a864, type: 3}
+    emotions: []
+  - characterName: Bekzat
+    defaultSprite: {fileID: 21300000, guid: 7da52c514ab9c8a4ab58f23c24542fc2, type: 3}
+    emotions: []
+  - characterName: Aida
+    defaultSprite: {fileID: 21300000, guid: 639a85ebd77c9bb469ac4ea906e36e71, type: 3}
+    emotions: []
 --- !u!1 &1062144738
 GameObject:
   m_ObjectHideFlags: 0
@@ -2170,7 +2218,7 @@ GameObject:
   - component: {fileID: 1176912195}
   - component: {fileID: 1176912197}
   m_Layer: 5
-  m_Name: DialoguePanel_Narrator
+  m_Name: DialoguePanel_Author
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2675,7 +2723,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1327904984}
-  - component: {fileID: 1327904983}
+  - component: {fileID: 1327904985}
   m_Layer: 0
   m_Name: UIController
   m_TagString: Untagged
@@ -2683,33 +2731,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1327904983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327904982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8db9432161fe5344bbba10b7b7ea50e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  authorPanel: {fileID: 1176912193}
-  authorText: {fileID: 725673670}
-  ainazPanel: {fileID: 696655967}
-  ainazNamePanel: {fileID: 757713037}
-  ainazName: {fileID: 810316209}
-  ainazText: {fileID: 945748389}
-  otherPanel: {fileID: 251045528}
-  otherNamePanel: {fileID: 2026779788}
-  otherName: {fileID: 20882765}
-  otherText: {fileID: 1295646654}
-  choicesPanel: {fileID: 789645529}
-  choiceButtons:
-  - {fileID: 1062144744}
-  - {fileID: 615870097}
-  - {fileID: 376438213}
 --- !u!4 &1327904984
 Transform:
   m_ObjectHideFlags: 0
@@ -2725,6 +2746,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 603450850}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1327904985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327904982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db9432161fe5344bbba10b7b7ea50e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  authorPanel: {fileID: 1176912193}
+  authorText: {fileID: 725673670}
+  LeftCharacterPanel: {fileID: 696655967}
+  LeftCharacterNamePanel: {fileID: 757713037}
+  LeftCharacterName: {fileID: 810316209}
+  LeftCharacterText: {fileID: 945748389}
+  otherPanel: {fileID: 251045528}
+  otherNamePanel: {fileID: 2026779788}
+  otherName: {fileID: 20882765}
+  otherText: {fileID: 1295646654}
+  choicesPanel: {fileID: 789645529}
+  choiceButtons:
+  - {fileID: 1062144744}
+  - {fileID: 615870097}
+  - {fileID: 376438213}
 --- !u!1 &1346570765
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,11 +9,11 @@ public class UIController : MonoBehaviour
     public GameObject authorPanel;
     public TextMeshProUGUI authorText;
 
-    [Header("Ainaz UI")]
-    public GameObject ainazPanel;
-    public GameObject ainazNamePanel;        // НОВАЯ ПАНЕЛЬ ИМЕНИ
-    public TextMeshProUGUI ainazName;
-    public TextMeshProUGUI ainazText;
+    [Header("LeftCharacter UI")]
+    public GameObject LeftCharacterPanel;
+    public GameObject LeftCharacterNamePanel;        // НОВАЯ ПАНЕЛЬ ИМЕНИ
+    public TextMeshProUGUI LeftCharacterName;
+    public TextMeshProUGUI LeftCharacterText;
 
     [Header("Other character UI")]
     public GameObject otherPanel;
@@ -31,8 +31,8 @@ public class UIController : MonoBehaviour
     {
         authorPanel?.SetActive(false);
 
-        ainazPanel?.SetActive(false);
-        ainazNamePanel?.SetActive(false);
+        LeftCharacterPanel?.SetActive(false);
+        LeftCharacterNamePanel?.SetActive(false);
 
         otherPanel?.SetActive(false);
         otherNamePanel?.SetActive(false);
@@ -65,24 +65,24 @@ public class UIController : MonoBehaviour
         if (auto) auto.RefreshSize();
     }
 
-    // ---------------------- AINAZ ----------------------
+    // ---------------------- LEFT CHARACTER ----------------------
 
-    public void ShowAinaz(string name, string text)
+    public void ShowLeftCharacter(string name, string text)
     {
         HideAll();
 
-        ainazNamePanel.SetActive(true);
-        ainazPanel.SetActive(true);
+        LeftCharacterNamePanel.SetActive(true);
+        LeftCharacterPanel.SetActive(true);
 
-        ainazName.text = name;
-        ainazText.text = text;
+        LeftCharacterName.text = name;
+        LeftCharacterText.text = text;
 
         // resize name panel
-        AutoResizePanel nameAuto = ainazNamePanel.GetComponent<AutoResizePanel>();
+        AutoResizePanel nameAuto = LeftCharacterNamePanel.GetComponent<AutoResizePanel>();
         if (nameAuto) nameAuto.RefreshSize();
 
         // resize dialogue panel
-        AutoResizePanel textAuto = ainazPanel.GetComponent<AutoResizePanel>();
+        AutoResizePanel textAuto = LeftCharacterPanel.GetComponent<AutoResizePanel>();
         if (textAuto) textAuto.RefreshSize();
     }
 
