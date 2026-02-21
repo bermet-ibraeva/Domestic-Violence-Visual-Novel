@@ -306,9 +306,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ui: {fileID: 1327904985}
   LeftCharacter: {fileID: 394096378}
-  LeftEmotions: {fileID: 394096382}
+  LeftPortrait: {fileID: 394096384}
   RightCharacter: {fileID: 950463527}
-  RightCharacterCtrl: {fileID: 950463532}
+  RightPortrait: {fileID: 950463532}
+  HideLeftWhenRightSpeaks: 1
+  HideRightWhenLeftSpeaks: 1
   layout: {fileID: 648468932}
   AuthorColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
   LeftCharacterColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
@@ -733,9 +735,8 @@ GameObject:
   m_Component:
   - component: {fileID: 394096379}
   - component: {fileID: 394096381}
-  - component: {fileID: 394096382}
-  - component: {fileID: 394096384}
   - component: {fileID: 394096383}
+  - component: {fileID: 394096384}
   m_Layer: 5
   m_Name: LeftCharacter
   m_TagString: Untagged
@@ -752,7 +753,7 @@ RectTransform:
   m_GameObject: {fileID: 394096378}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 603450850}
@@ -770,21 +771,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 394096378}
   m_CullTransparentMesh: 1
---- !u!114 &394096382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 394096378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d00d9731f36ee54d99f0bc0a254df66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterImage: {fileID: 0}
-  emotions: []
-  fallbackEmotion: Calm
 --- !u!114 &394096383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -827,10 +813,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70d5e42ea308b6a458b497f228921b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterImage: {fileID: 0}
+  characterImage: {fileID: 394096383}
   characters:
   - characterName: Ainaz
     defaultSprite: {fileID: 21300000, guid: 1b8e27bc21bc7d648b6e7cc26490f657, type: 3}
+    emotions: []
+  - characterName: Aida
+    defaultSprite: {fileID: 21300000, guid: 639a85ebd77c9bb469ac4ea906e36e71, type: 3}
     emotions: []
 --- !u!1 &603450846
 GameObject:
@@ -1893,7 +1882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70d5e42ea308b6a458b497f228921b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterImage: {fileID: 0}
+  characterImage: {fileID: 950463529}
   characters:
   - characterName: Guldana
     defaultSprite: {fileID: 21300000, guid: d3f9b415904a699429649fe98f8384ad, type: 3}
@@ -1901,14 +1890,14 @@ MonoBehaviour:
   - characterName: Aigul
     defaultSprite: {fileID: 21300000, guid: acbc71c6aa2a2ac45a3616007d8d3b97, type: 3}
     emotions: []
-  - characterName: TImur
+  - characterName: Timur
     defaultSprite: {fileID: 21300000, guid: 45abd3d62846dbb4f80d71c9f351a864, type: 3}
     emotions: []
   - characterName: Bekzat
     defaultSprite: {fileID: 21300000, guid: 7da52c514ab9c8a4ab58f23c24542fc2, type: 3}
     emotions: []
-  - characterName: Aida
-    defaultSprite: {fileID: 21300000, guid: 639a85ebd77c9bb469ac4ea906e36e71, type: 3}
+  - characterName: Ainaz
+    defaultSprite: {fileID: 21300000, guid: 1b8e27bc21bc7d648b6e7cc26490f657, type: 3}
     emotions: []
 --- !u!1 &1062144738
 GameObject:

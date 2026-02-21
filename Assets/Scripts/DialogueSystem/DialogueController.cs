@@ -2,27 +2,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Dialogue controller that works with EpisodeData -> scenes[] -> nodes[] structure.
+/// Dialogue controller: EpisodeData -> scenes[] -> nodes[]
+///
 /// Rules:
-/// - character == Narrator/Автор/empty  => hide both characters
+/// - character == Narrator/Автор/empty  => hide both portraits
 /// - emotion == null/empty and NOT narrator => use "Calm"
 /// - left character is fixed per scene (scene.leftCharacter)
 /// - right characters are allowed per scene (scene.rightCharacters)
-/// - nextNode may jump across scenes; nodeToScene mapping handles this
-/// - node.effects are applied once per save (existing logic kept)
-/// - choice.effects (EffectOp list) are applied when picking a choice (if present)
+///
+/// Portrait rules:
+/// - Left: exactly one per scene (can change between scenes, unlimited across episode)
+/// - Right: can change many times inside a scene (unlimited across episode)
 /// </summary>
 public class DialogueController : MonoBehaviour
 {
     [Header("UI")]
     public UIController ui;
 
-    [Header("Characters")]
+    [Header("Portrait Slots")]
     public GameObject LeftCharacter;
-    public EmotionsController LeftEmotions;
+    public CharacterPortraitController LeftPortrait;
 
     public GameObject RightCharacter;
-    public RightCharacterController RightCharacterCtrl;
+    public CharacterPortraitController RightPortrait;
+
+    [Header("Portrait Rules")]
+    [Tooltip("If true: when right character speaks, left portrait is hidden.")]
+    public bool HideLeftWhenRightSpeaks = true;
+
+    [Tooltip("If true: when left character speaks, right portrait is hidden.")]
+    public bool HideRightWhenLeftSpeaks = true;
 
     [Header("Layout")]
     public LayoutController layout;
@@ -49,7 +58,7 @@ public class DialogueController : MonoBehaviour
     private Dictionary<string, SceneData> nodeToScene;
 
     private SceneData currentScene;
-    private HashSet<string> currentRightAllowed = new HashSet<string>();
+    private readonly HashSet<string> currentRightAllowed = new HashSet<string>();
 
     private DialogueNode currentNode;
     private bool waitingForAdvance = false;
@@ -122,10 +131,34 @@ public class DialogueController : MonoBehaviour
         return string.IsNullOrEmpty(em) ? "Calm" : em;
     }
 
-    void HideAllCharacters()
+    void HideLeft()
     {
         if (LeftCharacter != null) LeftCharacter.SetActive(false);
+        // optional: LeftPortrait?.Hide();
+    }
+
+    void ShowLeft(string characterName, string emotion)
+    {
+        if (LeftCharacter != null) LeftCharacter.SetActive(true);
+        LeftPortrait?.Show(characterName, NormalizeEmotion(emotion));
+    }
+
+    void HideRight()
+    {
         if (RightCharacter != null) RightCharacter.SetActive(false);
+        // optional: RightPortrait?.Hide();
+    }
+
+    void ShowRight(string characterName, string emotion)
+    {
+        if (RightCharacter != null) RightCharacter.SetActive(true);
+        RightPortrait?.Show(characterName, NormalizeEmotion(emotion));
+    }
+
+    void HideAllCharacters()
+    {
+        HideLeft();
+        HideRight();
     }
 
     void RebuildRightAllowed(SceneData scene)
@@ -153,20 +186,14 @@ public class DialogueController : MonoBehaviour
         if (backgroundController != null && !string.IsNullOrEmpty(currentScene.background))
             backgroundController.SetBackground(currentScene.background);
 
-        // Initialize left slot for the scene (show calm by default if scene has leftCharacter)
+        // Left: fixed character per scene
         if (!string.IsNullOrEmpty(currentScene.leftCharacter))
-        {
-            if (LeftCharacter != null) LeftCharacter.SetActive(true);
-            LeftEmotions?.SetEmotion("Calm");
-        }
+            ShowLeft(currentScene.leftCharacter, "Calm");
         else
-        {
-            // summary/system scene etc.
-            if (LeftCharacter != null) LeftCharacter.SetActive(false);
-        }
+            HideLeft();
 
-        // Hide right at scene start (will appear when someone from right speaks)
-        if (RightCharacter != null) RightCharacter.SetActive(false);
+        // Right: start hidden (appears when a right character speaks)
+        HideRight();
     }
 
     bool IsLeftCharacter(string ch)
@@ -190,76 +217,76 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        // 1) Ensure scene context is correct
+        // Ensure scene context is correct
         EnterSceneIfChanged(nodeId);
 
         currentNode = node;
         waitingForAdvance = false;
 
-        //  Apply node effects once (old system kept)
+        // Apply node effects once
         ApplyEffectsOnce(nodeId, node);
 
-        // 2) Background override by node
+        // Background override by node
         if (backgroundController != null && !string.IsNullOrEmpty(node.background))
             backgroundController.SetBackground(node.background);
 
-        // 3) Text + visual rules
+        // -------- Text + portraits --------
         if (IsNarrator(node.character))
         {
-            // Text
             ui.ShowAuthor(node.text);
             if (ui.authorText != null) ui.authorText.color = AuthorColor;
 
-            // Visuals: narrator => hide both
             HideAllCharacters();
         }
         else if (IsLeftCharacter(node.character))
         {
-            // Text (left slot text UI)
             ui.ShowLeftCharacter(node.character, node.text);
             if (ui.LeftCharacterText != null) ui.LeftCharacterText.color = LeftCharacterColor;
 
-            // Visuals: left
-            if (LeftCharacter != null) LeftCharacter.SetActive(true);
-            LeftEmotions?.SetEmotion(NormalizeEmotion(node.emotion));
+            // Left speaks (left character name is defined by the scene)
+            if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
+                ShowLeft(currentScene.leftCharacter, node.emotion);
 
-            // Right stays as-is (no forced hide)
+            if (HideRightWhenLeftSpeaks)
+                HideRight();
         }
         else if (IsRightAllowed(node.character))
         {
-            // Text (right slot text UI)
             ui.ShowOther(node.character, node.text);
             if (ui.otherText != null) ui.otherText.color = OtherColor;
 
-            // Visuals: right
-            if (RightCharacter != null) RightCharacter.SetActive(true);
-            RightCharacterCtrl?.Show(node.character, NormalizeEmotion(node.emotion));
+            // Right speaks (node.character is the right speaker)
+            ShowRight(node.character, node.emotion);
 
-            // Left stays as-is (usually still visible in scene)
-            if (currentScene != null && !string.IsNullOrEmpty(currentScene.leftCharacter) && LeftCharacter != null)
-                LeftCharacter.SetActive(true);
+            if (HideLeftWhenRightSpeaks)
+                HideLeft();
+            else
+            {
+                // Keep left visible if the scene defines one
+                if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
+                    if (LeftCharacter != null) LeftCharacter.SetActive(true);
+            }
         }
         else
         {
-            // e.g., "System" in summary node or data mistake
+            // Unknown/system/data mistake
             ui.ShowOther(node.character, node.text);
             if (ui.otherText != null) ui.otherText.color = OtherColor;
 
-            // No portraits by default for unknown/system
             HideAllCharacters();
         }
 
-        // 4) Choices / click advance
+        // Choices / click advance
         SetupChoices(node);
 
-        // 5) Layout
+        // Layout
         if (layout != null)
         {
             string ch = IsNarrator(node.character) ? "Narrator" : node.character;
             layout.ApplyLayout(ch);
         }
 
-        // 6) Autosave pointers
+        // Autosave
         save.episodePath = episodePath;
         save.currentNodeId = nodeId;
         save.chapterNumber = chapterNumber;
@@ -286,7 +313,6 @@ public class DialogueController : MonoBehaviour
     {
         waitingForAdvance = false;
 
-        // Apply choice effects (new JSON style) if we can find the chosen choice
         TryApplyPickedChoiceEffects(nextNodeId);
 
         if (!string.IsNullOrEmpty(nextNodeId))
@@ -346,10 +372,6 @@ public class DialogueController : MonoBehaviour
     }
 
     // -------- Choice effects (NEW ops list) --------
-    // Supports keys like:
-    // - "risk"
-    // - "safety"
-    // - "trust.Ainaz_Guldana"
     void ApplyChoiceEffects(List<EffectOp> ops)
     {
         if (ops == null) return;
@@ -358,8 +380,6 @@ public class DialogueController : MonoBehaviour
         {
             if (op == null) continue;
             if (string.IsNullOrEmpty(op.op) || string.IsNullOrEmpty(op.key)) continue;
-
-            // Only implementing "inc" now (matches your JSON)
             if (op.op != "inc") continue;
 
             int v = op.value;
@@ -376,11 +396,8 @@ public class DialogueController : MonoBehaviour
                     save.episodeSafety += v;
                     break;
 
-                // If you store trust in SaveData as a single int trustAG, map it here:
                 case "trust.Ainaz_Guldana":
                 case "trust.Ainaz_Guldana ":
-                    // Use whatever field you actually track for this trust.
-                    // If you already use save.trustAG as "Ainaz-Guldana trust", then:
                     save.trustAG += v;
                     break;
             }
