@@ -173,6 +173,8 @@ public class DialogueController : MonoBehaviour
 
     void EnterSceneIfChanged(string nodeId)
     {
+        Debug.Log($"Scene check for node {nodeId}");
+        
         if (nodeToScene == null || !nodeToScene.TryGetValue(nodeId, out var sc) || sc == null)
             return;
 
@@ -182,17 +184,11 @@ public class DialogueController : MonoBehaviour
         currentScene = sc;
         RebuildRightAllowed(currentScene);
 
-        // Scene-level background on enter (node.background may override later)
-        if (backgroundController != null && !string.IsNullOrEmpty(currentScene.background))
-            backgroundController.SetBackground(currentScene.background);
-
-        // Left: fixed character per scene
         if (!string.IsNullOrEmpty(currentScene.leftCharacter))
             ShowLeft(currentScene.leftCharacter, "Calm");
         else
             HideLeft();
 
-        // Right: start hidden (appears when a right character speaks)
         HideRight();
     }
 
@@ -211,6 +207,8 @@ public class DialogueController : MonoBehaviour
     // ---------------- Main ----------------
     void ShowNode(string nodeId)
     {
+        Debug.Log("ShowNode called: " + nodeId);
+
         if (nodeDict == null || !nodeDict.TryGetValue(nodeId, out var node) || node == null)
         {
             Debug.LogError("[DialogueController] Node not found: " + nodeId);
@@ -226,55 +224,73 @@ public class DialogueController : MonoBehaviour
         // Apply node effects once
         ApplyEffectsOnce(nodeId, node);
 
-        // Background override by node
+        Debug.Log($"Trying to change BG to '{node.background}'");
+
+        // 1) Смена фона (если в узле указан background)
         if (backgroundController != null && !string.IsNullOrEmpty(node.background))
-            backgroundController.SetBackground(node.background);
-
-        // -------- Text + portraits --------
-        if (IsNarrator(node.character))
         {
-            ui.ShowAuthor(node.text);
-            if (ui.authorText != null) ui.authorText.color = AuthorColor;
-
-            HideAllCharacters();
-        }
-        else if (IsLeftCharacter(node.character))
-        {
-            ui.ShowLeftCharacter(node.character, node.text);
-            if (ui.LeftCharacterText != null) ui.LeftCharacterText.color = LeftCharacterColor;
-
-            // Left speaks (left character name is defined by the scene)
-            if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
-                ShowLeft(currentScene.leftCharacter, node.emotion);
-
-            if (HideRightWhenLeftSpeaks)
-                HideRight();
-        }
-        else if (IsRightAllowed(node.character))
-        {
-            ui.ShowOther(node.character, node.text);
-            if (ui.otherText != null) ui.otherText.color = OtherColor;
-
-            // Right speaks (node.character is the right speaker)
-            ShowRight(node.character, node.emotion);
-
-            if (HideLeftWhenRightSpeaks)
-                HideLeft();
+            if (node.bgFade)
+            {
+                float dur = node.bgFadeDuration > 0f ? node.bgFadeDuration : -1f;
+                backgroundController.SetBackgroundWithFade(node.background, dur);
+            }
             else
             {
-                // Keep left visible if the scene defines one
-                if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
-                    if (LeftCharacter != null) LeftCharacter.SetActive(true);
+                backgroundController.SetBackground(node.background);
             }
         }
-        else
-        {
-            // Unknown/system/data mistake
-            ui.ShowOther(node.character, node.text);
-            if (ui.otherText != null) ui.otherText.color = OtherColor;
 
-            HideAllCharacters();
+        // 2) Эффект фона (null/""/"none" => reset)
+        if (backgroundController != null)
+        {
+            backgroundController.PlayEffect(node.bgFx);
         }
+
+        // -------- Text + portraits --------
+            if (IsNarrator(node.character))
+            {
+                ui.ShowAuthor(node.text);
+                if (ui.authorText != null) ui.authorText.color = AuthorColor;
+
+                HideAllCharacters();
+            }
+            else if (IsLeftCharacter(node.character))
+            {
+                ui.ShowLeftCharacter(node.character, node.text);
+                if (ui.LeftCharacterText != null) ui.LeftCharacterText.color = LeftCharacterColor;
+
+                // Left speaks (left character name is defined by the scene)
+                if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
+                    ShowLeft(currentScene.leftCharacter, node.emotion);
+
+                if (HideRightWhenLeftSpeaks)
+                    HideRight();
+            }
+            else if (IsRightAllowed(node.character))
+            {
+                ui.ShowOther(node.character, node.text);
+                if (ui.otherText != null) ui.otherText.color = OtherColor;
+
+                // Right speaks (node.character is the right speaker)
+                ShowRight(node.character, node.emotion);
+
+                if (HideLeftWhenRightSpeaks)
+                    HideLeft();
+                else
+                {
+                    // Keep left visible if the scene defines one
+                    if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
+                        if (LeftCharacter != null) LeftCharacter.SetActive(true);
+                }
+            }
+            else
+            {
+                // Unknown/system/data mistake
+                ui.ShowOther(node.character, node.text);
+                if (ui.otherText != null) ui.otherText.color = OtherColor;
+
+                HideAllCharacters();
+            }
 
         // Choices / click advance
         SetupChoices(node);

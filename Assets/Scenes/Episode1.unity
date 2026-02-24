@@ -3225,7 +3225,7 @@ MonoBehaviour:
   backgrounds:
   - key: street_crossroad_morning
     sprite: {fileID: 21300000, guid: 960d23ec9a821064ca196c3acef8ee6e, type: 3}
-  - key: street_street_to_school_morning
+  - key: street_to_school_morning
     sprite: {fileID: 21300000, guid: a5c325f6464968c4ba2b19348e6b4a2c, type: 3}
   - key: school_hall_day
     sprite: {fileID: 21300000, guid: bd425301e2b89d2408a01b14157c696b, type: 3}
@@ -3241,8 +3241,9 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: ae236e63abc524d4496e9dbd18b6788f, type: 3}
   - key: guldana_house_night
     sprite: {fileID: 21300000, guid: 2161c7da9a358ec4b9735d5a18ecd335, type: 3}
-  - key: black_fade
-    sprite: {fileID: 21300000, guid: f00e4d4a66c8ae249856dd31545a3a5e, type: 3}
+  rootTransform: {fileID: 2009236190}
+  imageTransform: {fileID: 2009236190}
+  defaultFadeDuration: 0.2
 --- !u!1 &2026779788
 GameObject:
   m_ObjectHideFlags: 0

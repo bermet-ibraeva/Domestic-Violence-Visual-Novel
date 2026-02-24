@@ -43,6 +43,9 @@ public class DialogueNode
 {
     public string nodeId;
     public string background;
+    public string bgFx;            // пресет эффекта (zoom_in, pan_left, none...)
+    public bool bgFade;            // делать ли fade при смене background
+    public float bgFadeDuration;   // длительность fade (0 = взять дефолт)
     public string character;   // как в JSON
     public string emotion;
     public string text;

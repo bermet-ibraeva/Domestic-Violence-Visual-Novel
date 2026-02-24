@@ -24,7 +24,7 @@
         },
         {
           "nodeId": "E01_S01_dialogue_0",
-          "character": "Ainaz",
+          "character": "Narrator",
           "emotion": "Calm",
           "text": "Они живут не рядом, но в школу всегда идут вместе. Воздух холодный, солнце светит низко и слепит глаза.",
           "nextNode": "E01_S01_dialogue_1"
@@ -52,7 +52,10 @@
         },
         {
           "nodeId": "E01_S01_narration_1",
-          "background": "street_street_to_school_morning",
+          "background": "street_to_school_morning",
+          "bgFade": true,
+          "bgFadeDuration": 0.4,
+          "bgFx": "none",
           "character": "Narrator",
           "text": "Гульдана идёт чуть впереди. Айназ ускоряет шаг, чтобы идти рядом.",
           "nextNode": "E01_S01_dialogue_4"
@@ -88,6 +91,7 @@
         {
           "nodeId": "E01_S01_choice_setup",
           "character": "Narrator",
+          "bgFx": "zoom_in",
           "text": "Айназ улыбается и что-то напевает себе под нос, но Гульдана не улыбается в ответ.",
           "choices": [
             {
@@ -127,13 +131,16 @@
           "nodeId": "E01_S01_choice3_result",
           "character": "Narrator",
           "text": "Гульдана слабо улыбается, почти машинально, а затем снова закрывается и смотрит вперёд.",
-          "nextNode": "E01_S02_start"
+          "nextNode": "E01_S02"
         }
       ]
     },
     {
       "sceneId": "E01_S02",
       "background": "school_hall_day",
+      "bgFade": true,
+      "bgFadeDuration": 0.4,
+      "bgFx": "pan_left",
       "leftCharacter": "Ainaz",
       "rightCharacters": ["Guldana", "Aigul", "Timur", "Bekzat"],
       "startNode": "E01_S02_start",
@@ -426,10 +433,6 @@
         }
       ]
     },
-
-
-    
-
     {
       "sceneId": "E01_S04",
       "background": "ainaz_kitchen",
