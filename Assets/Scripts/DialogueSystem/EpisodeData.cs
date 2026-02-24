@@ -30,6 +30,9 @@ public class SceneData
 {
     public string sceneId;
     public string background;
+    public bool bgFade = false;
+    public float bgFadeDuration = 0.5f;
+    public string bgFx = "none";
 
     public string leftCharacter;           // может быть null (summary)
     public List<string> rightCharacters;
@@ -42,10 +45,15 @@ public class SceneData
 public class DialogueNode
 {
     public string nodeId;
+
+    // Background
     public string background;
-    public string bgFx;            // пресет эффекта (zoom_in, pan_left, none...)
-    public bool bgFade;            // делать ли fade при смене background
-    public float bgFadeDuration;   // длительность fade (0 = взять дефолт)
+    public bool bgFade = false;
+    public float bgFadeDuration = 0.5f;
+    public string bgFx = "none";
+    public bool stopPreviousBgEffect = true;
+
+    // Character
     public string character;   // как в JSON
     public string emotion;
     public string text;

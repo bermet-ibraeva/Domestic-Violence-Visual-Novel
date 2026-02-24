@@ -1,0 +1,126 @@
+using System.Collections;
+using UnityEngine;
+
+public class CinematicCameraController : MonoBehaviour
+{
+    [SerializeField] private RectTransform rootTransform;
+    [SerializeField] private RectTransform imageTransform;
+
+    private Coroutine currentSequence;
+
+    public enum EaseType
+    {
+        Linear,
+        Smooth,
+        EaseIn,
+        EaseOut
+    }
+
+    [System.Serializable]
+    public class CinematicStep
+    {
+        public Vector2 pan;
+        public float zoom = 1f;
+        public float rotation = 0f;
+        public float duration = 1f;
+        public EaseType ease = EaseType.Smooth;
+    }
+
+    // ----------------------------------------------------
+    // PUBLIC API
+    // ----------------------------------------------------
+
+    public void PlaySequence(CinematicStep[] steps)
+    {
+        Stop();
+
+        currentSequence = StartCoroutine(SequenceRoutine(steps));
+    }
+
+    public void Stop(bool reset = false)
+    {
+        if (currentSequence != null)
+            StopCoroutine(currentSequence);
+
+        currentSequence = null;
+
+        if (reset)
+            ResetTransform();
+    }
+
+    public void ResetTransform()
+    {
+        if (rootTransform != null)
+        {
+            rootTransform.anchoredPosition = Vector2.zero;
+            rootTransform.localRotation = Quaternion.identity;
+        }
+
+        if (imageTransform != null)
+            imageTransform.localScale = Vector3.one;
+    }
+
+    // ----------------------------------------------------
+    // SEQUENCE SYSTEM
+    // ----------------------------------------------------
+
+    private IEnumerator SequenceRoutine(CinematicStep[] steps)
+    {
+        foreach (var step in steps)
+        {
+            yield return AnimateStep(step);
+        }
+
+        currentSequence = null;
+    }
+
+    private IEnumerator AnimateStep(CinematicStep step)
+    {
+        Vector2 startPan = rootTransform.anchoredPosition;
+        Vector3 startScale = imageTransform.localScale;
+        float startRot = rootTransform.localRotation.eulerAngles.z;
+
+        Vector2 targetPan = step.pan;
+        Vector3 targetScale = Vector3.one * step.zoom;
+        float targetRot = step.rotation;
+
+        float t = 0f;
+
+        while (t < step.duration)
+        {
+            t += Time.deltaTime;
+            float progress = t / step.duration;
+            progress = ApplyEase(progress, step.ease);
+
+            rootTransform.anchoredPosition = Vector2.Lerp(startPan, targetPan, progress);
+            imageTransform.localScale = Vector3.Lerp(startScale, targetScale, progress);
+
+            float z = Mathf.LerpAngle(startRot, targetRot, progress);
+            rootTransform.localRotation = Quaternion.Euler(0, 0, z);
+
+            yield return null;
+        }
+
+        rootTransform.anchoredPosition = targetPan;
+        imageTransform.localScale = targetScale;
+        rootTransform.localRotation = Quaternion.Euler(0, 0, targetRot);
+    }
+
+    private float ApplyEase(float t, EaseType ease)
+    {
+        switch (ease)
+        {
+            case EaseType.Smooth:
+                return Mathf.SmoothStep(0f, 1f, t);
+
+            case EaseType.EaseIn:
+                return t * t;
+
+            case EaseType.EaseOut:
+                return 1f - (1f - t) * (1f - t);
+
+            default:
+                return t;
+        }
+    }
+}

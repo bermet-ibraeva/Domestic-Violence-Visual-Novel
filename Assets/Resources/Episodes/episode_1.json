@@ -139,8 +139,7 @@
       "sceneId": "E01_S02",
       "background": "school_hall_day",
       "bgFade": true,
-      "bgFadeDuration": 0.4,
-      "bgFx": "pan_left",
+      "bgFadeDuration": 1.2,
       "leftCharacter": "Ainaz",
       "rightCharacters": ["Guldana", "Aigul", "Timur", "Bekzat"],
       "startNode": "E01_S02_start",
@@ -250,8 +249,9 @@
         },
         {
           "nodeId": "E01_S02_choice1_start",
+          "bgFx": "zoom_in_pan_right",
           "character": "Narrator",
-          "text": "Айназ подходит к ребятам у окна.",
+          "text": "Айназ подходит к ребятам.",
           "nextNode": "E01_S02_choice1_narration_1"
         },
         {
@@ -341,7 +341,6 @@
           "text": "Айназ понимает, что разговор шёл не о школе и не о каком-то пустяке. Но продолжать его никто не собирается.",
           "nextNode": "E01_S03_start"
         },
-    
         {
           "nodeId": "E01_S02_choice2_result",
           "character": "Narrator",
@@ -353,6 +352,7 @@
     {
       "sceneId": "E01_S03",
       "background": "classroom_empty",
+      "bgFx": "pan_right",
       "leftCharacter": "Ainaz",
       "rightCharacters": ["Guldana"],
       "startNode": "E01_S03_start",
@@ -477,6 +477,7 @@
         {
           "nodeId": "E01_S04_narration_1",
           "character": "Narrator",
+          "bgFx": "pan_right",
           "text": "Аида переводит взгляд на Гульдану.",
           "nextNode": "E01_S04_dialogue_5"
         },
@@ -625,6 +626,7 @@
     },
     {
       "sceneId": "E01_S06",
+      "bgFade": true,
       "background": "ainaz_room_night",
       "leftCharacter": "Ainaz",
       "rightCharacters": [],
@@ -691,6 +693,7 @@
         },
         {
           "nodeId" : "E01_S06_walk_to_house1",
+          "bgFx": "zoom_in_pan_right",
           "character": "Narrator",
           "text": "Почти дойдя до дома, Айназ резко останавливается.",
           "nextNode": "E01_S06_walk_to_house2"
@@ -710,11 +713,11 @@
         {
           "nodeId": "E01_S06_thought_1",
           "character": "Ainaz",
-          "background": "guldana_house_night",
+          "background": "guldana_house_night_quarell",
           "emotion": "Fear",
           "isThought": true,
           "text": "Это… из дома Гульданы?",
-          "nextNode": ""
+          "nextNode": "EO1_SUMMARY"
         }
       ]
     },    

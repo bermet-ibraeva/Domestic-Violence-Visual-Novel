@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class BackgroundEntry
+{
+    public string key;
+    public Sprite sprite;
+}
+
 public class BackgroundController : MonoBehaviour
 {
     [Header("Main Image")]
@@ -33,17 +40,37 @@ public class BackgroundController : MonoBehaviour
         foreach (var b in backgrounds)
         {
             if (b == null || string.IsNullOrEmpty(b.key) || b.sprite == null)
+            {
+                Debug.LogWarning("Invalid BackgroundEntry found. Skipping.");
                 continue;
+            }
 
-            if (!bgDict.ContainsKey(b.key))
-                bgDict.Add(b.key, b.sprite);
+            if (bgDict.ContainsKey(b.key))
+            {
+                Debug.LogWarning($"Duplicate key '{b.key}' found. Skipping.");
+                continue;
+            }
+
+            bgDict.Add(b.key, b.sprite);
         }
 
-        if (backgroundImage != null && imageTransform == null)
-            imageTransform = backgroundImage.rectTransform;
+        if (backgroundImage == null)
+        {
+            Debug.LogError("Background Image is not assigned in the Inspector.");
+        }
 
-        if (backgroundImage != null && rootTransform == null)
-            rootTransform = backgroundImage.rectTransform.parent as RectTransform;
+        if (backgroundImage != null)
+        {
+            if (imageTransform == null)
+            {
+                imageTransform = backgroundImage.rectTransform;
+            }
+
+            if (rootTransform == null)
+            {
+                rootTransform = backgroundImage.rectTransform.parent as RectTransform;
+            }
+        }
     }
 
     // --------------------------
@@ -51,8 +78,16 @@ public class BackgroundController : MonoBehaviour
     // --------------------------
     public void SetBackground(string key)
     {
-        if (string.IsNullOrEmpty(key))
+        if (backgroundImage == null)
+        {
+            Debug.LogError("Background Image is not assigned in the Inspector.");
             return;
+        }
+
+        if (string.IsNullOrEmpty(key))
+        {
+            return;
+        }
 
         if (bgDict.TryGetValue(key, out var sprite))
         {
@@ -70,29 +105,37 @@ public class BackgroundController : MonoBehaviour
     // ------------------------------------------------------------------
     // NEW: плавная смена фона (fade out -> swap -> fade in)
     // ------------------------------------------------------------------
-    public void SetBackgroundWithFade(string key, float duration = -1f)
+    public void SetBackgroundWithFadeAndEffect(string key, float duration, string preset)
     {
-        if (string.IsNullOrEmpty(key))
+        if (backgroundImage == null)
             return;
 
         if (!bgDict.TryGetValue(key, out var sprite))
-        {
-            Debug.Log($"[BG DICT COUNT] {bgDict.Count}");
-            Debug.LogWarning($"Background '{key}' not found in BackgroundController.");
             return;
-        }
 
         if (duration <= 0f)
             duration = defaultFadeDuration;
 
-        // если уже идёт переход — остановим
         if (currentTransition != null)
             StopCoroutine(currentTransition);
 
-        currentTransition = StartCoroutine(FadeSwapRoutine(sprite, duration));
+        currentTransition = StartCoroutine(
+            FadeSwapAndEffectRoutine(sprite, duration, preset)
+        );
+    }
 
-        Debug.Log($"Current sprite: {backgroundImage.sprite?.name}");
-        Debug.Log($"Next sprite: {sprite?.name}");
+
+    private void SetBackgroundInstantWithEffect(string key, string preset)
+    {
+        if (currentTransition != null)
+            StopCoroutine(currentTransition);
+
+        currentTransition = null;
+
+        SetBackground(key);
+
+        if (!string.IsNullOrEmpty(preset) && preset != "none")
+            PlayEffect(preset);
     }
 
     private IEnumerator FadeSwapRoutine(Sprite nextSprite, float duration)
@@ -120,7 +163,8 @@ public class BackgroundController : MonoBehaviour
     // ------------------------------------------------------------------
     private IEnumerator FadeTo(float targetAlpha, float duration)
     {
-        if (backgroundImage == null) yield break;
+        if (backgroundImage == null)
+            yield break;
 
         float startAlpha = backgroundImage.color.a;
         float t = 0f;
@@ -128,17 +172,60 @@ public class BackgroundController : MonoBehaviour
         while (t < duration)
         {
             t += Time.deltaTime;
-            float a = Mathf.Lerp(startAlpha, targetAlpha, t / duration);
-            SetAlpha(a);
+
+            float progress = Mathf.Clamp01(t / duration);
+            progress = Mathf.SmoothStep(0f, 1f, progress);
+
+            float alpha = Mathf.Lerp(startAlpha, targetAlpha, progress);
+            SetAlpha(alpha);
+
             yield return null;
         }
 
         SetAlpha(targetAlpha);
     }
 
+    private IEnumerator FadeSwapAndEffectRoutine(Sprite nextSprite, float duration, string preset)
+    {
+        if (backgroundImage.sprite == nextSprite)
+        {
+            currentTransition = null;
+
+            if (!string.IsNullOrEmpty(preset) && preset != "none")
+                PlayEffect(preset);
+
+            yield break;
+        }
+        // Stop any active FX first
+        StopEffect(true);
+
+        // Fade out
+        yield return FadeTo(0f, duration * 0.5f);
+
+        // Swap sprite
+        backgroundImage.sprite = nextSprite;
+
+        ResetTransform();
+
+        // Fade in
+        yield return FadeTo(1f, duration * 0.5f);
+
+        currentTransition = null;
+
+        // 🔥 IMPORTANT: play FX AFTER fade completes
+        if (!string.IsNullOrEmpty(preset) && preset != "none")
+        {
+            PlayEffect(preset);
+        }
+    }
+
     private void SetAlpha(float a)
     {
-        if (backgroundImage == null) return;
+        if (backgroundImage == null)
+        {
+            return;
+        }
+
         var c = backgroundImage.color;
         c.a = a;
         backgroundImage.color = c;
@@ -179,12 +266,24 @@ public class BackgroundController : MonoBehaviour
     public void StopEffect(bool reset = false)
     {
         if (currentEffect != null)
+        {
             StopCoroutine(currentEffect);
+        }
 
         currentEffect = null;
 
         if (reset)
+        {
             ResetTransform();
+        }
+    }
+
+    public void ApplyBackground(string key, bool fade, float fadeDuration, string preset)
+    {
+        if (fade)
+            SetBackgroundWithFadeAndEffect(key, fadeDuration, preset);
+        else
+            SetBackgroundInstantWithEffect(key, preset);
     }
 
     private IEnumerator EffectRoutine(string preset)
@@ -221,6 +320,9 @@ public class BackgroundController : MonoBehaviour
                     PanTo(new Vector2(120f, 0f), 1.2f)
                 );
                 break;
+            case "drift_right":
+                yield return PanTo(new Vector2(50f, 0f), 5f);
+                break;
 
             default:
                 Debug.LogWarning($"Unknown background preset: {preset}");
@@ -228,9 +330,12 @@ public class BackgroundController : MonoBehaviour
         }
     }
 
-    private IEnumerator ZoomTo(float targetScale, float duration)
+    private IEnumerator ZoomTo(float targetScale, float duration, bool hold = true)
     {
-        if (imageTransform == null) yield break;
+        if (imageTransform == null)
+        {
+            yield break;
+        }
 
         Vector3 start = imageTransform.localScale;
         Vector3 end = Vector3.one * targetScale;
@@ -243,12 +348,18 @@ public class BackgroundController : MonoBehaviour
             yield return null;
         }
 
-        imageTransform.localScale = end;
+        if (!hold)
+        {
+            imageTransform.localScale = end;
+        }
     }
 
     private IEnumerator PanTo(Vector2 target, float duration)
     {
-        if (rootTransform == null) yield break;
+        if (rootTransform == null)
+        {
+            yield break;
+        }
 
         Vector2 start = rootTransform.anchoredPosition;
         float t = 0f;
@@ -265,7 +376,10 @@ public class BackgroundController : MonoBehaviour
 
     private IEnumerator RotateTo(float angle, float duration)
     {
-        if (rootTransform == null) yield break;
+        if (rootTransform == null)
+        {
+            yield break;
+        }
 
         float start = rootTransform.localRotation.eulerAngles.z;
         float t = 0f;
@@ -283,7 +397,10 @@ public class BackgroundController : MonoBehaviour
 
     private IEnumerator Shake(float intensity, float duration)
     {
-        if (rootTransform == null) yield break;
+        if (rootTransform == null)
+        {
+            yield break;
+        }
 
         Vector2 originalPos = rootTransform.anchoredPosition;
         float t = 0f;
@@ -300,20 +417,21 @@ public class BackgroundController : MonoBehaviour
         rootTransform.anchoredPosition = originalPos;
     }
 
-    // NOTE: сейчас параллель не идеальный (последовательный), но ок для старта.
-    // Если хочешь реально параллельно — сделаем Wrap-функцию (как раньше).
     private IEnumerator RunParallel(IEnumerator a, IEnumerator b)
     {
-        // Быстрый вариант: запускаем второй, ждём первый, потом ждём второй (почти параллельно)
-        Coroutine cb = StartCoroutine(b);
-        yield return StartCoroutine(a);
-        yield return cb;
-    }
-}
+        bool aDone = false;
+        bool bDone = false;
 
-[System.Serializable]
-public class BackgroundEntry
-{
-    public string key;
-    public Sprite sprite;
+        StartCoroutine(Wrap(a, () => aDone = true));
+        StartCoroutine(Wrap(b, () => bDone = true));
+
+        while (!aDone || !bDone)
+            yield return null;
+    }
+
+    private IEnumerator Wrap(IEnumerator routine, System.Action onDone)
+    {
+        yield return StartCoroutine(routine);
+        onDone?.Invoke();
+    }
 }
