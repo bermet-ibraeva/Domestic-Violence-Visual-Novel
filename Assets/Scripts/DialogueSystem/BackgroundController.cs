@@ -92,8 +92,9 @@ public class BackgroundController : MonoBehaviour
         if (bgDict.TryGetValue(key, out var sprite))
         {
             backgroundImage.sprite = sprite;
+            backgroundImage.SetNativeSize();
+            FitBackgroundToScreen();
             ResetTransform();
-            // ensure fully visible
             SetAlpha(1f);
         }
         else
@@ -138,6 +139,30 @@ public class BackgroundController : MonoBehaviour
             PlayEffect(preset);
     }
 
+    private void FitBackgroundToScreen()
+    {
+        if (backgroundImage == null)
+            return;
+
+        if (backgroundImage.sprite == null)
+            return;
+
+        RectTransform rt = backgroundImage.rectTransform;
+
+        float spriteWidth = backgroundImage.sprite.rect.width;
+        float spriteHeight = backgroundImage.sprite.rect.height;
+
+        float screenHeight = ((RectTransform)backgroundImage.canvas.transform).rect.height;
+
+        // Масштабируем так, чтобы высота = высоте экрана
+        float scale = screenHeight / spriteHeight;
+
+        rt.localScale = Vector3.one * scale;
+
+        // Центрируем
+        rt.anchoredPosition = Vector2.zero;
+    }
+
     private IEnumerator FadeSwapRoutine(Sprite nextSprite, float duration)
     {
         // 1) остановить эффекты и сбросить трансформ перед переходом
@@ -148,6 +173,10 @@ public class BackgroundController : MonoBehaviour
 
         // 3) сменить картинку
         backgroundImage.sprite = nextSprite;
+
+
+
+        FitBackgroundToScreen(); 
 
         // 4) reset transform (на всякий)
         ResetTransform();
@@ -204,7 +233,8 @@ public class BackgroundController : MonoBehaviour
 
         // Swap sprite
         backgroundImage.sprite = nextSprite;
-
+        backgroundImage.SetNativeSize();
+        FitBackgroundToScreen(); // ← И ЗДЕСЬ
         ResetTransform();
 
         // Fade in
@@ -253,6 +283,8 @@ public class BackgroundController : MonoBehaviour
     // --------------------------
     public void PlayEffect(string preset)
     {
+        Debug.Log("PlayEffect called with: " + preset);
+
         if (string.IsNullOrEmpty(preset) || preset == "none")
         {
             StopEffect(true);
@@ -286,8 +318,22 @@ public class BackgroundController : MonoBehaviour
             SetBackgroundInstantWithEffect(key, preset);
     }
 
+    // Just effect without changing bg
+    public void ApplyEffectOnly(string preset, bool stopPrevious = true)
+    {
+        if (string.IsNullOrEmpty(preset) || preset == "none")
+            return;
+
+        if (stopPrevious)
+            StopEffect(true);
+
+        PlayEffect(preset);
+    }
+
     private IEnumerator EffectRoutine(string preset)
     {
+        Debug.Log("EffectRoutine started: " + preset);
+
         switch (preset)
         {
             case "zoom_in":

@@ -79,12 +79,6 @@ public class DialogueController : MonoBehaviour
 
         LoadEpisode();
 
-        if (nodeDict == null || nodeDict.Count == 0)
-        {
-            Debug.LogError("[DialogueController] nodeDict empty");
-            return;
-        }
-
         ShowNode(startNodeId);
     }
 
@@ -125,7 +119,6 @@ public class DialogueController : MonoBehaviour
     {
         return string.IsNullOrEmpty(ch) || ch == "Narrator" || ch == "Автор";
     }
-
     string NormalizeEmotion(string em)
     {
         return string.IsNullOrEmpty(em) ? "Calm" : em;
@@ -171,10 +164,11 @@ public class DialogueController : MonoBehaviour
                 currentRightAllowed.Add(c);
     }
 
+
+    // When entering a node, check if we need to switch scenes (based on nodeToScene mapping). 
+    // If scene changes, update background and left character.
     void EnterSceneIfChanged(string nodeId)
     {
-        Debug.Log($"Scene check for node {nodeId}");
-
         if (nodeToScene == null || !nodeToScene.TryGetValue(nodeId, out var newScene) || newScene == null)
             return;
 
@@ -201,6 +195,7 @@ public class DialogueController : MonoBehaviour
             );
         }
 
+        
         // Update left character (fixed per scene)
         if (!string.IsNullOrEmpty(currentScene.leftCharacter))
             ShowLeft(currentScene.leftCharacter, "Calm");
@@ -225,8 +220,6 @@ public class DialogueController : MonoBehaviour
     // ---------------- Main ----------------
     void ShowNode(string nodeId)
     {
-        Debug.Log("ShowNode called: " + nodeId);
-
         if (nodeDict == null || !nodeDict.TryGetValue(nodeId, out var node) || node == null)
         {
             Debug.LogError("[DialogueController] Node not found: " + nodeId);
@@ -241,8 +234,6 @@ public class DialogueController : MonoBehaviour
 
         // Apply node effects once
         ApplyEffectsOnce(nodeId, node);
-
-        Debug.Log($"Trying to change BG to '{node.background}'");
 
         if (backgroundController != null && node.stopPreviousBgEffect)
         {
@@ -260,12 +251,19 @@ public class DialogueController : MonoBehaviour
                 node.background,
                 node.bgFade,
                 duration,
-                node.bgFx
+                node.bgFx            
             );
         }
 
-        if (node.stopPreviousBgEffect)
-            backgroundController.StopEffect(false);
+        // --- Background effect only ---
+        if (backgroundController != null)
+        {
+            if (node.stopPreviousBgEffect)
+                backgroundController.StopEffect(true);
+
+            if (!string.IsNullOrEmpty(node.bgFx) && node.bgFx != "none")
+                backgroundController.PlayEffect(node.bgFx);
+        }
 
         // -------- Text + portraits --------
         if (IsNarrator(node.character))

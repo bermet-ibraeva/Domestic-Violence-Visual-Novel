@@ -525,7 +525,7 @@
     },
     {
       "sceneId": "E01_S05",
-      "background": "ainaz_room_dark",
+      "background": "ainaz_room-dark",
       "leftCharacter": "Ainaz",
       "rightCharacters": ["Guldana"],
       "startNode": "E01_S05_start",
@@ -627,7 +627,7 @@
     {
       "sceneId": "E01_S06",
       "bgFade": true,
-      "background": "ainaz_room_night",
+      "background": "ainaz_room-night",
       "leftCharacter": "Ainaz",
       "rightCharacters": [],
       "startNode": "E01_S06_start",
@@ -717,7 +717,7 @@
           "emotion": "Fear",
           "isThought": true,
           "text": "Это… из дома Гульданы?",
-          "nextNode": "EO1_SUMMARY"
+          "nextNode": "E01_summary_start"
         }
       ]
     },    
