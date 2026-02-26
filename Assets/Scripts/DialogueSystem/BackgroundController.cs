@@ -76,36 +76,61 @@ public class BackgroundController : MonoBehaviour
     // --------------------------
     // Existing: instant set
     // --------------------------
-    public void SetBackground(string key)
+    public void ApplyBackground(string key, bool fade, float fadeDuration, string preset)
     {
-        if (backgroundImage == null)
+        if (fade)
         {
-            Debug.LogError("Background Image is not assigned in the Inspector.");
+            SetBackgroundWithFadeAndEffect(key, fadeDuration, preset);
             return;
         }
 
-        if (string.IsNullOrEmpty(key))
+        // ---- INSTANT VERSION ----
+
+        if (currentTransition != null)
         {
-            return;
+            StopCoroutine(currentTransition);
+            currentTransition = null;
         }
+
+        // Останавливаем текущий эффект, НО без reset
+        StopEffect();
+
+        // Меняем фон
+        SetBackground(key);
+
+        // После смены спрайта делаем reset (важно!)
+        ResetTransform();
+
+        // Запускаем эффект если есть
+        if (!string.IsNullOrEmpty(preset) && preset != "none")
+        {
+            PlayEffect(preset);
+        }
+    }
+    // ------------------------------------------------------------------
+    // NEW: плавная смена фона (fade out -> swap -> fade in)
+    // ------------------------------------------------------------------
+    private void SetBackground(string key)
+    {
+        if (backgroundImage == null)
+            return;
+
+        if (string.IsNullOrEmpty(key))
+            return;
 
         if (bgDict.TryGetValue(key, out var sprite))
         {
             backgroundImage.sprite = sprite;
             backgroundImage.SetNativeSize();
             FitBackgroundToScreen();
-            ResetTransform();
             SetAlpha(1f);
         }
         else
         {
-            Debug.LogWarning($"Background '{key}' not found in BackgroundController.");
+            Debug.LogWarning($"Background '{key}' not found.");
         }
     }
 
-    // ------------------------------------------------------------------
-    // NEW: плавная смена фона (fade out -> swap -> fade in)
-    // ------------------------------------------------------------------
     public void SetBackgroundWithFadeAndEffect(string key, float duration, string preset)
     {
         if (backgroundImage == null)
@@ -123,20 +148,6 @@ public class BackgroundController : MonoBehaviour
         currentTransition = StartCoroutine(
             FadeSwapAndEffectRoutine(sprite, duration, preset)
         );
-    }
-
-
-    private void SetBackgroundInstantWithEffect(string key, string preset)
-    {
-        if (currentTransition != null)
-            StopCoroutine(currentTransition);
-
-        currentTransition = null;
-
-        SetBackground(key);
-
-        if (!string.IsNullOrEmpty(preset) && preset != "none")
-            PlayEffect(preset);
     }
 
     private void FitBackgroundToScreen()
@@ -163,21 +174,6 @@ public class BackgroundController : MonoBehaviour
         rt.anchoredPosition = Vector2.zero;
     }
 
-    private IEnumerator FadeSwapRoutine(Sprite nextSprite, float duration)
-    {
-        StopEffect(true);
-
-        yield return FadeTo(0f, duration * 0.5f);
-
-        backgroundImage.sprite = nextSprite;
-        backgroundImage.SetNativeSize();
-        FitBackgroundToScreen(); 
-        ResetTransform();
-
-        yield return FadeTo(1f, duration * 0.5f);
-
-        currentTransition = null;
-    }
 
     // ------------------------------------------------------------------
     // NEW: универсальный fade alpha
@@ -195,7 +191,7 @@ public class BackgroundController : MonoBehaviour
             t += Time.deltaTime;
 
             float progress = Mathf.Clamp01(t / duration);
-            progress = Mathf.SmoothStep(0f, 1f, progress);
+            progress = 1 - Mathf.Pow(1 - progress, 3);
 
             float alpha = Mathf.Lerp(startAlpha, targetAlpha, progress);
             SetAlpha(alpha);
@@ -218,23 +214,22 @@ public class BackgroundController : MonoBehaviour
             yield break;
         }
         // Stop any active FX first
-        StopEffect(true);
+        StopEffect();
 
         // Fade out
         yield return FadeTo(0f, duration * 0.5f);
 
+        ResetTransform();
+
         // Swap sprite
         backgroundImage.sprite = nextSprite;
         backgroundImage.SetNativeSize();
-        FitBackgroundToScreen(); // ← И ЗДЕСЬ
-        ResetTransform();
-
+        FitBackgroundToScreen(); 
         // Fade in
         yield return FadeTo(1f, duration * 0.5f);
 
         currentTransition = null;
 
-        // 🔥 IMPORTANT: play FX AFTER fade completes
         if (!string.IsNullOrEmpty(preset) && preset != "none")
         {
             PlayEffect(preset);
@@ -279,35 +274,20 @@ public class BackgroundController : MonoBehaviour
 
         if (string.IsNullOrEmpty(preset) || preset == "none")
         {
-            StopEffect(true);
+            StopEffect();
             return;
         }
 
-        StopEffect(true);
+        StopEffect();
         currentEffect = StartCoroutine(EffectRoutine(preset));
     }
 
-    public void StopEffect(bool reset = false)
+    public void StopEffect()
     {
         if (currentEffect != null)
-        {
             StopCoroutine(currentEffect);
-        }
 
         currentEffect = null;
-
-        if (reset)
-        {
-            ResetTransform();
-        }
-    }
-
-    public void ApplyBackground(string key, bool fade, float fadeDuration, string preset)
-    {
-        if (fade)
-            SetBackgroundWithFadeAndEffect(key, fadeDuration, preset);
-        else
-            SetBackgroundInstantWithEffect(key, preset);
     }
 
     // Just effect without changing bg
@@ -317,7 +297,7 @@ public class BackgroundController : MonoBehaviour
             return;
 
         if (stopPrevious)
-            StopEffect(true);
+            StopEffect();
 
         PlayEffect(preset);
     }
@@ -331,37 +311,31 @@ public class BackgroundController : MonoBehaviour
             case "zoom_in":
                 yield return ZoomTo(1.18f, 1.2f);
                 break;
-
             case "zoom_out":
                 yield return ZoomTo(1f, 1f);
                 break;
-
             case "pan_left":
                 yield return PanTo(new Vector2(-200f, 0f), 1.2f);
                 break;
-
             case "pan_right":
-                yield return PanTo(new Vector2(400f, 0f), 1.2f);;
+                yield return PanTo(new Vector2(200f, 0f), 1.2f);;
                 break;
-
             case "tilt":
                 yield return RotateTo(3f, 0.8f);
                 break;
-
             case "shake":
                 yield return Shake(20f, 0.5f);
                 break;
-
             case "zoom_in_pan_left":
-                yield return RunParallel(
-                    ZoomTo(1.18f, 1.2f),
-                    PanTo(new Vector2(600f, 0f), 1.2f)
-                );
+                StartCoroutine(ZoomTo(1.18f, 1.2f));
+                yield return PanTo(new Vector2(600f, 0f), 1.2f);
                 break;
             case "drift_right":
-                yield return PanTo(new Vector2(50f, 0f), 5f);
+                yield return PanTo(new Vector2(400f, 0f), 5f);
                 break;
-
+            case "drift_left":
+                yield return PanTo(new Vector2(-400f, 0f), 5f);
+                break;
             default:
                 Debug.LogWarning($"Unknown background preset: {preset}");
                 break;
@@ -453,23 +427,5 @@ public class BackgroundController : MonoBehaviour
         }
 
         rootTransform.anchoredPosition = originalPos;
-    }
-
-    private IEnumerator RunParallel(IEnumerator a, IEnumerator b)
-    {
-        bool aDone = false;
-        bool bDone = false;
-
-        StartCoroutine(Wrap(a, () => aDone = true));
-        StartCoroutine(Wrap(b, () => bDone = true));
-
-        while (!aDone || !bDone)
-            yield return null;
-    }
-
-    private IEnumerator Wrap(IEnumerator routine, System.Action onDone)
-    {
-        yield return StartCoroutine(routine);
-        onDone?.Invoke();
     }
 }

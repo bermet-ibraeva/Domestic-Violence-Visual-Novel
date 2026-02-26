@@ -119,10 +119,10 @@
           "nodeId": "E01_S01_choice1_result",
           "character": "Narrator",
           "text": "Гульдана отвечает коротко и уклончиво, будто не хочет вдаваться в подробности.",
-          "nextNode": "E01_S01_choice2_result"
+          "nextNode": "E01_S01_choice1_result1"
         },
         {
-          "nodeId": "E01_S01_choice2_result",
+          "nodeId": "E01_S01_choice1_result1",
           "character": "Narrator",
           "text": "Но она запоминает сам вопрос и то, как внимательно Айназ на неё посмотрела.",
           "nextNode": "E01_S02_start"
@@ -255,7 +255,7 @@
         },
         {
           "nodeId": "E01_S02_choice1_start",
-          "bgFx": "pan_left",
+          "bgFx": "drift_left",
           "character": "Narrator",
           "text": "Айназ подходит к ребятам.",
           "nextNode": "E01_S02_choice1_narration_1"
@@ -483,7 +483,7 @@
         {
           "nodeId": "E01_S04_narration_1",
           "character": "Narrator",
-          "bgFx": "pan_left",
+          "bgFx": "pan_right",
           "text": "Аида переводит взгляд на Гульдану.",
           "nextNode": "E01_S04_dialogue_5"
         },
@@ -699,7 +699,7 @@
         },
         {
           "nodeId" : "E01_S06_walk_to_house1",
-          "bgFx": "zoom_in_pan_left",
+          "bgFx": "pan_right",
           "character": "Narrator",
           "text": "Почти дойдя до дома, Айназ резко останавливается.",
           "nextNode": "E01_S06_walk_to_house2"

@@ -237,7 +237,7 @@ public class DialogueController : MonoBehaviour
 
         if (backgroundController != null && node.stopPreviousBgEffect)
         {
-            backgroundController.StopEffect(false);
+            backgroundController.StopEffect();
         }
 
         // 1) Node-specific background (if specified)
@@ -259,7 +259,7 @@ public class DialogueController : MonoBehaviour
         if (backgroundController != null)
         {
             if (node.stopPreviousBgEffect)
-                backgroundController.StopEffect(true);
+                backgroundController.StopEffect();
 
             if (!string.IsNullOrEmpty(node.bgFx) && node.bgFx != "none")
                 backgroundController.PlayEffect(node.bgFx);
