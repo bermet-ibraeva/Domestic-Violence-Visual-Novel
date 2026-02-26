@@ -165,23 +165,15 @@ public class BackgroundController : MonoBehaviour
 
     private IEnumerator FadeSwapRoutine(Sprite nextSprite, float duration)
     {
-        // 1) остановить эффекты и сбросить трансформ перед переходом
         StopEffect(true);
 
-        // 2) fade out
         yield return FadeTo(0f, duration * 0.5f);
 
-        // 3) сменить картинку
         backgroundImage.sprite = nextSprite;
-
-
-
+        backgroundImage.SetNativeSize();
         FitBackgroundToScreen(); 
-
-        // 4) reset transform (на всякий)
         ResetTransform();
 
-        // 5) fade in
         yield return FadeTo(1f, duration * 0.5f);
 
         currentTransition = null;
@@ -337,7 +329,7 @@ public class BackgroundController : MonoBehaviour
         switch (preset)
         {
             case "zoom_in":
-                yield return ZoomTo(1.08f, 1f);
+                yield return ZoomTo(1.18f, 1.2f);
                 break;
 
             case "zoom_out":
@@ -345,11 +337,11 @@ public class BackgroundController : MonoBehaviour
                 break;
 
             case "pan_left":
-                yield return PanTo(new Vector2(-100f, 0f), 1.2f);
+                yield return PanTo(new Vector2(-200f, 0f), 1.2f);
                 break;
 
             case "pan_right":
-                yield return PanTo(new Vector2(100f, 0f), 1.2f);
+                yield return PanTo(new Vector2(400f, 0f), 1.2f);;
                 break;
 
             case "tilt":
@@ -360,10 +352,10 @@ public class BackgroundController : MonoBehaviour
                 yield return Shake(20f, 0.5f);
                 break;
 
-            case "zoom_in_pan_right":
+            case "zoom_in_pan_left":
                 yield return RunParallel(
-                    ZoomTo(1.1f, 1.2f),
-                    PanTo(new Vector2(120f, 0f), 1.2f)
+                    ZoomTo(1.18f, 1.2f),
+                    PanTo(new Vector2(600f, 0f), 1.2f)
                 );
                 break;
             case "drift_right":
