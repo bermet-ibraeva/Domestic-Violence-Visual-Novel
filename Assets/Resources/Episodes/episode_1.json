@@ -53,9 +53,6 @@
         {
           "nodeId": "E01_S01_narration_1",
           "background": "street_to_school_morning",
-          "bgFade": true,
-          "bgFadeDuration": 0.4,
-          "bgFx": "none",
           "character": "Narrator",
           "text": "Гульдана идёт чуть впереди. Айназ ускоряет шаг, чтобы идти рядом.",
           "nextNode": "E01_S01_dialogue_4"

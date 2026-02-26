@@ -85,7 +85,7 @@ public class BackgroundController : MonoBehaviour
         float screenHeight = ((RectTransform)backgroundImage.canvas.transform).rect.height;
 
         float scale = screenHeight / spriteHeight;
-        backgroundImage.rectTransform.sizeDelta = new Vector2(width, screenHeight);
+        backgroundImage.rectTransform.localScale = Vector3.one * scale;
         backgroundImage.rectTransform.anchoredPosition = Vector2.zero;
     }
 
@@ -129,11 +129,11 @@ public class BackgroundController : MonoBehaviour
                 break;
 
             case "pan_left":
-                yield return PanTo(new Vector2(-200f, 0f));
+                yield return PanTo(new Vector2(-200f, 0f), 1.2f);
                 break;
 
             case "pan_right":
-                yield return PanTo(new Vector2(200f, 0f));
+                yield return PanTo(new Vector2(200f, 0f), 1.2f);
                 break;
 
             case "tilt":
@@ -146,17 +146,22 @@ public class BackgroundController : MonoBehaviour
 
             case "zoom_in_pan_left":
                 StartCoroutine(ZoomTo(1.18f, 1.2f));
-                yield return PanTo(new Vector2(600f, 0f), 1.2f);
+                yield return PanTo(new Vector2(-400f, 0f), 1.2f);
+                break;
+            
+            case "zoom_in_pan_right":
+                StartCoroutine(ZoomTo(1.18f, 1.2f));
+                yield return PanTo(new Vector2(400f, 0f), 1.2f);
                 break;
 
             case "drift_right":
-                yield return PanTo(new Vector2(400f, 0f));
+                yield return PanTo(new Vector2(400f, 0f), 1.2f);
                 break;
 
             case "drift_left":
-                yield return PanTo(new Vector2(-400f, 0f));
+                yield return PanTo(new Vector2(-400f, 0f), 1.2f);
                 break;
-
+                
             default:
                 Debug.LogWarning($"Unknown background preset: {preset}");
                 break;
@@ -227,3 +232,4 @@ public class BackgroundController : MonoBehaviour
         rootTransform.anchoredPosition = originalPos;
     }
 }
+
