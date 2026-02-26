@@ -358,7 +358,7 @@
     {
       "sceneId": "E01_S03",
       "background": "classroom_empty",
-      "bgFx": "pan_left",
+      "bgFx": "drift_left",
       "leftCharacter": "Ainaz",
       "rightCharacters": ["Guldana"],
       "startNode": "E01_S03_start",
@@ -632,7 +632,6 @@
     },
     {
       "sceneId": "E01_S06",
-      "bgFade": true,
       "background": "ainaz_room-night",
       "leftCharacter": "Ainaz",
       "rightCharacters": [],
@@ -686,6 +685,7 @@
         },
         {
           "nodeId": "E01_S06_call_to_walk",
+          "bgFx": "none",
           "background": "street_night_empty",
           "character": "Narrator",
           "text": "Айназ откладывает телефон, надевает лёгкую куртку и выходит из дома.",

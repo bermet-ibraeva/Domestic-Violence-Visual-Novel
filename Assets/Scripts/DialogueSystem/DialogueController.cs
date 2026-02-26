@@ -183,14 +183,8 @@ public class DialogueController : MonoBehaviour
         // Refresh the background
         if (backgroundController != null && !string.IsNullOrEmpty(currentScene.background))
         {
-            float duration = currentScene.bgFadeDuration > 0f
-                ? currentScene.bgFadeDuration
-                : -1f;
-
             backgroundController.ApplyBackground(
                 currentScene.background,
-                currentScene.bgFade,
-                duration,
                 currentScene.bgFx
             );
         }
@@ -243,14 +237,8 @@ public class DialogueController : MonoBehaviour
         // 1) Node-specific background (if specified)
         if (backgroundController != null && !string.IsNullOrEmpty(node.background))
         {
-            float duration = node.bgFadeDuration > 0f
-                ? node.bgFadeDuration
-                : -1f;
-
             backgroundController.ApplyBackground(
                 node.background,
-                node.bgFade,
-                duration,
                 node.bgFx            
             );
         }
