@@ -220,30 +220,24 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        // Ensure scene context is correct
+        // Проверка сцены
         EnterSceneIfChanged(nodeId);
 
         currentNode = node;
         waitingForAdvance = false;
 
-        // Apply node effects once
+        // Применение эффектов узла
         ApplyEffectsOnce(nodeId, node);
 
+        // Остановка предыдущего эффекта фона
         if (backgroundController != null && node.stopPreviousBgEffect)
-        {
             backgroundController.StopEffect();
-        }
 
-        // 1) Node-specific background (if specified)
+        // Применение фонового изображения
         if (backgroundController != null && !string.IsNullOrEmpty(node.background))
-        {
-            backgroundController.ApplyBackground(
-                node.background,
-                node.bgFx            
-            );
-        }
+            backgroundController.ApplyBackground(node.background, node.bgFx);
 
-        // --- Background effect only ---
+        // Воспроизведение фонового эффекта (если есть)
         if (backgroundController != null)
         {
             if (node.stopPreviousBgEffect)
@@ -253,20 +247,25 @@ public class DialogueController : MonoBehaviour
                 backgroundController.PlayEffect(node.bgFx);
         }
 
-        // -------- Text + portraits --------
+        // ----------------- Текст и персонажи -----------------
+        string layoutCharacter; // строка для LayoutController
+
         if (IsNarrator(node.character))
         {
             ui.ShowAuthor(node.text);
-            if (ui.authorText != null) ui.authorText.color = AuthorColor;
+
+            if (ui.authorPanel != null && ui.authorPanel.targetText != null)
+                ui.authorPanel.targetText.color = AuthorColor;
 
             HideAllCharacters();
         }
         else if (IsLeftCharacter(node.character))
         {
             ui.ShowLeftCharacter(node.character, node.text);
-            if (ui.LeftCharacterText != null) ui.LeftCharacterText.color = LeftCharacterColor;
 
-            // Left speaks (left character name is defined by the scene)
+            if (ui.leftCharacterPanel != null && ui.leftCharacterPanel.targetText != null)
+                ui.leftCharacterPanel.targetText.color = LeftCharacterColor;
+
             if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
                 ShowLeft(currentScene.leftCharacter, node.emotion);
 
@@ -276,38 +275,43 @@ public class DialogueController : MonoBehaviour
         else if (IsRightAllowed(node.character))
         {
             ui.ShowOther(node.character, node.text);
-            if (ui.otherText != null) ui.otherText.color = OtherColor;
 
-            // Right speaks (node.character is the right speaker)
+            if (ui.otherPanel != null && ui.otherPanel.targetText != null)
+                ui.otherPanel.targetText.color = OtherColor;
+
             ShowRight(node.character, node.emotion);
 
             if (HideLeftWhenRightSpeaks)
                 HideLeft();
-            else
-            {
-                // Keep left visible if the scene defines one
-                if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
-                    if (LeftCharacter != null) LeftCharacter.SetActive(true);
-            }
+            else if (!string.IsNullOrEmpty(currentScene?.leftCharacter) && LeftCharacter != null)
+                LeftCharacter.SetActive(true);
         }
         else
         {
-            // Unknown/system/data mistake
             ui.ShowOther(node.character, node.text);
-            if (ui.otherText != null) ui.otherText.color = OtherColor;
+
+            if (ui.otherPanel != null && ui.otherPanel.targetText != null)
+                ui.otherPanel.targetText.color = OtherColor;
 
             HideAllCharacters();
         }
 
-        // Choices / click advance
-        SetupChoices(node);
+        // Определяем, какая панель должна быть активна для LayoutController
+        if (IsNarrator(node.character))
+            layoutCharacter = "Narrator";
+        else if (IsLeftCharacter(node.character))
+            layoutCharacter = "LeftCharacter";
+        else if (IsRightAllowed(node.character))
+            layoutCharacter = "RightCharacter";
+        else
+            layoutCharacter = "Narrator"; // fallback
 
-        // Layout
+        // Применяем layout
         if (layout != null)
-        {
-            string ch = IsNarrator(node.character) ? "Narrator" : node.character;
-            layout.ApplyLayout(ch);
-        }
+            layout.ApplyLayout(layoutCharacter);
+
+        // Настройка выбора игрока / клика
+        SetupChoices(node);
 
         // Autosave
         save.episodePath = episodePath;

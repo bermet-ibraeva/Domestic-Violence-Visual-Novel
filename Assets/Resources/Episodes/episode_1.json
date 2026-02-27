@@ -354,8 +354,7 @@
     },
     {
       "sceneId": "E01_S03",
-      "background": "classroom_empty",
-      "bgFx": "drift_left",
+      "background": "classroom_end_of_class",
       "leftCharacter": "Ainaz",
       "rightCharacters": ["Guldana"],
       "startNode": "E01_S03_start",

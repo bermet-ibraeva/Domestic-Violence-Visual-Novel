@@ -1,114 +1,101 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
 
 public class UIController : MonoBehaviour
 {
     [Header("Author UI")]
-    public GameObject authorPanel;
-    public TextMeshProUGUI authorText;
+    public AdaptivePanel authorPanel;
 
-    [Header("LeftCharacter UI")]
-    public GameObject LeftCharacterPanel;
-    public GameObject LeftCharacterNamePanel;        // НОВАЯ ПАНЕЛЬ ИМЕНИ
-    public TextMeshProUGUI LeftCharacterName;
-    public TextMeshProUGUI LeftCharacterText;
+    [Header("Left Character UI")]
+    public AdaptivePanel leftCharacterPanel;
+    public AdaptivePanel leftCharacterNamePanel;
 
-    [Header("Other character UI")]
-    public GameObject otherPanel;
-    public GameObject otherNamePanel;        // НОВАЯ ПАНЕЛЬ ИМЕНИ
-    public TextMeshProUGUI otherName;
-    public TextMeshProUGUI otherText;
+    [Header("Other Character UI")]
+    public AdaptivePanel otherPanel;
+    public AdaptivePanel otherNamePanel;
 
     [Header("Choices UI")]
-    public GameObject choicesPanel;
+    public AdaptivePanel choicesPanel;
     public ChoiceButton[] choiceButtons;
 
     // ---------------------- HIDE ----------------------
-
     public void HideAll()
     {
-        authorPanel?.SetActive(false);
+        authorPanel?.gameObject.SetActive(false);
 
-        LeftCharacterPanel?.SetActive(false);
-        LeftCharacterNamePanel?.SetActive(false);
+        leftCharacterPanel?.gameObject.SetActive(false);
+        leftCharacterNamePanel?.gameObject.SetActive(false);
 
-        otherPanel?.SetActive(false);
-        otherNamePanel?.SetActive(false);
+        otherPanel?.gameObject.SetActive(false);
+        otherNamePanel?.gameObject.SetActive(false);
 
-        choicesPanel?.SetActive(false);
+        choicesPanel?.gameObject.SetActive(false);
 
-        // Скрыть все кнопки
         foreach (var btn in choiceButtons)
             btn.gameObject.SetActive(false);
     }
 
     public void HideChoices()
     {
-        choicesPanel?.SetActive(false);
+        choicesPanel?.gameObject.SetActive(false);
 
         foreach (var btn in choiceButtons)
             btn.gameObject.SetActive(false);
     }
 
     // ---------------------- AUTHOR ----------------------
-
     public void ShowAuthor(string text)
     {
         HideAll();
 
-        authorPanel.SetActive(true);
-        authorText.text = text;
+        authorPanel.gameObject.SetActive(true);
 
-        AutoResizePanel auto = authorPanel.GetComponent<AutoResizePanel>();
-        if (auto) auto.RefreshSize();
+        if (authorPanel.targetText != null)
+            authorPanel.targetText.text = text;
+
+        authorPanel.RefreshSize();
     }
 
     // ---------------------- LEFT CHARACTER ----------------------
-
     public void ShowLeftCharacter(string name, string text)
     {
         HideAll();
 
-        LeftCharacterNamePanel.SetActive(true);
-        LeftCharacterPanel.SetActive(true);
+        leftCharacterNamePanel.gameObject.SetActive(true);
+        leftCharacterPanel.gameObject.SetActive(true);
 
-        LeftCharacterName.text = name;
-        LeftCharacterText.text = text;
+        if (leftCharacterNamePanel.targetText != null)
+            leftCharacterNamePanel.targetText.text = name;
 
-        // resize name panel
-        AutoResizePanel nameAuto = LeftCharacterNamePanel.GetComponent<AutoResizePanel>();
-        if (nameAuto) nameAuto.RefreshSize();
+        if (leftCharacterPanel.targetText != null)
+            leftCharacterPanel.targetText.text = text;
 
-        // resize dialogue panel
-        AutoResizePanel textAuto = LeftCharacterPanel.GetComponent<AutoResizePanel>();
-        if (textAuto) textAuto.RefreshSize();
+        leftCharacterNamePanel.RefreshSize();
+        leftCharacterPanel.RefreshSize();
     }
 
-    // ---------------------- OTHER ----------------------
-
+    // ---------------------- OTHER CHARACTER ----------------------
     public void ShowOther(string name, string text)
     {
         HideAll();
 
-        otherNamePanel.SetActive(true);
-        otherPanel.SetActive(true);
+        otherNamePanel.gameObject.SetActive(true);
+        otherPanel.gameObject.SetActive(true);
 
-        otherName.text = name;
-        otherText.text = text;
+        if (otherNamePanel.targetText != null)
+            otherNamePanel.targetText.text = name;
 
-        AutoResizePanel nameAuto = otherNamePanel.GetComponent<AutoResizePanel>();
-        if (nameAuto) nameAuto.RefreshSize();
+        if (otherPanel.targetText != null)
+            otherPanel.targetText.text = text;
 
-        AutoResizePanel textAuto = otherPanel.GetComponent<AutoResizePanel>();
-        if (textAuto) textAuto.RefreshSize();
+        otherNamePanel.RefreshSize();
+        otherPanel.RefreshSize();
     }
 
-
     // ---------------------- CHOICES ----------------------
-
-    public void ShowChoices(System.Collections.Generic.List<Choice> choices, System.Action<string> callback)
+    public void ShowChoices(List<Choice> choices, Action<string> callback)
     {
         if (choices == null || choices.Count == 0)
         {
@@ -116,13 +103,11 @@ public class UIController : MonoBehaviour
             return;
         }
 
-        choicesPanel.SetActive(true);
+        choicesPanel.gameObject.SetActive(true);
 
-        // Скрываем все кнопки
         foreach (var btn in choiceButtons)
             btn.gameObject.SetActive(false);
 
-        // Показываем только нужное количество кнопок
         for (int i = 0; i < choices.Count; i++)
         {
             if (i >= choiceButtons.Length)
