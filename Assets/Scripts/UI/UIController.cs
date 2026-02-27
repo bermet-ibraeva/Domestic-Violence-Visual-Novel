@@ -1,37 +1,28 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class UIController : MonoBehaviour
 {
-    [Header("Author UI")]
-    public AdaptivePanel authorPanel;
+    [Header("Panels")]
+    public AdaptivePanel authorPanel;          // диалог автора
+    public AdaptivePanel leftCharacterPanel;   // панель текста персонажа слева
+    public AdaptivePanel rightCharacterPanel;  // панель текста персонажа справа
 
-    [Header("Left Character UI")]
-    public AdaptivePanel leftCharacterPanel;
-    public AdaptivePanel leftCharacterNamePanel;
-
-    [Header("Other Character UI")]
-    public AdaptivePanel otherPanel;
-    public AdaptivePanel otherNamePanel;
-
-    [Header("Choices UI")]
-    public AdaptivePanel choicesPanel;
+    [Header("Choices")]
+    public RectTransform choicesPanel;         // контейнер кнопок
     public ChoiceButton[] choiceButtons;
+    public float verticalOffset = 8f;          // px ниже активной панели
 
     // ---------------------- HIDE ----------------------
     public void HideAll()
     {
         authorPanel?.gameObject.SetActive(false);
-
         leftCharacterPanel?.gameObject.SetActive(false);
-        leftCharacterNamePanel?.gameObject.SetActive(false);
+        rightCharacterPanel?.gameObject.SetActive(false);
 
-        otherPanel?.gameObject.SetActive(false);
-        otherNamePanel?.gameObject.SetActive(false);
-
-        choicesPanel?.gameObject.SetActive(false);
+        if (choicesPanel != null)
+            choicesPanel.gameObject.SetActive(false);
 
         foreach (var btn in choiceButtons)
             btn.gameObject.SetActive(false);
@@ -39,13 +30,14 @@ public class UIController : MonoBehaviour
 
     public void HideChoices()
     {
-        choicesPanel?.gameObject.SetActive(false);
+        if (choicesPanel != null)
+            choicesPanel.gameObject.SetActive(false);
 
         foreach (var btn in choiceButtons)
             btn.gameObject.SetActive(false);
     }
 
-    // ---------------------- AUTHOR ----------------------
+    // ---------------------- SHOW AUTHOR ----------------------
     public void ShowAuthor(string text)
     {
         HideAll();
@@ -56,45 +48,41 @@ public class UIController : MonoBehaviour
             authorPanel.targetText.text = text;
 
         authorPanel.RefreshSize();
+
+        PositionChoicesBelowActivePanel();
     }
 
-    // ---------------------- LEFT CHARACTER ----------------------
-    public void ShowLeftCharacter(string name, string text)
+    // ---------------------- SHOW LEFT CHARACTER ----------------------
+    public void ShowLeftCharacter(string text)
     {
         HideAll();
 
-        leftCharacterNamePanel.gameObject.SetActive(true);
         leftCharacterPanel.gameObject.SetActive(true);
-
-        if (leftCharacterNamePanel.targetText != null)
-            leftCharacterNamePanel.targetText.text = name;
 
         if (leftCharacterPanel.targetText != null)
             leftCharacterPanel.targetText.text = text;
 
-        leftCharacterNamePanel.RefreshSize();
         leftCharacterPanel.RefreshSize();
+
+        PositionChoicesBelowActivePanel();
     }
 
-    // ---------------------- OTHER CHARACTER ----------------------
-    public void ShowOther(string name, string text)
+    // ---------------------- SHOW RIGHT CHARACTER ----------------------
+    public void ShowRightCharacter(string text)
     {
         HideAll();
 
-        otherNamePanel.gameObject.SetActive(true);
-        otherPanel.gameObject.SetActive(true);
+        rightCharacterPanel.gameObject.SetActive(true);
 
-        if (otherNamePanel.targetText != null)
-            otherNamePanel.targetText.text = name;
+        if (rightCharacterPanel.targetText != null)
+            rightCharacterPanel.targetText.text = text;
 
-        if (otherPanel.targetText != null)
-            otherPanel.targetText.text = text;
+        rightCharacterPanel.RefreshSize();
 
-        otherNamePanel.RefreshSize();
-        otherPanel.RefreshSize();
+        PositionChoicesBelowActivePanel();
     }
 
-    // ---------------------- CHOICES ----------------------
+    // ---------------------- SHOW CHOICES ----------------------
     public void ShowChoices(List<Choice> choices, Action<string> callback)
     {
         if (choices == null || choices.Count == 0)
@@ -103,7 +91,8 @@ public class UIController : MonoBehaviour
             return;
         }
 
-        choicesPanel.gameObject.SetActive(true);
+        if (choicesPanel != null)
+            choicesPanel.gameObject.SetActive(true);
 
         foreach (var btn in choiceButtons)
             btn.gameObject.SetActive(false);
@@ -123,5 +112,42 @@ public class UIController : MonoBehaviour
             btn.SetText(choices[i].text);
             btn.SetCallback(() => callback?.Invoke(nextNode));
         }
+
+        PositionChoicesBelowActivePanel();
+    }
+
+    // ---------------------- POSITION CHOICES ----------------------
+    private void PositionChoicesBelowActivePanel()
+    {
+        if (choicesPanel == null)
+            return;
+
+        AdaptivePanel activePanel = null;
+
+        if (authorPanel != null && authorPanel.gameObject.activeSelf)
+            activePanel = authorPanel;
+        else if (leftCharacterPanel != null && leftCharacterPanel.gameObject.activeSelf)
+            activePanel = leftCharacterPanel;
+        else if (rightCharacterPanel != null && rightCharacterPanel.gameObject.activeSelf)
+            activePanel = rightCharacterPanel;
+
+        if (activePanel == null)
+            return;
+
+        RectTransform panelRect = activePanel.GetComponent<RectTransform>();
+        if (panelRect == null)
+            return;
+
+        Vector3[] corners = new Vector3[4];
+        panelRect.GetWorldCorners(corners);
+        float panelBottomY = corners[0].y;
+
+        Vector3 newPos = choicesPanel.position;
+        newPos.y = panelBottomY - verticalOffset;
+
+        // Горизонтально по центру активной панели
+        newPos.x = (corners[0].x + corners[2].x) / 2f;
+
+        choicesPanel.position = newPos;
     }
 }

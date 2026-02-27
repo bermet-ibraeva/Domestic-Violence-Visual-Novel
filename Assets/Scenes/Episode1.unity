@@ -314,7 +314,7 @@ MonoBehaviour:
   layout: {fileID: 648468932}
   AuthorColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
   LeftCharacterColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
-  OtherColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
+  RightCharacterColor: {r: 1, g: 1, b: 1, a: 1}
   backgroundController: {fileID: 2009236193}
   episodePath: Episodes/episode_1
   startNodeId: E01_S01_start
@@ -1739,14 +1739,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 789645529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dcfc074762a29f47ac27abc495fa6c9, type: 3}
+  m_Script: {fileID: 11500000, guid: de2bcbae81438b74c8852c1f42ad5b9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AuthorPanel: {fileID: 1176912194}
-  LeftCharacterPanel: {fileID: 696655970}
-  RightCharacterPanel: {fileID: 251045531}
-  ButtonsContainer: {fileID: 789645530}
-  verticalOffset: 10
+  targetText: {fileID: 0}
+  extraPadding: 0
+  minHeight: 0
+  maxHeight: 0
 --- !u!1 &809127905
 GameObject:
   m_ObjectHideFlags: 0
@@ -3004,16 +3003,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8db9432161fe5344bbba10b7b7ea50e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  authorPanel: {fileID: 1176912193}
-  leftCharacterPanel: {fileID: 0}
-  leftCharacterNamePanel: {fileID: 0}
-  otherPanel: {fileID: 251045528}
-  otherNamePanel: {fileID: 2026779788}
-  choicesPanel: {fileID: 789645529}
+  authorPanel: {fileID: 1176912197}
+  leftCharacterPanel: {fileID: 696655971}
+  rightCharacterPanel: {fileID: 251045532}
+  choicesPanel: {fileID: 789645530}
   choiceButtons:
   - {fileID: 1062144744}
   - {fileID: 615870097}
   - {fileID: 376438213}
+  verticalOffset: 8
 --- !u!1 &1394786216
 GameObject:
   m_ObjectHideFlags: 0

@@ -39,7 +39,7 @@ public class DialogueController : MonoBehaviour
     [Header("Text Colors")]
     public Color AuthorColor = Color.gray;
     public Color LeftCharacterColor = Color.white;
-    public Color OtherColor = Color.white;
+    public Color RightCharacterColor = Color.white;
 
     [Header("Backgrounds")]
     public BackgroundController backgroundController;
@@ -253,7 +253,6 @@ public class DialogueController : MonoBehaviour
         if (IsNarrator(node.character))
         {
             ui.ShowAuthor(node.text);
-
             if (ui.authorPanel != null && ui.authorPanel.targetText != null)
                 ui.authorPanel.targetText.color = AuthorColor;
 
@@ -261,8 +260,7 @@ public class DialogueController : MonoBehaviour
         }
         else if (IsLeftCharacter(node.character))
         {
-            ui.ShowLeftCharacter(node.character, node.text);
-
+            ui.ShowLeftCharacter(node.text);
             if (ui.leftCharacterPanel != null && ui.leftCharacterPanel.targetText != null)
                 ui.leftCharacterPanel.targetText.color = LeftCharacterColor;
 
@@ -274,10 +272,9 @@ public class DialogueController : MonoBehaviour
         }
         else if (IsRightAllowed(node.character))
         {
-            ui.ShowOther(node.character, node.text);
-
-            if (ui.otherPanel != null && ui.otherPanel.targetText != null)
-                ui.otherPanel.targetText.color = OtherColor;
+            ui.ShowRightCharacter(node.text);
+            if (ui.rightCharacterPanel != null && ui.rightCharacterPanel.targetText != null)
+                ui.rightCharacterPanel.targetText.color = RightCharacterColor;
 
             ShowRight(node.character, node.emotion);
 
@@ -288,10 +285,9 @@ public class DialogueController : MonoBehaviour
         }
         else
         {
-            ui.ShowOther(node.character, node.text);
-
-            if (ui.otherPanel != null && ui.otherPanel.targetText != null)
-                ui.otherPanel.targetText.color = OtherColor;
+            ui.ShowRightCharacter(node.text);
+            if (ui.rightCharacterPanel != null && ui.rightCharacterPanel.targetText != null)
+                ui.rightCharacterPanel.targetText.color = RightCharacterColor;
 
             HideAllCharacters();
         }
