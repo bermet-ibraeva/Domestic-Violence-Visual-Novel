@@ -134,7 +134,7 @@
           "nodeId": "E01_S01_choice3_result",
           "character": "Narrator",
           "text": "Гульдана слабо улыбается, почти машинально, а затем снова закрывается и смотрит вперёд.",
-          "nextNode": "E01_S02"
+          "nextNode": "E01_S02_start"
         }
       ]
     },

@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,7 +40,7 @@ public class DialogueController : MonoBehaviour
     [Header("Text Colors")]
     public Color AuthorColor = Color.gray;
     public Color LeftCharacterColor = Color.white;
-    public Color RightCharacterColor = Color.white;
+    public Color OtherColor = Color.white;
 
     [Header("Backgrounds")]
     public BackgroundController backgroundController;
@@ -220,96 +221,87 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        // Проверка сцены
+        // Ensure scene context is correct
         EnterSceneIfChanged(nodeId);
 
         currentNode = node;
         waitingForAdvance = false;
 
-        // Применение эффектов узла
+        // Apply node effects once
         ApplyEffectsOnce(nodeId, node);
 
-        // Остановка предыдущего эффекта фона
-        if (backgroundController != null && node.stopPreviousBgEffect)
-            backgroundController.StopEffect();
-
-        // Применение фонового изображения
-        if (backgroundController != null && !string.IsNullOrEmpty(node.background))
-            backgroundController.ApplyBackground(node.background, node.bgFx);
-
-        // Воспроизведение фонового эффекта (если есть)
+        // -------- Background --------
         if (backgroundController != null)
         {
             if (node.stopPreviousBgEffect)
                 backgroundController.StopEffect();
 
+            if (!string.IsNullOrEmpty(node.background))
+                backgroundController.ApplyBackground(node.background, node.bgFx);
+
             if (!string.IsNullOrEmpty(node.bgFx) && node.bgFx != "none")
                 backgroundController.PlayEffect(node.bgFx);
         }
 
-        // ----------------- Текст и персонажи -----------------
-        string layoutCharacter; // строка для LayoutController
-
+        // -------- Text + portraits --------
         if (IsNarrator(node.character))
         {
             ui.ShowAuthor(node.text);
-            if (ui.authorPanel != null && ui.authorPanel.targetText != null)
-                ui.authorPanel.targetText.color = AuthorColor;
+            if (ui.AuthorText != null) ui.AuthorText.color = AuthorColor;
 
-            HideAllCharacters();
+            HideAllCharacters(); // прячем портреты
         }
         else if (IsLeftCharacter(node.character))
         {
+            // --- UI: текст ---
             ui.ShowLeftCharacter(node.text);
-            if (ui.leftCharacterPanel != null && ui.leftCharacterPanel.targetText != null)
-                ui.leftCharacterPanel.targetText.color = LeftCharacterColor;
+            if (ui.LeftCharacterText != null) ui.LeftCharacterText.color = LeftCharacterColor;
+            // --- Портрет ---
+            ShowLeft(currentScene.leftCharacter, node.emotion);
 
-            if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
-                ShowLeft(currentScene.leftCharacter, node.emotion);
-
+            // Скрыть правого при необходимости
             if (HideRightWhenLeftSpeaks)
                 HideRight();
         }
         else if (IsRightAllowed(node.character))
         {
             ui.ShowRightCharacter(node.text);
-            if (ui.rightCharacterPanel != null && ui.rightCharacterPanel.targetText != null)
-                ui.rightCharacterPanel.targetText.color = RightCharacterColor;
-
+            if (ui.RightCharacterText != null) ui.RightCharacterText.color = OtherColor;
             ShowRight(node.character, node.emotion);
 
             if (HideLeftWhenRightSpeaks)
                 HideLeft();
-            else if (!string.IsNullOrEmpty(currentScene?.leftCharacter) && LeftCharacter != null)
-                LeftCharacter.SetActive(true);
+            else if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
+                ShowLeft(currentScene.leftCharacter, "Calm");
         }
         else
         {
+            // На случай ошибок
             ui.ShowRightCharacter(node.text);
-            if (ui.rightCharacterPanel != null && ui.rightCharacterPanel.targetText != null)
-                ui.rightCharacterPanel.targetText.color = RightCharacterColor;
-
             HideAllCharacters();
         }
 
-        // Определяем, какая панель должна быть активна для LayoutController
-        if (IsNarrator(node.character))
-            layoutCharacter = "Narrator";
-        else if (IsLeftCharacter(node.character))
-            layoutCharacter = "LeftCharacter";
-        else if (IsRightAllowed(node.character))
-            layoutCharacter = "RightCharacter";
-        else
-            layoutCharacter = "Narrator"; // fallback
-
-        // Применяем layout
+        // -------- Layout --------
         if (layout != null)
-            layout.ApplyLayout(layoutCharacter);
+        {
+            string layoutCharacter;
 
-        // Настройка выбора игрока / клика
+            if (IsNarrator(node.character))
+                layoutCharacter = "Narrator";
+            else if (IsLeftCharacter(node.character))
+                layoutCharacter = "LeftCharacter";
+            else if (IsRightAllowed(node.character))
+                layoutCharacter = "RightCharacter";
+            else
+                layoutCharacter = "Narrator";
+
+            layout.ApplyLayout(layoutCharacter);
+        }
+
+        // -------- Choices --------
         SetupChoices(node);
 
-        // Autosave
+        // -------- Autosave --------
         save.episodePath = episodePath;
         save.currentNodeId = nodeId;
         save.chapterNumber = chapterNumber;
