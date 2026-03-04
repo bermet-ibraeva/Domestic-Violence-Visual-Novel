@@ -1,49 +1,27 @@
 using UnityEngine;
 using TMPro;
 
-[RequireComponent(typeof(RectTransform))]
 public class SimpleCenterPanel : MonoBehaviour
 {
     public TextMeshProUGUI targetText;
-    
-    [Header("Настройки роста")]
     public float baseHeight = 150f; 
     public float pricePerLine = 30f;
-    public float minHeight = 150f;
-    public float maxHeight = 300f;
-
-    private RectTransform rect;
-    private RectTransform textRect;
-
-    void Awake()
-    {
-        rect = GetComponent<RectTransform>();
-        if (targetText != null) textRect = targetText.GetComponent<RectTransform>();
-    }
 
     public void RefreshSize()
     {
-        if (rect == null || targetText == null) return;
+        RectTransform rect = GetComponent<RectTransform>();
+        RectTransform tRect = targetText.GetComponent<RectTransform>();
 
-        // Фиксируем ширину, чтобы расчет строк был верным
-        textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.rect.width);
+        // Фиксируем ширину текста по ширине панели
+        tRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.rect.width);
         targetText.ForceMeshUpdate();
 
-        int lineCount = Mathf.Max(1, targetText.textInfo.lineCount);
-        float targetHeight = baseHeight + (lineCount - 1) * pricePerLine;
-        targetHeight = Mathf.Clamp(targetHeight, minHeight, maxHeight);
+        int lines = Mathf.Max(1, targetText.textInfo.lineCount);
+        float h = baseHeight + (lines - 1) * pricePerLine;
 
-        // Применяем высоту
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
 
-        // Центруем текст по всем осям
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.pivot = new Vector2(0.5f, 0.5f);
-        textRect.offsetMin = Vector2.zero;
-        textRect.offsetMax = Vector2.zero;
-        textRect.anchoredPosition = Vector2.zero;
-
-        targetText.alignment = TextAlignmentOptions.Center;
+        // Центрируем текст (Pivot Y = 0.5 у текста и у панели)
+        tRect.anchoredPosition = Vector2.zero;
     }
 }

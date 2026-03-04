@@ -1,20 +1,6 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Dialogue controller: EpisodeData -> scenes[] -> nodes[]
-///
-/// Rules:
-/// - character == Narrator/Автор/empty  => hide both portraits
-/// - emotion == null/empty and NOT narrator => use "Calm"
-/// - left character is fixed per scene (scene.leftCharacter)
-/// - right characters are allowed per scene (scene.rightCharacters)
-///
-/// Portrait rules:
-/// - Left: exactly one per scene (can change between scenes, unlimited across episode)
-/// - Right: can change many times inside a scene (unlimited across episode)
-/// </summary>
 public class DialogueController : MonoBehaviour
 {
     [Header("UI")]
@@ -28,15 +14,14 @@ public class DialogueController : MonoBehaviour
     public CharacterPortraitController RightPortrait;
 
     [Header("Portrait Rules")]
-    [Tooltip("If true: when right character speaks, left portrait is hidden.")]
     public bool HideLeftWhenRightSpeaks = true;
-
-    [Tooltip("If true: when left character speaks, right portrait is hidden.")]
     public bool HideRightWhenLeftSpeaks = true;
 
     [Header("Layout")]
     public LayoutController layout;
 
+    // Эти цвета теперь можно применять внутри методов Show, если нужно 
+    // (или настроить их один раз в префабах панелей)
     [Header("Text Colors")]
     public Color AuthorColor = Color.gray;
     public Color LeftCharacterColor = Color.white;
@@ -53,7 +38,6 @@ public class DialogueController : MonoBehaviour
     public int chapterNumber = 1;
 
     private EpisodeData episode;
-
     private Dictionary<string, DialogueNode> nodeDict;
     private Dictionary<string, SceneData> sceneDict;
     private Dictionary<string, SceneData> nodeToScene;
@@ -63,14 +47,12 @@ public class DialogueController : MonoBehaviour
 
     private DialogueNode currentNode;
     private bool waitingForAdvance = false;
-
     private SaveData save;
 
     void Start()
     {
         save = TempGameContext.saveToLoad ?? SaveSystem.Load();
         if (save == null) save = new SaveData();
-
         if (save.appliedEffectNodes == null) save.appliedEffectNodes = new List<string>();
 
         if (!string.IsNullOrEmpty(save.episodePath))
@@ -79,7 +61,6 @@ public class DialogueController : MonoBehaviour
         startNodeId = string.IsNullOrEmpty(save.currentNodeId) ? startNodeId : save.currentNodeId;
 
         LoadEpisode();
-
         ShowNode(startNodeId);
     }
 
@@ -88,10 +69,8 @@ public class DialogueController : MonoBehaviour
         if (waitingForAdvance && Input.GetMouseButtonDown(0))
         {
             waitingForAdvance = false;
-
             if (currentNode == null) return;
 
-            // Ending node: has requirements & no next
             if (currentNode.requirements != null &&
                 currentNode.requirements.Length > 0 &&
                 string.IsNullOrEmpty(currentNode.nextNode))
@@ -116,101 +95,57 @@ public class DialogueController : MonoBehaviour
 
     // ---------------- Helpers ----------------
 
-    bool IsNarrator(string ch)
-    {
-        return string.IsNullOrEmpty(ch) || ch == "Narrator" || ch == "Автор";
-    }
-    string NormalizeEmotion(string em)
-    {
-        return string.IsNullOrEmpty(em) ? "Calm" : em;
-    }
+    bool IsNarrator(string ch) => string.IsNullOrEmpty(ch) || ch == "Narrator" || ch == "Автор";
+    string NormalizeEmotion(string em) => string.IsNullOrEmpty(em) ? "Calm" : em;
 
-    void HideLeft()
-    {
-        if (LeftCharacter != null) LeftCharacter.SetActive(false);
-        // optional: LeftPortrait?.Hide();
-    }
-
+    void HideLeft() { if (LeftCharacter != null) LeftCharacter.SetActive(false); }
     void ShowLeft(string characterName, string emotion)
     {
         if (LeftCharacter != null) LeftCharacter.SetActive(true);
         LeftPortrait?.Show(characterName, NormalizeEmotion(emotion));
     }
 
-    void HideRight()
-    {
-        if (RightCharacter != null) RightCharacter.SetActive(false);
-        // optional: RightPortrait?.Hide();
-    }
-
+    void HideRight() { if (RightCharacter != null) RightCharacter.SetActive(false); }
     void ShowRight(string characterName, string emotion)
     {
         if (RightCharacter != null) RightCharacter.SetActive(true);
         RightPortrait?.Show(characterName, NormalizeEmotion(emotion));
     }
 
-    void HideAllCharacters()
-    {
-        HideLeft();
-        HideRight();
-    }
+    void HideAllCharacters() { HideLeft(); HideRight(); }
 
     void RebuildRightAllowed(SceneData scene)
     {
         currentRightAllowed.Clear();
         if (scene == null || scene.rightCharacters == null) return;
-
         foreach (var c in scene.rightCharacters)
-            if (!string.IsNullOrEmpty(c))
-                currentRightAllowed.Add(c);
+            if (!string.IsNullOrEmpty(c)) currentRightAllowed.Add(c);
     }
 
-
-    // When entering a node, check if we need to switch scenes (based on nodeToScene mapping). 
-    // If scene changes, update background and left character.
     void EnterSceneIfChanged(string nodeId)
     {
         if (nodeToScene == null || !nodeToScene.TryGetValue(nodeId, out var newScene) || newScene == null)
             return;
 
-        // Check if the scene has changed
         bool sceneChanged = (currentScene == null) || (currentScene.sceneId != newScene.sceneId);
         if (!sceneChanged) return;
 
-        // Update the current scene
         currentScene = newScene;
         RebuildRightAllowed(currentScene);
 
-        // Refresh the background
         if (backgroundController != null && !string.IsNullOrEmpty(currentScene.background))
-        {
-            backgroundController.ApplyBackground(
-                currentScene.background,
-                currentScene.bgFx
-            );
-        }
+            backgroundController.ApplyBackground(currentScene.background, currentScene.bgFx);
 
-        
-        // Update left character (fixed per scene)
         if (!string.IsNullOrEmpty(currentScene.leftCharacter))
             ShowLeft(currentScene.leftCharacter, "Calm");
         else
             HideLeft();
 
-        // Hide the right character initially
         HideRight();
     }
-    bool IsLeftCharacter(string ch)
-    {
-        return currentScene != null &&
-               !string.IsNullOrEmpty(currentScene.leftCharacter) &&
-               ch == currentScene.leftCharacter;
-    }
 
-    bool IsRightAllowed(string ch)
-    {
-        return !string.IsNullOrEmpty(ch) && currentRightAllowed.Contains(ch);
-    }
+    bool IsLeftCharacter(string ch) => currentScene != null && !string.IsNullOrEmpty(currentScene.leftCharacter) && ch == currentScene.leftCharacter;
+    bool IsRightAllowed(string ch) => !string.IsNullOrEmpty(ch) && currentRightAllowed.Contains(ch);
 
     // ---------------- Main ----------------
     void ShowNode(string nodeId)
@@ -221,87 +156,55 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        // Ensure scene context is correct
         EnterSceneIfChanged(nodeId);
-
         currentNode = node;
         waitingForAdvance = false;
 
-        // Apply node effects once
         ApplyEffectsOnce(nodeId, node);
 
-        // -------- Background --------
+        // Background
         if (backgroundController != null)
         {
-            if (node.stopPreviousBgEffect)
-                backgroundController.StopEffect();
-
-            if (!string.IsNullOrEmpty(node.background))
-                backgroundController.ApplyBackground(node.background, node.bgFx);
-
-            if (!string.IsNullOrEmpty(node.bgFx) && node.bgFx != "none")
-                backgroundController.PlayEffect(node.bgFx);
+            if (node.stopPreviousBgEffect) backgroundController.StopEffect();
+            if (!string.IsNullOrEmpty(node.background)) backgroundController.ApplyBackground(node.background, node.bgFx);
+            if (!string.IsNullOrEmpty(node.bgFx) && node.bgFx != "none") backgroundController.PlayEffect(node.bgFx);
         }
 
-        // -------- Text + portraits --------
+        // -------- Text + portraits (ИСПРАВЛЕНО ЗДЕСЬ) --------
         if (IsNarrator(node.character))
         {
+            // Используем метод ShowAuthor вместо прямого доступа к Text
             ui.ShowAuthor(node.text);
-            if (ui.AuthorText != null) ui.AuthorText.color = AuthorColor;
-
-            HideAllCharacters(); // прячем портреты
+            HideAllCharacters();
         }
         else if (IsLeftCharacter(node.character))
         {
-            // --- UI: текст ---
-            ui.ShowLeftCharacter(node.text);
-            if (ui.LeftCharacterText != null) ui.LeftCharacterText.color = LeftCharacterColor;
-            // --- Портрет ---
+            // Передаем имя из сцены и текст из ноды
+            ui.ShowLeftCharacter(currentScene.leftCharacter, node.text);
             ShowLeft(currentScene.leftCharacter, node.emotion);
 
-            // Скрыть правого при необходимости
-            if (HideRightWhenLeftSpeaks)
-                HideRight();
+            if (HideRightWhenLeftSpeaks) HideRight();
         }
         else if (IsRightAllowed(node.character))
         {
-            ui.ShowRightCharacter(node.text);
-            if (ui.RightCharacterText != null) ui.RightCharacterText.color = OtherColor;
+            ui.ShowRightCharacter(node.character, node.text);
             ShowRight(node.character, node.emotion);
 
-            if (HideLeftWhenRightSpeaks)
-                HideLeft();
+            if (HideLeftWhenRightSpeaks) HideLeft();
             else if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
                 ShowLeft(currentScene.leftCharacter, "Calm");
         }
         else
         {
-            // На случай ошибок
-            ui.ShowRightCharacter(node.text);
+            // Ошибка или сторонний персонаж (показываем справа)
+            ui.ShowRightCharacter(node.character, node.text);
             HideAllCharacters();
         }
 
-        // -------- Layout --------
-        if (layout != null)
-        {
-            string layoutCharacter;
-
-            if (IsNarrator(node.character))
-                layoutCharacter = "Narrator";
-            else if (IsLeftCharacter(node.character))
-                layoutCharacter = "LeftCharacter";
-            else if (IsRightAllowed(node.character))
-                layoutCharacter = "RightCharacter";
-            else
-                layoutCharacter = "Narrator";
-
-            layout.ApplyLayout(layoutCharacter);
-        }
-
-        // -------- Choices --------
+        // Choices
         SetupChoices(node);
 
-        // -------- Autosave --------
+        // Autosave
         save.episodePath = episodePath;
         save.currentNodeId = nodeId;
         save.chapterNumber = chapterNumber;
@@ -311,7 +214,6 @@ public class DialogueController : MonoBehaviour
     void SetupChoices(DialogueNode node)
     {
         bool hasChoices = node.choices != null && node.choices.Count > 0;
-
         if (hasChoices)
         {
             ui.ShowChoices(node.choices, OnChoicePicked);
@@ -327,47 +229,26 @@ public class DialogueController : MonoBehaviour
     void OnChoicePicked(string nextNodeId)
     {
         waitingForAdvance = false;
-
         TryApplyPickedChoiceEffects(nextNodeId);
-
-        if (!string.IsNullOrEmpty(nextNodeId))
-            ShowNode(nextNodeId);
-        else
-            ui.HideChoices();
+        if (!string.IsNullOrEmpty(nextNodeId)) ShowNode(nextNodeId);
+        else ui.HideChoices();
     }
 
+    // ... Остальные методы (ApplyEffects, HandleEnding и т.д.) без изменений
     void TryApplyPickedChoiceEffects(string nextNodeId)
     {
-        if (currentNode == null || currentNode.choices == null || string.IsNullOrEmpty(nextNodeId))
-            return;
-
-        Choice picked = null;
-        for (int i = 0; i < currentNode.choices.Count; i++)
-        {
-            var c = currentNode.choices[i];
-            if (c != null && c.nextNode == nextNodeId)
-            {
-                picked = c;
-                break;
-            }
-        }
-
-        if (picked == null || picked.effects == null || picked.effects.Count == 0)
-            return;
-
+        if (currentNode == null || currentNode.choices == null || string.IsNullOrEmpty(nextNodeId)) return;
+        Choice picked = currentNode.choices.Find(c => c != null && c.nextNode == nextNodeId);
+        if (picked == null || picked.effects == null || picked.effects.Count == 0) return;
         ApplyChoiceEffects(picked.effects);
         SaveSystem.Save(save);
     }
 
-    // -------- Effects (OLD node.effects kept) --------
-
     void ApplyEffectsOnce(string nodeId, DialogueNode node)
     {
         if (node == null || node.effects == null) return;
-
         string key = $"{episodePath}:{nodeId}";
         if (save.appliedEffectNodes.Contains(key)) return;
-
         ApplyEffects(node.effects);
         save.appliedEffectNodes.Add(key);
     }
@@ -376,45 +257,25 @@ public class DialogueController : MonoBehaviour
     {
         save.trustAG += e.trustAG;
         save.trustJA += e.trustJA;
-
         save.riskTotal += e.risk;
         save.safetyTotal += e.safety;
-
         save.episodeRisk += e.risk;
         save.episodeSafety += e.safety;
-
         save.sparksTotal += e.sparks;
     }
 
-    // -------- Choice effects (NEW ops list) --------
     void ApplyChoiceEffects(List<EffectOp> ops)
     {
         if (ops == null) return;
-
         foreach (var op in ops)
         {
-            if (op == null) continue;
-            if (string.IsNullOrEmpty(op.op) || string.IsNullOrEmpty(op.key)) continue;
-            if (op.op != "inc") continue;
-
+            if (op == null || string.IsNullOrEmpty(op.op) || string.IsNullOrEmpty(op.key) || op.op != "inc") continue;
             int v = op.value;
-
             switch (op.key)
             {
-                case "risk":
-                    save.riskTotal += v;
-                    save.episodeRisk += v;
-                    break;
-
-                case "safety":
-                    save.safetyTotal += v;
-                    save.episodeSafety += v;
-                    break;
-
-                case "trust.Ainaz_Guldana":
-                case "trust.Ainaz_Guldana ":
-                    save.trustAG += v;
-                    break;
+                case "risk": save.riskTotal += v; save.episodeRisk += v; break;
+                case "safety": save.safetyTotal += v; save.episodeSafety += v; break;
+                case "trust.Ainaz_Guldana": save.trustAG += v; break;
             }
         }
     }
@@ -426,7 +287,6 @@ public class DialogueController : MonoBehaviour
             ui.HideChoices();
             return;
         }
-
         Debug.Log("ENDING: " + node.requirements[0].ending);
         ui.HideChoices();
     }
