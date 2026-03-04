@@ -681,8 +681,8 @@
         },
         {
           "nodeId": "E01_S06_call_to_walk",
-          "bgFx": "none",
           "background": "street_night_empty",
+          "bgFx": "none",
           "character": "Narrator",
           "text": "Айназ откладывает телефон, надевает лёгкую куртку и выходит из дома.",
           "nextNode": "E01_S06_walk_to_house"
@@ -725,7 +725,7 @@
     },    
     {
       "sceneId": "E01_SUMMARY",
-      "background": "black_fade",
+      "background": "black-fade",
       "leftCharacter": null,
       "rightCharacters": [],
       "startNode": "E01_summary_start",
