@@ -4,85 +4,82 @@ using System.Collections;
 public class LayoutController : MonoBehaviour
 {
     [Header("Dialogue Panels")]
-    public AdaptivePanel AuthorPanel;
-    public AdaptivePanel LeftCharacterPanel;
-    public AdaptivePanel RightCharacterPanel;
+    public SimpleCenterPanel AuthorPanel;
+    public CharacterDialoguePanel LeftCharacterPanel;
+    public CharacterDialoguePanel RightCharacterPanel;
+
 
     [Header("Choice Buttons")]
     public RectTransform ButtonsContainer;
-    public float buttonOffset = 8f;
-
-    public void ApplyLayout(string characterType)
+    public ChoiceButton[] choiceButtons; // Перенесли сюда для удобства позиционирования
+    public float buttonOffset = 20f;
+    
+    // Метод для вызова диалога (теперь принимает имя)
+    public void ApplyLayout(string characterType, string nameText = "", string dialogueText = "")
     {
-        // Скрыть все панели
+        // Скрыть все
         AuthorPanel.gameObject.SetActive(false);
         LeftCharacterPanel.gameObject.SetActive(false);
         RightCharacterPanel.gameObject.SetActive(false);
 
-        AdaptivePanel activePanel = null;
+        RectTransform activeRect = null;
 
-        // Включить нужную панель
         switch (characterType)
         {
             case "Narrator":
                 AuthorPanel.gameObject.SetActive(true);
-                activePanel = AuthorPanel;
+                AuthorPanel.targetText.text = dialogueText;
+                AuthorPanel.RefreshSize();
+                activeRect = AuthorPanel.GetComponent<RectTransform>();
                 break;
 
             case "LeftCharacter":
                 LeftCharacterPanel.gameObject.SetActive(true);
-                activePanel = LeftCharacterPanel;
+                LeftCharacterPanel.SetDialogue(nameText, dialogueText);
+                activeRect = LeftCharacterPanel.GetComponent<RectTransform>();
                 break;
 
             case "RightCharacter":
                 RightCharacterPanel.gameObject.SetActive(true);
-                activePanel = RightCharacterPanel;
+                RightCharacterPanel.SetDialogue(nameText, dialogueText);
+                activeRect = RightCharacterPanel.GetComponent<RectTransform>();
                 break;
         }
 
-        if (activePanel != null)
+        if (activeRect != null)
         {
-            // Принудительный ресайз панели
-            activePanel.RefreshSize();
-
-            // Позиционируем кнопки через пару кадров, чтобы layout успел пересчитать
-            StartCoroutine(PositionButtonsNextFrame(activePanel));
+            StartCoroutine(PositionButtonsNextFrame(activeRect));
         }
     }
 
-    private IEnumerator PositionButtonsNextFrame(AdaptivePanel activePanel)
+    private IEnumerator PositionButtonsNextFrame(RectTransform activeRect)
     {
-        // Ждём 1 кадр
-        yield return null;
+        // Ждем конца кадра, чтобы Unity применила SetSizeWithCurrentAnchors
+        yield return new WaitForEndOfFrame();
 
-        // Принудительно обновляем Canvas
-        Canvas.ForceUpdateCanvases();
+        if (activeRect == null || ButtonsContainer == null) yield break;
 
-        if (activePanel == null || ButtonsContainer == null) yield break;
-
-        RectTransform panelRect = activePanel.GetComponent<RectTransform>();
+        // Получаем углы панели в мировых координатах
         Vector3[] corners = new Vector3[4];
-        panelRect.GetWorldCorners(corners);
+        activeRect.GetWorldCorners(corners);
 
+        // corners[0] - левый низ, corners[1] - левый верх, corners[3] - правый низ
         float bottomY = corners[0].y;
-        float centerX = (corners[0].x + corners[2].x) / 2f;
+        float centerX = (corners[0].x + corners[3].x) / 2f;
 
-        Vector3 pos = ButtonsContainer.position;
-        pos.x = centerX;
-        pos.y = bottomY - buttonOffset;
-
-        ButtonsContainer.position = pos;
+        // Устанавливаем позицию контейнера кнопок
+        // Важно: у ButtonsContainer Pivot Y должен быть 1 (Top), чтобы он рос вниз от панели
+        ButtonsContainer.position = new Vector3(centerX, bottomY - buttonOffset, activeRect.position.z);
     }
 
-    // Для ручного обновления, если панель меняется динамически после ShowNode
     public void RefreshButtonPosition()
     {
-        AdaptivePanel activePanel = null;
-        if (AuthorPanel.gameObject.activeSelf) activePanel = AuthorPanel;
-        else if (LeftCharacterPanel.gameObject.activeSelf) activePanel = LeftCharacterPanel;
-        else if (RightCharacterPanel.gameObject.activeSelf) activePanel = RightCharacterPanel;
+        RectTransform activeRect = null;
+        if (AuthorPanel.gameObject.activeSelf) activeRect = AuthorPanel.GetComponent<RectTransform>();
+        else if (LeftCharacterPanel.gameObject.activeSelf) activeRect = LeftCharacterPanel.GetComponent<RectTransform>();
+        else if (RightCharacterPanel.gameObject.activeSelf) activeRect = RightCharacterPanel.GetComponent<RectTransform>();
 
-        if (activePanel != null)
-            StartCoroutine(PositionButtonsNextFrame(activePanel));
+        if (activeRect != null)
+            StartCoroutine(PositionButtonsNextFrame(activeRect));
     }
 }

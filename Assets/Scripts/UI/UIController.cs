@@ -5,64 +5,54 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
-    [Header("Panels")]
-    public AdaptivePanel authorPanel;
-    public AdaptivePanel leftCharacterPanel;
-    public AdaptivePanel rightCharacterPanel;
+    [Header("Controllers")]
+    public LayoutController layoutController;
 
-    [Header("Text Fields inside Panels")]
-    public TMP_Text AuthorText;
-    public TMP_Text LeftCharacterName;
-    public TMP_Text LeftCharacterText;
-    public TMP_Text RightCharacterName;
-    public TMP_Text RightCharacterText;
 
-    [Header("Choices")]
-    public RectTransform choicesContainer;
-    public ChoiceButton[] choiceButtons;
+    // Ссылки на тексты теперь живут здесь, чтобы UIController мог ими управлять
+    [Header("Text Fields")]
+    public TMP_Text authorText;
+    public TMP_Text leftCharacterName;
+    public TMP_Text rightCharacterName;
+
 
     // ---------------------- HIDE ----------------------
     public void HideAll()
     {
-        authorPanel?.gameObject.SetActive(false);
-        leftCharacterPanel?.gameObject.SetActive(false);
-        rightCharacterPanel?.gameObject.SetActive(false);
+        // LayoutController сам знает, как выключить свои панели
+        layoutController.AuthorPanel.gameObject.SetActive(false);
+        layoutController.LeftCharacterPanel.gameObject.SetActive(false);
+        layoutController.RightCharacterPanel.gameObject.SetActive(false);
         HideChoices();
     }
 
     public void HideChoices()
     {
-        if (choicesContainer != null)
-            choicesContainer.gameObject.SetActive(false);
+        if (layoutController.ButtonsContainer != null)
+            layoutController.ButtonsContainer.gameObject.SetActive(false);
 
-        foreach (var btn in choiceButtons)
+        // choiceButtons можно оставить в UIController или перенести в Layout
+        foreach (var btn in layoutController.choiceButtons)
             btn.gameObject.SetActive(false);
     }
 
     // ---------------------- SHOW PANELS ----------------------
+    
     public void ShowAuthor(string text)
     {
-        HideAll();
-        authorPanel.gameObject.SetActive(true);
-        if (AuthorText != null)
-            AuthorText.text = text;
-        authorPanel.RefreshSize();
+        HideChoices(); // Скрываем старые выборы при новом тексте
+        // Передаем пустую строку в имя, так как у автора его нет
+        layoutController.ApplyLayout("Narrator", "", text);
     }
 
-    public void ShowLeftCharacter(string text)
+    public void ShowLeftCharacter(string name, string text)
     {
-        leftCharacterPanel.gameObject.SetActive(true);
-        if (leftCharacterPanel.targetText != null)
-            leftCharacterPanel.targetText.text = text;
-        leftCharacterPanel.RefreshSize();
+        layoutController.ApplyLayout("LeftCharacter", name, text);
     }
 
-    public void ShowRightCharacter(string text)
+    public void ShowRightCharacter(string name, string text)
     {
-        rightCharacterPanel.gameObject.SetActive(true);
-        if (rightCharacterPanel.targetText != null)
-            rightCharacterPanel.targetText.text = text;
-        rightCharacterPanel.RefreshSize();
+        layoutController.ApplyLayout("RightCharacter", name, text);
     }
 
     // ---------------------- SHOW CHOICES ----------------------
@@ -74,21 +64,26 @@ public class UIController : MonoBehaviour
             return;
         }
 
-        choicesContainer.gameObject.SetActive(true);
+        layoutController.ButtonsContainer.gameObject.SetActive(true);
 
-        foreach (var btn in choiceButtons)
+        // Сначала выключаем все кнопки
+        foreach (var btn in layoutController.choiceButtons)
             btn.gameObject.SetActive(false);
 
+        // Включаем нужные
         for (int i = 0; i < choices.Count; i++)
         {
-            if (i >= choiceButtons.Length) break;
+            if (i >= layoutController.choiceButtons.Length) break;
 
-            ChoiceButton btn = choiceButtons[i];
+            ChoiceButton btn = layoutController.choiceButtons[i];
             btn.gameObject.SetActive(true);
 
             string nextNode = choices[i].nextNode;
             btn.SetText(choices[i].text);
             btn.SetCallback(() => callback?.Invoke(nextNode));
         }
+
+        // ПОСЛЕ того как кнопки включены, обновляем их позицию под активной панелью
+        layoutController.RefreshButtonPosition();
     }
 }
