@@ -3,6 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+BackgroundController
+
+This class manages background images and visual effects for a visual novel.
+
+Responsibilities:
+- Stores a database of background sprites (key -> Sprite)
+- Provides a main Image component to display backgrounds
+- Automatically builds a dictionary from the list of BackgroundEntry for fast lookup
+- Fits backgrounds to screen while preserving aspect ratio
+- Supports changing backgrounds with optional preset effects
+- Resets background transforms to default when applying a new background
+- Supports animated background effects via Coroutines:
+    • zoom_in
+    • pan_left / pan_right
+    • tilt
+    • shake
+    • combined effects like zoom_in_pan_left / zoom_in_pan_right
+    • drift_left / drift_right
+- Allows stopping ongoing effects immediately
+- Handles root transform (for pan/rotate/shake) and image transform (for zoom)
+- Warns if a requested background or preset is missing
+- Smoothly interpolates effects over time using Lerp
+- Designed to integrate with dialogue system (e.g., called from DialogueController)
+
+Usage:
+- Call ApplyBackground("key", "preset") to set a background and optionally start an effect
+- Call StopEffect() to halt ongoing animations
+- Call ResetTransform() to return background to default state
+*/
+
 [System.Serializable]
 public class BackgroundEntry
 {

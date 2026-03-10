@@ -3,53 +3,62 @@ using TMPro;
 
 public class CharacterDialoguePanel : MonoBehaviour
 {
-    [Header("UI Links")]
-    public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
-    public RectTransform namePlate;
-    
-    [Header("Settings")]
-    public float topPadding = 200f; // Тот самый отступ под шапку внутри панели
-    public float pricePerLine = 40f;
+
+    [Header("Panel Settings")]
+    public float topPadding = 150f;
+    public float bottomPadding = 40f;
+    public float leftRightPadding = 50f;
     public float minHeight = 280f;
 
+    private RectTransform panelRect;
+    private RectTransform textRect;
+
+    void Awake()
+    {
+        panelRect = GetComponent<RectTransform>();
+
+        if (dialogueText != null)
+            textRect = dialogueText.GetComponent<RectTransform>();
+    }
+
+    // Оставили для совместимости со старым UIController
     public void SetDialogue(string name, string text)
     {
-        if (nameText != null) nameText.text = name;
-        if (dialogueText != null) dialogueText.text = text;
+        SetText(text);
+    }
 
-        if (namePlate != null) 
-            namePlate.gameObject.SetActive(!string.IsNullOrEmpty(name));
+    public void SetText(string text)
+    {
+        if (dialogueText != null)
+            dialogueText.text = text;
 
         RefreshSize();
     }
 
     public void RefreshSize()
     {
-        // 1. Проверка ссылок, чтобы не было NullReferenceException
-        if (dialogueText == null) 
+        if (panelRect == null || dialogueText == null || textRect == null)
         {
-            Debug.LogError($"На объекте {gameObject.name} не назначена ссылка на Dialogue Text!");
+            Debug.LogError($"[{gameObject.name}] Missing references.");
             return;
         }
 
-        RectTransform rect = GetComponent<RectTransform>();
-        RectTransform tRect = dialogueText.GetComponent<RectTransform>();
+        Canvas.ForceUpdateCanvases();
 
-        // 2. Расчет текста
-        tRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.rect.width);
+        float textWidth = panelRect.rect.width - (leftRightPadding * 2f);
+        textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, textWidth);
+
         dialogueText.ForceMeshUpdate();
 
-        // 3. Считаем высоту
-        int lines = Mathf.Max(1, dialogueText.textInfo.lineCount);
-        float h = topPadding + (lines * pricePerLine);
-        
-        if (h < minHeight) h = minHeight;
+        float textHeight = dialogueText.preferredHeight;
+        float targetHeight = topPadding + textHeight + bottomPadding;
 
-        // 4. Применяем высоту (раз Pivot Y = 1, панель растет вниз)
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
-        
-        // 5. Позиционируем текст. Если Pos Y был не 0, теперь ставим его четко под отступ.
-        tRect.anchoredPosition = new Vector2(0, -topPadding);
+        if (targetHeight < minHeight)
+            targetHeight = minHeight;
+
+        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
+
+        textRect.anchoredPosition = new Vector2(0f, -topPadding);
     }
 }

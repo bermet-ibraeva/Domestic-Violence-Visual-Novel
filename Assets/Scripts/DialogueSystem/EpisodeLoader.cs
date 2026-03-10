@@ -1,14 +1,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Loads EpisodeData JSON from Resources and builds fast lookup dictionaries:
-/// - nodeDict: nodeId -> DialogueNode
-/// - sceneDict: sceneId -> SceneData
-/// - nodeToScene: nodeId -> SceneData (which scene this node belongs to)
-///
-/// episodePath example: "Episodes/episode_1" -> Resources/Episodes/episode_1.json
-/// </summary>
+/*
+EpisodeLoader
+
+This static class loads episode JSON data from the Resources folder
+and builds fast lookup dictionaries for nodes and scenes.
+
+Responsibilities:
+- Loads EpisodeData from a JSON file in Resources.
+  Example: episodePath = "Episodes/episode_1" -> Resources/Episodes/episode_1.json
+- Parses the JSON into EpisodeData object using JsonUtility.
+- Builds the following dictionaries for fast access:
+    • nodeDict: nodeId -> DialogueNode
+    • sceneDict: sceneId -> SceneData
+    • nodeToScene: nodeId -> SceneData (maps which scene each node belongs to)
+- Handles error cases:
+    • empty episodePath
+    • JSON file not found
+    • JSON parsing errors
+    • missing or duplicate sceneIds or nodeIds
+- Skips null scenes or nodes gracefully
+- Logs warnings/errors to help debug episode structure
+
+Usage:
+- Call LoadEpisode with the path to episode JSON.
+- Get the episode object and the dictionaries for runtime dialogue access.
+*/
+
 public static class EpisodeLoader
 {
     public static EpisodeData LoadEpisode(

@@ -3,6 +3,31 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/*
+UIController
+
+This class manages the visual display of dialogue panels and choice buttons in a visual novel system.
+
+Responsibilities:
+- Integrates with LayoutController to control panels and buttons
+- Provides methods to show/hide dialogue panels:
+    • ShowAuthor(text)       -> displays narrator/author panel
+    • ShowLeftCharacter(name, text)  -> displays left character panel
+    • ShowRightCharacter(name, text) -> displays right character panel
+    • HideAll()              -> hides all panels and choice buttons
+- Manages choice buttons:
+    • ShowChoices(choices, callback) -> displays choice buttons and binds their callbacks
+    • HideChoices()                  -> hides all choice buttons
+- Automatically refreshes button positions after showing any panel
+- Designed to integrate with DialogueController for dynamic dialogue display
+
+Usage:
+- Call ShowAuthor, ShowLeftCharacter, or ShowRightCharacter to display dialogue
+- Call ShowChoices to present branching options to the player
+- Call HideAll to clear the UI
+- Works with LayoutController for proper positioning of panels and buttons
+*/
+
 public class UIController : MonoBehaviour
 {
     [Header("Controllers")]
@@ -38,7 +63,7 @@ public class UIController : MonoBehaviour
     {
         HideAll();
         layoutController.LeftPanel.gameObject.SetActive(true);
-        layoutController.LeftPanel.SetDialogue(name, text); 
+        layoutController.LeftPanel.SetDialogue(name, text);
         layoutController.RefreshButtons(layoutController.LeftPanel.GetComponent<RectTransform>());
     }
 

@@ -1,6 +1,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+Dialogue Controller
+
+This class manages the dialogue system for the visual novel.
+
+Main responsibilities:
+- Loads episode data from Resources using EpisodeLoader
+- Builds dictionaries for quick access to nodes and scenes
+- Controls dialogue flow between nodes
+- Displays dialogue text using UIController
+- Manages character portraits (left and right slots)
+- Applies scene rules:
+    • left character is fixed per scene
+    • only allowed right characters can appear
+- Handles narrator lines (hides both character portraits)
+- Changes backgrounds and background effects
+- Processes player choices and branching paths
+- Applies node effects only once per save file
+- Applies choice effects when a player selects an option
+- Supports jumping between nodes across different scenes
+- Automatically saves progress after each node
+- Restores progress using SaveSystem
+*/
+
 public class DialogueController : MonoBehaviour
 {
     [Header("UI")]

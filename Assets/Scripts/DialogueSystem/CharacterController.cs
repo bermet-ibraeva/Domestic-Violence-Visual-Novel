@@ -2,6 +2,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+CharacterPortraitController
+
+This class manages character portraits and their emotions for a visual novel.
+
+Responsibilities:
+- Stores character data including default sprites and emotion-specific sprites
+- Builds fast lookup dictionaries for characters and their emotions
+- Provides a single Image component to display the portrait
+- Supports showing a character with a specific emotion or default if emotion is missing
+- Normalizes emotion names for consistent lookup
+- Hides the portrait if no character or sprite is found
+- Warns in the console if a sprite is missing or characterImage is not assigned
+- Designed to integrate with DialogueController for dynamic dialogue display
+
+Usage:
+- Call Show(characterName, emotion) to display a character's portrait with the specified emotion
+- Call Hide() to hide the portrait
+- Supports multiple characters with multiple emotions each
+- Automatically falls back to default sprite if the requested emotion sprite is not found
+*/
+
 public class CharacterPortraitController : MonoBehaviour
 {
     public Image characterImage;
