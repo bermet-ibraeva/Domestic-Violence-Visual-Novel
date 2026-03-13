@@ -7,21 +7,25 @@ public class CharacterDialoguePanel : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
 
-    [Header("Panel")]
-    public float minHeight = 280f;
-    public float maxHeight = 400f;
-
-    [Header("Offsets")]
-    public float textTopOffset = 140f;
+    [Header("Panel Height")]
+    public float minPanelHeight = 280f;
+    public float maxPanelHeight = 400f;
     public float bottomPadding = 20f;
 
     private RectTransform panelRect;
     private RectTransform textRect;
 
+    private float fixedTopOffset;
+
     void Awake()
     {
         panelRect = GetComponent<RectTransform>();
-        textRect = dialogueText.GetComponent<RectTransform>();
+
+        if (dialogueText != null)
+            textRect = dialogueText.GetComponent<RectTransform>();
+
+        if (textRect != null)
+            fixedTopOffset = -textRect.offsetMax.y; // если Top = 140, тут сохранится 140
     }
 
     public void SetDialogue(string characterName, string text)
@@ -29,34 +33,45 @@ public class CharacterDialoguePanel : MonoBehaviour
         if (nameText != null)
             nameText.text = characterName;
 
-        dialogueText.text = text;
+        if (dialogueText != null)
+            dialogueText.text = text;
 
         RefreshSize();
     }
 
     public void RefreshSize()
     {
+        if (panelRect == null || textRect == null || dialogueText == null)
+        {
+            Debug.LogError($"[{gameObject.name}] Missing references.");
+            return;
+        }
+
         Canvas.ForceUpdateCanvases();
         dialogueText.ForceMeshUpdate();
 
-        float width = textRect.rect.width;
+        float textWidth = textRect.rect.width;
+        if (textWidth <= 0f)
+        {
+            Debug.LogWarning($"[{gameObject.name}] text width <= 0");
+            return;
+        }
 
-        float textHeight = dialogueText
-            .GetPreferredValues(dialogueText.text, width, 0)
-            .y;
+        float preferredHeight = dialogueText.GetPreferredValues(dialogueText.text, textWidth, 0f).y;
 
-        textRect.SetSizeWithCurrentAnchors(
-            RectTransform.Axis.Vertical,
-            textHeight
-        );
+        // ЖЕСТКО возвращаем Top обратно, чтобы он всегда был 140
+        Vector2 offsetMax = textRect.offsetMax;
+        offsetMax.y = -fixedTopOffset;
+        textRect.offsetMax = offsetMax;
 
-        float panelHeight = textTopOffset + textHeight + bottomPadding;
+        // Меняем только низ текста, чтобы он рос вниз
+        Vector2 offsetMin = textRect.offsetMin;
+        offsetMin.y = -(fixedTopOffset + preferredHeight);
+        textRect.offsetMin = offsetMin;
 
-        panelHeight = Mathf.Clamp(panelHeight, minHeight, maxHeight);
+        float panelHeight = fixedTopOffset + preferredHeight + bottomPadding;
+        panelHeight = Mathf.Clamp(panelHeight, minPanelHeight, maxPanelHeight);
 
-        panelRect.SetSizeWithCurrentAnchors(
-            RectTransform.Axis.Vertical,
-            panelHeight
-        );
+        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, panelHeight);
     }
 }
