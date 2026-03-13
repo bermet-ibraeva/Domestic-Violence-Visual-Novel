@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LayoutController : MonoBehaviour
 {
@@ -7,73 +8,69 @@ public class LayoutController : MonoBehaviour
     public CharacterDialoguePanel LeftPanel;
     public CharacterDialoguePanel RightPanel;
 
-    [Header("Character Roots")]
-    public RectTransform LeftCharacterRoot;
-    public RectTransform RightCharacterRoot;
-
     [Header("Choice Buttons")]
     public RectTransform ButtonsContainer;
     public ChoiceButton[] choiceButtons;
-    public float buttonOffset = 30f;
+    public float buttonOffset = 15f;
 
-    private RectTransform lastActiveRoot;
+    private RectTransform lastActivePanelRect;
 
-    public void RefreshButtons(RectTransform activeRoot)
+    public void SetActivePanel(CharacterDialoguePanel panel)
     {
-        if (activeRoot == null || ButtonsContainer == null)
-            return;
+        if (panel == null) return;
+        lastActivePanelRect = panel.GetComponent<RectTransform>();
+    }
 
-        lastActiveRoot = activeRoot;
+    public void SetActivePanel(SimpleCenterPanel panel)
+    {
+        if (panel == null) return;
+        lastActivePanelRect = panel.GetComponent<RectTransform>();
+    }
 
-        Canvas.ForceUpdateCanvases();
-        PositionButtonsBelowRoot(activeRoot);
+    public void SetActivePanel(RectTransform panelRect)
+    {
+        if (panelRect == null) return;
+        lastActivePanelRect = panelRect;
     }
 
     public void RefreshButtonPosition()
     {
-        if (lastActiveRoot == null || ButtonsContainer == null)
+        if (lastActivePanelRect == null || ButtonsContainer == null)
             return;
+
+        if (!lastActivePanelRect.gameObject.activeInHierarchy)
+            return;
+
+        RectTransform parentRect = ButtonsContainer.parent as RectTransform;
+        if (parentRect == null)
+        {
+            Debug.LogWarning("[LayoutController] ButtonsContainer parent RectTransform not found.");
+            return;
+        }
 
         Canvas.ForceUpdateCanvases();
-        PositionButtonsBelowRoot(lastActiveRoot);
-    }
-
-    private void PositionButtonsBelowRoot(RectTransform root)
-    {
-        if (root == null || ButtonsContainer == null)
-            return;
-
-        Canvas canvas = ButtonsContainer.GetComponentInParent<Canvas>();
-        if (canvas == null)
-        {
-            Debug.LogWarning("[LayoutController] Canvas not found.");
-            return;
-        }
-
-        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
-        if (canvasRect == null)
-        {
-            Debug.LogWarning("[LayoutController] Canvas RectTransform not found.");
-            return;
-        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(lastActivePanelRect);
 
         Vector3[] corners = new Vector3[4];
-        root.GetWorldCorners(corners);
+        lastActivePanelRect.GetWorldCorners(corners);
 
-        // 0 = bottom-left, 3 = top-left
-        Vector3 worldBottomCenter = (corners[0] + corners[3]) * 0.5f;
+        // Unity corners:
+        // 0 = bottom-left
+        // 1 = top-left
+        // 2 = top-right
+        // 3 = bottom-right
 
-        Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRect,
-            RectTransformUtility.WorldToScreenPoint(null, worldBottomCenter),
-            null,
-            out localPoint
-        );
+        Vector3 bottomLeftLocal = parentRect.InverseTransformPoint(corners[0]);
+        Vector3 bottomRightLocal = parentRect.InverseTransformPoint(corners[3]);
 
-        float targetX = localPoint.x;
-        float targetY = localPoint.y - buttonOffset;
+        float targetX = (bottomLeftLocal.x + bottomRightLocal.x) * 0.5f;
+        float targetY = bottomLeftLocal.y - buttonOffset;
 
         ButtonsContainer.anchoredPosition = new Vector2(targetX, targetY);
+    }
+
+    public void ClearActivePanel()
+    {
+        lastActivePanelRect = null;
     }
 }

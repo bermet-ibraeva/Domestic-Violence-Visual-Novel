@@ -22,6 +22,12 @@ public class UIController : MonoBehaviour
         if (layoutController.AuthorPanel != null)
             layoutController.AuthorPanel.gameObject.SetActive(false);
 
+        if (layoutController.LeftPanel != null)
+            layoutController.LeftPanel.gameObject.SetActive(false);
+
+        if (layoutController.RightPanel != null)
+            layoutController.RightPanel.gameObject.SetActive(false);
+
         if (LeftCharacterRootObject != null)
             LeftCharacterRootObject.SetActive(false);
 
@@ -30,6 +36,8 @@ public class UIController : MonoBehaviour
 
         HideAllNamePanels();
         HideChoices();
+
+        layoutController.ClearActivePanel();
     }
 
     public void HideChoices()
@@ -70,8 +78,7 @@ public class UIController : MonoBehaviour
 
         HideAllNamePanels();
 
-        RectTransform authorRect = layoutController.AuthorPanel.GetComponent<RectTransform>();
-        layoutController.RefreshButtons(authorRect);
+        layoutController.SetActivePanel(layoutController.AuthorPanel);
     }
 
     public void ShowLeftCharacter(string name, string text)
@@ -93,8 +100,7 @@ public class UIController : MonoBehaviour
         if (RightNamePanelObject != null)
             RightNamePanelObject.SetActive(false);
 
-        if (layoutController.LeftCharacterRoot != null)
-            layoutController.RefreshButtons(layoutController.LeftCharacterRoot);
+        layoutController.SetActivePanel(layoutController.LeftPanel);
     }
 
     public void ShowRightCharacter(string name, string text)
@@ -116,8 +122,7 @@ public class UIController : MonoBehaviour
         if (RightNamePanelObject != null)
             RightNamePanelObject.SetActive(true);
 
-        if (layoutController.RightCharacterRoot != null)
-            layoutController.RefreshButtons(layoutController.RightCharacterRoot);
+        layoutController.SetActivePanel(layoutController.RightPanel);
     }
 
     public void ShowChoices(List<Choice> choices, Action<string> callback)
@@ -128,7 +133,8 @@ public class UIController : MonoBehaviour
         if (layoutController.ButtonsContainer != null)
             layoutController.ButtonsContainer.gameObject.SetActive(true);
 
-        if (layoutController.choiceButtons == null) return;
+        if (layoutController.choiceButtons == null)
+            return;
 
         foreach (var btn in layoutController.choiceButtons)
         {
@@ -151,6 +157,7 @@ public class UIController : MonoBehaviour
             btn.SetCallback(() => callback?.Invoke(nextNode));
         }
 
+        Canvas.ForceUpdateCanvases();
         layoutController.RefreshButtonPosition();
     }
 }

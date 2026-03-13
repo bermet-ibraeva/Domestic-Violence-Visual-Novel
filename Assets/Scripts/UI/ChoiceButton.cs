@@ -10,6 +10,7 @@ public class ChoiceButton : MonoBehaviour
     public TextMeshProUGUI text;
 
     private Action onClick;
+    private SimpleCenterPanel simplePanel;
 
     void Awake()
     {
@@ -27,6 +28,8 @@ public class ChoiceButton : MonoBehaviour
                 Debug.LogError($"[ChoiceButton] На кнопке {gameObject.name} нет TextMeshProUGUI!");
         }
 
+        simplePanel = GetComponent<SimpleCenterPanel>();
+
         if (button != null)
         {
             button.onClick.RemoveAllListeners();
@@ -43,6 +46,10 @@ public class ChoiceButton : MonoBehaviour
     {
         if (text != null)
             text.text = value;
+
+        var panel = GetComponent<SimpleCenterPanel>();
+        if (panel != null)
+            panel.RefreshSize();
     }
 
     public void SetCallback(Action callback)

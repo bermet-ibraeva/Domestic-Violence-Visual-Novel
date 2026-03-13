@@ -4,8 +4,8 @@ using TMPro;
 public class SimpleCenterPanel : MonoBehaviour
 {
     public TextMeshProUGUI targetText;
-    public float baseHeight = 150f; 
-    public float pricePerLine = 30f;
+    public float baseHeight = 140f; // for btn; for author put always 180 for 1st line
+    public float pricePerLine = 25f; // for btn; for author put always 30
 
     public void RefreshSize()
     {

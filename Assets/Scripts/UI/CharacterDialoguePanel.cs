@@ -10,7 +10,7 @@ public class CharacterDialoguePanel : MonoBehaviour
     [Header("Panel Height")]
     public float minPanelHeight = 280f;
     public float maxPanelHeight = 400f;
-    public float bottomPadding = 20f;
+    public float bottomPadding = 30f;
 
     private RectTransform panelRect;
     private RectTransform textRect;
@@ -25,7 +25,7 @@ public class CharacterDialoguePanel : MonoBehaviour
             textRect = dialogueText.GetComponent<RectTransform>();
 
         if (textRect != null)
-            fixedTopOffset = -textRect.offsetMax.y; // если Top = 140, тут сохранится 140
+            fixedTopOffset = -textRect.offsetMax.y; // если Top = 130, тут сохранится 130
     }
 
     public void SetDialogue(string characterName, string text)
