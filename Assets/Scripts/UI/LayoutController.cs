@@ -1,31 +1,4 @@
 using UnityEngine;
-using System.Collections;
-
-/*
-LayoutController
-
-This class manages the positioning of dialogue panels and choice buttons
-for a visual novel or dialogue system.
-
-Responsibilities:
-- Holds references to dialogue panels:
-    • AuthorPanel (narrator/author)
-    • LeftPanel (left character)
-    • RightPanel (right character)
-- Holds references to choice buttons and their container
-- Supports dynamic positioning of choice buttons relative to the active panel
-- Provides RefreshButtons(RectTransform activePanelRect) to update button positions
-    • Starts a coroutine to position buttons after the end of the frame
-    • Aligns buttons to the horizontal center of the panel
-    • Places buttons below the panel using buttonOffset
-- Provides RefreshButtonPosition() to update button positions based on the currently active panel
-- Designed to integrate with DialogueController to handle dialogue choices visually
-
-Usage:
-- Assign panels and choice buttons in the Inspector
-- Call RefreshButtonPosition() after showing a dialogue panel
-- Call RefreshButtons(panelRect) to manually reposition buttons for a specific panel
-*/
 
 public class LayoutController : MonoBehaviour
 {
@@ -34,42 +7,73 @@ public class LayoutController : MonoBehaviour
     public CharacterDialoguePanel LeftPanel;
     public CharacterDialoguePanel RightPanel;
 
+    [Header("Character Roots")]
+    public RectTransform LeftCharacterRoot;
+    public RectTransform RightCharacterRoot;
+
     [Header("Choice Buttons")]
     public RectTransform ButtonsContainer;
     public ChoiceButton[] choiceButtons;
-    public float buttonOffset = 20f;
+    public float buttonOffset = 30f;
 
-    // Метод для позиционирования кнопок
-    public void RefreshButtons(RectTransform activePanelRect)
+    private RectTransform lastActiveRoot;
+
+    public void RefreshButtons(RectTransform activeRoot)
     {
-        if (activePanelRect == null) return;
-        StartCoroutine(PositionRoutine(activePanelRect));
+        if (activeRoot == null || ButtonsContainer == null)
+            return;
+
+        lastActiveRoot = activeRoot;
+
+        Canvas.ForceUpdateCanvases();
+        PositionButtonsBelowRoot(activeRoot);
     }
 
-    private IEnumerator PositionRoutine(RectTransform panel)
-    {
-        yield return new WaitForEndOfFrame();
-
-        Vector3[] corners = new Vector3[4];
-        panel.GetWorldCorners(corners);
-
-        float bottomY = corners[0].y;
-        float centerX = (corners[0].x + corners[3].x) / 2f;
-
-        if (ButtonsContainer != null)
-        {
-            ButtonsContainer.position = new Vector3(centerX, bottomY - buttonOffset, panel.position.z);
-        }
-    }
-
-    // Вспомогательный метод для обновления позиции без смены текста
     public void RefreshButtonPosition()
     {
-        RectTransform active = null;
-        if (AuthorPanel.gameObject.activeSelf) active = AuthorPanel.GetComponent<RectTransform>();
-        else if (LeftPanel.gameObject.activeSelf) active = LeftPanel.GetComponent<RectTransform>();
-        else if (RightPanel.gameObject.activeSelf) active = RightPanel.GetComponent<RectTransform>();
+        if (lastActiveRoot == null || ButtonsContainer == null)
+            return;
 
-        if (active != null) RefreshButtons(active);
+        Canvas.ForceUpdateCanvases();
+        PositionButtonsBelowRoot(lastActiveRoot);
+    }
+
+    private void PositionButtonsBelowRoot(RectTransform root)
+    {
+        if (root == null || ButtonsContainer == null)
+            return;
+
+        Canvas canvas = ButtonsContainer.GetComponentInParent<Canvas>();
+        if (canvas == null)
+        {
+            Debug.LogWarning("[LayoutController] Canvas not found.");
+            return;
+        }
+
+        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        if (canvasRect == null)
+        {
+            Debug.LogWarning("[LayoutController] Canvas RectTransform not found.");
+            return;
+        }
+
+        Vector3[] corners = new Vector3[4];
+        root.GetWorldCorners(corners);
+
+        // 0 = bottom-left, 3 = top-left
+        Vector3 worldBottomCenter = (corners[0] + corners[3]) * 0.5f;
+
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            RectTransformUtility.WorldToScreenPoint(null, worldBottomCenter),
+            null,
+            out localPoint
+        );
+
+        float targetX = localPoint.x;
+        float targetY = localPoint.y - buttonOffset;
+
+        ButtonsContainer.anchoredPosition = new Vector2(targetX, targetY);
     }
 }

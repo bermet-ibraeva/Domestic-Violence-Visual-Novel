@@ -13,7 +13,6 @@ public class ChoiceButton : MonoBehaviour
 
     void Awake()
     {
-        // Автопоиск кнопки, если ты забыл её назначить
         if (button == null)
         {
             button = GetComponent<Button>();
@@ -21,7 +20,6 @@ public class ChoiceButton : MonoBehaviour
                 Debug.LogError($"[ChoiceButton] На объекте {gameObject.name} нет компонента Button!");
         }
 
-        // Автопоиск текста (во всех дочерних объектах)
         if (text == null)
         {
             text = GetComponentInChildren<TextMeshProUGUI>();
@@ -29,15 +27,16 @@ public class ChoiceButton : MonoBehaviour
                 Debug.LogError($"[ChoiceButton] На кнопке {gameObject.name} нет TextMeshProUGUI!");
         }
 
-        // Подписка на клик
         if (button != null)
         {
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() =>
-            {
-                onClick?.Invoke();
-            });
+            button.onClick.AddListener(HandleClick);
         }
+    }
+
+    private void HandleClick()
+    {
+        onClick?.Invoke();
     }
 
     public void SetText(string value)

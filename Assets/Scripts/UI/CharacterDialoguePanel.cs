@@ -3,13 +3,17 @@ using TMPro;
 
 public class CharacterDialoguePanel : MonoBehaviour
 {
+    [Header("UI")]
+    public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
 
-    [Header("Panel Settings")]
-    public float topPadding = 150f;
-    public float bottomPadding = 40f;
-    public float leftRightPadding = 50f;
+    [Header("Panel")]
     public float minHeight = 280f;
+    public float maxHeight = 400f;
+
+    [Header("Offsets")]
+    public float textTopOffset = 140f;
+    public float bottomPadding = 20f;
 
     private RectTransform panelRect;
     private RectTransform textRect;
@@ -17,48 +21,42 @@ public class CharacterDialoguePanel : MonoBehaviour
     void Awake()
     {
         panelRect = GetComponent<RectTransform>();
-
-        if (dialogueText != null)
-            textRect = dialogueText.GetComponent<RectTransform>();
+        textRect = dialogueText.GetComponent<RectTransform>();
     }
 
-    // Оставили для совместимости со старым UIController
-    public void SetDialogue(string name, string text)
+    public void SetDialogue(string characterName, string text)
     {
-        SetText(text);
-    }
+        if (nameText != null)
+            nameText.text = characterName;
 
-    public void SetText(string text)
-    {
-        if (dialogueText != null)
-            dialogueText.text = text;
+        dialogueText.text = text;
 
         RefreshSize();
     }
 
     public void RefreshSize()
     {
-        if (panelRect == null || dialogueText == null || textRect == null)
-        {
-            Debug.LogError($"[{gameObject.name}] Missing references.");
-            return;
-        }
-
         Canvas.ForceUpdateCanvases();
-
-        float textWidth = panelRect.rect.width - (leftRightPadding * 2f);
-        textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, textWidth);
-
         dialogueText.ForceMeshUpdate();
 
-        float textHeight = dialogueText.preferredHeight;
-        float targetHeight = topPadding + textHeight + bottomPadding;
+        float width = textRect.rect.width;
 
-        if (targetHeight < minHeight)
-            targetHeight = minHeight;
+        float textHeight = dialogueText
+            .GetPreferredValues(dialogueText.text, width, 0)
+            .y;
 
-        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
+        textRect.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Vertical,
+            textHeight
+        );
 
-        textRect.anchoredPosition = new Vector2(0f, -topPadding);
+        float panelHeight = textTopOffset + textHeight + bottomPadding;
+
+        panelHeight = Mathf.Clamp(panelHeight, minHeight, maxHeight);
+
+        panelRect.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Vertical,
+            panelHeight
+        );
     }
 }
