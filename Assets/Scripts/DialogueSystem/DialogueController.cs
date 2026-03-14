@@ -61,6 +61,9 @@ public class DialogueController : MonoBehaviour
     [Header("Chapter")]
     public int chapterNumber = 1;
 
+    [Header("Episode End UI")]
+    public EpisodeEndPanelUI episodeEndPanel;
+
     private EpisodeData episode;
     private Dictionary<string, DialogueNode> nodeDict;
     private Dictionary<string, SceneData> sceneDict;
@@ -76,15 +79,66 @@ public class DialogueController : MonoBehaviour
     void Start()
     {
         save = TempGameContext.saveToLoad ?? SaveSystem.Load();
-        if (save == null) save = new SaveData();
-        if (save.appliedEffectNodes == null) save.appliedEffectNodes = new List<string>();
+        bool hasLoadedSave = save != null;
 
-        if (!string.IsNullOrEmpty(save.episodePath))
+        if (save == null)
+            save = new SaveData();
+
+        if (save.appliedEffectNodes == null)
+            save.appliedEffectNodes = new List<string>();
+
+        string requestedEpisodePath = episodePath;
+        string requestedStartNodeId = startNodeId;
+
+        bool sameEpisodeAsSave =
+            hasLoadedSave &&
+            !string.IsNullOrEmpty(save.episodePath) &&
+            save.episodePath == requestedEpisodePath;
+
+        bool hasMidEpisodeProgress =
+            hasLoadedSave &&
+            sameEpisodeAsSave &&
+            !string.IsNullOrEmpty(save.currentNodeId) &&
+            save.currentNodeId != requestedStartNodeId;
+
+        if (sameEpisodeAsSave)
+        {
             episodePath = save.episodePath;
-
-        startNodeId = string.IsNullOrEmpty(save.currentNodeId) ? startNodeId : save.currentNodeId;
+            startNodeId = string.IsNullOrEmpty(save.currentNodeId) ? requestedStartNodeId : save.currentNodeId;
+        }
+        else
+        {
+            episodePath = requestedEpisodePath;
+            startNodeId = requestedStartNodeId;
+        }
 
         LoadEpisode();
+
+        StatSystem.Instance.Init(save);
+
+        if (episodeEndPanel != null)
+        {
+            episodeEndPanel.Init(this);
+            episodeEndPanel.Hide();
+        }
+
+        if (!hasMidEpisodeProgress)
+        {
+            StatSystem.Instance.ResetEpisodeStats();
+            save.episodeRewardGranted = false;
+            save.currentNodeId = startNodeId;
+            save.episodePath = episodePath;
+
+            save.episodeStartSnapshot = new EpisodeSnapshot
+            {
+                sparksTotal = save.sparksTotal,
+                trustAG = save.trustAG,
+                trustJA = save.trustJA,
+                riskTotal = save.riskTotal,
+                safetyTotal = save.safetyTotal
+            };
+        }
+
         ShowNode(startNodeId);
     }
 
@@ -279,29 +333,14 @@ public class DialogueController : MonoBehaviour
 
     void ApplyEffects(NodeEffects e)
     {
-        save.trustAG += e.trustAG;
-        save.trustJA += e.trustJA;
-        save.riskTotal += e.risk;
-        save.safetyTotal += e.safety;
-        save.episodeRisk += e.risk;
-        save.episodeSafety += e.safety;
-        save.sparksTotal += e.sparks;
+        if (e == null) return;
+        StatSystem.Instance.ApplyLegacyNodeEffects(e);
     }
 
     void ApplyChoiceEffects(List<EffectOp> ops)
     {
-        if (ops == null) return;
-        foreach (var op in ops)
-        {
-            if (op == null || string.IsNullOrEmpty(op.op) || string.IsNullOrEmpty(op.key) || op.op != "inc") continue;
-            int v = op.value;
-            switch (op.key)
-            {
-                case "risk": save.riskTotal += v; save.episodeRisk += v; break;
-                case "safety": save.safetyTotal += v; save.episodeSafety += v; break;
-                case "trust.Ainaz_Guldana": save.trustAG += v; break;
-            }
-        }
+        if (ops == null || ops.Count == 0) return;
+        StatSystem.Instance.ApplyChoiceEffects(ops);
     }
 
     void HandleEnding(DialogueNode node)
@@ -311,7 +350,109 @@ public class DialogueController : MonoBehaviour
             ui.HideChoices();
             return;
         }
-        Debug.Log("ENDING: " + node.requirements[0].ending);
+
+        int reward = 2;
+
+        if (!save.episodeRewardGranted)
+        {
+            StatSystem.Instance.AddEpisodeReward(reward);
+            save.episodeRewardGranted = true;
+            SaveSystem.Save(save);
+        }
+
+        StatSystem.Instance.PrintEpisodeSummary();
+
         ui.HideChoices();
+
+        if (episodeEndPanel != null)
+        {
+            episodeEndPanel.Show(
+                save,
+                node.requirements[0].ending,
+                reward,
+                "Episodes/episode_2",
+                "E02_S01_start"
+            );
+        }
+        else
+        {
+            Debug.Log("ENDING: " + node.requirements[0].ending);
+        }
+    }
+
+    private string GetEpisodeStartNode()
+    {
+        if (episode != null && episode.scenes != null && episode.scenes.Count > 0)
+        {
+            if (!string.IsNullOrEmpty(episode.scenes[0].startNode))
+                return episode.scenes[0].startNode;
+        }
+
+        return startNodeId;
+    }
+
+    public void StartNextEpisode(string newEpisodePath, string newStartNodeId)
+    {
+        if (string.IsNullOrEmpty(newEpisodePath) || string.IsNullOrEmpty(newStartNodeId))
+        {
+            Debug.LogWarning("[DialogueController] Next episode path or start node is empty.");
+            return;
+        }
+
+        episodePath = newEpisodePath;
+        startNodeId = newStartNodeId;
+
+        save.episodePath = episodePath;
+        save.currentNodeId = startNodeId;
+        save.episodeRewardGranted = false;
+
+        if (save.appliedEffectNodes == null)
+            save.appliedEffectNodes = new List<string>();
+        else
+            save.appliedEffectNodes.Clear();
+
+        StatSystem.Instance.ResetEpisodeStats();
+
+        if (episodeEndPanel != null)
+            episodeEndPanel.Hide();
+
+        LoadEpisode();
+        ShowNode(startNodeId);
+    }
+
+    public void RestartCurrentEpisode()
+    {
+        string firstNode = GetEpisodeStartNode();
+
+        if (string.IsNullOrEmpty(firstNode))
+        {
+            Debug.LogError("[DialogueController] Cannot restart episode: start node not found.");
+            return;
+        }
+
+        if (save.episodeStartSnapshot != null)
+        {
+            save.sparksTotal = save.episodeStartSnapshot.sparksTotal;
+            save.trustAG = save.episodeStartSnapshot.trustAG;
+            save.trustJA = save.episodeStartSnapshot.trustJA;
+            save.riskTotal = save.episodeStartSnapshot.riskTotal;
+            save.safetyTotal = save.episodeStartSnapshot.safetyTotal;
+        }
+
+        StatSystem.Instance.ResetEpisodeStats();
+
+        save.episodeRewardGranted = false;
+        save.currentNodeId = firstNode;
+
+        if (save.appliedEffectNodes == null)
+            save.appliedEffectNodes = new List<string>();
+        else
+            save.appliedEffectNodes.Clear();
+
+        if (episodeEndPanel != null)
+            episodeEndPanel.Hide();
+
+        SaveSystem.Save(save);
+        ShowNode(firstNode);
     }
 }

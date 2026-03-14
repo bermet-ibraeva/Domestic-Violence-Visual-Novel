@@ -3,7 +3,7 @@
   "episodeTitle": "Первые звонки",
   "variables": {
     "trust": {
-      "Ainaz_Guldana": 0
+      "AG": 0
     },
     "risk": 0,
     "safety": 0
@@ -94,7 +94,7 @@
             {
               "text": "Спросить, всё ли у неё в порядке",
               "effects": [
-                { "op": "inc", "key": "trust.Ainaz_Guldana", "value": 2 }
+                { "op": "inc", "key": "trust.AG", "value": 2 }
               ],
               "nextNode": "E01_S01_choice1_result"
             },
@@ -106,7 +106,7 @@
             {
               "text": "Пошутить, чтобы разрядить обстановку",
               "effects": [
-                { "op": "inc", "key": "trust.Ainaz_Guldana", "value": 1 }
+                { "op": "inc", "key": "trust.AG", "value": 1 }
               ],
               "nextNode": "E01_S01_choice3_result"
             }
@@ -245,7 +245,7 @@
             },
             {
               "text": "Проигнорировать и дождаться Гульдану",
-              "effects": [{ "op": "inc", "key": "trust.Ainaz_Guldana", "value": 1 }],
+              "effects": [{ "op": "inc", "key": "trust.AG", "value": 1 }],
               "nextNode": "E01_S02_choice2_result"
             }
           ]
@@ -601,7 +601,7 @@
             {
               "text": "Больше не расспрашивать",
               "effects": [
-                { "op": "inc", "key": "trust.Ainaz_Guldana", "value": 1 }
+                { "op": "inc", "key": "trust.AG", "value": 1 }
               ],
               "nextNode": "E01_S05_choice1_result"
             },

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+
+// score saved by player
 [Serializable]
 public class SaveData
 {
@@ -9,6 +11,7 @@ public class SaveData
     public int chapterNumber = 1;
 
     public int sparksTotal;
+    public bool episodeRewardGranted;
 
     public List<string> notesRewarded = new List<string>();
     public List<TestBestScore> testsBest = new List<TestBestScore>();
@@ -21,6 +24,9 @@ public class SaveData
 
     public int episodeRisk;
     public int episodeSafety;
+    public int episodeTrustAG;
+    public int episodeTrustJA;
+    public int episodeSparks;
 
     public List<string> completedEpisodes = new List<string>();
 

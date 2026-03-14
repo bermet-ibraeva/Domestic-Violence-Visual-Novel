@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+
+// data written in json
 [Serializable]
 public class EpisodeData
 {
@@ -22,7 +24,8 @@ public class EpisodeVariables
 [Serializable]
 public class TrustVariables
 {
-    public int Ainaz_Guldana;
+    public int AG;
+    public int JA;
 }
 
 [Serializable]
