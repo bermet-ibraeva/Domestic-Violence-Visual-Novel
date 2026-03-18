@@ -61,8 +61,8 @@ public class DialogueController : MonoBehaviour
     [Header("Chapter")]
     public int chapterNumber = 1;
 
-    [Header("Episode End UI")]
-    public EpisodeEndPanelUI episodeEndPanel;
+    [Header("Episode End Panel UI")]
+    public EpisodeEndPanel episodeEndPanel;
 
     private EpisodeData episode;
     private Dictionary<string, DialogueNode> nodeDict;
@@ -361,22 +361,16 @@ public class DialogueController : MonoBehaviour
         }
 
         StatSystem.Instance.PrintEpisodeSummary();
-
         ui.HideChoices();
 
         if (episodeEndPanel != null)
         {
             episodeEndPanel.Show(
                 save,
-                node.requirements[0].ending,
                 reward,
                 "Episodes/episode_2",
                 "E02_S01_start"
             );
-        }
-        else
-        {
-            Debug.Log("ENDING: " + node.requirements[0].ending);
         }
     }
 

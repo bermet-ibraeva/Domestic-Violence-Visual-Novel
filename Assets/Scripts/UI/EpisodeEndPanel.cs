@@ -9,18 +9,12 @@ public class EpisodeEndPanel : MonoBehaviour
 
     [Header("Texts")]
     public TextMeshProUGUI titleText;
-    public TextMeshProUGUI endingText;
-    public TextMeshProUGUI rewardText;
 
-    public TextMeshProUGUI trustText;
+    public TextMeshProUGUI trustAGText;
+    public TextMeshProUGUI trustJAText;
     public TextMeshProUGUI riskText;
     public TextMeshProUGUI safetyText;
     public TextMeshProUGUI sparksText;
-
-    public TextMeshProUGUI totalTrustText;
-    public TextMeshProUGUI totalRiskText;
-    public TextMeshProUGUI totalSafetyText;
-    public TextMeshProUGUI totalSparksText;
 
     [Header("Buttons")]
     public Button nextEpisodeButton;
@@ -35,46 +29,56 @@ public class EpisodeEndPanel : MonoBehaviour
 
     public void Show(
         SaveData save,
-        string endingName,
-        int completionReward,
+        int sparksReward,
         string nextEpisodePath,
         string nextEpisodeStartNode)
     {
+        if (save == null)
+        {
+            Debug.LogError("[EpisodeEndPanel] SaveData is null.");
+            return;
+        }
+
         if (root != null)
             root.SetActive(true);
 
         if (titleText != null)
-            titleText.text = "Эпизод завершён";
+            titleText.text = "Эпизод закончен!";
 
-        if (endingText != null)
-            endingText.text = $"Финал: {endingName}";
+        if (trustAGText != null)
+            trustAGText.text = BuildStatLine(
+                save.trustAG,
+                save.episodeTrustAG,
+                "Доверие между Айназ и Гульданой"
+            );
 
-        if (rewardText != null)
-            rewardText.text = $"+{completionReward} искры за завершение эпизода";
-
-        if (trustText != null)
-            trustText.text = $"Доверие: {FormatSigned(save.episodeTrustAG)}";
+        if (trustJAText != null)
+            trustJAText.text = BuildStatLine(
+                save.trustJA,
+                save.episodeTrustJA,
+                "Доверие между Аидой и Жамилёй"
+            );
 
         if (riskText != null)
-            riskText.text = $"Риск: {FormatSigned(save.episodeRisk)}";
+            riskText.text = BuildStatLine(
+                save.riskTotal,
+                save.episodeRisk,
+                "Риск"
+            );
 
         if (safetyText != null)
-            safetyText.text = $"Безопасность: {FormatSigned(save.episodeSafety)}";
+            safetyText.text = BuildStatLine(
+                save.safetyTotal,
+                save.episodeSafety,
+                "Безопасность"
+            );
 
         if (sparksText != null)
-            sparksText.text = $"Искры: {FormatSigned(save.episodeSparks)}";
-
-        if (totalTrustText != null)
-            totalTrustText.text = $"Всего доверия: {save.trustAG}";
-
-        if (totalRiskText != null)
-            totalRiskText.text = $"Всего риска: {save.riskTotal}";
-
-        if (totalSafetyText != null)
-            totalSafetyText.text = $"Всего безопасности: {save.safetyTotal}";
-
-        if (totalSparksText != null)
-            totalSparksText.text = $"Всего искр: {save.sparksTotal}";
+            sparksText.text = BuildStatLine(
+                save.sparksTotal,
+                sparksReward,
+                "Искры"
+            );
 
         if (nextEpisodeButton != null)
         {
@@ -101,8 +105,14 @@ public class EpisodeEndPanel : MonoBehaviour
             root.SetActive(false);
     }
 
-    private string FormatSigned(int value)
+    private string BuildStatLine(int totalValue, int deltaValue, string label)
     {
-        return value >= 0 ? $"+{value}" : value.ToString();
+        if (deltaValue > 0)
+            return $"{totalValue} (+{deltaValue})  {label}";
+
+        if (deltaValue < 0)
+            return $"{totalValue} ({deltaValue})  {label}";
+
+        return $"{totalValue}  {label}";
     }
 }
