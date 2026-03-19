@@ -65,6 +65,24 @@ public class UIController : MonoBehaviour
             RightNamePanelObject.SetActive(false);
     }
 
+    
+    public void HideDialoguePanels()
+    {
+        if (layoutController == null) return;
+
+        if (layoutController.AuthorPanel != null)
+            layoutController.AuthorPanel.gameObject.SetActive(false);
+
+        if (layoutController.LeftPanel != null)
+            layoutController.LeftPanel.gameObject.SetActive(false);
+
+        if (layoutController.RightPanel != null)
+            layoutController.RightPanel.gameObject.SetActive(false);
+
+        HideAllNamePanels();
+        layoutController.ClearActivePanel();
+    }
+
     public void ShowAuthor(string text)
     {
         HideAll();

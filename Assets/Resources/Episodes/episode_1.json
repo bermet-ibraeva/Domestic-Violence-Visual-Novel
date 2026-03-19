@@ -709,36 +709,28 @@
           "character": "Narrator",
           "text": "Раздается женский крик",
           "nextNode": "E01_S06_thought_1"
-        },
-        {
-          "nodeId": "E01_S06_thought_1",
-          "character": "Ainaz",
-          "background": "guldana_house_night_quarell",
-          "emotion": "Fear",
-          "isThought": true,
-          "text": "Это… из дома Гульданы?",
-          "nextNode": "E01_summary_start"
         }
       ]
     },    
     {
       "sceneId": "E01_SUMMARY",
-      "background": "black-fade",
-      "leftCharacter": null,
+      "background": "guldana_house_night_quarell",
+      "leftCharacter": "Ainaz",
       "rightCharacters": [],
-      "startNode": "E01_summary_start",
+      "startNode": "E01_S06_thought_1",
       "nodes": [
         {
-          "nodeId": "E01_summary_start",
-          "character": "Narrator",
-          "text": "Эпизод завершён.",
-          "nextNode": "E01_summary_stats"
+          "nodeId": "E01_S06_thought_1",
+          "character": "Ainaz",
+          "emotion": "Fear",
+          "isThought": true,
+          "text": "Это… из дома Гульданы?",
+          "nextNode": "E01_summary_start"
         },
         {
-          "nodeId": "E01_summary_stats",
+          "nodeId": "E01_summary_start",
           "character": "System",
-          "text": "summary_screen",
-          "nextNode": "E02_S01_start"
+          "text": "summary_screen"
         }
       ]
     }

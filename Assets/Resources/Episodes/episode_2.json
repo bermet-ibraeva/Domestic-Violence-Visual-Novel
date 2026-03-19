@@ -1,0 +1,195 @@
+{
+    "episodeId": "E02",
+    "episodeTitle": "Соседняя дверь",
+    "variables": {
+      "trust": {
+        "AG": 0
+      },
+      "risk": 0,
+      "safety": 0
+    },
+    "scenes": [
+      {
+        "sceneId": "E02_S01",
+        "background": "street_evening_cold",
+        "leftCharacter": "Ainaz",
+        "rightCharacters": [],
+        "startNode": "E02_S01_start",
+        "nodes": [
+          {
+            "nodeId": "E02_S01_start",
+            "character": "Narrator",
+            "text": "Вечер. Айназ идёт домой из школы. В воздухе холод, где-то лает собака.",
+            "nextNode": "E02_S01_narration_1"
+          },
+          {
+            "nodeId": "E02_S01_narration_1",
+            "character": "Narrator",
+            "text": "Айназ стоит у знакомого дома, где только что слышала чей-то крик.",
+            "nextNode": "E02_S01_thought_1"
+          },
+          {
+            "nodeId": "E02_S01_thought_1",
+            "character": "Ainaz",
+            "emotion": "Fear",
+            "isThought": true,
+            "text": "Это… из дома Гульданы?",
+            "nextNode": "E02_S01_thought_2"
+          },
+          {
+            "nodeId": "E02_S01_thought_2",
+            "character": "Ainaz",
+            "emotion": "Fear",
+            "isThought": true,
+            "text": "Это что крики её мамы?",
+            "nextNode": "E02_S01_thought_3"
+          },
+          {
+            "nodeId": "E02_S01_thought_3",
+            "character": "Ainaz",
+            "emotion": "Nervous",
+            "isThought": true,
+            "text": "Что мне делать?",
+            "nextNode": "E02_S01_choice_setup"
+          },
+          {
+            "nodeId": "E02_S01_choice_setup",
+            "character": "Narrator",
+            "text": "Айназ замирает, не зная, как поступить.",
+            "choices": [
+              {
+                "text": "Сделать вид, что не слышала, и уйти домой",
+                "effects": [
+                  { "op": "inc", "key": "safety", "value": 1 }
+                ],
+                "nextNode": "E02_S01_choice1_result"
+              },
+              {
+                "text": "Позвонить Гульдане",
+                "effects": [
+                  { "op": "inc", "key": "risk", "value": 1 }
+                ],
+                "nextNode": "E02_S01_choice2_result"
+              }
+            ]
+          },
+          {
+            "nodeId": "E02_S01_choice1_result",
+            "character": "Narrator",
+            "text": "Айназ замирает на месте, потом ускоряет шаг и почти бежит домой, не оглядываясь.",
+            "nextNode": "E02_S02_start"
+          },
+          {
+            "nodeId": "E02_S01_choice2_result",
+            "character": "Narrator",
+            "text": "Айназ достаёт телефон и набирает номер.",
+            "nextNode": "E02_S01_choice2_narration_1"
+          },
+          {
+            "nodeId": "E02_S01_choice2_narration_1",
+            "character": "Narrator",
+            "text": "Гудки идут долго.",
+            "nextNode": "E02_S01_choice2_narration_2"
+          },
+          {
+            "nodeId": "E02_S01_choice2_narration_2",
+            "character": "Narrator",
+            "text": "Потом — короткий обрыв. Ответа нет.",
+            "nextNode": "E02_S01_choice2_narration_3"
+          },
+          {
+            "nodeId": "E02_S01_choice2_narration_3",
+            "character": "Narrator",
+            "text": "Айназ стоит ещё несколько секунд, сжимая учебник так крепко, что пальцы немеют.",
+            "nextNode": "E02_S01_choice2_narration_4"
+          },
+          {
+            "nodeId": "E02_S01_choice2_narration_4",
+            "character": "Narrator",
+            "text": "Потом разворачивается и уходит.",
+            "nextNode": "E02_S02_start"
+          }
+        ]
+      },
+      {
+        "sceneId": "E02_S02",
+        "background": "ainaz_room-night",
+        "leftCharacter": "Ainaz",
+        "rightCharacters": [],
+        "startNode": "E02_S02_start",
+        "nodes": [
+          {
+            "nodeId": "E02_S02_start",
+            "character": "Narrator",
+            "text": "Ночь. Айназ лежит в кровати, уставившись в потолок. Свет выключен.",
+            "nextNode": "E02_S02_narration_1"
+          },
+          {
+            "nodeId": "E02_S02_narration_1",
+            "character": "Narrator",
+            "text": "За окном тихо — слишком тихо.",
+            "nextNode": "E02_S02_thought_1"
+          },
+          {
+            "nodeId": "E02_S02_thought_1",
+            "character": "Ainaz",
+            "emotion": "Anxiety",
+            "isThought": true,
+            "text": "Я слышала это. Мне это точно не показалось. Это не похоже на обычную ссору.",
+            "nextNode": "E02_S02_thought_2"
+          },
+          {
+            "nodeId": "E02_S02_thought_2",
+            "character": "Ainaz",
+            "emotion": "Nervous",
+            "isThought": true,
+            "text": "Но что мне делать?",
+            "nextNode": "E02_S02_narration_2"
+          },
+          {
+            "nodeId": "E02_S02_narration_2",
+            "character": "Narrator",
+            "text": "Она поворачивается на бок, подтягивает колени к груди.",
+            "nextNode": "E02_S02_thought_3"
+          },
+          {
+            "nodeId": "E02_S02_thought_3",
+            "character": "Ainaz",
+            "emotion": "Anxiety",
+            "isThought": true,
+            "text": "Может мне кому-то рассказать? Но кому?",
+            "nextNode": "E02_S02_thought_4"
+          },
+          {
+            "nodeId": "E02_S02_thought_4",
+            "character": "Ainaz",
+            "emotion": "Anxiety",
+            "isThought": true,
+            "text": "Мне надо поговорить с Гульданой. Мы лучшие подруги.",
+            "nextNode": "E02_S02_thought_5"
+          },
+          {
+            "nodeId": "E02_S02_thought_5",
+            "character": "Ainaz",
+            "emotion": "Hope",
+            "isThought": true,
+            "text": "Она скажет, если что-то не так.",
+            "nextNode": "E02_S02_narration_3"
+          },
+          {
+            "nodeId": "E02_S02_narration_3",
+            "character": "Narrator",
+            "text": "Айназ закрывает глаза и засыпает.",
+            "nextNode": "E02_S02_end"
+          },
+          {
+            "nodeId": "E02_S02_end",
+            "character": "Narrator",
+            "background": "black-fade",
+            "text": "Наступает новый день.",
+            "nextNode": "E03_S01_start"
+          }
+        ]
+      }
+    ]
+  }

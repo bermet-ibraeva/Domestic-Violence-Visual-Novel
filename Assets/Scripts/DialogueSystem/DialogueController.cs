@@ -149,14 +149,6 @@ public class DialogueController : MonoBehaviour
             waitingForAdvance = false;
             if (currentNode == null) return;
 
-            if (currentNode.requirements != null &&
-                currentNode.requirements.Length > 0 &&
-                string.IsNullOrEmpty(currentNode.nextNode))
-            {
-                HandleEnding(currentNode);
-                return;
-            }
-
             if (!string.IsNullOrEmpty(currentNode.nextNode))
                 ShowNode(currentNode.nextNode);
             else
@@ -237,6 +229,12 @@ public class DialogueController : MonoBehaviour
         EnterSceneIfChanged(nodeId);
         currentNode = node;
         waitingForAdvance = false;
+
+        if (IsSummaryScreenNode(node))
+        {
+            ShowEpisodeEndPanel();
+            return;
+        }
 
         ApplyEffectsOnce(nodeId, node);
 
@@ -343,36 +341,6 @@ public class DialogueController : MonoBehaviour
         StatSystem.Instance.ApplyChoiceEffects(ops);
     }
 
-    void HandleEnding(DialogueNode node)
-    {
-        if (node.requirements == null || node.requirements.Length == 0)
-        {
-            ui.HideChoices();
-            return;
-        }
-
-        int reward = 2;
-
-        if (!save.episodeRewardGranted)
-        {
-            StatSystem.Instance.AddEpisodeReward(reward);
-            save.episodeRewardGranted = true;
-            SaveSystem.Save(save);
-        }
-
-        StatSystem.Instance.PrintEpisodeSummary();
-        ui.HideChoices();
-
-        if (episodeEndPanel != null)
-        {
-            episodeEndPanel.Show(
-                save,
-                reward,
-                "Episodes/episode_2",
-                "E02_S01_start"
-            );
-        }
-    }
 
     private string GetEpisodeStartNode()
     {
@@ -383,6 +351,82 @@ public class DialogueController : MonoBehaviour
         }
 
         return startNodeId;
+    }
+
+    bool IsSummaryScreenNode(DialogueNode node)
+    {
+        return node != null
+            && node.character == "System"
+            && node.text == "summary_screen";
+    }
+
+    void ShowEpisodeEndPanel()
+    {
+        Debug.Log("[DialogueController] ShowEpisodeEndPanel called");
+
+        int reward = 2;
+
+        if (!save.episodeRewardGranted)
+        {
+            StatSystem.Instance.AddEpisodeReward(reward);
+            save.episodeRewardGranted = true;
+            SaveSystem.Save(save);
+        }
+
+        ui.HideChoices();
+        ui.HideDialoguePanels();
+        HideAllCharacters();
+
+        if (episodeEndPanel == null)
+        {
+            Debug.LogError("[DialogueController] episodeEndPanel is NULL");
+            return;
+        }
+
+        string nextEpisodePath = GetNextEpisodePath();
+        string nextEpisodeStartNode = GetNextEpisodeStartNode();
+
+        Debug.Log("[DialogueController] Showing episode end panel");
+
+        episodeEndPanel.Show(
+            save,
+            nextEpisodePath,
+            nextEpisodeStartNode
+        );
+    }
+
+    string GetNextEpisodeStartNode()
+    {
+        if (string.IsNullOrEmpty(episodePath))
+            return null;
+
+        string fileName = episodePath.Substring(episodePath.LastIndexOf('_') + 1);
+
+        if (!int.TryParse(fileName, out int currentEpisodeNumber))
+        {
+            Debug.LogWarning("[DialogueController] Could not parse current episode number from path: " + episodePath);
+            return null;
+        }
+
+        int nextEpisodeNumber = currentEpisodeNumber + 1;
+        return $"E{nextEpisodeNumber:D2}_S01_start";
+    }
+
+    string GetNextEpisodePath()
+    {
+        if (string.IsNullOrEmpty(episodePath))
+            return null;
+
+        string fileName = episodePath.Substring(episodePath.LastIndexOf('_') + 1);
+
+        if (!int.TryParse(fileName, out int currentEpisodeNumber))
+        {
+            Debug.LogWarning("[DialogueController] Could not parse current episode number from path: " + episodePath);
+            return null;
+        }
+
+        int nextEpisodeNumber = currentEpisodeNumber + 1;
+        return $"Episodes/episode_{nextEpisodeNumber}";
     }
 
     public void StartNextEpisode(string newEpisodePath, string newStartNodeId)
@@ -407,13 +451,24 @@ public class DialogueController : MonoBehaviour
 
         StatSystem.Instance.ResetEpisodeStats();
 
+        save.episodeStartSnapshot = new EpisodeSnapshot {
+            sparksTotal = save.sparksTotal,
+            trustAG = save.trustAG,
+            trustJA = save.trustJA,
+            riskTotal = save.riskTotal,
+            safetyTotal = save.safetyTotal
+        };
+
         if (episodeEndPanel != null)
             episodeEndPanel.Hide();
+
+        SaveSystem.Save(save);
 
         LoadEpisode();
         ShowNode(startNodeId);
     }
 
+    // will be used later in Settings Page to allow players to restart the current episode
     public void RestartCurrentEpisode()
     {
         string firstNode = GetEpisodeStartNode();
