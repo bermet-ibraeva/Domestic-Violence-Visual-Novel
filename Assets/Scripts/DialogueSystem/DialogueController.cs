@@ -64,6 +64,9 @@ public class DialogueController : MonoBehaviour
     [Header("Episode End Panel UI")]
     public EpisodeEndPanel episodeEndPanel;
 
+    [Header("Stat Feedback UI")]
+    public StatFeedbackUI statFeedbackUI;
+
     private EpisodeData episode;
     private Dictionary<string, DialogueNode> nodeDict;
     private Dictionary<string, SceneData> sceneDict;
@@ -338,7 +341,24 @@ public class DialogueController : MonoBehaviour
     void ApplyChoiceEffects(List<EffectOp> ops)
     {
         if (ops == null || ops.Count == 0) return;
+
         StatSystem.Instance.ApplyChoiceEffects(ops);
+
+        foreach (var op in ops)
+        {
+            if (op == null || op.value == 0)
+                continue;
+
+            switch (op.key)
+            {
+                case "trust.AG":
+                case "trust.JA":
+                case "risk":
+                case "safety":
+                    statFeedbackUI?.ShowStatChange(op.key, op.value);
+                    break;
+            }
+        }
     }
 
 
