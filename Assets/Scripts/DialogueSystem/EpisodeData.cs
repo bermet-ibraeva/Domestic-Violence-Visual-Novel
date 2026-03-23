@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-
-// data written in json
 [Serializable]
 public class EpisodeData
 {
@@ -37,7 +35,7 @@ public class SceneData
     public float bgFadeDuration = 0.5f;
     public string bgFx = "none";
 
-    public string leftCharacter;           // может быть null (summary)
+    public string leftCharacter;
     public List<string> rightCharacters;
 
     public string startNode;
@@ -49,15 +47,13 @@ public class DialogueNode
 {
     public string nodeId;
 
-    // Background
     public string background;
     public bool bgFade = false;
     public float bgFadeDuration = 0.5f;
     public string bgFx = "none";
     public bool stopPreviousBgEffect = true;
 
-    // Character
-    public string character;   // как в JSON
+    public string character;
     public string emotion;
     public string text;
     public string nextNode;
@@ -65,13 +61,12 @@ public class DialogueNode
     public bool isThought;
 
     public List<Choice> choices;
-
-    // пока оставим как было (если в некоторых эпизодах ещё старые эффекты)
     public NodeEffects effects;
     public RequirementData[] requirements;
+    public NotificationData notification;
 }
 
-[System.Serializable]
+[Serializable]
 public class Choice
 {
     public string text;
@@ -79,7 +74,7 @@ public class Choice
     public List<EffectOp> effects;
 }
 
-[System.Serializable]
+[Serializable]
 public class EffectOp
 {
     public string op;
@@ -87,11 +82,12 @@ public class EffectOp
     public int value;
 }
 
-
 [Serializable]
 public class RequirementData
 {
-    public string ending;
+    public string key;
+    public string op;
+    public int value;
 }
 
 [Serializable]
@@ -102,4 +98,22 @@ public class NodeEffects
     public int risk;
     public int safety;
     public int sparks;
+}
+
+[Serializable]
+public class NotificationData
+{
+    public string id;
+    public bool showOnce;
+
+    // modal / toast
+    public string mode;
+
+    // modal: tutorial / hint / confirm
+    // toast: consequence / warning / locked
+    public string type;
+
+    public string title;
+    public string message;
+    public string icon;
 }

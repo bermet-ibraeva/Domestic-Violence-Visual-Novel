@@ -90,6 +90,15 @@
           "character": "Narrator",
           "bgFx": "zoom_in",
           "text": "Айназ улыбается и что-то напевает себе под нос, но Гульдана не улыбается в ответ.",
+          "notification": {
+            "id": "tutorial_trust",
+            "showOnce": true,
+            "mode": "modal",
+            "type": "tutorial",
+            "title": "Обучение",
+            "message": "Некоторые решения влияют на отношения между персонажами.\n\nДоверие может расти или снижаться — и это влияет на дальнейшие события.",
+            "icon": "trust"
+          },
           "choices": [
             {
               "text": "Спросить, всё ли у неё в порядке",
@@ -137,7 +146,7 @@
           "nextNode": "E01_S02_start"
         }
       ]
-    },
+    },  
     {
       "sceneId": "E01_S02",
       "background": "school_hall_day",
@@ -656,6 +665,15 @@
           "character": "Ainaz",
           "emotion": "Anxiety",
           "text": "А ещё говорит, что я забывчивая… А нам ведь нужно выучить стих до понедельника.",
+          "notification": {
+            "id": "tutorial_risk_safety",
+            "showOnce": true,
+            "mode": "modal",
+            "type": "hint",
+            "title": "Подсказка",
+            "message": "Некоторые решения могут увеличить риск или помочь сохранить безопасность.\n\nИногда правильный выбор не самый очевидный.",
+            "icon": "safety"
+          },
           "choices": [
             {
               "text": "Сразу отнести учебник",

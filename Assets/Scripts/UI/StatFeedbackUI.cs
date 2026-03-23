@@ -85,6 +85,7 @@ public class StatFeedbackUI : MonoBehaviour
         }
 
         labelText.text = data.text;
+        // RebuildCenteredLayout();
 
         canvasGroup.alpha = 0f;
         rectTransform.anchoredPosition = baseAnchoredPos + new Vector2(0f, startYOffset);
@@ -180,4 +181,36 @@ public class StatFeedbackUI : MonoBehaviour
             this.icon = icon;
         }
     }
+
+    // // can be used for other codes too !!!!
+    // private void RebuildCenteredLayout()
+    // {
+    //     if (labelText == null) return;
+
+    //     RectTransform textRect = labelText.GetComponent<RectTransform>();
+    //     RectTransform iconRect = iconImage != null ? iconImage.GetComponent<RectTransform>() : null;
+
+    //     Canvas.ForceUpdateCanvases();
+    //     labelText.ForceMeshUpdate();
+
+    //     float textWidth = labelText.preferredWidth;
+    //     bool hasIcon = iconImage != null && iconImage.enabled;
+
+    //     float spacing = 10f;
+    //     float iconWidth = 24f;
+
+    //     float totalWidth = textWidth + (hasIcon ? iconWidth + spacing : 0f);
+
+    //     float startX = -totalWidth * 0.5f;
+
+    //     if (hasIcon && iconRect != null)
+    //     {
+    //         iconRect.anchoredPosition = new Vector2(startX + iconWidth * 0.5f, 0f);
+    //     }
+
+    //     float textX = hasIcon ? startX + iconWidth + spacing : startX;
+
+    //     textRect.pivot = new Vector2(0f, 0.5f);
+    //     textRect.anchoredPosition = new Vector2(textX, 0f);
+    // }
 }

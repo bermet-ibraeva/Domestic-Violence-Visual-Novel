@@ -67,6 +67,10 @@ public class DialogueController : MonoBehaviour
     [Header("Stat Feedback UI")]
     public StatFeedbackUI statFeedbackUI;
 
+    [Header("Notification Controller")]
+    public NotificationController notificationController;
+
+
     private EpisodeData episode;
     private Dictionary<string, DialogueNode> nodeDict;
     private Dictionary<string, SceneData> sceneDict;
@@ -115,6 +119,9 @@ public class DialogueController : MonoBehaviour
             startNodeId = requestedStartNodeId;
         }
 
+        if (save.shownNotificationIds == null)
+            save.shownNotificationIds = new List<string>();
+
         LoadEpisode();
 
         StatSystem.Instance.Init(save);
@@ -147,6 +154,9 @@ public class DialogueController : MonoBehaviour
 
     void Update()
     {
+        if (notificationController != null && notificationController.IsShowingBlockingNotification)
+            return;
+
         if (waitingForAdvance && Input.GetMouseButtonDown(0))
         {
             waitingForAdvance = false;
@@ -241,6 +251,31 @@ public class DialogueController : MonoBehaviour
 
         ApplyEffectsOnce(nodeId, node);
 
+        // ===== NOTIFICATION =====
+        if (node.notification != null && notificationController != null && ShouldShowNotification(node.notification))
+        {
+            if (notificationController.IsBlocking(node.notification))
+            {
+                ui.HideChoices();
+                ui.HideDialoguePanels(); // или другой твой метод скрытия текста
+
+                notificationController.Show(node.notification, () =>
+                {
+                    MarkNotificationShown(node.notification);
+                    ContinueShowNode(node, nodeId);
+                });
+                return;
+            }
+
+            notificationController.Show(node.notification);
+            MarkNotificationShown(node.notification);
+        }
+
+        ContinueShowNode(node, nodeId);
+    }
+
+    private void ContinueShowNode(DialogueNode node, string nodeId)
+    {
         // Background
         if (backgroundController != null)
         {
@@ -249,16 +284,14 @@ public class DialogueController : MonoBehaviour
             if (!string.IsNullOrEmpty(node.bgFx) && node.bgFx != "none") backgroundController.PlayEffect(node.bgFx);
         }
 
-        // -------- Text + portraits (ИСПРАВЛЕНО ЗДЕСЬ) --------
+        // Text + portraits
         if (IsNarrator(node.character))
         {
-            // Используем метод ShowAuthor вместо прямого доступа к Text
             ui.ShowAuthor(node.text);
             HideAllCharacters();
         }
         else if (IsLeftCharacter(node.character))
         {
-            // Передаем имя из сцены и текст из ноды
             ui.ShowLeftCharacter(currentScene.leftCharacter, node.text);
             ShowLeft(currentScene.leftCharacter, node.emotion);
 
@@ -275,7 +308,6 @@ public class DialogueController : MonoBehaviour
         }
         else
         {
-            // Ошибка или сторонний персонаж (показываем справа)
             ui.ShowRightCharacter(node.character, node.text);
             HideAllCharacters();
         }
@@ -361,6 +393,40 @@ public class DialogueController : MonoBehaviour
         }
     }
 
+    bool ShouldShowNotification(NotificationData notification)
+    {
+        if (notification == null)
+            return false;
+
+        if (!notification.showOnce)
+            return true;
+
+        if (save == null)
+            return true;
+
+        if (save.shownNotificationIds == null)
+            save.shownNotificationIds = new List<string>();
+
+        if (string.IsNullOrEmpty(notification.id))
+            return true;
+
+        return !save.shownNotificationIds.Contains(notification.id);
+    }
+
+    void MarkNotificationShown(NotificationData notification)
+    {
+        if (notification == null || !notification.showOnce || string.IsNullOrEmpty(notification.id))
+            return;
+
+        if (save.shownNotificationIds == null)
+            save.shownNotificationIds = new List<string>();
+
+        if (!save.shownNotificationIds.Contains(notification.id))
+        {
+            save.shownNotificationIds.Add(notification.id);
+            SaveSystem.Save(save);
+        }
+    }
 
     private string GetEpisodeStartNode()
     {

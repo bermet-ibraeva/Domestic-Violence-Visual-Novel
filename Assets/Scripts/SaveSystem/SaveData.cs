@@ -32,4 +32,6 @@ public class SaveData
 
     public EpisodeSnapshot episodeStartSnapshot;
     public List<string> appliedEffectNodes = new List<string>();
+
+    public List<string> shownNotificationIds = new List<string>();
 }
