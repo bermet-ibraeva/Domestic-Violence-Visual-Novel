@@ -251,25 +251,27 @@ public class DialogueController : MonoBehaviour
 
         ApplyEffectsOnce(nodeId, node);
 
-        // ===== NOTIFICATION =====
-        if (node.notification != null && notificationController != null && ShouldShowNotification(node.notification))
-        {
-            if (notificationController.IsBlocking(node.notification))
-            {
-                ui.HideChoices();
-                ui.HideDialoguePanels(); // или другой твой метод скрытия текста
 
-                notificationController.Show(node.notification, () =>
-                {
-                    MarkNotificationShown(node.notification);
-                    ContinueShowNode(node, nodeId);
-                });
-                return;
-            }
+        // // ===== NOTIFICATION =====
+        // if (node.notification != null && notificationController != null && ShouldShowNotification(node.notification))
+        // {
+        //     if (notificationController.IsBlocking(node.notification))
+        //     {
+        //         ui.HideChoices();
+        //         ui.HideDialoguePanels();
+        //         HideAllCharacters();
 
-            notificationController.Show(node.notification);
-            MarkNotificationShown(node.notification);
-        }
+        //         notificationController.Show(node.notification, () =>
+        //         {
+        //             MarkNotificationShown(node.notification);
+        //             ContinueShowNode(node, nodeId);
+        //         });
+        //         return;
+        //     }
+
+        //     notificationController.Show(node.notification);
+        //     MarkNotificationShown(node.notification);
+        // }
 
         ContinueShowNode(node, nodeId);
     }

@@ -92,16 +92,21 @@ public class UIController : MonoBehaviour
 
         layoutController.AuthorPanel.gameObject.SetActive(true);
         layoutController.AuthorPanel.targetText.text = text;
-        layoutController.AuthorPanel.RefreshSize();
+        StartCoroutine(RefreshAuthorNextFrame());
 
         HideAllNamePanels();
-
         layoutController.SetActivePanel(layoutController.AuthorPanel);
+    }
+
+    private System.Collections.IEnumerator RefreshAuthorNextFrame()
+    {
+        yield return null;
+        layoutController.AuthorPanel.RefreshSize();
     }
 
     public void ShowLeftCharacter(string name, string text)
     {
-        HideAll();
+        HideDialoguePanels();
 
         if (layoutController == null || layoutController.LeftPanel == null)
             return;
@@ -110,6 +115,9 @@ public class UIController : MonoBehaviour
             LeftCharacterRootObject.SetActive(true);
 
         layoutController.LeftPanel.gameObject.SetActive(true);
+
+        Canvas.ForceUpdateCanvases();
+
         layoutController.LeftPanel.SetDialogue(name, text);
 
         if (LeftNamePanelObject != null)
@@ -123,7 +131,7 @@ public class UIController : MonoBehaviour
 
     public void ShowRightCharacter(string name, string text)
     {
-        HideAll();
+        HideDialoguePanels(); 
 
         if (layoutController == null || layoutController.RightPanel == null)
             return;
@@ -132,6 +140,9 @@ public class UIController : MonoBehaviour
             RightCharacterRootObject.SetActive(true);
 
         layoutController.RightPanel.gameObject.SetActive(true);
+
+        Canvas.ForceUpdateCanvases(); 
+
         layoutController.RightPanel.SetDialogue(name, text);
 
         if (LeftNamePanelObject != null)

@@ -4,24 +4,27 @@ using TMPro;
 public class SimpleCenterPanel : MonoBehaviour
 {
     public TextMeshProUGUI targetText;
-    public float baseHeight = 140f; // for btn; for author put always 180 for 1st line
-    public float pricePerLine = 25f; // for btn; for author put always 30
+    public float baseHeight = 140f;
+    public float pricePerLine = 25f;
+    public float singleLineHeight = 30f;
 
     public void RefreshSize()
     {
         RectTransform rect = GetComponent<RectTransform>();
-        RectTransform tRect = targetText.GetComponent<RectTransform>();
+        if (rect == null || targetText == null) return;
 
-        // Фиксируем ширину текста по ширине панели
+        RectTransform tRect = targetText.GetComponent<RectTransform>();
+        if (tRect == null) return;
+
         tRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.rect.width);
+
+        Canvas.ForceUpdateCanvases();
         targetText.ForceMeshUpdate();
 
-        int lines = Mathf.Max(1, targetText.textInfo.lineCount);
-        float h = baseHeight + (lines - 1) * pricePerLine;
+        float preferredHeight = targetText.preferredHeight;
+        float h = Mathf.Max(baseHeight, preferredHeight + 40f);
 
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
-
-        // Центрируем текст (Pivot Y = 0.5 у текста и у панели)
         tRect.anchoredPosition = Vector2.zero;
     }
 }
