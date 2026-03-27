@@ -1,12 +1,13 @@
 using UnityEngine;
 using TMPro;
 
+
+// used for author panel and choice panel
 public class SimpleCenterPanel : MonoBehaviour
 {
     public TextMeshProUGUI targetText;
-    public float baseHeight = 140f;
-    public float pricePerLine = 25f;
-    public float singleLineHeight = 30f;
+    public float baseHeight = 150f;
+    public float padding = 40f;
 
     public void RefreshSize()
     {
@@ -22,7 +23,7 @@ public class SimpleCenterPanel : MonoBehaviour
         targetText.ForceMeshUpdate();
 
         float preferredHeight = targetText.preferredHeight;
-        float h = Mathf.Max(baseHeight, preferredHeight + 40f);
+        float h = Mathf.Max(baseHeight, preferredHeight + padding);
 
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
         tRect.anchoredPosition = Vector2.zero;

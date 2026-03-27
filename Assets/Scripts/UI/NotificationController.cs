@@ -7,26 +7,14 @@ public class NotificationController : MonoBehaviour
     public ModalUI modalUI;
     public ToastUI toastUI;
 
-    private Action onClosed;
-    private bool isBlockingShown;
+    private Action onModalClosed;
+    private bool isModalShowing;
 
-    public bool IsShowingBlockingNotification => isBlockingShown;
+    public bool IsModalShowing => isModalShowing;
 
-    void Awake()
+    private void Awake()
     {
-        if (modalUI != null)
-            modalUI.HideImmediate();
-
-        if (toastUI != null)
-            toastUI.HideImmediate();
-    }
-
-    public bool IsBlocking(NotificationData data)
-    {
-        if (data == null || string.IsNullOrEmpty(data.mode))
-            return false;
-
-        return data.mode.ToLower() == "modal";
+        HideAllImmediate();
     }
 
     public void Show(NotificationData data, Action onComplete = null)
@@ -37,43 +25,55 @@ public class NotificationController : MonoBehaviour
             return;
         }
 
-        string mode = string.IsNullOrEmpty(data.mode) ? "" : data.mode.ToLower();
+        string mode = string.IsNullOrWhiteSpace(data.mode)
+            ? ""
+            : data.mode.Trim().ToLower();
 
-        if (mode == "modal")
+        switch (mode)
         {
-            isBlockingShown = true;
-            onClosed = onComplete;
+            case "modal":
+                ShowModal(data, onComplete);
+                break;
 
-            if (modalUI != null)
-            {
-                modalUI.Show(data, () =>
-                {
-                    isBlockingShown = false;
-
-                    Action callback = onClosed;
-                    onClosed = null;
-                    callback?.Invoke();
-                });
-            }
-            else
-            {
-                isBlockingShown = false;
+            case "toast":
+                ShowToast(data);
                 onComplete?.Invoke();
-            }
+                break;
 
-            return;
+            default:
+                onComplete?.Invoke();
+                break;
         }
+    }
 
-        if (mode == "toast")
+    private void ShowModal(NotificationData data, Action onComplete = null)
+    {
+        isModalShowing = true;
+        onModalClosed = onComplete;
+
+        if (modalUI != null)
         {
-            if (toastUI != null)
-                toastUI.Show(data);
+            modalUI.Show(data, () =>
+            {
+                isModalShowing = false;
 
-            onComplete?.Invoke();
-            return;
+                Action callback = onModalClosed;
+                onModalClosed = null;
+                callback?.Invoke();
+            });
         }
+        else
+        {
+            isModalShowing = false;
+            onModalClosed = null;
+            onComplete?.Invoke();
+        }
+    }
 
-        onComplete?.Invoke();
+    private void ShowToast(NotificationData data)
+    {
+        if (toastUI != null)
+            toastUI.Show(data);
     }
 
     public void HideAllImmediate()
@@ -84,7 +84,7 @@ public class NotificationController : MonoBehaviour
         if (toastUI != null)
             toastUI.HideImmediate();
 
-        isBlockingShown = false;
-        onClosed = null;
+        isModalShowing = false;
+        onModalClosed = null;
     }
 }

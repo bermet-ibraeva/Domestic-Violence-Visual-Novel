@@ -3,43 +3,84 @@ using TMPro;
 
 public class SimpleAutoResize : MonoBehaviour
 {
+    [Header("UI")]
     public TextMeshProUGUI textUI;
 
-    public float topOffset = 75f;   // расстояние от верха панели
-    public float bottomPadding = 30f;
-
+    [Header("Panel Height")]
     public float minHeight = 200f;
     public float maxHeight = 500f;
+    public float bottomPadding = 30f;
 
     private RectTransform panelRect;
     private RectTransform textRect;
+    private float fixedTopOffset;
 
     void Awake()
     {
-        panelRect = GetComponent<RectTransform>();
-        textRect = textUI.GetComponent<RectTransform>();
+        CacheReferences();
+    }
+
+    void OnEnable()
+    {
+        CacheReferences();
+    }
+
+    private void CacheReferences()
+    {
+        if (panelRect == null)
+            panelRect = GetComponent<RectTransform>();
+
+        if (textUI != null && textRect == null)
+            textRect = textUI.GetComponent<RectTransform>();
+
+        if (textRect != null)
+            fixedTopOffset = -textRect.offsetMax.y;
     }
 
     public void SetText(string text)
     {
+        CacheReferences();
+
+        if (textUI == null)
+        {
+            Debug.LogError($"[{gameObject.name}] textUI is NULL", this);
+            return;
+        }
+
         textUI.text = text;
+        RefreshSize();
+    }
+
+    public void RefreshSize()
+    {
+        CacheReferences();
+
+        if (panelRect == null || textUI == null || textRect == null)
+            return;
 
         Canvas.ForceUpdateCanvases();
         textUI.ForceMeshUpdate();
 
-        float width = textRect.rect.width;
-        float height = textUI.GetPreferredValues(text, width, 0).y;
+        float textWidth = textRect.rect.width;
+        if (textWidth <= 0f)
+        {
+            Debug.LogWarning($"[{gameObject.name}] text width <= 0", this);
+            return;
+        }
 
-        // верх фиксирован (pivot сверху)
-        textRect.offsetMax = new Vector2(textRect.offsetMax.x, -topOffset);
+        float preferredHeight = textUI.GetPreferredValues(textUI.text, textWidth, 0f).y;
 
-        // низ уходит вниз
-        textRect.offsetMin = new Vector2(textRect.offsetMin.x, -(topOffset + height));
+        Vector2 offsetMax = textRect.offsetMax;
+        offsetMax.y = -fixedTopOffset;
+        textRect.offsetMax = offsetMax;
 
-        // панель растёт вниз (pivot = 1)
-        float panelHeight = topOffset + height + bottomPadding;
+        Vector2 offsetMin = textRect.offsetMin;
+        offsetMin.y = -(fixedTopOffset + preferredHeight);
+        textRect.offsetMin = offsetMin;
+
+        float panelHeight = fixedTopOffset + preferredHeight + bottomPadding;
         panelHeight = Mathf.Clamp(panelHeight, minHeight, maxHeight);
 
-        panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, panelHeight);
+        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, panelHeight);
     }
 }

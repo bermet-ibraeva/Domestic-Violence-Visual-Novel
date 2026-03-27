@@ -48,7 +48,11 @@ public class ToastUI : MonoBehaviour
         isShowing = false;
 
         if (toastCanvasGroup != null)
+        {
             toastCanvasGroup.alpha = 0f;
+            toastCanvasGroup.interactable = false;
+            toastCanvasGroup.blocksRaycasts = false;
+        }
 
         if (toastRoot != null)
             toastRoot.SetActive(false);
@@ -65,6 +69,13 @@ public class ToastUI : MonoBehaviour
             if (toastRoot != null)
                 toastRoot.SetActive(true);
 
+            if (toastCanvasGroup != null)
+            {
+                toastCanvasGroup.alpha = 0f;
+                toastCanvasGroup.interactable = false;
+                toastCanvasGroup.blocksRaycasts = false;
+            }
+
             if (messageText != null)
                 messageText.text = data.message ?? "";
 
@@ -77,7 +88,11 @@ public class ToastUI : MonoBehaviour
         }
 
         if (toastCanvasGroup != null)
+        {
             toastCanvasGroup.alpha = 0f;
+            toastCanvasGroup.interactable = false;
+            toastCanvasGroup.blocksRaycasts = false;
+        }
 
         if (toastRoot != null)
             toastRoot.SetActive(false);

@@ -7,8 +7,17 @@ public class EpisodeData
     public string episodeId;
     public string episodeTitle;
 
+    public List<CharacterMeta> characters;
     public EpisodeVariables variables;
     public List<SceneData> scenes;
+}
+
+[Serializable]
+public class CharacterMeta
+{
+    public string characterId;
+    public string displayName;
+    public string portraitKey;
 }
 
 [Serializable]
@@ -35,8 +44,8 @@ public class SceneData
     public float bgFadeDuration = 0.5f;
     public string bgFx = "none";
 
-    public string leftCharacter;
-    public List<string> rightCharacters;
+    public string leftCharacterId;
+    public List<string> rightCharactersId;
 
     public string startNode;
     public List<DialogueNode> nodes;
@@ -53,10 +62,11 @@ public class DialogueNode
     public string bgFx = "none";
     public bool stopPreviousBgEffect = true;
 
-    public string character;
+    public string characterId;
     public string emotion;
     public string text;
     public string nextNode;
+    public string action;
 
     public bool isThought;
 
@@ -72,6 +82,7 @@ public class Choice
     public string text;
     public string nextNode;
     public List<EffectOp> effects;
+    public NotificationData notification;
 }
 
 [Serializable]
@@ -104,16 +115,8 @@ public class NodeEffects
 public class NotificationData
 {
     public string id;
-    public bool showOnce;
-
-    // modal / toast
+    public bool showOnce = true;
     public string mode;
-
-    // modal: tutorial / hint / confirm
-    // toast: consequence / warning / locked
-    public string type;
-
     public string title;
     public string message;
-    public string icon;
 }

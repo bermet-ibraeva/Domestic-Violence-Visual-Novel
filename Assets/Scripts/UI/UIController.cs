@@ -1,171 +1,198 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+// manage dialogue panels, character roots, name panels, and choices
 
 public class UIController : MonoBehaviour
 {
     [Header("Controllers")]
-    public LayoutController layoutController;
+    [SerializeField] private LayoutController layoutController;
 
-    [Header("Roots")]
-    public GameObject LeftCharacterRootObject;
-    public GameObject RightCharacterRootObject;
+    [Header("Main Root")]
+    [SerializeField] private GameObject dialogueAndChoiceRoot;
+
+    [Header("Panels")]
+    [SerializeField] private SimpleCenterPanel authorPanel;
+    [SerializeField] private CharacterDialoguePanel leftPanel;
+    [SerializeField] private CharacterDialoguePanel rightPanel;
+
+    [Header("Dialogue Roots")]
+    [SerializeField] private GameObject leftCharacterRootObject;
+    [SerializeField] private GameObject rightCharacterRootObject;
 
     [Header("Name Panels")]
-    public GameObject LeftNamePanelObject;
-    public GameObject RightNamePanelObject;
+    [SerializeField] private GameObject leftNamePanelObject;
+    [SerializeField] private GameObject rightNamePanelObject;
+
+    [Header("Name Plates")]
+    [SerializeField] private NamePlateAutoWidth leftNamePlate;
+    [SerializeField] private NamePlateAutoWidth rightNamePlate;
+
+    [Header("Choices")]
+    [SerializeField] private ChoiceButton[] choiceButtons;
 
     public void HideAll()
     {
-        if (layoutController == null) return;
-
-        if (layoutController.AuthorPanel != null)
-            layoutController.AuthorPanel.gameObject.SetActive(false);
-
-        if (layoutController.LeftPanel != null)
-            layoutController.LeftPanel.gameObject.SetActive(false);
-
-        if (layoutController.RightPanel != null)
-            layoutController.RightPanel.gameObject.SetActive(false);
-
-        if (LeftCharacterRootObject != null)
-            LeftCharacterRootObject.SetActive(false);
-
-        if (RightCharacterRootObject != null)
-            RightCharacterRootObject.SetActive(false);
-
-        HideAllNamePanels();
+        HideDialoguePanels();
+        HideCharacterRoots();
         HideChoices();
 
-        layoutController.ClearActivePanel();
+        if (dialogueAndChoiceRoot != null)
+            dialogueAndChoiceRoot.SetActive(false);
+    }
+
+    public void HideDialoguePanels()
+    {
+        if (authorPanel != null)
+            authorPanel.gameObject.SetActive(false);
+
+        if (leftPanel != null)
+            leftPanel.gameObject.SetActive(false);
+
+        if (rightPanel != null)
+            rightPanel.gameObject.SetActive(false);
+
+        HideAllNamePanels();
+
+        if (layoutController != null)
+            layoutController.ClearTarget();
     }
 
     public void HideChoices()
     {
-        if (layoutController == null) return;
-
-        if (layoutController.ButtonsContainer != null)
+        if (layoutController != null && layoutController.ButtonsContainer != null)
             layoutController.ButtonsContainer.gameObject.SetActive(false);
 
-        if (layoutController.choiceButtons == null) return;
+        if (choiceButtons == null)
+            return;
 
-        foreach (var btn in layoutController.choiceButtons)
+        foreach (var btn in choiceButtons)
         {
             if (btn != null)
                 btn.gameObject.SetActive(false);
         }
     }
 
-    public void HideAllNamePanels()
+    public void HideCharacterRoots()
     {
-        if (LeftNamePanelObject != null)
-            LeftNamePanelObject.SetActive(false);
+        if (leftCharacterRootObject != null)
+            leftCharacterRootObject.SetActive(false);
 
-        if (RightNamePanelObject != null)
-            RightNamePanelObject.SetActive(false);
+        if (rightCharacterRootObject != null)
+            rightCharacterRootObject.SetActive(false);
     }
 
-    
-    public void HideDialoguePanels()
+    public void HideAllNamePanels()
     {
-        if (layoutController == null) return;
+        if (leftNamePanelObject != null)
+            leftNamePanelObject.SetActive(false);
 
-        if (layoutController.AuthorPanel != null)
-            layoutController.AuthorPanel.gameObject.SetActive(false);
-
-        if (layoutController.LeftPanel != null)
-            layoutController.LeftPanel.gameObject.SetActive(false);
-
-        if (layoutController.RightPanel != null)
-            layoutController.RightPanel.gameObject.SetActive(false);
-
-        HideAllNamePanels();
-        layoutController.ClearActivePanel();
+        if (rightNamePanelObject != null)
+            rightNamePanelObject.SetActive(false);
     }
 
     public void ShowAuthor(string text)
     {
-        HideAll();
+        EnsureDialogueRootActive();
 
-        if (layoutController == null || layoutController.AuthorPanel == null)
+        HideDialoguePanels();
+        HideCharacterRoots();
+        HideChoices();
+
+        if (authorPanel == null)
             return;
 
-        layoutController.AuthorPanel.gameObject.SetActive(true);
-        layoutController.AuthorPanel.targetText.text = text;
+        authorPanel.gameObject.SetActive(true);
+        authorPanel.targetText.text = text;
+
         StartCoroutine(RefreshAuthorNextFrame());
 
-        HideAllNamePanels();
-        layoutController.SetActivePanel(layoutController.AuthorPanel);
-    }
-
-    private System.Collections.IEnumerator RefreshAuthorNextFrame()
-    {
-        yield return null;
-        layoutController.AuthorPanel.RefreshSize();
+        if (layoutController != null)
+            layoutController.SetTarget(authorPanel.GetComponent<RectTransform>());
     }
 
     public void ShowLeftCharacter(string name, string text)
     {
-        HideDialoguePanels();
+        EnsureDialogueRootActive();
 
-        if (layoutController == null || layoutController.LeftPanel == null)
+        HideDialoguePanels();
+        HideChoices();
+
+        if (leftPanel == null)
             return;
 
-        if (LeftCharacterRootObject != null)
-            LeftCharacterRootObject.SetActive(true);
+        if (leftCharacterRootObject != null)
+            leftCharacterRootObject.SetActive(true);
 
-        layoutController.LeftPanel.gameObject.SetActive(true);
+        if (rightCharacterRootObject != null)
+            rightCharacterRootObject.SetActive(false);
+
+        leftPanel.gameObject.SetActive(true);
+        leftPanel.SetDialogue(name, text);
+
+        if (leftNamePlate != null)
+            leftNamePlate.SetName(name);
+
+        if (leftNamePanelObject != null)
+            leftNamePanelObject.SetActive(true);
+
+        if (rightNamePanelObject != null)
+            rightNamePanelObject.SetActive(false);
 
         Canvas.ForceUpdateCanvases();
 
-        layoutController.LeftPanel.SetDialogue(name, text);
-
-        if (LeftNamePanelObject != null)
-            LeftNamePanelObject.SetActive(true);
-
-        if (RightNamePanelObject != null)
-            RightNamePanelObject.SetActive(false);
-
-        layoutController.SetActivePanel(layoutController.LeftPanel);
+        if (layoutController != null)
+            layoutController.SetTarget(leftPanel.GetComponent<RectTransform>());
     }
 
     public void ShowRightCharacter(string name, string text)
     {
-        HideDialoguePanels(); 
+        EnsureDialogueRootActive();
 
-        if (layoutController == null || layoutController.RightPanel == null)
+        HideDialoguePanels();
+        HideChoices();
+
+        if (rightPanel == null)
             return;
 
-        if (RightCharacterRootObject != null)
-            RightCharacterRootObject.SetActive(true);
+        if (leftCharacterRootObject != null)
+            leftCharacterRootObject.SetActive(false);
 
-        layoutController.RightPanel.gameObject.SetActive(true);
+        if (rightCharacterRootObject != null)
+            rightCharacterRootObject.SetActive(true);
 
-        Canvas.ForceUpdateCanvases(); 
+        rightPanel.gameObject.SetActive(true);
+        rightPanel.SetDialogue(name, text);
 
-        layoutController.RightPanel.SetDialogue(name, text);
+        if (rightNamePlate != null)
+            rightNamePlate.SetName(name);
 
-        if (LeftNamePanelObject != null)
-            LeftNamePanelObject.SetActive(false);
+        if (leftNamePanelObject != null)
+            leftNamePanelObject.SetActive(false);
 
-        if (RightNamePanelObject != null)
-            RightNamePanelObject.SetActive(true);
+        if (rightNamePanelObject != null)
+            rightNamePanelObject.SetActive(true);
 
-        layoutController.SetActivePanel(layoutController.RightPanel);
+        Canvas.ForceUpdateCanvases();
+
+        if (layoutController != null)
+            layoutController.SetTarget(rightPanel.GetComponent<RectTransform>());
     }
 
     public void ShowChoices(List<Choice> choices, Action<string> callback)
     {
-        if (layoutController == null || choices == null || choices.Count == 0)
+        if (choices == null || choices.Count == 0 || choiceButtons == null)
             return;
 
-        if (layoutController.ButtonsContainer != null)
+        EnsureDialogueRootActive();
+
+        if (layoutController != null && layoutController.ButtonsContainer != null)
             layoutController.ButtonsContainer.gameObject.SetActive(true);
 
-        if (layoutController.choiceButtons == null)
-            return;
-
-        foreach (var btn in layoutController.choiceButtons)
+        foreach (var btn in choiceButtons)
         {
             if (btn != null)
                 btn.gameObject.SetActive(false);
@@ -173,20 +200,43 @@ public class UIController : MonoBehaviour
 
         for (int i = 0; i < choices.Count; i++)
         {
-            if (i >= layoutController.choiceButtons.Length)
+            if (i >= choiceButtons.Length)
                 break;
 
-            var btn = layoutController.choiceButtons[i];
-            if (btn == null) continue;
-
-            btn.gameObject.SetActive(true);
+            ChoiceButton btn = choiceButtons[i];
+            if (btn == null)
+                continue;
 
             string nextNode = choices[i].nextNode;
-            btn.SetText(choices[i].text);
+            string choiceText = choices[i].text;
+
+            btn.gameObject.SetActive(true);
+            btn.SetText(choiceText);
             btn.SetCallback(() => callback?.Invoke(nextNode));
         }
 
         Canvas.ForceUpdateCanvases();
-        layoutController.RefreshButtonPosition();
+
+        if (layoutController != null)
+            layoutController.RefreshButtonPositionDelayed();
+    }
+
+    private void EnsureDialogueRootActive()
+    {
+        if (dialogueAndChoiceRoot != null && !dialogueAndChoiceRoot.activeSelf)
+            dialogueAndChoiceRoot.SetActive(true);
+    }
+
+    private IEnumerator RefreshAuthorNextFrame()
+    {
+        yield return null;
+
+        if (authorPanel != null)
+            authorPanel.RefreshSize();
+
+        Canvas.ForceUpdateCanvases();
+
+        if (layoutController != null)
+            layoutController.RefreshButtonPositionDelayed();
     }
 }

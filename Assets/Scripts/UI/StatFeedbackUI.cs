@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,6 +10,12 @@ public class StatFeedbackUI : MonoBehaviour
     [Header("UI")]
     public Image iconImage;
     public TextMeshProUGUI labelText;
+
+    [Tooltip("RectTransform объекта StatePanel, на котором висит Horizontal Layout Group + Content Size Fitter")]
+    public RectTransform statePanelRect;
+
+    [Tooltip("Скрипт TextMaxWidthClamp на LabelReward или LabelContainer")]
+    public TextMaxWidthClamp labelWidthClamp;
 
     [Header("Icons")]
     public Sprite trustAGIcon;
@@ -31,6 +38,9 @@ public class StatFeedbackUI : MonoBehaviour
     private RectTransform rectTransform;
     private Coroutine playRoutine;
     private Vector2 baseAnchoredPos;
+    private Action onFinished;
+
+    public bool IsShowing => playRoutine != null;
 
     private void Awake()
     {
@@ -42,6 +52,9 @@ public class StatFeedbackUI : MonoBehaviour
 
         if (rectTransform != null)
             baseAnchoredPos = rectTransform.anchoredPosition;
+
+        if (labelWidthClamp == null && labelText != null)
+            labelWidthClamp = labelText.GetComponent<TextMaxWidthClamp>();
 
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
@@ -55,7 +68,6 @@ public class StatFeedbackUI : MonoBehaviour
 
         StatPopupData data = BuildPopupData(statKey, value);
 
-        // если statKey не должен показываться — просто не добавляем в очередь
         if (string.IsNullOrEmpty(data.text))
             return;
 
@@ -71,6 +83,10 @@ public class StatFeedbackUI : MonoBehaviour
             yield return ShowBanner(queue.Dequeue());
 
         playRoutine = null;
+
+        var callback = onFinished;
+        onFinished = null;
+        callback?.Invoke();
     }
 
     private IEnumerator ShowBanner(StatPopupData data)
@@ -85,7 +101,11 @@ public class StatFeedbackUI : MonoBehaviour
         }
 
         labelText.text = data.text;
-        // RebuildCenteredLayout();
+
+        // ВОТ ГЛАВНОЕ:
+        // после смены текста обновляем ограничение ширины
+        // и пересобираем layout, чтобы StatePanel остался по центру.
+        RefreshFeedbackLayout();
 
         canvasGroup.alpha = 0f;
         rectTransform.anchoredPosition = baseAnchoredPos + new Vector2(0f, startYOffset);
@@ -137,11 +157,27 @@ public class StatFeedbackUI : MonoBehaviour
         rectTransform.anchoredPosition = baseAnchoredPos;
     }
 
+    private void RefreshFeedbackLayout()
+    {
+        Canvas.ForceUpdateCanvases();
+
+        if (labelText != null)
+            labelText.ForceMeshUpdate();
+
+        if (labelWidthClamp != null)
+            labelWidthClamp.RefreshWidth();
+
+        if (statePanelRect != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(statePanelRect);
+
+        if (rectTransform != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+    }
+
     private StatPopupData BuildPopupData(string statKey, int value)
     {
         string amountText = value > 0 ? $"+{value}" : value.ToString();
 
-        // TODO: change to some kind of localization later
         switch (statKey)
         {
             case "trust.AG":
@@ -156,7 +192,6 @@ public class StatFeedbackUI : MonoBehaviour
             case "risk":
                 return new StatPopupData($"{amountText} Риск", riskIcon);
 
-            // искорки не показываем в обычном игровом popup
             case "sparks":
                 return new StatPopupData(null, null);
 
@@ -182,35 +217,14 @@ public class StatFeedbackUI : MonoBehaviour
         }
     }
 
-    // // can be used for other codes too !!!!
-    // private void RebuildCenteredLayout()
-    // {
-    //     if (labelText == null) return;
+    public void WaitUntilFinished(Action callback)
+    {
+        if (!IsShowing)
+        {
+            callback?.Invoke();
+            return;
+        }
 
-    //     RectTransform textRect = labelText.GetComponent<RectTransform>();
-    //     RectTransform iconRect = iconImage != null ? iconImage.GetComponent<RectTransform>() : null;
-
-    //     Canvas.ForceUpdateCanvases();
-    //     labelText.ForceMeshUpdate();
-
-    //     float textWidth = labelText.preferredWidth;
-    //     bool hasIcon = iconImage != null && iconImage.enabled;
-
-    //     float spacing = 10f;
-    //     float iconWidth = 24f;
-
-    //     float totalWidth = textWidth + (hasIcon ? iconWidth + spacing : 0f);
-
-    //     float startX = -totalWidth * 0.5f;
-
-    //     if (hasIcon && iconRect != null)
-    //     {
-    //         iconRect.anchoredPosition = new Vector2(startX + iconWidth * 0.5f, 0f);
-    //     }
-
-    //     float textX = hasIcon ? startX + iconWidth + spacing : startX;
-
-    //     textRect.pivot = new Vector2(0f, 0.5f);
-    //     textRect.anchoredPosition = new Vector2(textX, 0f);
-    // }
+        onFinished += callback;
+    }
 }

@@ -1,51 +1,87 @@
 {
   "episodeId": "E01",
   "episodeTitle": "Первые звонки",
-  "variables": {
-    "trust": {
-      "AG": 0
+  "characters": [
+    {
+      "characterId": "Narrator",
+      "displayName": "",
+      "portraitKey": null
     },
-    "risk": 0,
-    "safety": 0
+    {
+      "characterId": "Ainaz",
+      "displayName": "Айназ",
+      "portraitKey": "Ainaz"
+    },
+    {
+      "characterId": "Guldana",
+      "displayName": "Гульдана",
+      "portraitKey": "Guldana"
+    },
+    {
+      "characterId": "Aigul",
+      "displayName": "Айгуль",
+      "portraitKey": "Aigul"
+    },
+    {
+      "characterId": "Timur",
+      "displayName": "Тимур",
+      "portraitKey": "Timur"
+    },
+    {
+      "characterId": "Bekzat",
+      "displayName": "Бекзат",
+      "portraitKey": "Bekzat"
+    },
+    {
+      "characterId": "Aida",
+      "displayName": "Аида",
+      "portraitKey": "Aida"
+    }
+  ],
+  "variables": {
+      "trust": {
+        "AG": 0
+      },
+      "risk": 0,
+      "safety": 0
   },
   "scenes": [
     {
       "sceneId": "E01_S01",
       "background": "street_crossroad_morning",
-      "leftCharacter": "Ainaz",
-      "rightCharacters": ["Guldana"],
+      "leftCharacterId": "Ainaz",
+      "rightCharactersId": ["Guldana"],
       "startNode": "E01_S01_start",
       "nodes": [
         {
           "nodeId": "E01_S01_start",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Утро. Айназ и Гульдана встречаются у поворота дороги — как обычно.",
           "nextNode": "E01_S01_dialogue_0"
         },
         {
           "nodeId": "E01_S01_dialogue_0",
-          "character": "Narrator",
-          "emotion": "Calm",
+          "characterId": "Narrator",
           "text": "Они живут не рядом, но в школу всегда идут вместе. Воздух холодный, солнце светит низко и слепит глаза.",
           "nextNode": "E01_S01_dialogue_1"
         },
         {
           "nodeId": "E01_S01_dialogue_1",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Calm",
           "text": "Ты сегодня рано. Ты же всегда опаздываешь?",
           "nextNode": "E01_S01_dialogue_2"
         },
         {
           "nodeId": "E01_S01_dialogue_2",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Shy",
           "text": "Да, сегодня просто так вышло. В другой раз обязательно опоздаем.",
           "nextNode": "E01_S01_dialogue_3"
         },
         {
           "nodeId": "E01_S01_dialogue_3",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Happy",
           "text": "Хорошо.",
           "nextNode": "E01_S01_narration_1"
@@ -53,34 +89,34 @@
         {
           "nodeId": "E01_S01_narration_1",
           "background": "street_to_school_morning",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Гульдана идёт чуть впереди. Айназ ускоряет шаг, чтобы идти рядом.",
           "nextNode": "E01_S01_dialogue_4"
         },
         {
           "nodeId": "E01_S01_dialogue_4",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Happy",
-          "text": "Айзатовна снова задала кучу домашки. Весь вечер просидела над уроками. Кстати, у тебя получился последний номер по математике?",
+          "text": "Анара Айзатовна снова задала кучу домашки. Весь вечер просидела над уроками. Кстати, у тебя получился последний номер по математике?",
           "nextNode": "E01_S01_dialogue_5"
         },
         {
           "nodeId": "E01_S01_dialogue_5",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Apathy",
           "text": "Почти. Но я не думаю, что это правильный ответ.",
           "nextNode": "E01_S01_dialogue_6"
         },
         {
           "nodeId": "E01_S01_dialogue_6",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Anxiety",
           "text": "Покажешь?",
           "nextNode": "E01_S01_dialogue_7"
         },
         {
           "nodeId": "E01_S01_dialogue_7",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Apathy",
           "text": "Конечно.",
           "nextNode": "E01_S01_choice_setup"
@@ -96,7 +132,8 @@
             "mode": "modal",
             "type": "tutorial",
             "title": "Обучение",
-            "message": "Некоторые решения влияют на отношения между персонажами.\n\nДоверие может расти или снижаться — и это влияет на дальнейшие события."
+            "message": "Некоторые решения влияют на отношения между персонажами.\n\nДоверие может расти или снижаться — и это влияет на дальнейшие события.",
+            "icon": "trust"
           },
           "choices": [
             {
@@ -119,137 +156,119 @@
               "nextNode": "E01_S01_choice3_result"
             }
           ]
-        },
-        {
-          "nodeId": "E01_S01_choice1_result",
-          "character": "Narrator",
-          "text": "Гульдана отвечает коротко и уклончиво, будто не хочет вдаваться в подробности.",
-          "nextNode": "E01_S01_choice1_result1"
-        },
-        {
-          "nodeId": "E01_S01_choice1_result1",
-          "character": "Narrator",
-          "text": "Но она запоминает сам вопрос и то, как внимательно Айназ на неё посмотрела.",
-          "nextNode": "E01_S02_start"
-        },
-        {
-          "nodeId": "E01_S01_choice2_result",
-          "character": "Narrator",
-          "text": "Разговор продолжается, но между ними остаётся небольшая дистанция, которую никто не называет вслух.",
-          "nextNode": "E01_S02_start"
-        },
-        {
-          "nodeId": "E01_S01_choice3_result",
-          "character": "Narrator",
-          "text": "Гульдана слабо улыбается, почти машинально, а затем снова закрывается и смотрит вперёд.",
-          "nextNode": "E01_S02_start"
         }
       ]
-    },  
+    },
     {
       "sceneId": "E01_S02",
       "background": "school_hall_day",
       "bgFade": true,
       "bgFadeDuration": 1.2,
-      "leftCharacter": "Ainaz",
-      "rightCharacters": ["Guldana", "Aigul", "Timur", "Bekzat"],
+      "leftCharacterId": "Ainaz",
+      "rightCharactersId": ["Guldana", "Aigul", "Timur", "Bekzat"],
       "startNode": "E01_S02_start",
       "nodes": [
         {
           "nodeId": "E01_S02_start",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айназ стоит с Гульданой у стены школы. Вокруг шумно — кто-то смеётся, кто-то уткнулся в телефон.",
           "nextNode": "E01_S02_dialogue_0"
         },
         {
           "nodeId": "E01_S02_dialogue_0",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "К ним подходит Айгуль, одноклассница.",
           "nextNode": "E01_S02_dialogue_1"
         },
         {
           "nodeId": "E01_S02_dialogue_1",
-          "character": "Aigul",
+          "characterId": "Aigul",
           "emotion": "Irritation",
           "text": "Ты опять сегодня в библиотеке будешь сидеть пока не выгонят?",
           "nextNode": "E01_S02_dialogue_2"
         },
         {
           "nodeId": "E01_S02_dialogue_2",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Nervous",
-          "text": "…",
+          "text": "...",
           "nextNode": "E01_S02_dialogue_3"
         },
         {
           "nodeId": "E01_S02_dialogue_3",
-          "character": "Aigul",
+          "characterId": "Aigul",
           "emotion": "Irritation",
           "text": "Конечно. Тебе же… некуда торопиться.",
           "nextNode": "E01_S02_narration_1"
         },
         {
           "nodeId": "E01_S02_narration_1",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айгуль смотрит на Айназ, будто ожидая, что та всё поймёт.",
           "nextNode": "E01_S02_dialogue_4"
         },
         {
           "nodeId": "E01_S02_dialogue_4",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Anxiety",
           "text": "Ты о чём?",
           "nextNode": "E01_S02_dialogue_5"
         },
         {
           "nodeId": "E01_S02_dialogue_5",
-          "character": "Aigul",
+          "characterId": "Aigul",
           "emotion": "Irritation",
           "text": "Серьёзно? Ты ей не сказала?",
           "nextNode": "E01_S02_dialogue_6"
         },
         {
           "nodeId": "E01_S02_dialogue_6",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Irritation",
           "text": "Хватит.",
           "nextNode": "E01_S02_narration_2"
         },
         {
           "nodeId": "E01_S02_narration_2",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "На секунду вокруг становится будто тише.",
           "nextNode": "E01_S02_dialogue_7"
         },
         {
           "nodeId": "E01_S02_dialogue_7",
-          "character": "Aigul",
+          "characterId": "Aigul",
           "emotion": "Neutral",
           "text": "Ладно. Не моё дело.",
           "nextNode": "E01_S02_narration_3"
         },
         {
           "nodeId": "E01_S02_narration_3",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айгуль пожимает плечами и уходит в класс.",
           "nextNode": "E01_S02_dialogue_8"
         },
         {
           "nodeId": "E01_S02_dialogue_8",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Sad",
           "text": "Я в уборную.",
           "nextNode": "E01_S02_choice_setup"
         },
         {
           "nodeId": "E01_S02_choice_setup",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Она уходит. Айназ остаётся стоять, чувствуя неловкость и странное беспокойство.",
           "choices": [
             {
               "text": "Попытаться узнать у других, о чём слухи",
               "effects": [{ "op": "inc", "key": "risk", "value": 1 }],
-              "nextNode": "E01_S02_choice1_start"
+              "nextNode": "E01_S02_choice1_start",
+              "notification": {
+                "id": "toast_1",
+                "mode": "toast",
+                "showOnce": true,
+                "message": "Иногда любопытство имеет последствия"
+              }
             },
             {
               "text": "Проигнорировать и дождаться Гульдану",
@@ -261,86 +280,86 @@
         {
           "nodeId": "E01_S02_choice1_start",
           "bgFx": "drift_left",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айназ подходит к ребятам.",
           "nextNode": "E01_S02_choice1_narration_1"
         },
         {
           "nodeId": "E01_S02_choice1_narration_1",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Разговор сначала затихает, потом продолжается тише, но уже не скрываясь.",
           "nextNode": "E01_S02_choice1_dialogue_1"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_1",
-          "character": "Timur",
+          "characterId": "Timur",
           "emotion": "Mocking",
           "text": "Ты правда не знаешь?",
           "nextNode": "E01_S02_choice1_dialogue_2"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_2",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Embarrassed",
           "text": "Не знаю… чего?",
           "nextNode": "E01_S02_choice1_dialogue_3"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_3",
-          "character": "Aigul",
+          "characterId": "Aigul",
           "emotion": "Mocking",
           "text": "Ну да, ты же не местная.",
           "nextNode": "E01_S02_choice1_dialogue_4"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_4",
-          "character": "Aigul",
+          "characterId": "Aigul",
           "emotion": "Mocking",
           "text": "Ты сюда сколько лет назад переехала? Три-четыре?",
           "nextNode": "E01_S02_choice1_narration_2"
         },
         {
           "nodeId": "E01_S02_choice1_narration_2",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айназ кивает.",
           "nextNode": "E01_S02_choice1_dialogue_5"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_5",
-          "character": "Bekzat",
+          "characterId": "Bekzat",
           "emotion": "Embarrassed",
           "text": "Тогда понятно.",
           "nextNode": "E01_S02_choice1_dialogue_6"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_6",
-          "character": "Bekzat",
+          "characterId": "Bekzat",
           "emotion": "Embarrassed",
-          "text": "Это было же произошло когда мы только в школу пошли.",
+          "text": "Это было же произошло, когда мы только в школу пошли.",
           "nextNode": "E01_S02_choice1_narration_3"
         },
         {
           "nodeId": "E01_S02_choice1_narration_3",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Наступает короткая пауза. Кто-то из ребят опускает взгляд.",
           "nextNode": "E01_S02_choice1_dialogue_7"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_7",
-          "character": "Bekzat",
+          "characterId": "Bekzat",
           "emotion": "Embarrassed",
           "text": "Ладно, неважно. Кто после школы в футбол?",
           "nextNode": "E01_S02_choice1_narration_4"
         },
         {
           "nodeId": "E01_S02_choice1_narration_4",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Тимур усмехается. Айгуль фыркает и отворачивается. Разговор уходит в сторону.",
           "nextNode": "E01_S02_choice1_thought"
         },
         {
           "nodeId": "E01_S02_choice1_thought",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Anxiety",
           "isThought": true,
           "text": "Что это было?",
@@ -348,13 +367,13 @@
         },
         {
           "nodeId": "E01_S02_choice1_narration_5",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айназ понимает, что разговор шёл не о школе и не о каком-то пустяке. Но продолжать его никто не собирается.",
           "nextNode": "E01_S03_start"
         },
         {
           "nodeId": "E01_S02_choice2_result",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Когда Гульдана возвращается, она замечает, что Айназ не ушла и не стала обсуждать её с другими. Это немного успокаивает.",
           "nextNode": "E01_S03_start"
         }
@@ -363,81 +382,81 @@
     {
       "sceneId": "E01_S03",
       "background": "classroom_end_of_class",
-      "leftCharacter": "Ainaz",
-      "rightCharacters": ["Guldana"],
+      "leftCharacterId": "Ainaz",
+      "rightCharactersId": ["Guldana"],
       "startNode": "E01_S03_start",
       "nodes": [
         {
           "nodeId": "E01_S03_start",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Уроки закончились. Коридоры пустеют. Гульдана медленно собирает вещи и застёгивает рюкзак.",
           "nextNode": "E01_S03_dialogue_1"
         },
         {
           "nodeId": "E01_S03_dialogue_1",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Serious",
           "text": "Ты правда хочешь посидеть в библиотеке?",
           "nextNode": "E01_S03_dialogue_2"
         },
         {
           "nodeId": "E01_S03_dialogue_2",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Apathy",
           "text": "Да.",
           "nextNode": "E01_S03_dialogue_3"
         },
         {
           "nodeId": "E01_S03_dialogue_3",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Serious",
           "text": "Почему?",
           "nextNode": "E01_S03_dialogue_4"
         },
         {
           "nodeId": "E01_S03_dialogue_4",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Sad",
           "text": "Просто не хочу пока домой.",
           "nextNode": "E01_S03_narration_1"
         },
         {
           "nodeId": "E01_S03_narration_1",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Гульдана смотрит в пол и уже собирается уйти. Айназ хватает её за руку.",
           "nextNode": "E01_S03_dialogue_5"
         },
         {
           "nodeId": "E01_S03_dialogue_5",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Hope",
           "text": "А хочешь ко мне домой? Мама сказала, что испечёт пирог с вишней.",
           "nextNode": "E01_S03_dialogue_6"
         },
         {
           "nodeId": "E01_S03_dialogue_6",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Nervous",
           "text": "Твоя мама не будет против?",
           "nextNode": "E01_S03_dialogue_7"
         },
         {
           "nodeId": "E01_S03_dialogue_7",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Joy",
           "text": "Конечно нет. Ты ей нравишься.",
           "nextNode": "E01_S03_dialogue_8"
         },
         {
           "nodeId": "E01_S03_dialogue_8",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Embarrassment",
           "text": "Тогда хорошо.",
           "nextNode": "E01_S03_dialogue_9"
         },
         {
           "nodeId": "E01_S03_dialogue_9",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Они вместе выходят из школы, обсуждая, что будут делать у Айназ в комнате.",
           "nextNode": "E01_S04_start"
         }
@@ -446,88 +465,88 @@
     {
       "sceneId": "E01_S04",
       "background": "ainaz_kitchen",
-      "leftCharacter": "Aida",
-      "rightCharacters": ["Ainaz", "Guldana"],
+      "leftCharacterId": "Aida",
+      "rightCharactersId": ["Ainaz", "Guldana"],
       "startNode": "E01_S04_start",
       "nodes": [
         {
           "nodeId": "E01_S04_start",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Дом Айназ наполнен мягким светом. На плите кипит чайник. Аида, мама Айназ, достаёт из духовки пирог.",
           "nextNode": "E01_S04_dialogue_1"
         },
         {
           "nodeId": "E01_S04_dialogue_1",
-          "character": "Aida",
+          "characterId": "Aida",
           "emotion": "Calm",
           "text": "Ну что, как дела в школе?",
           "nextNode": "E01_S04_dialogue_2"
         },
         {
           "nodeId": "E01_S04_dialogue_2",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Joy",
           "text": "Нам сказали, что мы готовим выступление на конец года. Ребята хотят поставить спектакль.",
           "nextNode": "E01_S04_dialogue_3"
         },
         {
           "nodeId": "E01_S04_dialogue_3",
-          "character": "Aida",
+          "characterId": "Aida",
           "emotion": "Joy",
           "text": "Здорово. Помню, как я играла Красную Шапочку, когда была ещё маленькой.",
           "nextNode": "E01_S04_dialogue_4"
         },
         {
           "nodeId": "E01_S04_dialogue_4",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Embarrassment",
           "text": "Ну мам, хватит. Я, может, вообще играть не буду. Лучше сценарий писать.",
           "nextNode": "E01_S04_narration_1"
         },
         {
           "nodeId": "E01_S04_narration_1",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "bgFx": "pan_right",
           "text": "Аида переводит взгляд на Гульдану.",
           "nextNode": "E01_S04_dialogue_5"
         },
         {
           "nodeId": "E01_S04_dialogue_5",
-          "character": "Aida",
+          "characterId": "Aida",
           "emotion": "Joy",
           "text": "А ты? Кого бы хотела сыграть?",
           "nextNode": "E01_S04_narration_2"
         },
         {
           "nodeId": "E01_S04_narration_2",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Гульдана долго молчит. Неловко держит чашку и смотрит в неё. Потом вздрагивает, будто только сейчас услышала вопрос.",
           "nextNode": "E01_S04_dialogue_6"
         },
         {
           "nodeId": "E01_S04_dialogue_6",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Nervous",
           "text": "Что? Извините… я задумалась.",
           "nextNode": "E01_S04_dialogue_7"
         },
         {
           "nodeId": "E01_S04_dialogue_7",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Embarrassment",
           "text": "Мам, она просто устала. Давай лучше поедим пирог.",
           "nextNode": "E01_S04_dialogue_8"
         },
         {
           "nodeId": "E01_S04_dialogue_8",
-          "character": "Aida",
+          "characterId": "Aida",
           "emotion": "Calm",
           "text": "Хорошо, уже режу.",
           "nextNode": "E01_S04_narration_3"
         },
         {
           "nodeId": "E01_S04_narration_3",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Аида больше не расспрашивает, но задумчиво смотрит на Гульдану.",
           "nextNode": "E01_S05_start"
         }
@@ -536,74 +555,74 @@
     {
       "sceneId": "E01_S05",
       "background": "ainaz_room-dark",
-      "leftCharacter": "Ainaz",
-      "rightCharacters": ["Guldana"],
+      "leftCharacterId": "Ainaz",
+      "rightCharactersId": ["Guldana"],
       "startNode": "E01_S05_start",
       "nodes": [
         {
           "nodeId": "E01_S05_start",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Становится поздно. За окном уже темно. Айназ вдруг смотрит на часы.",
           "nextNode": "E01_S05_dialogue_1"
         },
         {
           "nodeId": "E01_S05_dialogue_1",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Nervous",
           "text": "Ой, уже так поздно… Твоя мама не будет тебя ругать?",
           "nextNode": "E01_S05_dialogue_2"
         },
         {
           "nodeId": "E01_S05_dialogue_2",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Apathy",
           "text": "Нет.",
           "nextNode": "E01_S05_dialogue_3"
         },
         {
           "nodeId": "E01_S05_dialogue_3",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Nervous",
           "text": "Точно?",
           "nextNode": "E01_S05_narration_1"
         },
         {
           "nodeId": "E01_S05_narration_1",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Гульдана утыкается в книгу и, не поднимая глаз, быстро кивает.",
           "nextNode": "E01_S05_dialogue_4"
         },
         {
           "nodeId": "E01_S05_dialogue_4",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Joy",
           "text": "А ты точно не хочешь в кино на выходных? Говорят, тот новый фильм очень классный…",
           "nextNode": "E01_S05_dialogue_5"
         },
         {
           "nodeId": "E01_S05_dialogue_5",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Sad",
           "text": "Нет, я не смогу.",
           "nextNode": "E01_S05_dialogue_6"
         },
         {
           "nodeId": "E01_S05_dialogue_6",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Anxiety",
           "text": "Почему? Ты же говорила, что обязательно пойдёшь.",
           "nextNode": "E01_S05_dialogue_7"
         },
         {
           "nodeId": "E01_S05_dialogue_7",
-          "character": "Guldana",
+          "characterId": "Guldana",
           "emotion": "Embarrassment",
           "text": "Прости. Правда не получится.",
           "nextNode": "E01_S05_choice_setup"
         },
         {
           "nodeId": "E01_S05_choice_setup",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Гульдана неловко смотрит на Айназ и почти сразу переводит разговор на другую тему.",
           "choices": [
             {
@@ -622,13 +641,13 @@
         },
         {
           "nodeId": "E01_S05_choice1_result",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Гульдана заметно расслабляется и продолжает говорить спокойнее.",
           "nextNode": "E01_S06_start"
         },
         {
           "nodeId": "E01_S05_choice2_result",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Разговор продолжается, но между строк остаётся напряжение.",
           "nextNode": "E01_S06_start"
         }
@@ -637,41 +656,39 @@
     {
       "sceneId": "E01_S06",
       "background": "ainaz_room-night",
-      "leftCharacter": "Ainaz",
-      "rightCharacters": [],
+      "leftCharacterId": "Ainaz",
+      "rightCharactersId": [],
       "startNode": "E01_S06_start",
       "nodes": [
         {
           "nodeId": "E01_S06_start",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "На улице очень тихо. Гульдана уже ушла домой, а Айназ лежит на кровати и смотрит в потолок.",
           "nextNode": "E01_S06_dialogue_1"
         },
         {
           "nodeId": "E01_S06_dialogue_1",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Вдруг она замечает на парте лишний учебник.",
           "nextNode": "E01_S06_dialogue_2"
         },
         {
           "nodeId": "E01_S06_dialogue_2",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айназ резко садится и понимает, что Гульдана забыла учебник по кыргызскому.",
           "nextNode": "E01_S06_dialogue_3"
         },
         {
           "nodeId": "E01_S06_dialogue_3",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Anxiety",
           "text": "А ещё говорит, что я забывчивая… А нам ведь нужно выучить стих до понедельника.",
           "notification": {
-            "id": "tutorial_risk_safety",
+            "id": "tutorial_2",
             "showOnce": true,
             "mode": "modal",
-            "type": "hint",
             "title": "Подсказка",
-            "message": "Некоторые решения могут увеличить риск или помочь сохранить безопасность.\n\nИногда правильный выбор не самый очевидный.",
-            "icon": "safety"
+            "message": "Некоторые решения могут увеличить риск или помочь сохранить безопасность.\n\nИногда правильный выбор не самый очевидный."
           },
           "choices": [
             {
@@ -692,38 +709,38 @@
         },
         {
           "nodeId": "E01_S06_call_attempt",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айназ берёт телефон и набирает номер Гульданы. Гудки идут долго. Потом тишина. Ответа нет.",
           "nextNode": "E01_S06_call_to_walk"
         },
         {
           "nodeId": "E01_S06_call_to_walk",
           "background": "street_night_empty",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Айназ откладывает телефон, надевает лёгкую куртку и выходит из дома.",
           "nextNode": "E01_S06_walk_to_house"
         },
         {
           "nodeId": "E01_S06_walk_to_house",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Идти до дома Гульданы недолго: выйти на главную улицу и повернуть направо.",
           "nextNode": "E01_S06_walk_to_house1"
         },
         {
-          "nodeId" : "E01_S06_walk_to_house1",
-          "character": "Narrator",
+          "nodeId": "E01_S06_walk_to_house1",
+          "characterId": "Narrator",
           "text": "Почти дойдя до дома, Айназ резко останавливается.",
           "nextNode": "E01_S06_walk_to_house2"
         },
         {
           "nodeId" : "E01_S06_walk_to_house2",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Сначала приглушённые голоса. Потом резкий звук, будто тарелка разбилась об пол.",
           "nextNode": "E01_S06_walk_to_house3"
         },
         {
           "nodeId" : "E01_S06_walk_to_house3",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "text": "Раздается женский крик",
           "nextNode": "E01_S06_thought_1"
         }
@@ -732,13 +749,13 @@
     {
       "sceneId": "E01_SUMMARY",
       "background": "guldana_house_night_quarell",
-      "leftCharacter": "Ainaz",
-      "rightCharacters": [],
+      "leftCharacterId": "Ainaz",
+      "rightCharactersId": [],
       "startNode": "E01_S06_thought_1",
       "nodes": [
         {
           "nodeId": "E01_S06_thought_1",
-          "character": "Ainaz",
+          "characterId": "Ainaz",
           "emotion": "Fear",
           "isThought": true,
           "text": "Это… из дома Гульданы?",
@@ -746,8 +763,7 @@
         },
         {
           "nodeId": "E01_summary_start",
-          "character": "System",
-          "text": "summary_screen"
+          "action": "summary_screen"
         }
       ]
     }

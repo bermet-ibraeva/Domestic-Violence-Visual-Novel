@@ -2,12 +2,10 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class ModalUI : MonoBehaviour, IPointerClickHandler
+public class ModalUI : MonoBehaviour
 {
     [Header("Root")]
-    public GameObject modalRoot;
     public CanvasGroup modalCanvasGroup;
 
     [Header("Content")]
@@ -26,6 +24,17 @@ public class ModalUI : MonoBehaviour, IPointerClickHandler
         HideImmediate();
     }
 
+    private void Update()
+    {
+        if (!isVisible)
+            return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RequestClose();
+        }
+    }
+
     public void Show(NotificationData data, Action callback = null)
     {
         if (data == null)
@@ -39,9 +48,6 @@ public class ModalUI : MonoBehaviour, IPointerClickHandler
             StopCoroutine(activeRoutine);
             activeRoutine = null;
         }
-
-        if (modalRoot != null)
-            modalRoot.SetActive(true);
 
         if (titleText != null)
             titleText.text = data.title ?? "";
@@ -62,7 +68,7 @@ public class ModalUI : MonoBehaviour, IPointerClickHandler
         activeRoutine = StartCoroutine(FadeInRoutine());
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void RequestClose()
     {
         if (!isVisible)
             return;
@@ -94,12 +100,11 @@ public class ModalUI : MonoBehaviour, IPointerClickHandler
 
         yield return FadeTo(0f);
 
-        if (modalRoot != null)
-            modalRoot.SetActive(false);
-
         Action callback = onClose;
         onClose = null;
         activeRoutine = null;
+
+        yield return null;
         callback?.Invoke();
     }
 
@@ -137,10 +142,12 @@ public class ModalUI : MonoBehaviour, IPointerClickHandler
             modalCanvasGroup.blocksRaycasts = false;
         }
 
-        if (modalRoot != null)
-            modalRoot.SetActive(false);
-
         isVisible = false;
         onClose = null;
+    }
+
+    public bool IsVisible()
+    {
+        return isVisible;
     }
 }

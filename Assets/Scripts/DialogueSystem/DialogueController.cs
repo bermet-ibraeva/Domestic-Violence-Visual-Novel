@@ -12,17 +12,47 @@ Main responsibilities:
 - Controls dialogue flow between nodes
 - Displays dialogue text using UIController
 - Manages character portraits (left and right slots)
-- Applies scene rules:
-    • left character is fixed per scene
-    • only allowed right characters can appear
-- Handles narrator lines (hides both character portraits)
-- Changes backgrounds and background effects
-- Processes player choices and branching paths
+
+Scene rules:
+- Left character is fixed per scene
+- Only allowed right characters can appear
+- Narrator lines hide both character portraits
+
+Visual handling:
+- Changes backgrounds and applies background effects (bgFx)
+- Updates UI panels for author, left, and right characters
+
+Choices & branching:
+- Displays player choices
+- Handles choice selection and transitions to the next node
+- Applies choice effects (e.g., trust, risk, safety)
+
+Effects system:
 - Applies node effects only once per save file
-- Applies choice effects when a player selects an option
-- Supports jumping between nodes across different scenes
+- Applies choice effects immediately on selection
+
+Notification system:
+- Supports two types of notifications:
+    • Modal — temporarily replaces dialogue (shown before or after node/choice)
+    • Toast — short message shown over UI without interrupting flow
+- Notifications can be triggered:
+    • On nodes
+    • On choices
+- Modal notifications pause dialogue flow until closed
+- Toast notifications do not interrupt dialogue flow
+- Supports "showOnce" logic to prevent repeated notifications
+
+Flow control:
+- Allows jumping between nodes across different scenes
+- Ensures correct scene transitions when node changes
+- Waits for player input to advance dialogue
+
+Saving system:
 - Automatically saves progress after each node
-- Restores progress using SaveSystem
+- Restores progress using SaveSystem (nodeId, episodePath, stats)
+
+Additional features:
+- Supports episode end / summary screen nodes
 */
 
 public class DialogueController : MonoBehaviour
@@ -40,9 +70,6 @@ public class DialogueController : MonoBehaviour
     [Header("Portrait Rules")]
     public bool HideLeftWhenRightSpeaks = true;
     public bool HideRightWhenLeftSpeaks = true;
-
-    [Header("Layout")]
-    public LayoutController layout;
 
     // Эти цвета теперь можно применять внутри методов Show, если нужно 
     // (или настроить их один раз в префабах панелей)
@@ -75,6 +102,7 @@ public class DialogueController : MonoBehaviour
     private Dictionary<string, DialogueNode> nodeDict;
     private Dictionary<string, SceneData> sceneDict;
     private Dictionary<string, SceneData> nodeToScene;
+    private Dictionary<string, CharacterMeta> characterMetaDict;
 
     private SceneData currentScene;
     private readonly HashSet<string> currentRightAllowed = new HashSet<string>();
@@ -154,7 +182,7 @@ public class DialogueController : MonoBehaviour
 
     void Update()
     {
-        if (notificationController != null && notificationController.IsShowingBlockingNotification)
+        if (notificationController != null && notificationController.IsModalShowing)
             return;
 
         if (waitingForAdvance && Input.GetMouseButtonDown(0))
@@ -168,17 +196,39 @@ public class DialogueController : MonoBehaviour
                 ui.HideChoices();
         }
     }
-
+ 
     void LoadEpisode()
     {
         episode = EpisodeLoader.LoadEpisode(episodePath, out nodeDict, out sceneDict, out nodeToScene);
+
         if (episode == null)
+        {
             Debug.LogError("[DialogueController] Episode failed to load");
+            return;
+        }
+
+        BuildCharacterMetaDict();
+    }
+
+    void BuildCharacterMetaDict()
+    {
+        characterMetaDict = new Dictionary<string, CharacterMeta>();
+
+        if (episode.characters == null)
+            return;
+
+        foreach (var ch in episode.characters)
+        {
+            if (ch == null || string.IsNullOrEmpty(ch.characterId))
+                continue;
+
+            characterMetaDict[ch.characterId] = ch;
+        }
     }
 
     // ---------------- Helpers ----------------
 
-    bool IsNarrator(string ch) => string.IsNullOrEmpty(ch) || ch == "Narrator" || ch == "Автор";
+    bool IsNarrator(string ch) => string.IsNullOrEmpty(ch) || ch == "Narrator";
     string NormalizeEmotion(string em) => string.IsNullOrEmpty(em) ? "Calm" : em;
 
     void HideLeft() { if (LeftCharacter != null) LeftCharacter.SetActive(false); }
@@ -200,8 +250,8 @@ public class DialogueController : MonoBehaviour
     void RebuildRightAllowed(SceneData scene)
     {
         currentRightAllowed.Clear();
-        if (scene == null || scene.rightCharacters == null) return;
-        foreach (var c in scene.rightCharacters)
+        if (scene == null || scene.rightCharactersId == null) return;
+        foreach (var c in scene.rightCharactersId)
             if (!string.IsNullOrEmpty(c)) currentRightAllowed.Add(c);
     }
 
@@ -219,15 +269,32 @@ public class DialogueController : MonoBehaviour
         if (backgroundController != null && !string.IsNullOrEmpty(currentScene.background))
             backgroundController.ApplyBackground(currentScene.background, currentScene.bgFx);
 
-        if (!string.IsNullOrEmpty(currentScene.leftCharacter))
-            ShowLeft(currentScene.leftCharacter, "Calm");
+        if (!string.IsNullOrEmpty(currentScene.leftCharacterId))
+        {
+            var meta = GetCharacterMeta(currentScene.leftCharacterId);
+            ShowLeft(meta?.portraitKey, "Calm");
+        }
         else
+        {
             HideLeft();
+        }
 
         HideRight();
     }
 
-    bool IsLeftCharacter(string ch) => currentScene != null && !string.IsNullOrEmpty(currentScene.leftCharacter) && ch == currentScene.leftCharacter;
+    CharacterMeta GetCharacterMeta(string characterId)
+    {
+        if (string.IsNullOrEmpty(characterId))
+            return null;
+
+        if (characterMetaDict != null && characterMetaDict.TryGetValue(characterId, out var meta))
+            return meta;
+
+        Debug.LogWarning($"[DialogueController] CharacterMeta not found for '{characterId}'");
+        return null;
+    }
+
+    bool IsLeftCharacter(string ch) => currentScene != null && !string.IsNullOrEmpty(currentScene.leftCharacterId) && ch == currentScene.leftCharacterId;
     bool IsRightAllowed(string ch) => !string.IsNullOrEmpty(ch) && currentRightAllowed.Contains(ch);
 
     // ---------------- Main ----------------
@@ -243,35 +310,40 @@ public class DialogueController : MonoBehaviour
         currentNode = node;
         waitingForAdvance = false;
 
-        if (IsSummaryScreenNode(node))
+        if (HasAction(node))
         {
-            ShowEpisodeEndPanel();
+            HandleActionNode(node);
             return;
         }
 
         ApplyEffectsOnce(nodeId, node);
 
+        if (node.notification != null && notificationController != null && ShouldShowNotification(node.notification))
+        {
+            string mode = string.IsNullOrWhiteSpace(node.notification.mode)
+                ? ""
+                : node.notification.mode.Trim().ToLower();
 
-        // // ===== NOTIFICATION =====
-        // if (node.notification != null && notificationController != null && ShouldShowNotification(node.notification))
-        // {
-        //     if (notificationController.IsBlocking(node.notification))
-        //     {
-        //         ui.HideChoices();
-        //         ui.HideDialoguePanels();
-        //         HideAllCharacters();
+            if (mode == "modal")
+            {
+                ui.HideChoices();
+                ui.HideDialoguePanels();
+                HideAllCharacters();
 
-        //         notificationController.Show(node.notification, () =>
-        //         {
-        //             MarkNotificationShown(node.notification);
-        //             ContinueShowNode(node, nodeId);
-        //         });
-        //         return;
-        //     }
+                notificationController.Show(node.notification, () =>
+                {
+                    MarkNotificationShown(node.notification);
+                    ContinueShowNode(node, nodeId);
+                });
+                return;
+            }
 
-        //     notificationController.Show(node.notification);
-        //     MarkNotificationShown(node.notification);
-        // }
+            if (mode == "toast")
+            {
+                notificationController.Show(node.notification);
+                MarkNotificationShown(node.notification);
+            }
+        }
 
         ContinueShowNode(node, nodeId);
     }
@@ -287,30 +359,38 @@ public class DialogueController : MonoBehaviour
         }
 
         // Text + portraits
-        if (IsNarrator(node.character))
+        if (IsNarrator(node.characterId))
         {
             ui.ShowAuthor(node.text);
             HideAllCharacters();
         }
-        else if (IsLeftCharacter(node.character))
+        else if (IsLeftCharacter(node.characterId))
         {
-            ui.ShowLeftCharacter(currentScene.leftCharacter, node.text);
-            ShowLeft(currentScene.leftCharacter, node.emotion);
+            var meta = GetCharacterMeta(currentScene.leftCharacterId);
+
+            ui.ShowLeftCharacter(meta?.displayName, node.text);
+            ShowLeft(meta?.portraitKey, node.emotion);
 
             if (HideRightWhenLeftSpeaks) HideRight();
         }
-        else if (IsRightAllowed(node.character))
+        else if (IsRightAllowed(node.characterId))
         {
-            ui.ShowRightCharacter(node.character, node.text);
-            ShowRight(node.character, node.emotion);
+            var meta = GetCharacterMeta(node.characterId);
+
+            ui.ShowRightCharacter(meta?.displayName, node.text);
+            ShowRight(meta?.portraitKey, node.emotion);
 
             if (HideLeftWhenRightSpeaks) HideLeft();
-            else if (!string.IsNullOrEmpty(currentScene?.leftCharacter))
-                ShowLeft(currentScene.leftCharacter, "Calm");
+            else if (!string.IsNullOrEmpty(currentScene?.leftCharacterId))
+            {
+                var leftMeta = GetCharacterMeta(currentScene.leftCharacterId);
+                ShowLeft(leftMeta?.portraitKey, "Calm");
+            }
         }
         else
         {
-            ui.ShowRightCharacter(node.character, node.text);
+            var meta = GetCharacterMeta(node.characterId);
+            ui.ShowRightCharacter(meta?.displayName ?? node.characterId, node.text);
             HideAllCharacters();
         }
 
@@ -342,19 +422,94 @@ public class DialogueController : MonoBehaviour
     void OnChoicePicked(string nextNodeId)
     {
         waitingForAdvance = false;
-        TryApplyPickedChoiceEffects(nextNodeId);
-        if (!string.IsNullOrEmpty(nextNodeId)) ShowNode(nextNodeId);
-        else ui.HideChoices();
-    }
 
-    // ... Остальные методы (ApplyEffects, HandleEnding и т.д.) без изменений
-    void TryApplyPickedChoiceEffects(string nextNodeId)
-    {
-        if (currentNode == null || currentNode.choices == null || string.IsNullOrEmpty(nextNodeId)) return;
+        if (currentNode == null || currentNode.choices == null)
+        {
+            if (!string.IsNullOrEmpty(nextNodeId))
+                ShowNode(nextNodeId);
+            else
+                ui.HideChoices();
+
+            return;
+        }
+
         Choice picked = currentNode.choices.Find(c => c != null && c.nextNode == nextNodeId);
-        if (picked == null || picked.effects == null || picked.effects.Count == 0) return;
-        ApplyChoiceEffects(picked.effects);
-        SaveSystem.Save(save);
+
+        if (picked != null && picked.effects != null && picked.effects.Count > 0)
+        {
+            ApplyChoiceEffects(picked.effects);
+            SaveSystem.Save(save);
+        }
+
+        if (picked != null && picked.notification != null && notificationController != null)
+        {
+            string mode = string.IsNullOrWhiteSpace(picked.notification.mode)
+                ? ""
+                : picked.notification.mode.Trim().ToLower();
+
+            if (mode == "modal")
+            {
+                if (statFeedbackUI != null)
+                {
+                    statFeedbackUI.WaitUntilFinished(() =>
+                    {
+                        ui.HideChoices();
+                        ui.HideDialoguePanels();
+                        HideAllCharacters();
+
+                        notificationController.Show(picked.notification, () =>
+                        {
+                            MarkNotificationShown(picked.notification);
+
+                            if (!string.IsNullOrEmpty(nextNodeId))
+                                ShowNode(nextNodeId);
+                            else
+                                ui.HideChoices();
+                        });
+                    });
+                }
+                else
+                {
+                    ui.HideChoices();
+                    ui.HideDialoguePanels();
+                    HideAllCharacters();
+
+                    notificationController.Show(picked.notification, () =>
+                    {
+                        MarkNotificationShown(picked.notification);
+
+                        if (!string.IsNullOrEmpty(nextNodeId))
+                            ShowNode(nextNodeId);
+                        else
+                            ui.HideChoices();
+                    });
+                }
+
+                return;
+            }
+
+            if (mode == "toast")
+            {
+                if (statFeedbackUI != null)
+                {
+                    statFeedbackUI.WaitUntilFinished(() =>
+                    {
+                        notificationController.Show(picked.notification);
+                        MarkNotificationShown(picked.notification);
+                    });
+                }
+                else
+                {
+                    notificationController.Show(picked.notification);
+                    MarkNotificationShown(picked.notification);
+                }
+            }
+        }
+
+        if (!string.IsNullOrEmpty(nextNodeId))
+            ShowNode(nextNodeId);
+        else
+            ui.HideChoices();
     }
 
     void ApplyEffectsOnce(string nodeId, DialogueNode node)
@@ -441,16 +596,70 @@ public class DialogueController : MonoBehaviour
         return startNodeId;
     }
 
-    bool IsSummaryScreenNode(DialogueNode node)
+    bool HasAction(DialogueNode node)
     {
-        return node != null
-            && node.character == "System"
-            && node.text == "summary_screen";
+        return node != null && !string.IsNullOrEmpty(node.action);
     }
+
+    void HandleActionNode(DialogueNode node)
+    {
+        /*
+        ACTION SYSTEM на будущее:
+
+        action = это "что сделать"
+        requirements = это "когда это разрешено"
+
+        Использование:
+        - action: вызывает особое поведение (не диалог)
+            примеры:
+                "summary_screen"
+                "skip_scene"
+                "open_panel"
+                "play_cutscene"
+
+        - requirements: проверяет условия (risk, trust, safety и т.д.)
+            пример:
+                risk >= 2
+
+        Паттерн:
+            если requirements выполнены → выполняем action
+            если нет → игнорируем или идём по другой ветке
+
+        Важно:
+        НЕ зашивать условия внутрь action (типа "show_if_risk_2")
+        Всю логику условий держать в requirements.
+
+        Когда дойдём до ветвлений:
+        - использовать action + requirements для:
+            • пропуска сцен
+            • скрытых веток
+            • альтернативных концовок
+        */
+
+        if (node == null) return;
+
+        switch (node.action)
+        {
+            case "summary_screen":
+                ShowEpisodeEndPanel();
+                break;
+
+            default:
+                Debug.LogWarning($"[DialogueController] Unknown action: {node.action}");
+                break;
+        }
+    }
+
 
     void ShowEpisodeEndPanel()
     {
         Debug.Log("[DialogueController] ShowEpisodeEndPanel called");
+
+        if (episodeEndPanel == null)
+        {
+            Debug.LogError("[DialogueController] episodeEndPanel is NULL");
+            return;
+        }
 
         int reward = 2;
 
@@ -465,16 +674,8 @@ public class DialogueController : MonoBehaviour
         ui.HideDialoguePanels();
         HideAllCharacters();
 
-        if (episodeEndPanel == null)
-        {
-            Debug.LogError("[DialogueController] episodeEndPanel is NULL");
-            return;
-        }
-
         string nextEpisodePath = GetNextEpisodePath();
         string nextEpisodeStartNode = GetNextEpisodeStartNode();
-
-        Debug.Log("[DialogueController] Showing episode end panel");
 
         episodeEndPanel.Show(
             save,

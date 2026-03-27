@@ -8,74 +8,17 @@ public class CharacterDialoguePanel : MonoBehaviour
     public TextMeshProUGUI dialogueText;
 
     [Header("Panel Height")]
-    public float minPanelHeight = 280f;
-    public float maxPanelHeight = 400f;
-    public float bottomPadding = 30f;
-
-    private RectTransform panelRect;
-    private RectTransform textRect;
-    private float fixedTopOffset;
-
-    void Awake()
-    {
-        CacheReferences();
-    }
-
-    void OnEnable()
-    {
-        CacheReferences();
-    }
-
-    private void CacheReferences()
-    {
-        if (panelRect == null)
-            panelRect = GetComponent<RectTransform>();
-
-        if (dialogueText != null && textRect == null)
-            textRect = dialogueText.GetComponent<RectTransform>();
-
-        if (textRect != null)
-            fixedTopOffset = -textRect.offsetMax.y;
-    }
-
-    public void SetDialogue(string characterName, string text)
-    {
-        CacheReferences();
-
-        if (nameText != null)
-            nameText.text = characterName;
-        else
-            Debug.LogError($"[{gameObject.name}] nameText is NULL", this);
-
-        if (dialogueText != null)
-            dialogueText.text = text;
-        else
-            Debug.LogError($"[{gameObject.name}] dialogueText is NULL", this);
-
-        RefreshSize();
-    }
+    public float minPanelHeight = 300f;
+    public float maxPanelHeight = 520f;
+    public float bottomPadding = 40f;
+    public float textExtraPadding = 12f;
 
     public void RefreshSize()
     {
         CacheReferences();
 
-        if (panelRect == null)
-        {
-            Debug.LogError($"[{gameObject.name}] panelRect is NULL", this);
+        if (panelRect == null || dialogueText == null || textRect == null)
             return;
-        }
-
-        if (dialogueText == null)
-        {
-            Debug.LogError($"[{gameObject.name}] dialogueText is NULL", this);
-            return;
-        }
-
-        if (textRect == null)
-        {
-            Debug.LogError($"[{gameObject.name}] textRect is NULL", this);
-            return;
-        }
 
         Canvas.ForceUpdateCanvases();
         dialogueText.ForceMeshUpdate();
@@ -88,6 +31,7 @@ public class CharacterDialoguePanel : MonoBehaviour
         }
 
         float preferredHeight = dialogueText.GetPreferredValues(dialogueText.text, textWidth, 0f).y;
+        preferredHeight += textExtraPadding;
 
         Vector2 offsetMax = textRect.offsetMax;
         offsetMax.y = -fixedTopOffset;
