@@ -1,0 +1,43 @@
+{
+    "episodePath": "Episodes/episode_1",
+    "currentNodeId": "E01_S01_start",
+    "chapterNumber": 1,
+  
+    "sparksTotal": 0,
+    "episodeRewardGranted": false,
+  
+    "notes": [
+      {
+        "noteId": "note_signs_01",
+        "isUnlocked": false,
+        "isRead": false,
+        "rewardClaimed": false
+      }
+    ],
+  
+    "testsBest": [
+      {
+        "quizId": "quiz_signs_01",
+        "bestScore": 0
+      }
+    ],
+  
+    "trustAG": 0,
+    "trustJA": 0,
+  
+    "riskTotal": 0,
+    "safetyTotal": 0,
+  
+    "episodeRisk": 0,
+    "episodeSafety": 0,
+    "episodeTrustAG": 0,
+    "episodeTrustJA": 0,
+    "episodeSparks": 0,
+  
+    "completedEpisodes": [],
+  
+    "episodeStartSnapshot": null,
+    "appliedEffectNodes": [],
+  
+    "shownNotificationIds": []
+  }

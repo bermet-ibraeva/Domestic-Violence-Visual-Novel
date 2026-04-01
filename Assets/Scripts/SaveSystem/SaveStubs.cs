@@ -1,13 +1,6 @@
 using System;
 
 [Serializable]
-public class TestBestScore
-{
-    public string testId;
-    public int bestScore;
-}
-
-[Serializable]
 public class EpisodeSnapshot
 {
     public string episodePath;

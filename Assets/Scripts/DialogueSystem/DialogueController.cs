@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /*
 Dialogue Controller
@@ -73,6 +74,8 @@ public class DialogueController : MonoBehaviour
 
     // Эти цвета теперь можно применять внутри методов Show, если нужно 
     // (или настроить их один раз в префабах панелей)
+    public RectTransform topPanel;
+
     [Header("Text Colors")]
     public Color AuthorColor = Color.gray;
     public Color LeftCharacterColor = Color.white;
@@ -96,7 +99,6 @@ public class DialogueController : MonoBehaviour
 
     [Header("Notification Controller")]
     public NotificationController notificationController;
-
 
     private EpisodeData episode;
     private Dictionary<string, DialogueNode> nodeDict;
@@ -180,23 +182,60 @@ public class DialogueController : MonoBehaviour
         ShowNode(startNodeId);
     }
 
+    // void Update()
+    // {
+    //     if (notificationController != null && notificationController.IsModalShowing)
+    //         return;
+
+    //     if (waitingForAdvance && Input.GetMouseButtonDown(0))
+    //     {
+    //         waitingForAdvance = false;
+    //         if (currentNode == null) return;
+
+    //         if (!string.IsNullOrEmpty(currentNode.nextNode))
+    //             ShowNode(currentNode.nextNode);
+    //         else
+    //             ui.HideChoices();
+    //     }
+    // }
+
     void Update()
     {
         if (notificationController != null && notificationController.IsModalShowing)
             return;
 
-        if (waitingForAdvance && Input.GetMouseButtonDown(0))
-        {
-            waitingForAdvance = false;
-            if (currentNode == null) return;
+        if (!waitingForAdvance)
+            return;
 
-            if (!string.IsNullOrEmpty(currentNode.nextNode))
-                ShowNode(currentNode.nextNode);
-            else
-                ui.HideChoices();
-        }
+        if (!Input.GetMouseButtonDown(0))
+            return;
+
+        if (IsPointerOverTopPanel())
+            return;
+
+        waitingForAdvance = false;
+
+        if (currentNode == null)
+            return;
+
+        if (!string.IsNullOrEmpty(currentNode.nextNode))
+            ShowNode(currentNode.nextNode);
+        else
+            ui.HideChoices();
     }
- 
+
+    bool IsPointerOverTopPanel()
+    {
+        if (topPanel == null)
+            return false;
+
+        return RectTransformUtility.RectangleContainsScreenPoint(
+            topPanel,
+            Input.mousePosition,
+            null
+        );
+    }
+
     void LoadEpisode()
     {
         episode = EpisodeLoader.LoadEpisode(episodePath, out nodeDict, out sceneDict, out nodeToScene);
@@ -326,12 +365,14 @@ public class DialogueController : MonoBehaviour
 
             if (mode == "modal")
             {
+                Debug.Log($"NODE notification found. id={node.notification.id}, mode={node.notification.mode}, shouldShow={ShouldShowNotification(node.notification)}");
                 ui.HideChoices();
                 ui.HideDialoguePanels();
                 HideAllCharacters();
 
                 notificationController.Show(node.notification, () =>
                 {
+                    Debug.Log("NODE MODAL branch entered");
                     MarkNotificationShown(node.notification);
                     ContinueShowNode(node, nodeId);
                 });
@@ -643,6 +684,9 @@ public class DialogueController : MonoBehaviour
             case "summary_screen":
                 ShowEpisodeEndPanel();
                 break;
+            case "open_note":
+                UnlockNote(node.action);
+                break;
 
             default:
                 Debug.LogWarning($"[DialogueController] Unknown action: {node.action}");
@@ -740,7 +784,8 @@ public class DialogueController : MonoBehaviour
 
         StatSystem.Instance.ResetEpisodeStats();
 
-        save.episodeStartSnapshot = new EpisodeSnapshot {
+        save.episodeStartSnapshot = new EpisodeSnapshot
+        {
             sparksTotal = save.sparksTotal,
             trustAG = save.trustAG,
             trustJA = save.trustJA,
@@ -792,5 +837,35 @@ public class DialogueController : MonoBehaviour
 
         SaveSystem.Save(save);
         ShowNode(firstNode);
+    }
+    
+
+    // TODO: finish later: this will be used to unlock notes from dialogue nodes (node.effects can have "unlock_note:noteId")
+    void UnlockNote(string noteId)
+    {
+        if (string.IsNullOrEmpty(noteId))
+        {
+            Debug.LogWarning("[DialogueController] UnlockNote called with empty noteId");
+            return;
+        }
+
+        if (save == null)
+        {
+            Debug.LogError("[DialogueController] SaveData is null");
+            return;
+        }
+
+        NoteState note = save.GetOrCreateNote(noteId);
+
+        if (!note.isUnlocked)
+        {
+            note.isUnlocked = true;
+            SaveSystem.Save(save);
+            Debug.Log("[DialogueController] Note unlocked: " + noteId);
+        }
+        else
+        {
+            Debug.Log("[DialogueController] Note already unlocked: " + noteId);
+        }
     }
 }

@@ -24,7 +24,7 @@ public class EpisodeEndPanel : MonoBehaviour
     public Button continueButton;
 
     [Header("Colors")]
-    public Color totalValueColor = new Color32(253, 253, 249, 255);   // #FDFDF9
+    public Color totalValueColor = new Color32(58, 52, 68, 255);   // #FDFDF9
     public Color positiveDeltaColor = new Color32(207, 167, 91, 255); // #CFA75B
     public Color negativeDeltaColor = new Color32(181, 84, 72, 255);  // #B55448
 
@@ -32,7 +32,7 @@ public class EpisodeEndPanel : MonoBehaviour
     [Range(100, 200)] public int totalSizePercent = 120;
 
     [Header("Title")]
-    public float fixedTitleFontSize = 85f;
+    public float fixedTitleFontSize = 65f;
 
     private DialogueController dialogueController;
 
@@ -90,10 +90,10 @@ public class EpisodeEndPanel : MonoBehaviour
 
         titleText.enableAutoSizing = false;
         titleText.fontSize = fixedTitleFontSize;
-        titleText.text = "Эпизод завершён"; // TODO: replace with Localization.Get("episode_end_title")
+        titleText.text = "ЭПИЗОД ЗАВЕРШЁН!"; // TODO: replace with Localization.Get("episode_end_title")
 
-        titleText.enableWordWrapping = false;
-        titleText.overflowMode = TextOverflowModes.Overflow;
+        titleText.enableWordWrapping = true;
+        titleText.overflowMode = TextOverflowModes.Masking;
         titleText.alignment = TextAlignmentOptions.Center;
 
         titleText.ForceMeshUpdate();

@@ -123,7 +123,7 @@
         },
         {
           "nodeId": "E01_S01_choice_setup",
-          "character": "Narrator",
+          "characterId": "Narrator",
           "bgFx": "zoom_in",
           "text": "Айназ улыбается и что-то напевает себе под нос, но Гульдана не улыбается в ответ.",
           "notification": {
@@ -156,7 +156,31 @@
               "nextNode": "E01_S01_choice3_result"
             }
           ]
-        }
+        },
+      {
+        "nodeId": "E01_S01_choice1_result",
+        "character": "Narrator",
+        "text": "Гульдана отвечает коротко и уклончиво, будто не хочет вдаваться в подробности.",
+        "nextNode": "E01_S01_choice1_result1"
+      },
+      {
+        "nodeId": "E01_S01_choice1_result1",
+        "character": "Narrator",
+        "text": "Но она запоминает сам вопрос и то, как внимательно Айназ на неё посмотрела.",
+        "nextNode": "E01_S02_start"
+      },
+      {
+        "nodeId": "E01_S01_choice2_result",
+        "character": "Narrator",
+        "text": "Разговор продолжается, но между ними остаётся небольшая дистанция, которую никто не называет вслух.",
+        "nextNode": "E01_S02_start"
+      },
+      {
+        "nodeId": "E01_S01_choice3_result",
+        "character": "Narrator",
+        "text": "Гульдана слабо улыбается, почти машинально, а затем снова закрывается и смотрит вперёд.",
+        "nextNode": "E01_S02_start"
+      }
       ]
     },
     {
@@ -191,7 +215,7 @@
           "nodeId": "E01_S02_dialogue_2",
           "characterId": "Guldana",
           "emotion": "Nervous",
-          "text": "...",
+          "text": "(молчит)",
           "nextNode": "E01_S02_dialogue_3"
         },
         {

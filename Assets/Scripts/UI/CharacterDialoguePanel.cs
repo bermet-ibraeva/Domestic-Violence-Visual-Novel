@@ -7,11 +7,50 @@ public class CharacterDialoguePanel : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
 
-    [Header("Panel Height")]
-    public float minPanelHeight = 300f;
-    public float maxPanelHeight = 520f;
+    [Header("Panel Settings")]
+    public float baseHeight = 270f;     // 1 строка
+    public float heightPerLine = 50f;   // шаг
+    public int maxLines = 5;
+
+    [Header("Text Area")]
+    public float topOffset = 140f;
     public float bottomPadding = 40f;
-    public float textExtraPadding = 12f;
+    public float extraTextPadding = 12f;
+
+    private RectTransform panelRect;
+    private RectTransform textRect;
+
+    void Awake()
+    {
+        CacheReferences();
+    }
+
+    void OnEnable()
+    {
+        CacheReferences();
+    }
+
+    void CacheReferences()
+    {
+        if (panelRect == null)
+            panelRect = GetComponent<RectTransform>();
+
+        if (dialogueText != null && textRect == null)
+            textRect = dialogueText.GetComponent<RectTransform>();
+    }
+
+    public void SetDialogue(string characterName, string text)
+    {
+        CacheReferences();
+
+        if (nameText != null)
+            nameText.text = characterName;
+
+        if (dialogueText != null)
+            dialogueText.text = text;
+
+        RefreshSize();
+    }
 
     public void RefreshSize()
     {
@@ -25,25 +64,34 @@ public class CharacterDialoguePanel : MonoBehaviour
 
         float textWidth = textRect.rect.width;
         if (textWidth <= 0f)
-        {
-            Debug.LogWarning($"[{gameObject.name}] text width <= 0", this);
             return;
-        }
 
         float preferredHeight = dialogueText.GetPreferredValues(dialogueText.text, textWidth, 0f).y;
-        preferredHeight += textExtraPadding;
+        preferredHeight += extraTextPadding;
 
+        // обновляем текстовую область
         Vector2 offsetMax = textRect.offsetMax;
-        offsetMax.y = -fixedTopOffset;
+        offsetMax.y = -topOffset;
         textRect.offsetMax = offsetMax;
 
         Vector2 offsetMin = textRect.offsetMin;
-        offsetMin.y = -(fixedTopOffset + preferredHeight);
+        offsetMin.y = -(topOffset + preferredHeight);
         textRect.offsetMin = offsetMin;
 
-        float panelHeight = fixedTopOffset + preferredHeight + bottomPadding;
-        panelHeight = Mathf.Clamp(panelHeight, minPanelHeight, maxPanelHeight);
+        Canvas.ForceUpdateCanvases();
+        dialogueText.ForceMeshUpdate();
 
-        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, panelHeight);
+        // считаем строки
+        int lineCount = Mathf.Max(1, dialogueText.textInfo.lineCount);
+        lineCount = Mathf.Min(lineCount, maxLines);
+
+        // считаем высоту панели
+        float targetHeight = baseHeight + (lineCount - 1) * heightPerLine;
+
+        float minimumNeeded = topOffset + preferredHeight + bottomPadding;
+        if (targetHeight < minimumNeeded)
+            targetHeight = minimumNeeded;
+
+        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
     }
 }

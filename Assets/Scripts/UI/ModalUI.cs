@@ -18,6 +18,7 @@ public class ModalUI : MonoBehaviour
     private Action onClose;
     private Coroutine activeRoutine;
     private bool isVisible;
+    private int showFrame = -1;
 
     private void Awake()
     {
@@ -27,6 +28,10 @@ public class ModalUI : MonoBehaviour
     private void Update()
     {
         if (!isVisible)
+            return;
+
+        // Игнорируем тот же кадр, в который modal был открыт
+        if (Time.frameCount == showFrame)
             return;
 
         if (Input.GetMouseButtonDown(0))
@@ -57,6 +62,7 @@ public class ModalUI : MonoBehaviour
 
         onClose = callback;
         isVisible = true;
+        showFrame = Time.frameCount;
 
         if (modalCanvasGroup != null)
         {
@@ -144,6 +150,7 @@ public class ModalUI : MonoBehaviour
 
         isVisible = false;
         onClose = null;
+        showFrame = -1;
     }
 
     public bool IsVisible()

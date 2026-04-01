@@ -19,6 +19,8 @@ public class NotificationController : MonoBehaviour
 
     public void Show(NotificationData data, Action onComplete = null)
     {
+        Debug.Log("NotificationController.Show called");
+        
         if (data == null)
         {
             onComplete?.Invoke();

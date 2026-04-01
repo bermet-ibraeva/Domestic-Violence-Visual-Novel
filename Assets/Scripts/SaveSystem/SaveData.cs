@@ -13,9 +13,6 @@ public class SaveData
     public int sparksTotal;
     public bool episodeRewardGranted;
 
-    public List<string> notesRewarded = new List<string>();
-    public List<TestBestScore> testsBest = new List<TestBestScore>();
-
     public int trustAG;
     public int trustJA;
 
@@ -34,4 +31,63 @@ public class SaveData
     public List<string> appliedEffectNodes = new List<string>();
 
     public List<string> shownNotificationIds = new List<string>();
+
+    public List<NoteState> notes = new List<NoteState>();
+    public List<TestBestScore> testsBest = new List<TestBestScore>();
+
+    // Получить или создать заметку
+    public NoteState GetOrCreateNote(string noteId)
+    {
+        NoteState note = notes.Find(n => n.noteId == noteId);
+
+        if (note == null)
+        {
+            note = new NoteState
+            {
+                noteId = noteId,
+                isUnlocked = false,
+                isRead = false,
+                rewardClaimed = false
+            };
+
+            notes.Add(note);
+        }
+
+        return note;
+    }
+
+    //  Получить или создать тест
+    public TestBestScore GetOrCreateTest(string quizId)
+    {
+        TestBestScore test = testsBest.Find(t => t.quizId == quizId);
+
+        if (test == null)
+        {
+            test = new TestBestScore
+            {
+                quizId = quizId,
+                bestScore = 0
+            };
+
+            testsBest.Add(test);
+        }
+
+        return test;
+    }
+}
+
+[Serializable]
+public class NoteState
+{
+    public string noteId;
+    public bool isUnlocked;
+    public bool isRead;
+    public bool rewardClaimed;
+}
+
+[Serializable]
+public class TestBestScore
+{
+    public string quizId;
+    public int bestScore; // 0–3
 }
