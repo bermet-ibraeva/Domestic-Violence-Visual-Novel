@@ -1,0 +1,46 @@
+[
+    {
+        "nodeId": "E01_S01_choice_setup",
+        "characterId": "Narrator",
+        "bgFx": "zoom_in",
+        "text": "Айназ улыбается и что-то напевает себе под нос, но Гульдана не улыбается в ответ.",
+        "audio": {
+          "changeMusic": true,
+          "musicId": "choice_tension",
+          "stopMusic": false,
+          "musicVolume": 0.55
+        },
+        "notification": {
+          "id": "tutorial_trust",
+          "showOnce": true,
+          "mode": "modal",
+          "type": "tutorial",
+          "title": "Обучение",
+          "message": "Некоторые решения влияют на отношения между персонажами.\n\nДоверие может расти или снижаться — и это влияет на дальнейшие события.",
+          "icon": "trust"
+        },
+        "choices": [
+          {
+            "text": "Спросить, всё ли у неё в порядке",
+            "effects": [
+              { "op": "inc", "key": "trust.AG", "value": 2 }
+            ],
+            "nextNode": "E01_S01_choice1_result"
+          }
+        ]
+    },
+    {
+        "nodeId": "E01_S01_dialogue_4",
+        "characterId": "Ainaz",
+        "emotion": "Happy",
+        "text": "Анара Айзатовна снова задала кучу домашки...",
+        "nextNode": "E01_S01_dialogue_5",
+        "audio": {
+            "changeMusic": true,
+            "musicId": "choice_tension",
+            "stopMusic": false
+        }
+    }
+    
+]
+

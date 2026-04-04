@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chapterInfoUI: {fileID: 725622337}
   playButtonText: {fileID: 1506832082}
-  sceneToLoad: Episode1
+  sceneToLoad: EpisodePage
 --- !u!1 &266946728
 GameObject:
   m_ObjectHideFlags: 0

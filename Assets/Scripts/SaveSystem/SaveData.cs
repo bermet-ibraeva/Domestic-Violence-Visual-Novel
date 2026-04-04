@@ -2,42 +2,40 @@ using System;
 using System.Collections.Generic;
 
 
-// score saved by player
+// containes all the data that needs to be saved and loaded
 [Serializable]
 public class SaveData
 {
+    // Player Progress
     public string episodePath = "Episodes/episode_1";
     public string currentNodeId = "E01_S01_start";
     public int chapterNumber = 1;
 
+    // Player Total Stats
     public int sparksTotal;
-    public bool episodeRewardGranted;
-
-    public int trustAG;
-    public int trustJA;
-
+    public int trustAGTotal;
+    public int trustJATotal;
     public int riskTotal;
     public int safetyTotal;
-
-    public int episodeRisk;
-    public int episodeSafety;
-    public int episodeTrustAG;
-    public int episodeTrustJA;
-    public int episodeSparks;
-
+    
+    // Flags and Service Data
+    public EpisodeSnapshot episodeStartSnapshot; // super important: used for episode restart and for calculating rewards at the end of episode
+    public bool episodeRewardGranted;
     public List<string> completedEpisodes = new List<string>();
 
-    public EpisodeSnapshot episodeStartSnapshot;
     public List<string> appliedEffectNodes = new List<string>();
-
     public List<string> shownNotificationIds = new List<string>();
 
+    // Learning Progress
     public List<NoteState> notes = new List<NoteState>();
     public List<TestBestScore> testsBest = new List<TestBestScore>();
 
-    // Получить или создать заметку
+    // helper methods to get or create note and test data
     public NoteState GetOrCreateNote(string noteId)
     {
+        if (notes == null)
+            notes = new List<NoteState>();
+
         NoteState note = notes.Find(n => n.noteId == noteId);
 
         if (note == null)
@@ -56,16 +54,19 @@ public class SaveData
         return note;
     }
 
-    //  Получить или создать тест
-    public TestBestScore GetOrCreateTest(string quizId)
+    // for tests we only track the best score, so we can easily calculate rewards and show progress in the UI
+    public TestBestScore GetOrCreateTest(string testId)
     {
-        TestBestScore test = testsBest.Find(t => t.quizId == quizId);
+        if (testsBest == null)
+            testsBest = new List<TestBestScore>();
+
+        TestBestScore test = testsBest.Find(t => t.testId == testId);
 
         if (test == null)
         {
             test = new TestBestScore
             {
-                quizId = quizId,
+                testId = testId,
                 bestScore = 0
             };
 
@@ -74,20 +75,4 @@ public class SaveData
 
         return test;
     }
-}
-
-[Serializable]
-public class NoteState
-{
-    public string noteId;
-    public bool isUnlocked;
-    public bool isRead;
-    public bool rewardClaimed;
-}
-
-[Serializable]
-public class TestBestScore
-{
-    public string quizId;
-    public int bestScore; // 0–3
 }

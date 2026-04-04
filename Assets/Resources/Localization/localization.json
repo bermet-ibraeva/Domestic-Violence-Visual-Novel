@@ -1,0 +1,128 @@
+{
+    "MainMenu": {
+      "pageName": "MainMenu",
+      "items": [
+        {
+          "key": "play",
+          "value": {
+            "ru": "ИГРАТЬ",
+            "en": "PLAY",
+            "ky": "ОЙНОО"
+          }
+        },
+        {
+          "key": "continue",
+          "value": {
+            "ru": "ПРОДОЛЖИТЬ",
+            "en": "CONTINUE",
+            "ky": "УЛАНТУУ"
+          }
+        },
+        {
+          "key": "settings",
+          "value": {
+            "ru": "НАСТРОЙКИ",
+            "en": "SETTINGS",
+            "ky": "ЖӨНДӨӨЛӨР"
+          }
+        },
+        {
+          "key": "about",
+          "value": {
+            "ru": "ОБ ИГРЕ",
+            "en": "ABOUT",
+            "ky": "ОЮН ЖӨНҮНДӨ"
+          }
+        },
+        {
+          "key": "notes",
+          "value": {
+            "ru": "ЗАМЕТКИ",
+            "en": "NOTES",
+            "ky": "ЭСКЕРТМЕЛЕР"
+          }
+        },
+        {
+          "key": "episode_1_title",
+          "value": {
+            "ru": "Эпизод 1: Первые звонки",
+            "en": "Episode 1: First Signs",
+            "ky": "1-бөлүм: Алгачкы белгилер"
+          }
+        },
+        {
+          "key": "episode_2_title",
+          "value": {
+            "ru": "Эпизод 2: Соседняя дверь",
+            "en": "Episode 2: Next Door",
+            "ky": "2-бөлүм: Коңшу эшик"
+          }
+        },
+        {
+          "key": "episode_3_title",
+          "value": {
+            "ru": "Эпизод 3: Молчание",
+            "en": "Episode 3: Silence",
+            "ky": "3-бөлүм: Тынчтык"
+          }
+        }
+      ]
+    },
+    "AboutPage": {
+      "pageName": "AboutPage",
+      "items": [
+        {
+          "key": "title",
+          "value": {
+            "ru": "Об игре",
+            "en": "About",
+            "ky": "Оюн тууралуу"
+          }
+        },
+        {
+          "key": "description",
+          "value": {
+            "ru": "<b>Когда гаснет свет</b> — это интерактивная история о выборе, доверии и внимании к тому, что часто остаётся незамеченным.\n\nИгра поднимает тему домашнего насилия — физического и психологического — и показывает ситуации, которые не всегда легко распознать.\n\nЗдесь нет правильных ответов.\nТолько твой путь.",
+            "en": "<b>When the Light Goes Out</b> is an interactive story about choice, trust, and noticing what often remains unseen.\n\nThe game addresses the topic of domestic violence — both physical and psychological — and shows situations that are not always easy to recognize.\n\nThere are no right answers.\nOnly your path.",
+            "ky": "<b>Жарык өчкөндө</b> — бул тандоо, ишеним жана көп учурда байкалбай калган нерселерге көңүл буруу тууралуу интерактивдүү окуя.\n\nОюн үй-бүлөлүк зомбулук темасын — физикалык жана психологиялык — көтөрүп чыгып, ар дайым оңой байкалбаган жагдайларды көрсөтөт.\n\nБул жерде туура жооп жок.\nСенин өз жолуң гана бар."
+          }
+        },
+        {
+          "key": "feedback_text",
+          "value": {
+            "ru": "Ваше мнение важно для нас",
+            "en": "Your opinion matters to us",
+            "ky": "Сиздин оюңуз биз үчүн маанилүү"
+          }
+        },
+        {
+          "key": "leave_feedback",
+          "value": {
+            "ru": "ОСТАВИТЬ ОТЗЫВ",
+            "en": "LEAVE FEEDBACK",
+            "ky": "ПИКИР КАЛТЫРУУ"
+          }
+        },
+        {
+          "key": "terms",
+          "value": {
+            "ru": "Условия использования",
+            "en": "Terms & Conditions",
+            "ky": "Колдонуу шарттары"
+          }
+        },
+        {
+          "key": "privacy",
+          "value": {
+            "ru": "Политика конфиденциальности",
+            "en": "Privacy Policy",
+            "ky": "Купуялык саясаты"
+          }
+        }
+      ]
+    },
+    "SettingsPage": {
+      "pageName": "SettingsPage",
+      "items": []
+    }
+  }

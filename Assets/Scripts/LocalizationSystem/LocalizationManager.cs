@@ -6,16 +6,19 @@ public class LocalizationManager : MonoBehaviour
 {
     public static LocalizationManager Instance { get; private set; }
 
-    [Header("CSV file in Resources/Localization")]
-    [SerializeField] private string csvFileName = "dialogue_localization";
+    [Header("JSON file in Resources/Localization")]
+    [SerializeField] private string jsonFileName = "localizationData";
 
     public Language CurrentLanguage { get; private set; } = Language.Russian;
-
-    private readonly Dictionary<string, LocalizedText> localizedTexts = new();
+    public bool HasSelectedLanguage { get; private set; }
 
     public event Action<Language> OnLanguageChanged;
 
     private const string LanguagePrefKey = "game_language";
+    private const string LanguageSelectedPrefKey = "game_language_selected";
+
+    private LocalizationRoot localizationData;
+    private readonly Dictionary<string, PageData> pages = new();
 
     private void Awake()
     {
@@ -29,166 +32,132 @@ public class LocalizationManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         LoadSavedLanguage();
-        LoadLocalizationTable();
+        LoadLocalizationJson();
     }
 
     private void LoadSavedLanguage()
     {
-        if (PlayerPrefs.HasKey(LanguagePrefKey))
-        {
-            CurrentLanguage = (Language)PlayerPrefs.GetInt(LanguagePrefKey);
-        }
-        else
+        HasSelectedLanguage = PlayerPrefs.GetInt(LanguageSelectedPrefKey, 0) == 1;
+
+        if (!PlayerPrefs.HasKey(LanguagePrefKey))
         {
             CurrentLanguage = Language.Russian;
+            return;
         }
+
+        string saved = PlayerPrefs.GetString(LanguagePrefKey, Language.Russian.ToString());
+
+        if (Enum.TryParse(saved, out Language parsedLanguage))
+            CurrentLanguage = parsedLanguage;
+        else
+            CurrentLanguage = Language.Russian;
     }
 
     public void SetLanguage(Language language)
     {
-        if (CurrentLanguage == language)
-            return;
-
         CurrentLanguage = language;
-        PlayerPrefs.SetInt(LanguagePrefKey, (int)CurrentLanguage);
+        HasSelectedLanguage = true;
+
+        PlayerPrefs.SetString(LanguagePrefKey, CurrentLanguage.ToString());
+        PlayerPrefs.SetInt(LanguageSelectedPrefKey, 1);
         PlayerPrefs.Save();
 
         OnLanguageChanged?.Invoke(CurrentLanguage);
     }
 
-    public string GetText(string key)
+    public bool IsFirstLaunch()
     {
-        if (string.IsNullOrWhiteSpace(key))
-            return string.Empty;
-
-        if (!localizedTexts.TryGetValue(key, out var entry))
-        {
-            Debug.LogWarning($"[Localization] Key not found: {key}");
-            return $"#{key}";
-        }
-
-        return CurrentLanguage switch
-        {
-            Language.Russian => string.IsNullOrEmpty(entry.ru) ? Fallback(entry, key) : entry.ru,
-            Language.English => string.IsNullOrEmpty(entry.en) ? Fallback(entry, key) : entry.en,
-            Language.Kyrgyz  => string.IsNullOrEmpty(entry.ky) ? Fallback(entry, key) : entry.ky,
-            _ => Fallback(entry, key)
-        };
+        return !HasSelectedLanguage;
     }
 
-    private string Fallback(LocalizedText entry, string key)
+    public string GetText(string pageName, string key)
     {
+        if (string.IsNullOrWhiteSpace(pageName) || string.IsNullOrWhiteSpace(key))
+            return string.Empty;
+
+        if (!pages.TryGetValue(pageName, out PageData page))
+        {
+            Debug.LogWarning($"[Localization] Page not found: {pageName}");
+            return $"#{pageName}.{key}";
+        }
+
+        if (!page.TryGetEntry(key, out LocalizedEntry entry))
+        {
+            Debug.LogWarning($"[Localization] Key not found: {pageName}.{key}");
+            return $"#{pageName}.{key}";
+        }
+
+        return GetLocalizedValue(entry, pageName, key);
+    }
+
+    public string GetText(string fullKey)
+    {
+        if (string.IsNullOrWhiteSpace(fullKey))
+            return string.Empty;
+
+        string[] parts = fullKey.Split('.');
+
+        if (parts.Length != 2)
+        {
+            Debug.LogWarning($"[Localization] Invalid key format: {fullKey}. Use Page.Key");
+            return $"#{fullKey}";
+        }
+
+        return GetText(parts[0], parts[1]);
+    }
+
+    private string GetLocalizedValue(LocalizedEntry entry, string pageName, string key)
+    {
+        string value = CurrentLanguage switch
+        {
+            Language.Russian => entry.ru,
+            Language.English => entry.en,
+            Language.Kyrgyz => entry.ky,
+            _ => entry.ru
+        };
+
+        if (!string.IsNullOrEmpty(value))
+            return value;
+
         if (!string.IsNullOrEmpty(entry.ru)) return entry.ru;
         if (!string.IsNullOrEmpty(entry.en)) return entry.en;
         if (!string.IsNullOrEmpty(entry.ky)) return entry.ky;
 
-        Debug.LogWarning($"[Localization] Empty translations for key: {key}");
-        return $"#{key}";
+        Debug.LogWarning($"[Localization] Empty translations for key: {pageName}.{key}");
+        return $"#{pageName}.{key}";
     }
 
-    private void LoadLocalizationTable()
+    private void LoadLocalizationJson()
     {
-        localizedTexts.Clear();
+        pages.Clear();
 
-        TextAsset csvFile = Resources.Load<TextAsset>($"Localization/{csvFileName}");
-        if (csvFile == null)
+        TextAsset jsonFile = Resources.Load<TextAsset>($"Localization/{jsonFileName}");
+        if (jsonFile == null)
         {
-            Debug.LogError($"[Localization] CSV file not found at Resources/Localization/{csvFileName}");
+            Debug.LogError($"[Localization] JSON file not found at Resources/Localization/{jsonFileName}");
             return;
         }
 
-        List<string[]> rows = ParseCsv(csvFile.text);
+        localizationData = JsonUtility.FromJson<LocalizationRoot>(jsonFile.text);
 
-        if (rows.Count <= 1)
+        if (localizationData == null)
         {
-            Debug.LogWarning("[Localization] CSV is empty or has no data rows.");
+            Debug.LogError("[Localization] Failed to parse localization JSON.");
             return;
         }
 
-        // expected header: key,ru,en,ky
-        for (int i = 1; i < rows.Count; i++)
-        {
-            string[] row = rows[i];
+        AddPage(localizationData.MainMenu);
+        AddPage(localizationData.AboutPage);
+        AddPage(localizationData.SettingsPage);
 
-            if (row.Length < 4)
-            {
-                Debug.LogWarning($"[Localization] Row {i + 1} has not enough columns.");
-                continue;
-            }
-
-            string key = row[0].Trim();
-            if (string.IsNullOrEmpty(key))
-                continue;
-
-            localizedTexts[key] = new LocalizedText
-            {
-                ru = row[1],
-                en = row[2],
-                ky = row[3]
-            };
-        }
-
-        Debug.Log($"[Localization] Loaded {localizedTexts.Count} entries.");
+        Debug.Log($"[Localization] Loaded pages: {pages.Count}");
     }
 
-    private List<string[]> ParseCsv(string csvText)
+    private void AddPage(PageData page)
     {
-        var result = new List<string[]>();
-        var rows = csvText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        if (page == null || string.IsNullOrWhiteSpace(page.pageName))
+            return;
 
-        foreach (var row in rows)
-        {
-            if (string.IsNullOrWhiteSpace(row))
-                continue;
-
-            result.Add(ParseCsvLine(row));
-        }
-
-        return result;
-    }
-
-    private string[] ParseCsvLine(string line)
-    {
-        List<string> fields = new();
-        bool inQuotes = false;
-        string current = "";
-
-        for (int i = 0; i < line.Length; i++)
-        {
-            char c = line[i];
-
-            if (c == '"')
-            {
-                if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
-                {
-                    current += '"';
-                    i++;
-                }
-                else
-                {
-                    inQuotes = !inQuotes;
-                }
-            }
-            else if (c == ',' && !inQuotes)
-            {
-                fields.Add(current);
-                current = "";
-            }
-            else
-            {
-                current += c;
-            }
-        }
-
-        fields.Add(current);
-        return fields.ToArray();
-    }
-
-    [Serializable]
-    private class LocalizedText
-    {
-        public string ru;
-        public string en;
-        public string ky;
+        pages[page.pageName] = page;
     }
 }

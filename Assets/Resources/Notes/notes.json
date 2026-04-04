@@ -4,14 +4,14 @@
       "noteId": "note_signs_01",
       "title": "Что происходит?",
       "text": "Иногда что-то кажется странным, но сложно сразу понять — это нормально или нет...",
-      "quizId": "quiz_signs_01",
+      "testId": "test_signs_01",
       "order": 1
     },
     {
       "noteId": "note_silence_01",
       "title": "Все молчат",
       "text": "Иногда окружающие делают вид, что ничего не происходит...",
-      "quizId": "quiz_silence_01",
+      "testId": "test_silence_01",
       "order": 2
     }
   ]

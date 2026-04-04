@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "testId": "test_signs_01",
+      "noteId": "note_signs_01",
+      "title": "Тест",
+      "maxReward": 3,
+      "questionsPerRun": 3,
+      "questions": [
+        {
+          "questionId": "q1",
+          "questionText": "Что является тревожным сигналом?",
+          "answers": [
+            { "answerId": "a1", "text": "Резкие изменения поведения", "isCorrect": true },
+            { "answerId": "a2", "text": "Любовь к тишине", "isCorrect": false }
+          ]
+        }
+      ]
+    }
+  ]
+}
