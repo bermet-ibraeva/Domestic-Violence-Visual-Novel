@@ -821,9 +821,9 @@ public class DialogueController : MonoBehaviour
         if (node == null || node.audio == null)
             return;
 
-        if (SceneMusicController.Instance == null)
+        if (SceneMusicManager.Instance == null)
             return;
 
-        SceneMusicController.Instance.ApplyNodeAudio(node.audio);
+        SceneMusicManager.Instance.ApplyNodeAudio(node.audio);
     }
 }

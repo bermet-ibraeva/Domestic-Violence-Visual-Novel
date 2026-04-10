@@ -50,7 +50,7 @@
       "sceneId": "E01_S01",
       "background": "street_crossroad_morning",
       "leftCharacterId": "Ainaz",
-      "rightCharactersId": ["Guldana"],
+      "rightCharacterIds": ["Guldana"],
       "startNode": "E01_S01_start",
       "nodes": [
         {
@@ -189,7 +189,7 @@
       "bgFade": true,
       "bgFadeDuration": 1.2,
       "leftCharacterId": "Ainaz",
-      "rightCharactersId": ["Guldana", "Aigul", "Timur", "Bekzat"],
+      "rightCharacterIds": ["Guldana", "Aigul", "Timur", "Bekzat"],
       "startNode": "E01_S02_start",
       "nodes": [
         {
@@ -407,7 +407,7 @@
       "sceneId": "E01_S03",
       "background": "classroom_end_of_class",
       "leftCharacterId": "Ainaz",
-      "rightCharactersId": ["Guldana"],
+      "rightCharacterIdss": ["Guldana"],
       "startNode": "E01_S03_start",
       "nodes": [
         {
@@ -490,7 +490,7 @@
       "sceneId": "E01_S04",
       "background": "ainaz_kitchen",
       "leftCharacterId": "Aida",
-      "rightCharactersId": ["Ainaz", "Guldana"],
+      "rightCharacterIds": ["Ainaz", "Guldana"],
       "startNode": "E01_S04_start",
       "nodes": [
         {
@@ -580,7 +580,7 @@
       "sceneId": "E01_S05",
       "background": "ainaz_room-dark",
       "leftCharacterId": "Ainaz",
-      "rightCharactersId": ["Guldana"],
+      "rightCharacterIds": ["Guldana"],
       "startNode": "E01_S05_start",
       "nodes": [
         {
@@ -681,7 +681,7 @@
       "sceneId": "E01_S06",
       "background": "ainaz_room-night",
       "leftCharacterId": "Ainaz",
-      "rightCharactersId": [],
+      "rightCharacterIds": [],
       "startNode": "E01_S06_start",
       "nodes": [
         {
@@ -774,7 +774,7 @@
       "sceneId": "E01_SUMMARY",
       "background": "guldana_house_night_quarell",
       "leftCharacterId": "Ainaz",
-      "rightCharactersId": [],
+      "rightCharacterIds": [],
       "startNode": "E01_S06_thought_1",
       "nodes": [
         {

@@ -99,6 +99,12 @@ public class NotesListController : MonoBehaviour
     // use NoteCardUI prefab to create a card for each note and set up its UI
     private void CreateCard(NoteData note)
     {
+
+        if (noteCardPrefab == null)
+        {
+            Debug.LogError("Prefab is NULL or destroyed!");
+            return;
+        }
         GameObject cardObject = Instantiate(noteCardPrefab, cardsParent);
         spawnedCards.Add(cardObject);
 
@@ -106,11 +112,13 @@ public class NotesListController : MonoBehaviour
 
         if (cardUI == null)
         {
-            Debug.LogError($"[NotesListController] NoteCardUI not found on prefab for note: {note.noteId}");
+            Debug.LogError($"NoteCardUI not found: {note.noteId}");
             return;
         }
 
-        cardUI.Setup(note, this, GetStatusText(note));
+        NoteState state = save.GetOrCreateNote(note.noteId);
+
+        cardUI.Setup(note, this, state);
     }
 
     public void OpenNote(string noteId)
@@ -165,7 +173,7 @@ public class NotesListController : MonoBehaviour
 
         for (int i = cardsParent.childCount - 1; i >= 0; i--)
         {
-            Destroy(cardsParent.GetChild(i).gameObject);
+            DestroyImmediate(cardsParent.GetChild(i).gameObject);
         }
     }
 

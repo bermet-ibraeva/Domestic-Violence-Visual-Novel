@@ -21,8 +21,8 @@ EditorBuildSettings:
     path: Assets/Scenes/NotesListPage.unity
     guid: 6e1c6afc665831a4dbe0066ce75eda24
   - enabled: 1
-    path: Assets/Scenes/NotePage.unity
-    guid: 4d09824a774b82a49b8862bbae25e533
+    path: Assets/Scenes/NoteDetailPage.unity
+    guid: 041cd1c6169c3f4438a8d4be7cfef3cd
   - enabled: 1
     path: Assets/Scenes/TestPage.unity
     guid: 3798b7ee66026dd48b4f6a9947bcc99a

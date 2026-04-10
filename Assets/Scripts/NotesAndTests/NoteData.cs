@@ -8,6 +8,8 @@ public class NoteData
     public string noteId;
     public string title;
     public string preview; /* maybe add later: check how it will look first */
+    public string highlight;
+    public string image;
     public string text;
     public string testId;
     public int order;

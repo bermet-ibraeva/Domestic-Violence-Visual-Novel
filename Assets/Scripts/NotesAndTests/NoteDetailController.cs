@@ -16,6 +16,7 @@ public class NoteDetailController : MonoBehaviour
 
     [Header("Optional UI")]
     [SerializeField] private TMP_Text openTestButtonText;
+    [SerializeField] private TMP_Text highlightText;
     [SerializeField] private GameObject contentRoot;
     [SerializeField] private GameObject errorRoot;
     [SerializeField] private TMP_Text errorText;
@@ -23,7 +24,6 @@ public class NoteDetailController : MonoBehaviour
     [Header("Scene Names")]
     [SerializeField] private string notesSceneName = "NotesListPage";
     [SerializeField] private string testSceneName = "TestPage";
-
 
     private NoteData currentNote;
     private NotesDatabase database;
@@ -50,7 +50,6 @@ public class NoteDetailController : MonoBehaviour
         if (notesJson == null)
         {
             ShowError("Файл заметок не назначен.");
-            Debug.LogError("[NoteDetailController] notesJson is not assigned.");
             return;
         }
 
@@ -58,8 +57,7 @@ public class NoteDetailController : MonoBehaviour
 
         if (database == null)
         {
-            ShowError("Не удалось загрузить базу заметок.");
-            Debug.LogError("[NoteDetailController] Failed to parse NotesDatabase.");
+            ShowError("Ошибка загрузки базы заметок.");
         }
     }
 
@@ -70,14 +68,6 @@ public class NoteDetailController : MonoBehaviour
         if (string.IsNullOrEmpty(selectedNoteId))
         {
             ShowError("Заметка не выбрана.");
-            Debug.LogWarning("[NoteDetailController] SelectedNoteId is null or empty.");
-            return;
-        }
-
-        if (database == null)
-        {
-            ShowError("База заметок не найдена.");
-            Debug.LogError("[NoteDetailController] Notes Database is null.");
             return;
         }
 
@@ -85,8 +75,7 @@ public class NoteDetailController : MonoBehaviour
 
         if (currentNote == null)
         {
-            ShowError("Не удалось загрузить заметку.");
-            Debug.LogWarning($"[NoteDetailController] Note not found for id: {selectedNoteId}");
+            ShowError("Заметка не найдена.");
             return;
         }
 
@@ -103,10 +92,30 @@ public class NoteDetailController : MonoBehaviour
         if (noteContentText != null)
         {
             noteContentText.richText = true;
-            noteContentText.text = currentNote.text;
+            noteContentText.text = FormatText(currentNote.text);
         }
 
+        if (highlightText != null)
+            highlightText.text = currentNote.highlight;
+
         SetupTestButton();
+    }
+
+    private string FormatText(string raw)
+    {
+        if (string.IsNullOrEmpty(raw))
+            return "";
+
+        // Разбиваем по абзацам
+        string[] paragraphs = raw.Split(new string[] { "\n\n" }, System.StringSplitOptions.None);
+
+        for (int i = 0; i < paragraphs.Length; i++)
+        {
+            // добавляем отступ снизу
+            paragraphs[i] = paragraphs[i].Trim() + "\n\n";
+        }
+
+        return string.Join("", paragraphs);
     }
 
     private void BindButtons()
@@ -141,10 +150,7 @@ public class NoteDetailController : MonoBehaviour
 
     private void OpenTest()
     {
-        if (currentNote == null)
-            return;
-
-        if (string.IsNullOrEmpty(currentNote.testId))
+        if (currentNote == null || string.IsNullOrEmpty(currentNote.testId))
             return;
 
         TestSession.SelectedTestId = currentNote.testId;
@@ -172,11 +178,8 @@ public class NoteDetailController : MonoBehaviour
                 note.rewardClaimed = true;
 
                 int reward = 2;
-
                 save.sparksTotal += reward;
                 TempGameContext.CurrentEpisode.sparks += reward;
-
-                Debug.Log("[NoteDetailController] +2 sparks for note: " + noteId);
             }
 
             SaveSystem.Save(save);

@@ -6,6 +6,16 @@ public class LanguageSelectionController : MonoBehaviour
 {
     [SerializeField] private FirstLaunchFlowController firstLaunchFlowController;
 
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void SelectRussian()
     {
         ApplyLanguage(Language.Russian);

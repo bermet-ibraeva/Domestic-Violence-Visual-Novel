@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 public enum Language
 {
     Russian,
@@ -25,6 +28,24 @@ public class PageData
 {
     public string pageName;
     public List<LocalizationItem> items;
+
+    public bool TryGetEntry(string key, out LocalizedEntry entry)
+    {
+        if (items != null)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i] != null && items[i].key == key)
+                {
+                    entry = items[i].value;
+                    return true;
+                }
+            }
+        }
+
+        entry = null;
+        return false;
+    }
 }
 
 [Serializable]
