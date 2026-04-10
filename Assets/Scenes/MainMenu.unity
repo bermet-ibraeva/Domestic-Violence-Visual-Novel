@@ -450,7 +450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859beaf3ffdca914ab56074406628f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: NotesPage
+  sceneName: NotesListPage
   sceneIndex: 4
 --- !u!1 &370320919
 GameObject:

@@ -3,16 +3,129 @@
     {
       "testId": "test_signs_01",
       "noteId": "note_signs_01",
-      "title": "Тест",
+      "title": "Тревожные сигналы",
       "maxReward": 3,
       "questionsPerRun": 3,
       "questions": [
         {
           "questionId": "q1",
-          "questionText": "Что является тревожным сигналом?",
+          "questionText": "Какое изменение в поведении может быть тревожным сигналом?",
           "answers": [
-            { "answerId": "a1", "text": "Резкие изменения поведения", "isCorrect": true },
-            { "answerId": "a2", "text": "Любовь к тишине", "isCorrect": false }
+            { "answerId": "a1", "text": "Человек стал говорить меньше и избегает разговоров", "isCorrect": true },
+            { "answerId": "a2", "text": "Человек начал больше шутить", "isCorrect": false },
+            { "answerId": "a3", "text": "Человек стал чаще заниматься спортом", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q2",
+          "questionText": "Что из этого может указывать на внутреннюю тревогу?",
+          "answers": [
+            { "answerId": "a1", "text": "Резкая реакция на громкие звуки", "isCorrect": true },
+            { "answerId": "a2", "text": "Любовь к тихой музыке", "isCorrect": false },
+            { "answerId": "a3", "text": "Желание больше спать на выходных", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q3",
+          "questionText": "Почему улыбка может быть тревожным сигналом?",
+          "answers": [
+            { "answerId": "a1", "text": "Она может выглядеть натянутой и неискренней", "isCorrect": true },
+            { "answerId": "a2", "text": "Потому что человек всегда должен быть серьёзным", "isCorrect": false },
+            { "answerId": "a3", "text": "Потому что улыбка означает радость", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q4",
+          "questionText": "Какое поведение может говорить о том, что человеку тяжело дома?",
+          "answers": [
+            { "answerId": "a1", "text": "Он(-a) не хочет идти домой и придумывает причины не возвращаться", "isCorrect": true },
+            { "answerId": "a2", "text": "Он(-a) любит гулять с друзьями", "isCorrect": false },
+            { "answerId": "a3", "text": "Он(-a) часто сидит в телефоне", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q5",
+          "questionText": "Что важно сделать, если ты замечаешь тревожные сигналы?",
+          "answers": [
+            { "answerId": "a1", "text": "Не игнорировать и понимать, что человеку может быть тяжело", "isCorrect": true },
+            { "answerId": "a2", "text": "Сразу обвинить человека в странном поведении", "isCorrect": false },
+            { "answerId": "a3", "text": "Полностью игнорировать ситуацию", "isCorrect": false }
+          ]
+        }
+      ]
+    },
+    {
+      "tests": [
+        {
+          "testId": "test_rumors_01_pro",
+          "noteId": "note_rumors_01",
+          "title": "Слухи",
+          "maxReward": 5,
+          "questionsPerRun": 4,
+          "questions": [
+            {
+              "questionId": "q1",
+              "questionText": "Почему слух может сильно измениться по сравнению с оригинальной историей?",
+              "answers": [
+                { "answerId": "a1", "text": "Каждый пересказывает по-своему и добавляет детали", "isCorrect": true },
+                { "answerId": "a2", "text": "Люди специально хотят соврать", "isCorrect": false },
+                { "answerId": "a3", "text": "Информация становится точнее со временем", "isCorrect": false }
+              ]
+            },
+            {
+              "questionId": "q2",
+              "questionText": "Ты слышишь слух о знакомом человеке, и он звучит правдоподобно. Что сделать правильнее?",
+              "answers": [
+                { "answerId": "a1", "text": "Поделиться только с близкими друзьями, чтобы обсудить", "isCorrect": false },
+                { "answerId": "a2", "text": "Не распространять и не делать выводов без фактов", "isCorrect": true },
+                { "answerId": "a3", "text": "Сразу поверить, если это звучит логично", "isCorrect": false }
+              ]
+            },
+            {
+              "questionId": "q3",
+              "questionText": "Почему даже «просто слушать» слухи может быть проблемой?",
+              "answers": [
+                { "answerId": "a1", "text": "Потому что это поддерживает распространение и делает это нормой", "isCorrect": true },
+                { "answerId": "a2", "text": "Потому что это занимает много времени", "isCorrect": false },
+                { "answerId": "a3", "text": "Потому что это всегда скучно", "isCorrect": false }
+              ]
+            },
+            {
+              "questionId": "q4",
+              "questionText": "Ты замечаешь, что о человеке говорят за спиной, но никто не подходит к нему напрямую. Почему это происходит?",
+              "answers": [
+                { "answerId": "a1", "text": "Людям проще обсуждать, чем вступать в прямой разговор", "isCorrect": true },
+                { "answerId": "a2", "text": "Потому что им всё равно", "isCorrect": false },
+                { "answerId": "a3", "text": "Потому что они знают правду", "isCorrect": false }
+              ]
+            },
+            {
+              "questionId": "q5",
+              "questionText": "Ты в компании, где обсуждают слух. Если ты резко скажешь «перестаньте», это может создать напряжение. Что сделать лучше?",
+              "answers": [
+                { "answerId": "a1", "text": "Аккуратно сменить тему или не поддерживать разговор", "isCorrect": true },
+                { "answerId": "a2", "text": "Активно участвовать, чтобы не выделяться", "isCorrect": false },
+                { "answerId": "a3", "text": "Сразу уйти, ничего не объяснив", "isCorrect": false }
+              ]
+            },
+            {
+              "questionId": "q6",
+              "questionText": "Человек, о котором ходят слухи, говорит «всё нормально», но выглядит напряжённым. Как лучше отреагировать?",
+              "answers": [
+                { "answerId": "a1", "text": "Принять слова буквально и не вмешиваться", "isCorrect": false },
+                { "answerId": "a2", "text": "Аккуратно показать поддержку, не давя на него", "isCorrect": true },
+                { "answerId": "a3", "text": "Спросить прямо при всех, что происходит", "isCorrect": false }
+              ]
+            },
+            {
+              "questionId": "q7",
+              "questionText": "Почему слухи могут усиливать чувство одиночества?",
+              "answers": [
+                { "answerId": "a1", "text": "Потому что человек остаётся один с чужими словами о себе", "isCorrect": true },
+                { "answerId": "a2", "text": "Потому что люди начинают больше с ним общаться", "isCorrect": false },
+                { "answerId": "a3", "text": "Потому что слухи быстро забываются", "isCorrect": false }
+              ]
+            }
           ]
         }
       ]

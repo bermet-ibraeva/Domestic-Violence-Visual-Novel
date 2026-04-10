@@ -11,15 +11,13 @@ public class NoteDetailController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text noteTitleText;
     [SerializeField] private TMP_Text noteContentText;
+    [SerializeField] private TMP_Text readTimeText;
+    [SerializeField] private Image noteImage;
     [SerializeField] private Button openTestButton;
     [SerializeField] private Button backButton;
 
-    [Header("Optional UI")]
-    [SerializeField] private TMP_Text openTestButtonText;
-    [SerializeField] private TMP_Text highlightText;
-    [SerializeField] private GameObject contentRoot;
-    [SerializeField] private GameObject errorRoot;
-    [SerializeField] private TMP_Text errorText;
+    [Header("Image")]
+    [SerializeField] private Sprite fallbackImage;
 
     [Header("Scene Names")]
     [SerializeField] private string notesSceneName = "NotesListPage";
@@ -32,14 +30,6 @@ public class NoteDetailController : MonoBehaviour
     private void Start()
     {
         save = SaveSystem.Load();
-
-        if (save == null)
-        {
-            ShowError("Не удалось загрузить сохранение.");
-            Debug.LogError("[NoteDetailController] SaveData is null.");
-            return;
-        }
-
         LoadDatabase();
         LoadNote();
         BindButtons();
@@ -47,57 +37,34 @@ public class NoteDetailController : MonoBehaviour
 
     private void LoadDatabase()
     {
-        if (notesJson == null)
-        {
-            ShowError("Файл заметок не назначен.");
-            return;
-        }
-
         database = JsonUtility.FromJson<NotesDatabase>(notesJson.text);
-
-        if (database == null)
-        {
-            ShowError("Ошибка загрузки базы заметок.");
-        }
     }
 
     private void LoadNote()
     {
         string selectedNoteId = NoteSession.SelectedNoteId;
 
-        if (string.IsNullOrEmpty(selectedNoteId))
-        {
-            ShowError("Заметка не выбрана.");
-            return;
-        }
-
         currentNote = database.GetNoteById(selectedNoteId);
 
         if (currentNote == null)
         {
-            ShowError("Заметка не найдена.");
+            Debug.LogError("Note not found");
             return;
         }
 
         MarkNoteAsRead(currentNote.noteId);
-        ShowContent();
         RefreshUI();
     }
 
     private void RefreshUI()
     {
-        if (noteTitleText != null)
-            noteTitleText.text = currentNote.title;
+        noteTitleText.text = currentNote.title;
+        noteContentText.text = FormatText(currentNote.text);
+        
+        if (readTimeText != null)
+            readTimeText.text = CalculateReadTime(currentNote.text);
 
-        if (noteContentText != null)
-        {
-            noteContentText.richText = true;
-            noteContentText.text = FormatText(currentNote.text);
-        }
-
-        if (highlightText != null)
-            highlightText.text = currentNote.highlight;
-
+        SetupImage();
         SetupTestButton();
     }
 
@@ -106,53 +73,70 @@ public class NoteDetailController : MonoBehaviour
         if (string.IsNullOrEmpty(raw))
             return "";
 
-        // Разбиваем по абзацам
         string[] paragraphs = raw.Split(new string[] { "\n\n" }, System.StringSplitOptions.None);
 
         for (int i = 0; i < paragraphs.Length; i++)
         {
-            // добавляем отступ снизу
             paragraphs[i] = paragraphs[i].Trim() + "\n\n";
         }
 
         return string.Join("", paragraphs);
     }
 
-    private void BindButtons()
+    private string CalculateReadTime(string text)
     {
-        if (openTestButton != null)
+        if (string.IsNullOrEmpty(text))
+            return "1 мин";
+
+        // убираем rich text теги (<b>, <i>, <color>)
+        string cleanText = System.Text.RegularExpressions.Regex.Replace(text, "<.*?>", "");
+
+        // считаем слова
+        int wordCount = cleanText.Split(' ', System.StringSplitOptions.RemoveEmptyEntries).Length;
+
+        // считаем минуты
+        int minutes = Mathf.CeilToInt(wordCount / 200f);
+
+        if (minutes == 1)
+            return "1 мин";
+        else
+            return $"{minutes} мин";
+    }
+
+    private void SetupImage()
+    {
+        if (string.IsNullOrEmpty(currentNote.image))
         {
-            openTestButton.onClick.RemoveAllListeners();
-            openTestButton.onClick.AddListener(OpenTest);
+            noteImage.sprite = fallbackImage;
+            return;
         }
 
-        if (backButton != null)
-        {
-            backButton.onClick.RemoveAllListeners();
-            backButton.onClick.AddListener(GoBack);
-        }
+        Debug.Log("Loading image: " + currentNote.image);
+
+        Sprite loaded = Resources.Load<Sprite>(currentNote.image);
+
+        Debug.Log(loaded == null ? "NOT FOUND" : "LOADED");
+
+        noteImage.sprite = loaded != null ? loaded : fallbackImage;
     }
 
     private void SetupTestButton()
     {
-        if (openTestButton == null || currentNote == null)
-            return;
-
         bool hasTest = !string.IsNullOrEmpty(currentNote.testId);
         openTestButton.gameObject.SetActive(hasTest);
+    }
 
-        if (!hasTest)
-            return;
+    private void BindButtons()
+    {
+        openTestButton.onClick.RemoveAllListeners();
+        openTestButton.onClick.AddListener(OpenTest);
 
-        if (openTestButtonText != null)
-            openTestButtonText.text = "Пройти тест";
+        backButton.onClick.RemoveAllListeners();
+        backButton.onClick.AddListener(GoBack);
     }
 
     private void OpenTest()
     {
-        if (currentNote == null || string.IsNullOrEmpty(currentNote.testId))
-            return;
-
         TestSession.SelectedTestId = currentNote.testId;
         SceneManager.LoadScene(testSceneName);
     }
@@ -164,9 +148,6 @@ public class NoteDetailController : MonoBehaviour
 
     private void MarkNoteAsRead(string noteId)
     {
-        if (string.IsNullOrEmpty(noteId))
-            return;
-
         NoteState note = save.GetOrCreateNote(noteId);
 
         if (!note.isRead)
@@ -177,33 +158,11 @@ public class NoteDetailController : MonoBehaviour
             {
                 note.rewardClaimed = true;
 
-                int reward = 2;
-                save.sparksTotal += reward;
-                TempGameContext.CurrentEpisode.sparks += reward;
+                save.sparksTotal += 2;
+                TempGameContext.CurrentEpisode.sparks += 2;
             }
 
             SaveSystem.Save(save);
         }
-    }
-
-    private void ShowContent()
-    {
-        if (contentRoot != null)
-            contentRoot.SetActive(true);
-
-        if (errorRoot != null)
-            errorRoot.SetActive(false);
-    }
-
-    private void ShowError(string message)
-    {
-        if (contentRoot != null)
-            contentRoot.SetActive(false);
-
-        if (errorRoot != null)
-            errorRoot.SetActive(true);
-
-        if (errorText != null)
-            errorText.text = message;
     }
 }
