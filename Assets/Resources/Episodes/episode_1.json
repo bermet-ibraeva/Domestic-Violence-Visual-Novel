@@ -110,7 +110,7 @@
         {
           "nodeId": "E01_S01_dialogue_6",
           "characterId": "Ainaz",
-          "emotion": "Anxiety",
+          "emotion": "Calm",
           "text": "Покажешь?",
           "nextNode": "E01_S01_dialogue_7"
         },
@@ -234,7 +234,7 @@
         {
           "nodeId": "E01_S02_dialogue_4",
           "characterId": "Ainaz",
-          "emotion": "Anxiety",
+          "emotion": "Calm",
           "text": "Ты о чём?",
           "nextNode": "E01_S02_dialogue_5"
         },
@@ -317,7 +317,7 @@
         {
           "nodeId": "E01_S02_choice1_dialogue_1",
           "characterId": "Timur",
-          "emotion": "Mocking",
+          "emotion": "Calm", 
           "text": "Ты правда не знаешь?",
           "nextNode": "E01_S02_choice1_dialogue_2"
         },
@@ -331,14 +331,14 @@
         {
           "nodeId": "E01_S02_choice1_dialogue_3",
           "characterId": "Aigul",
-          "emotion": "Mocking",
+          "emotion": "Calm",
           "text": "Ну да, ты же не местная.",
           "nextNode": "E01_S02_choice1_dialogue_4"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_4",
           "characterId": "Aigul",
-          "emotion": "Mocking",
+          "emotion": "Calm",
           "text": "Ты сюда сколько лет назад переехала? Три-четыре?",
           "nextNode": "E01_S02_choice1_narration_2"
         },
@@ -351,14 +351,14 @@
         {
           "nodeId": "E01_S02_choice1_dialogue_5",
           "characterId": "Bekzat",
-          "emotion": "Embarrassed",
+          "emotion": "Calm",
           "text": "Тогда понятно.",
           "nextNode": "E01_S02_choice1_dialogue_6"
         },
         {
           "nodeId": "E01_S02_choice1_dialogue_6",
           "characterId": "Bekzat",
-          "emotion": "Embarrassed",
+          "emotion": "Calm",
           "text": "Это было же произошло, когда мы только в школу пошли.",
           "nextNode": "E01_S02_choice1_narration_3"
         },
@@ -371,7 +371,7 @@
         {
           "nodeId": "E01_S02_choice1_dialogue_7",
           "characterId": "Bekzat",
-          "emotion": "Embarrassed",
+          "emotion": "Calm",
           "text": "Ладно, неважно. Кто после школы в футбол?",
           "nextNode": "E01_S02_choice1_narration_4"
         },
@@ -384,7 +384,7 @@
         {
           "nodeId": "E01_S02_choice1_thought",
           "characterId": "Ainaz",
-          "emotion": "Anxiety",
+          "emotion": "Calm",
           "isThought": true,
           "text": "Что это было?",
           "nextNode": "E01_S02_choice1_narration_5"
@@ -407,7 +407,7 @@
       "sceneId": "E01_S03",
       "background": "classroom_end_of_class",
       "leftCharacterId": "Ainaz",
-      "rightCharacterIdss": ["Guldana"],
+      "rightCharacterIds": ["Guldana"],
       "startNode": "E01_S03_start",
       "nodes": [
         {
@@ -633,7 +633,7 @@
         {
           "nodeId": "E01_S05_dialogue_6",
           "characterId": "Ainaz",
-          "emotion": "Anxiety",
+          "emotion": "Calm",
           "text": "Почему? Ты же говорила, что обязательно пойдёшь.",
           "nextNode": "E01_S05_dialogue_7"
         },
@@ -705,7 +705,7 @@
         {
           "nodeId": "E01_S06_dialogue_3",
           "characterId": "Ainaz",
-          "emotion": "Anxiety",
+          "emotion": "Calm",
           "text": "А ещё говорит, что я забывчивая… А нам ведь нужно выучить стих до понедельника.",
           "notification": {
             "id": "tutorial_2",

@@ -1,20 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Collections;
 using TMPro;
 
 public class MainMenuController : MonoBehaviour
 {
     [Header("UI")]
-    public ChapterInfoFromJson chapterInfoUI;
-    public TextMeshProUGUI playButtonText;
-    [SerializeField] private LanguageSelectionController languageSelectionController;
-
-    [Header("Scene")]
-    public string sceneToLoad = "EpisodePage";
+    [SerializeField] private ChapterInfoFromJson chapterInfoUI;
+    [SerializeField] private TextMeshProUGUI playButtonText;
+    [SerializeField] private Button playButton;
 
     private SaveData currentSave;
-    private bool isNewGame;
 
     private const string DEFAULT_EPISODE_PATH = "Episodes/episode_1";
     private const string DEFAULT_NODE_ID = "E01_S01_start";
@@ -22,12 +18,16 @@ public class MainMenuController : MonoBehaviour
 
     private void Start()
     {
-        InitializeSave();
-        UpdateMainMenuUI();
-        CheckFirstLaunchLanguageSelection();
+        Time.timeScale = 1f;
+
+        LoadSave();
+        UpdateUI();
+        BindButton();
     }
 
-    private void InitializeSave()
+    // ================= SAVE =================
+
+    private void LoadSave()
     {
         if (SaveSystem.HasSave())
         {
@@ -35,90 +35,95 @@ public class MainMenuController : MonoBehaviour
 
             if (currentSave == null)
             {
-                Debug.LogWarning("Save exists, but Load() returned null. Recreating save.");
-                currentSave = CreateDefaultSave();
-                SaveSystem.Save(currentSave);
+                Debug.LogWarning("[MainMenu] Save corrupted. Clearing.");
+                SaveSystem.Clear();
+                currentSave = null;
             }
         }
         else
         {
-            currentSave = CreateDefaultSave();
-            SaveSystem.Save(currentSave);
+            currentSave = null;
         }
-
-        isNewGame = IsDefaultSave(currentSave);
     }
 
-    private void UpdateMainMenuUI()
-    {
-        playButtonText.text = isNewGame
-            ? LocalizationManager.Instance.GetText("MainMenu", "play")
-            : LocalizationManager.Instance.GetText("MainMenu", "continue");
+    // ================= UI =================
 
-        if (chapterInfoUI != null)
-            chapterInfoUI.ShowFromSave(currentSave);
-        else
-            Debug.LogError("chapterInfoUI is NULL. Assign it in Inspector.");
-    }
-
-    private void CheckFirstLaunchLanguageSelection()
+    private void UpdateUI()
     {
-        if (LocalizationManager.Instance == null)
+        // 🔹 кнопка
+        if (playButtonText != null)
+            playButtonText.text = currentSave != null ? "ПРОДОЛЖИТЬ" : "ИГРАТЬ";
+
+        if (chapterInfoUI == null)
+        {
+            Debug.LogError("[MainMenu] chapterInfoUI is NULL.");
             return;
-
-        if (LocalizationManager.Instance.IsFirstLaunch())
-        {
-            if (languageSelectionController != null)
-                languageSelectionController.Show();
-            else
-                Debug.LogWarning("LanguageSelectionController is not assigned in MainMenuController.");
         }
-    }
 
-    private SaveData CreateDefaultSave()
-    {
-        return new SaveData
+        // 🔹 если нет save → показываем дефолтный эпизод
+        if (currentSave == null)
         {
-            episodePath = DEFAULT_EPISODE_PATH,
-            currentNodeId = DEFAULT_NODE_ID,
-            chapterNumber = DEFAULT_CHAPTER
-        };
-    }
+            EpisodeData episode = EpisodeLoader.LoadEpisode(
+                DEFAULT_EPISODE_PATH,
+                out _,
+                out _,
+                out _
+            );
 
-    private bool IsDefaultSave(SaveData data)
-    {
-        if (data == null) return true;
-
-        return data.episodePath == DEFAULT_EPISODE_PATH &&
-               data.currentNodeId == DEFAULT_NODE_ID &&
-               data.chapterNumber == DEFAULT_CHAPTER;
-    }
-
-    public void OnPlayButton()
-    {
-        if (isNewGame)
-        {
-            currentSave = CreateDefaultSave();
-            SaveSystem.Save(currentSave);
-        }
-        else
-        {
-            currentSave = SaveSystem.Load();
-
-            if (currentSave == null)
+            if (episode != null)
             {
-                currentSave = CreateDefaultSave();
-                SaveSystem.Save(currentSave);
+                SaveData temp = new SaveData
+                {
+                    episodePath = DEFAULT_EPISODE_PATH,
+                    currentNodeId = DEFAULT_NODE_ID,
+                    chapterNumber = DEFAULT_CHAPTER
+                };
+
+                chapterInfoUI.Show(temp, episode);
             }
+
+            return;
         }
 
-        TempGameContext.saveToLoad = currentSave;
-        StartCoroutine(LoadSceneNextFrame(sceneToLoad));
+        // 🔹 если есть save → показываем текущий прогресс
+        EpisodeData currentEpisode = EpisodeLoader.LoadEpisode(
+            currentSave.episodePath,
+            out _,
+            out _,
+            out _
+        );
+
+        if (currentEpisode == null)
+        {
+            Debug.LogError($"[MainMenu] Failed to load episode: {currentSave.episodePath}");
+            return;
+        }
+
+        chapterInfoUI.Show(currentSave, currentEpisode);
     }
 
-    private IEnumerator LoadSceneNextFrame(string sceneName)
+    // ================= BUTTON =================
+
+    private void BindButton()
     {
-        yield return null;
-        SceneManager.LoadScene(sceneName);
+        if (playButton == null)
+        {
+            Debug.LogError("[MainMenu] PlayButton is not assigned!");
+            return;
+        }
+
+        playButton.onClick.RemoveAllListeners();
+        playButton.onClick.AddListener(OnPlayPressed);
+    }
+
+    private void OnPlayPressed()
+    {
+        // 🔹 если нет save → начинаем новую игру
+        if (!SaveSystem.HasSave())
+        {
+            SaveSystem.StartEpisode(DEFAULT_EPISODE_PATH);
+        }
+
+        SceneManager.LoadScene("EpisodePage");
     }
 }

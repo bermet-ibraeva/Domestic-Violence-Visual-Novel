@@ -5,12 +5,6 @@ using UnityEngine.UI;
 
 public class SettingsController : MonoBehaviour
 {
-    [Header("Navigation")]
-    [SerializeField] private Button backButton;
-    [SerializeField] private string backSceneName = "MainMenu";
-    [SerializeField] private string episodeSceneName = "EpisodePage";
-
-
     [Header("Language Buttons")]
     [SerializeField] private Button enButton;
     [SerializeField] private Button kgButton;
@@ -35,19 +29,13 @@ public class SettingsController : MonoBehaviour
     [SerializeField] private Button restartEpisodeButton;
     [SerializeField] private Button resetGameButton;
 
-    [Header("Optional Confirmation Panels")]
-    [SerializeField] private GameObject restartEpisodeConfirmPanel;
-    [SerializeField] private GameObject resetGameConfirmPanel;
-    [SerializeField] private Button confirmRestartEpisodeButton;
-    [SerializeField] private Button cancelRestartEpisodeButton;
-    [SerializeField] private Button confirmResetGameButton;
-    [SerializeField] private Button cancelResetGameButton;
-
     [Header("Colors")]
     [SerializeField] private Color selectedButtonColor = new Color32(216, 206, 240, 255);
     [SerializeField] private Color unselectedButtonColor = new Color32(255, 255, 255, 0);
     [SerializeField] private Color selectedTextColor = new Color32(143, 121, 198, 255);
     [SerializeField] private Color unselectedTextColor = new Color32(55, 49, 73, 255);
+
+    [SerializeField] private ConfirmPopup confirmPopup;
 
     private const string LanguageKey = "language";
     private const string MusicVolumeKey = "music_volume";
@@ -67,12 +55,6 @@ public class SettingsController : MonoBehaviour
 
     private void InitializeUI()
     {
-        if (restartEpisodeConfirmPanel != null)
-            restartEpisodeConfirmPanel.SetActive(false);
-
-        if (resetGameConfirmPanel != null)
-            resetGameConfirmPanel.SetActive(false);
-
         if (musicSlider != null)
         {
             musicSlider.minValue = 0f;
@@ -106,9 +88,6 @@ public class SettingsController : MonoBehaviour
 
     private void BindButtons()
     {
-        if (backButton != null)
-            backButton.onClick.AddListener(OnBackPressed);
-
         if (enButton != null)
             enButton.onClick.AddListener(() => OnLanguageSelected("EN"));
 
@@ -123,18 +102,6 @@ public class SettingsController : MonoBehaviour
 
         if (resetGameButton != null)
             resetGameButton.onClick.AddListener(OnResetGamePressed);
-
-        if (confirmRestartEpisodeButton != null)
-            confirmRestartEpisodeButton.onClick.AddListener(ConfirmRestartEpisode);
-
-        if (cancelRestartEpisodeButton != null)
-            cancelRestartEpisodeButton.onClick.AddListener(CloseRestartEpisodePanel);
-
-        if (confirmResetGameButton != null)
-            confirmResetGameButton.onClick.AddListener(ConfirmResetGame);
-
-        if (cancelResetGameButton != null)
-            cancelResetGameButton.onClick.AddListener(CloseResetGamePanel);
     }
 
     private void BindSliders()
@@ -144,11 +111,6 @@ public class SettingsController : MonoBehaviour
 
         if (sfxSlider != null)
             sfxSlider.onValueChanged.AddListener(OnSfxSliderChanged);
-    }
-
-    private void OnBackPressed()
-    {
-        SceneManager.LoadScene(backSceneName);
     }
 
     private void OnLanguageSelected(string languageCode)
@@ -161,9 +123,7 @@ public class SettingsController : MonoBehaviour
     {
         currentLanguage = languageCode;
 
-        // Здесь подключишь свою локализацию
-        // Например:
-        // LocalizationManager.Instance.SetLanguage(languageCode);
+        // Локализацию подключишь позже
 
         if (save)
         {
@@ -186,9 +146,7 @@ public class SettingsController : MonoBehaviour
 
     private void ApplyMusicVolume(float value, bool save)
     {
-        // Здесь подключишь свой AudioManager
-        // Например:
-        // AudioManager.Instance.SetMusicVolume(value);
+        // AudioManager подключишь позже
 
         if (save)
         {
@@ -199,9 +157,7 @@ public class SettingsController : MonoBehaviour
 
     private void ApplySfxVolume(float value, bool save)
     {
-        // Здесь подключишь свой AudioManager
-        // Например:
-        // AudioManager.Instance.SetSfxVolume(value);
+        // AudioManager подключишь позже
 
         if (save)
         {
@@ -226,6 +182,7 @@ public class SettingsController : MonoBehaviour
             label.color = isSelected ? selectedTextColor : unselectedTextColor;
     }
 
+
     private void RefreshAudioUI()
     {
         if (musicPercentText != null && musicSlider != null)
@@ -235,84 +192,42 @@ public class SettingsController : MonoBehaviour
             sfxPercentText.text = Mathf.RoundToInt(sfxSlider.value * 100f) + "%";
     }
 
+    // ================= CORE LOGIC =================
 
-    public void OnRestartEpisodePressed()
+    private void OnRestartEpisodePressed()
     {
-        bool restarted = SaveSystem.RestartCurrentEpisode();
-
-        if (!restarted)
+        if (confirmPopup == null)
             return;
 
-        if (StatSystem.Instance != null)
-            StatSystem.Instance.ResetEpisodeStats();
+        confirmPopup.Show(
+            "Вы действительно хотите начать эпизод заново?",
+            () =>
+            {
+                bool restarted = SaveSystem.RestartCurrentEpisode();
 
-        SceneManager.LoadScene(episodeSceneName);
+                if (!restarted)
+                    return;
+
+                if (StatSystem.Instance != null)
+                    StatSystem.Instance.ResetEpisodeStats();
+
+                Debug.Log("Episode restarted");
+            }
+        );
     }
 
     private void OnResetGamePressed()
     {
-        if (resetGameConfirmPanel != null)
-        {
-            resetGameConfirmPanel.SetActive(true);
-        }
-        else
-        {
-            ConfirmResetGame();
-        }
-    }
-
-    private void CloseRestartEpisodePanel()
-    {
-        if (restartEpisodeConfirmPanel != null)
-            restartEpisodeConfirmPanel.SetActive(false);
-    }
-
-    private void CloseResetGamePanel()
-    {
-        if (resetGameConfirmPanel != null)
-            resetGameConfirmPanel.SetActive(false);
-    }
-
-    private void ConfirmRestartEpisode()
-    {
-        bool restarted = SaveSystem.RestartCurrentEpisode();
-
-        if (!restarted)
+        if (confirmPopup == null)
             return;
 
-        StatSystem.Instance.ResetEpisodeStats();
-
-        SceneManager.LoadScene("EpisodePage");
-    }
-
-    private void ConfirmResetGame()
-    {
-        CloseResetGamePanel();
-
-        // Полный сброс игры
-        // Лучше не делать просто PlayerPrefs.DeleteAll(),
-        // если у тебя там и язык, и звук тоже хранятся.
-        //
-        // Ниже вариант: удаляем только прогресс игры,
-        // а настройки можно оставить.
-
-        // Пример:
-        // SaveSystem.DeleteSave();
-
-        // Если хочешь и настройки тоже сбрасывать:
-        // PlayerPrefs.DeleteAll();
-
-        // Временный вариант:
-        PlayerPrefs.DeleteKey("episode_path");
-        PlayerPrefs.DeleteKey("current_node_id");
-        PlayerPrefs.DeleteKey("chapter_number");
-        PlayerPrefs.DeleteKey("sparks_total");
-        PlayerPrefs.DeleteKey("trust_ag_total");
-        PlayerPrefs.DeleteKey("trust_ja_total");
-        PlayerPrefs.DeleteKey("risk_total");
-        PlayerPrefs.DeleteKey("safety_total");
-        PlayerPrefs.Save();
-
-        SceneManager.LoadScene("MainMenu");
+        confirmPopup.Show(
+            "Вы действительно хотите начать игру заново?",
+            () =>
+            {
+                SaveSystem.Clear();
+                Debug.Log("Game reset");
+            }
+        );
     }
 }

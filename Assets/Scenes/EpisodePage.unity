@@ -382,7 +382,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 78949060}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 78949062}
+        m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
+        m_MethodName: GoToScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &78949060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,7 +445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859beaf3ffdca914ab56074406628f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: NotesPage
+  sceneName: NotesListPage
   sceneIndex: 4
 --- !u!1 &99467222
 GameObject:
@@ -3245,9 +3257,6 @@ MonoBehaviour:
   - characterId: Aigul
     defaultSprite: {fileID: 21300000, guid: acbc71c6aa2a2ac45a3616007d8d3b97, type: 3}
     emotions: []
-  - characterId: TImur
-    defaultSprite: {fileID: 21300000, guid: 45abd3d62846dbb4f80d71c9f351a864, type: 3}
-    emotions: []
   - characterId: Bekzat
     defaultSprite: {fileID: 21300000, guid: 7da52c514ab9c8a4ab58f23c24542fc2, type: 3}
     emotions: []
@@ -3262,6 +3271,9 @@ MonoBehaviour:
     emotions: []
   - characterId: Jakyp
     defaultSprite: {fileID: 21300000, guid: b7a2d610658f2204b8a1ae6ff823ee91, type: 3}
+    emotions: []
+  - characterId: Timur
+    defaultSprite: {fileID: 21300000, guid: 45abd3d62846dbb4f80d71c9f351a864, type: 3}
     emotions: []
 --- !u!1 &992224246
 GameObject:
@@ -4431,7 +4443,7 @@ GameObject:
   - component: {fileID: 1317869464}
   - component: {fileID: 1317869463}
   - component: {fileID: 1317869462}
-  - component: {fileID: 1317869461}
+  - component: {fileID: 1317869465}
   m_Layer: 5
   m_Name: HomeButton
   m_TagString: Untagged
@@ -4458,18 +4470,6 @@ RectTransform:
   m_AnchoredPosition: {x: -400, y: 0}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1317869461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317869459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4677f2a4483221d4e8ddb8d873fb586a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1317869462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4514,9 +4514,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1317869461}
-        m_TargetAssemblyTypeName: HomeButton, Assembly-CSharp
-        m_MethodName: GoHome
+      - m_Target: {fileID: 1317869465}
+        m_TargetAssemblyTypeName: SceneButton, Assembly-CSharp
+        m_MethodName: GoToScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4564,6 +4564,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317869459}
   m_CullTransparentMesh: 1
+--- !u!114 &1317869465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317869459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 859beaf3ffdca914ab56074406628f7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: MainMenu
+  sceneIndex: 0
 --- !u!1 &1318075828
 GameObject:
   m_ObjectHideFlags: 0

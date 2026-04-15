@@ -139,6 +139,7 @@ public class NoteDetailController : MonoBehaviour
     {
         TestSession.SelectedTestId = currentNote.testId;
         SceneManager.LoadScene(testSceneName);
+        Debug.Log("Opening test: " + currentNote.testId);
     }
 
     private void GoBack()

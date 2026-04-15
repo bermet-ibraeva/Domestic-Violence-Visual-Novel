@@ -66,7 +66,7 @@ public class EpisodeEndPanel : MonoBehaviour
             continueButton.onClick.RemoveAllListeners();
             continueButton.onClick.AddListener(() =>
             {
-                dialogueController?.StartNextEpisode(nextEpisodePath, nextEpisodeStartNode);
+                dialogueController?.StartNextEpisode(nextEpisodePath);
             });
         }
 

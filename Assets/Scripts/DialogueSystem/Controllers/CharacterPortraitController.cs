@@ -49,6 +49,10 @@ public class CharacterPortraitController : MonoBehaviour
     private Dictionary<string, Sprite> defaultDict;
     private Dictionary<string, Dictionary<string, Sprite>> emotionDict;
 
+    private string currentCharacterId;
+    private string currentEmotion;
+    private Sprite currentSprite;
+
     void Awake()
     {
         if (characterImage == null)
@@ -59,15 +63,17 @@ public class CharacterPortraitController : MonoBehaviour
 
     void BuildDictionaries()
     {
-        defaultDict = new();
-        emotionDict = new();
+        defaultDict = new Dictionary<string, Sprite>();
+        emotionDict = new Dictionary<string, Dictionary<string, Sprite>>();
 
         foreach (var ch in characters)
         {
             if (ch == null || string.IsNullOrEmpty(ch.characterId))
                 continue;
 
-            defaultDict[ch.characterId] = ch.defaultSprite;
+            string id = Normalize(ch.characterId); 
+
+            defaultDict[id] = ch.defaultSprite;
 
             var inner = new Dictionary<string, Sprite>();
 
@@ -82,19 +88,25 @@ public class CharacterPortraitController : MonoBehaviour
                 }
             }
 
-            emotionDict[ch.characterId] = inner;
+            emotionDict[id] = inner; 
         }
     }
 
     static string Normalize(string s)
     {
-        return (s ?? "").Trim().ToLowerInvariant();
+        return string.IsNullOrWhiteSpace(s)
+            ? string.Empty
+            : s.Trim().ToLowerInvariant();
     }
 
     public void Hide()
     {
         if (characterImage != null)
             characterImage.enabled = false;
+
+        currentCharacterId = null;
+        currentEmotion = null;
+        currentSprite = null;
     }
 
     public void Show(string characterId, string emotion)
@@ -111,17 +123,31 @@ public class CharacterPortraitController : MonoBehaviour
             return;
         }
 
-        Sprite result = GetSprite(characterId, emotion);
+        string id = Normalize(characterId);
+        string emo = Normalize(string.IsNullOrEmpty(emotion) ? "Calm" : emotion);
+
+        // cashe current state to avoid redundant updates
+        if (currentCharacterId == id && currentEmotion == emo)
+        {
+            return;
+        }
+
+        Sprite result = GetSprite(id, emo);
 
         if (result == null)
         {
-            Debug.LogWarning($"[CharacterPortraitController] Нет спрайта для '{characterId}' (эмоция '{emotion}')");
+            Debug.LogError($"[CharacterPortraitController] Нет спрайта для '{characterId}' → скрываю портрет");
             Hide();
             return;
         }
 
         characterImage.enabled = true;
         characterImage.sprite = result;
+
+        // обновляем кэш только после успешного применения спрайта
+        currentCharacterId = id;
+        currentEmotion = emo;
+        currentSprite = result;
     }
 
     public Sprite GetSprite(string characterId, string emotion)
@@ -129,10 +155,17 @@ public class CharacterPortraitController : MonoBehaviour
         if (string.IsNullOrEmpty(characterId))
             return null;
 
+        string id = Normalize(characterId);
+
+        if (!defaultDict.ContainsKey(id))
+        {
+            Debug.LogError($"[CharacterPortraitController] Character NOT FOUND: '{characterId}'");
+        }
+
         string emoKey = Normalize(string.IsNullOrEmpty(emotion) ? "Calm" : emotion);
 
         if (emotionDict != null &&
-            emotionDict.TryGetValue(characterId, out var emDict) &&
+            emotionDict.TryGetValue(id, out var emDict) &&
             emDict != null &&
             emDict.TryGetValue(emoKey, out var emSprite) &&
             emSprite != null)
@@ -141,7 +174,7 @@ public class CharacterPortraitController : MonoBehaviour
         }
 
         if (defaultDict != null &&
-            defaultDict.TryGetValue(characterId, out var defSprite) &&
+            defaultDict.TryGetValue(id, out var defSprite) &&
             defSprite != null)
         {
             return defSprite;

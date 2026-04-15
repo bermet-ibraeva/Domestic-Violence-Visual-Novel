@@ -75,6 +75,47 @@ public static class SaveSystem
             data.testsBest = new List<TestBestScore>();
     }
 
+    public static void StartEpisode(string episodePath)
+    {
+        SaveData save = SaveSystem.Load();
+
+        save.episodePath = episodePath;
+
+        string startNode = GetEpisodeStartNode(episodePath);
+
+        save.currentNodeId = startNode;
+
+        // сохранить snapshot для рестарта
+        save.episodeStartSnapshot = new EpisodeSnapshot
+        {
+            sparks = save.sparksTotal,
+            trustAG = save.trustAGTotal,
+            trustJA = save.trustJATotal,
+            risk = save.riskTotal,
+            safety = save.safetyTotal
+        };
+
+        SaveSystem.Save(save);
+    }
+
+    private static string GetEpisodeStartNode(string episodePath)
+    {
+        TextAsset episodeJson = Resources.Load<TextAsset>(episodePath);
+
+        if (episodeJson == null)
+        {
+            Debug.LogError($"Episode not found: {episodePath}");
+            return null;
+        }
+
+        EpisodeData episode = JsonUtility.FromJson<EpisodeData>(episodeJson.text);
+
+        if (episode == null || episode.scenes.Count == 0)
+            return null;
+
+        return episode.scenes[0].startNode;
+    }
+
     public static bool RestartCurrentEpisode()
     {
         SaveData save = Load();
@@ -85,7 +126,13 @@ public static class SaveSystem
             return false;
         }
 
-        string firstNode = GetEpisodeStartNode(save);
+        if (string.IsNullOrEmpty(save.episodePath))
+        {
+            Debug.LogError("[SaveSystem] episodePath is empty.");
+            return false;
+        }
+
+        string firstNode = GetEpisodeStartNode(save.episodePath);
 
         if (string.IsNullOrEmpty(firstNode))
         {
@@ -93,6 +140,7 @@ public static class SaveSystem
             return false;
         }
 
+        // вернуть snapshot
         if (save.episodeStartSnapshot != null)
         {
             save.sparksTotal = save.episodeStartSnapshot.sparks;
@@ -105,6 +153,7 @@ public static class SaveSystem
         save.episodeRewardGranted = false;
         save.currentNodeId = firstNode;
 
+        // очистка эффектов
         if (save.appliedEffectNodes == null)
             save.appliedEffectNodes = new List<string>();
         else
@@ -112,41 +161,5 @@ public static class SaveSystem
 
         Save(save);
         return true;
-    }
-
-    private static string GetEpisodeStartNode(SaveData save)
-    {
-        if (save == null || string.IsNullOrEmpty(save.episodePath))
-            return null;
-
-        TextAsset episodeJson = Resources.Load<TextAsset>(save.episodePath);
-
-        if (episodeJson == null)
-        {
-            Debug.LogError($"[SaveSystem] Episode JSON not found at path: {save.episodePath}");
-            return null;
-        }
-
-        EpisodeData episode = JsonUtility.FromJson<EpisodeData>(episodeJson.text);
-
-        if (episode == null)
-        {
-            Debug.LogError("[SaveSystem] Failed to parse EpisodeData from JSON.");
-            return null;
-        }
-
-        if (episode.scenes == null || episode.scenes.Count == 0)
-        {
-            Debug.LogError("[SaveSystem] Episode has no scenes.");
-            return null;
-        }
-
-        if (string.IsNullOrEmpty(episode.scenes[0].startNode))
-        {
-            Debug.LogError("[SaveSystem] First scene startNode is empty.");
-            return null;
-        }
-
-        return episode.scenes[0].startNode;
-    }
+    }   
 }

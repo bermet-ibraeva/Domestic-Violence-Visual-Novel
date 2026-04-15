@@ -168,8 +168,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chapterInfoUI: {fileID: 725622337}
   playButtonText: {fileID: 1506832082}
-  languageSelectionController: {fileID: 0}
   sceneToLoad: EpisodePage
+  playButton: {fileID: 1059236663}
 --- !u!1 &266946728
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041F\u0435\u0440\u0432\u044B\u0435 \u0437\u0432\u043E\u043D\u043A\u0438"
+  m_text: "\u0412\u0438\u0434\u0438\u0448\u044C, \u0442\u043E \u0442\u044B \u043B\u043E\u0445"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 76e0341efbd9d4b41b0f1d68dd5c514a, type: 2}
   m_sharedMaterial: {fileID: 6326275127611215842, guid: 76e0341efbd9d4b41b0f1d68dd5c514a, type: 2}
@@ -600,7 +600,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -90}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &600527051
 MonoBehaviour:
@@ -655,7 +655,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 15
   m_fontSizeMax: 60
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -811,7 +811,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -90}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &702446928
 MonoBehaviour:
@@ -866,7 +866,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 15
   m_fontSizeMax: 60
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -945,7 +945,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -90}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &709149341
 MonoBehaviour:
@@ -1000,7 +1000,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 15
   m_fontSizeMax: 60
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1366,9 +1366,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 168993398}
+      - m_Target: {fileID: 11500000, guid: 8f6bc26a058eddc4ebc90473e927eb21, type: 3}
         m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
-        m_MethodName: OnPlayButton
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1435,7 +1435,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u042D\u043F\u0438\u0437\u043E\u0434 1"
+  m_text: "\u0415\u0441\u043B\u0438 \u0442\u044B \u044D\u0442\u043E "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2143aed63af6f3b4fb7c2dfd8b846611, type: 2}
   m_sharedMaterial: {fileID: 9059776404175644782, guid: 2143aed63af6f3b4fb7c2dfd8b846611, type: 2}
@@ -1661,7 +1661,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PLAY
+  m_text: "\u0438\u0441\u043F\u0440\u0430\u0432\u043B\u044F\u0439"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 76e0341efbd9d4b41b0f1d68dd5c514a, type: 2}
   m_sharedMaterial: {fileID: 6326275127611215842, guid: 76e0341efbd9d4b41b0f1d68dd5c514a, type: 2}
@@ -1694,7 +1694,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

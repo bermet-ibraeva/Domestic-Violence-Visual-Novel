@@ -1,6 +1,43 @@
 {
     "episodeId": "E02",
     "episodeTitle": "Соседняя дверь",
+    "characters": [
+    {
+      "characterId": "Narrator",
+      "displayName": "",
+      "portraitKey": null
+    },
+    {
+      "characterId": "Ainaz",
+      "displayName": "Айназ",
+      "portraitKey": "Ainaz"
+    },
+    {
+      "characterId": "Guldana",
+      "displayName": "Гульдана",
+      "portraitKey": "Guldana"
+    },
+    {
+      "characterId": "Aigul",
+      "displayName": "Айгуль",
+      "portraitKey": "Aigul"
+    },
+    {
+      "characterId": "Timur",
+      "displayName": "Тимур",
+      "portraitKey": "Timur"
+    },
+    {
+      "characterId": "Bekzat",
+      "displayName": "Бекзат",
+      "portraitKey": "Bekzat"
+    },
+    {
+      "characterId": "Aida",
+      "displayName": "Аида",
+      "portraitKey": "Aida"
+    }
+  ],
     "variables": {
       "trust": {
         "AG": 0

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 /*
 Dialogue Controller
@@ -115,8 +116,7 @@ public class DialogueController : MonoBehaviour
 
     void Start()
     {
-        save = TempGameContext.saveToLoad ?? SaveSystem.Load();
-        bool hasLoadedSave = save != null;
+        save = SaveSystem.Load();
 
         if (save == null)
             save = new SaveData();
@@ -124,33 +124,11 @@ public class DialogueController : MonoBehaviour
         if (save.appliedEffectNodes == null)
             save.appliedEffectNodes = new List<string>();
 
-        string requestedEpisodePath = episodePath;
-        string requestedStartNodeId = startNodeId;
-
-        bool sameEpisodeAsSave =
-            hasLoadedSave &&
-            !string.IsNullOrEmpty(save.episodePath) &&
-            save.episodePath == requestedEpisodePath;
-
-        bool hasMidEpisodeProgress =
-            hasLoadedSave &&
-            sameEpisodeAsSave &&
-            !string.IsNullOrEmpty(save.currentNodeId) &&
-            save.currentNodeId != requestedStartNodeId;
-
-        if (sameEpisodeAsSave)
-        {
-            episodePath = save.episodePath;
-            startNodeId = string.IsNullOrEmpty(save.currentNodeId) ? requestedStartNodeId : save.currentNodeId;
-        }
-        else
-        {
-            episodePath = requestedEpisodePath;
-            startNodeId = requestedStartNodeId;
-        }
-
         if (save.shownNotificationIds == null)
             save.shownNotificationIds = new List<string>();
+
+        episodePath = save.episodePath;
+        startNodeId = save.currentNodeId;
 
         LoadEpisode();
 
@@ -160,23 +138,6 @@ public class DialogueController : MonoBehaviour
         {
             episodeEndPanel.Init(this);
             episodeEndPanel.Hide();
-        }
-
-        if (!hasMidEpisodeProgress)
-        {
-            StatSystem.Instance.ResetEpisodeStats();
-            save.episodeRewardGranted = false;
-            save.currentNodeId = startNodeId;
-            save.episodePath = episodePath;
-
-            save.episodeStartSnapshot = new EpisodeSnapshot
-            {
-                sparks = save.sparksTotal,
-                trustAG = save.trustAGTotal,
-                trustJA = save.trustJATotal,
-                risk = save.riskTotal,
-                safety = save.safetyTotal
-            };
         }
 
         ShowNode(startNodeId);
@@ -747,44 +708,25 @@ public class DialogueController : MonoBehaviour
         return $"Episodes/episode_{nextEpisodeNumber}";
     }
 
-    public void StartNextEpisode(string newEpisodePath, string newStartNodeId)
+    public void StartNextEpisode(string newEpisodePath)
     {
-        if (string.IsNullOrEmpty(newEpisodePath) || string.IsNullOrEmpty(newStartNodeId))
-        {
-            Debug.LogWarning("[DialogueController] Next episode path or start node is empty.");
-            return;
-        }
+        SaveSystem.StartEpisode(newEpisodePath);
 
-        episodePath = newEpisodePath;
-        startNodeId = newStartNodeId;
+        SceneManager.LoadScene("EpisodePage");
+    }
 
-        save.episodePath = episodePath;
-        save.currentNodeId = startNodeId;
-        save.episodeRewardGranted = false;
+    int ExtractEpisodeNumber(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return 1;
 
-        if (save.appliedEffectNodes == null)
-            save.appliedEffectNodes = new List<string>();
-        else
-            save.appliedEffectNodes.Clear();
+        string fileName = path.Substring(path.LastIndexOf('_') + 1);
 
-        StatSystem.Instance.ResetEpisodeStats();
+        if (int.TryParse(fileName, out int number))
+            return number;
 
-        save.episodeStartSnapshot = new EpisodeSnapshot
-        {
-            sparks = save.sparksTotal,
-            trustAG = save.trustAGTotal,
-            trustJA = save.trustJATotal,
-            risk = save.riskTotal,
-            safety = save.safetyTotal
-        };
-
-        if (episodeEndPanel != null)
-            episodeEndPanel.Hide();
-
-        SaveSystem.Save(save);
-
-        LoadEpisode();
-        ShowNode(startNodeId);
+        Debug.LogWarning($"[DialogueController] Failed to extract episode number from path: {path}");
+        return 1;
     }
 
     // TODO: finish later: this will be used to unlock notes from dialogue nodes (node.effects can have "unlock_note:noteId")

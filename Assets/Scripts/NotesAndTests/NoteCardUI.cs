@@ -32,10 +32,10 @@ public class NoteCardUI : MonoBehaviour
             titleText.text = data.title;
 
         if (previewText != null)
-            previewText.text = TrimPreview(data.preview);
+            previewText.text = data.preview;
 
         //  STATE LOGIC
-        bool isUnlocked = state.isUnlocked;
+            bool isUnlocked = state.isUnlocked;
         bool isRead = state.isRead;
 
         if (!isUnlocked)

@@ -5,7 +5,7 @@
       "noteId": "note_signs_01",
       "title": "Тревожные сигналы",
       "maxReward": 3,
-      "questionsPerRun": 3,
+      "questionsPerRun": 5,
       "questions": [
         {
           "questionId": "q1",
@@ -55,77 +55,73 @@
       ]
     },
     {
-      "tests": [
+      "testId": "test_rumors_01",
+      "noteId": "note_rumors_01",
+      "title": "Слухи",
+      "maxReward": 3,
+      "questionsPerRun": 5,
+      "questions": [
         {
-          "testId": "test_rumors_01_pro",
-          "noteId": "note_rumors_01",
-          "title": "Слухи",
-          "maxReward": 5,
-          "questionsPerRun": 4,
-          "questions": [
-            {
-              "questionId": "q1",
-              "questionText": "Почему слух может сильно измениться по сравнению с оригинальной историей?",
-              "answers": [
-                { "answerId": "a1", "text": "Каждый пересказывает по-своему и добавляет детали", "isCorrect": true },
-                { "answerId": "a2", "text": "Люди специально хотят соврать", "isCorrect": false },
-                { "answerId": "a3", "text": "Информация становится точнее со временем", "isCorrect": false }
-              ]
-            },
-            {
-              "questionId": "q2",
-              "questionText": "Ты слышишь слух о знакомом человеке, и он звучит правдоподобно. Что сделать правильнее?",
-              "answers": [
-                { "answerId": "a1", "text": "Поделиться только с близкими друзьями, чтобы обсудить", "isCorrect": false },
-                { "answerId": "a2", "text": "Не распространять и не делать выводов без фактов", "isCorrect": true },
-                { "answerId": "a3", "text": "Сразу поверить, если это звучит логично", "isCorrect": false }
-              ]
-            },
-            {
-              "questionId": "q3",
-              "questionText": "Почему даже «просто слушать» слухи может быть проблемой?",
-              "answers": [
-                { "answerId": "a1", "text": "Потому что это поддерживает распространение и делает это нормой", "isCorrect": true },
-                { "answerId": "a2", "text": "Потому что это занимает много времени", "isCorrect": false },
-                { "answerId": "a3", "text": "Потому что это всегда скучно", "isCorrect": false }
-              ]
-            },
-            {
-              "questionId": "q4",
-              "questionText": "Ты замечаешь, что о человеке говорят за спиной, но никто не подходит к нему напрямую. Почему это происходит?",
-              "answers": [
-                { "answerId": "a1", "text": "Людям проще обсуждать, чем вступать в прямой разговор", "isCorrect": true },
-                { "answerId": "a2", "text": "Потому что им всё равно", "isCorrect": false },
-                { "answerId": "a3", "text": "Потому что они знают правду", "isCorrect": false }
-              ]
-            },
-            {
-              "questionId": "q5",
-              "questionText": "Ты в компании, где обсуждают слух. Если ты резко скажешь «перестаньте», это может создать напряжение. Что сделать лучше?",
-              "answers": [
-                { "answerId": "a1", "text": "Аккуратно сменить тему или не поддерживать разговор", "isCorrect": true },
-                { "answerId": "a2", "text": "Активно участвовать, чтобы не выделяться", "isCorrect": false },
-                { "answerId": "a3", "text": "Сразу уйти, ничего не объяснив", "isCorrect": false }
-              ]
-            },
-            {
-              "questionId": "q6",
-              "questionText": "Человек, о котором ходят слухи, говорит «всё нормально», но выглядит напряжённым. Как лучше отреагировать?",
-              "answers": [
-                { "answerId": "a1", "text": "Принять слова буквально и не вмешиваться", "isCorrect": false },
-                { "answerId": "a2", "text": "Аккуратно показать поддержку, не давя на него", "isCorrect": true },
-                { "answerId": "a3", "text": "Спросить прямо при всех, что происходит", "isCorrect": false }
-              ]
-            },
-            {
-              "questionId": "q7",
-              "questionText": "Почему слухи могут усиливать чувство одиночества?",
-              "answers": [
-                { "answerId": "a1", "text": "Потому что человек остаётся один с чужими словами о себе", "isCorrect": true },
-                { "answerId": "a2", "text": "Потому что люди начинают больше с ним общаться", "isCorrect": false },
-                { "answerId": "a3", "text": "Потому что слухи быстро забываются", "isCorrect": false }
-              ]
-            }
+          "questionId": "q1",
+          "questionText": "Почему слух может сильно измениться по сравнению с оригинальной историей?",
+          "answers": [
+            { "answerId": "a1", "text": "Каждый пересказывает по-своему и добавляет детали", "isCorrect": true },
+            { "answerId": "a2", "text": "Люди специально хотят соврать", "isCorrect": false },
+            { "answerId": "a3", "text": "Информация становится точнее со временем", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q2",
+          "questionText": "Ты слышишь слух о знакомом человеке, и он звучит правдоподобно. Что сделать правильнее?",
+          "answers": [
+            { "answerId": "a1", "text": "Поделиться только с близкими друзьями, чтобы обсудить", "isCorrect": false },
+            { "answerId": "a2", "text": "Не распространять и не делать выводов без фактов", "isCorrect": true },
+            { "answerId": "a3", "text": "Сразу поверить, если это звучит логично", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q3",
+          "questionText": "Почему даже «просто слушать» слухи может быть проблемой?",
+          "answers": [
+            { "answerId": "a1", "text": "Потому что это поддерживает распространение и делает это нормой", "isCorrect": true },
+            { "answerId": "a2", "text": "Потому что это занимает много времени", "isCorrect": false },
+            { "answerId": "a3", "text": "Потому что это всегда скучно", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q4",
+          "questionText": "Ты замечаешь, что о человеке говорят за спиной, но никто не подходит к нему напрямую. Почему это происходит?",
+          "answers": [
+            { "answerId": "a1", "text": "Людям проще обсуждать, чем вступать в прямой разговор", "isCorrect": true },
+            { "answerId": "a2", "text": "Потому что им всё равно", "isCorrect": false },
+            { "answerId": "a3", "text": "Потому что они знают правду", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q5",
+          "questionText": "Ты в компании, где обсуждают слух. Если ты резко скажешь «перестаньте», это может создать напряжение. Что сделать лучше?",
+          "answers": [
+            { "answerId": "a1", "text": "Аккуратно сменить тему или не поддерживать разговор", "isCorrect": true },
+            { "answerId": "a2", "text": "Активно участвовать, чтобы не выделяться", "isCorrect": false },
+            { "answerId": "a3", "text": "Сразу уйти, ничего не объяснив", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q6",
+          "questionText": "Человек, о котором ходят слухи, говорит «всё нормально», но выглядит напряжённым. Как лучше отреагировать?",
+          "answers": [
+            { "answerId": "a1", "text": "Принять слова буквально и не вмешиваться", "isCorrect": false },
+            { "answerId": "a2", "text": "Аккуратно показать поддержку, не давя на него", "isCorrect": true },
+            { "answerId": "a3", "text": "Спросить прямо при всех, что происходит", "isCorrect": false }
+          ]
+        },
+        {
+          "questionId": "q7",
+          "questionText": "Почему слухи могут усиливать чувство одиночества?",
+          "answers": [
+            { "answerId": "a1", "text": "Потому что человек остаётся один с чужими словами о себе", "isCorrect": true },
+            { "answerId": "a2", "text": "Потому что люди начинают больше с ним общаться", "isCorrect": false },
+            { "answerId": "a3", "text": "Потому что слухи быстро забываются", "isCorrect": false }
           ]
         }
       ]

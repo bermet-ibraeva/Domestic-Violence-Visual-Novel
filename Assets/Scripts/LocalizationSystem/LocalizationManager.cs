@@ -65,6 +65,18 @@ public class LocalizationManager : MonoBehaviour
         OnLanguageChanged?.Invoke(CurrentLanguage);
     }
 
+    public void SetDefaultLanguage()
+    {
+        // if language was already selected, do not override it with default
+        if (HasSelectedLanguage)
+            return;
+
+        // put russian as default language, because it's the most complete one and will be used as fallback for missing translations in other languages
+        SetLanguage(Language.Russian);
+
+        Debug.Log("[Localization] Default language applied.");
+    }
+
     public bool IsFirstLaunch()
     {
         return !HasSelectedLanguage;

@@ -2,12 +2,6 @@ using UnityEngine;
 using TMPro;
 using System;
 
-[Serializable]
-public class EpisodeHeader
-{
-    public string episodeId;
-    public string episodeTitle;  
-}
 
 public class ChapterInfoFromJson : MonoBehaviour
 {
@@ -15,32 +9,31 @@ public class ChapterInfoFromJson : MonoBehaviour
     public TextMeshProUGUI chapterNumberText;
     public TextMeshProUGUI chapterTitleText;
 
-    public void ShowFromSave(SaveData saveData)
+    public void Show(SaveData saveData, EpisodeData episode)
     {
-        if (saveData == null)
+        if (saveData == null || episode == null)
         {
-            Debug.LogError("SaveData is null в ChapterInfoFromJson");
-            return;
-        }
-
-        TextAsset jsonAsset = Resources.Load<TextAsset>(saveData.episodePath);
-        if (jsonAsset == null)
-        {
-            Debug.LogError($"JSON НЕ найден в Resources: {saveData.episodePath}");
-            return;
-        }
-
-        EpisodeHeader header = JsonUtility.FromJson<EpisodeHeader>(jsonAsset.text);
-        if (header == null)
-        {
-            Debug.LogError("Ошибка парсинга: header == null");
+            Debug.LogError("SaveData или EpisodeData null в ChapterInfo");
             return;
         }
 
         if (chapterNumberText != null)
-            chapterNumberText.text = $"Эпизод {saveData.chapterNumber}";
-
+            chapterNumberText.text = $"Эпизод {ExtractEpisodeNumber(saveData.episodePath)}";
         if (chapterTitleText != null)
-            chapterTitleText.text = header.episodeTitle; 
+            chapterTitleText.text = episode.episodeTitle;
+    }
+
+    int ExtractEpisodeNumber(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return 1;
+
+        string fileName = path.Substring(path.LastIndexOf('_') + 1);
+
+        if (int.TryParse(fileName, out int number))
+            return number;
+
+        Debug.LogWarning($"[ChapterInfo] Failed to parse episode number from: {path}");
+        return 1;
     }
 }
