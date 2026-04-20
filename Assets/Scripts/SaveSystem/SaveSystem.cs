@@ -79,11 +79,23 @@ public static class SaveSystem
     {
         SaveData save = SaveSystem.Load();
 
+        if (save.shownNotificationIds != null)
+            save.shownNotificationIds.Clear();
+
         save.episodePath = episodePath;
 
         string startNode = GetEpisodeStartNode(episodePath);
 
-        save.currentNodeId = startNode;
+        if (string.IsNullOrEmpty(startNode))
+        {
+            Debug.LogError("[SaveSystem] Start node not found.");
+            return;
+        }
+
+        if (!nodeDict.ContainsKey(save.currentNodeId))
+        {
+            Debug.LogError($"[SaveSystem] Invalid nodeId: {save.currentNodeId}");
+        }
 
         // сохранить snapshot для рестарта
         save.episodeStartSnapshot = new EpisodeSnapshot
@@ -96,6 +108,7 @@ public static class SaveSystem
         };
 
         SaveSystem.Save(save);
+        Debug.Log($"[SaveSystem] Starting episode: {episodePath}");
     }
 
     private static string GetEpisodeStartNode(string episodePath)
@@ -110,10 +123,16 @@ public static class SaveSystem
 
         EpisodeData episode = JsonUtility.FromJson<EpisodeData>(episodeJson.text);
 
-        if (episode == null || episode.scenes.Count == 0)
+        if (episode == null || episode.scenes == null || episode.scenes.Count == 0)
             return null;
 
-        return episode.scenes[0].startNode;
+        foreach (var scene in episode.scenes)
+        {
+            if (!string.IsNullOrEmpty(scene.startNode))
+                return scene.startNode;
+        }
+
+        return null;
     }
 
     public static bool RestartCurrentEpisode()
@@ -125,6 +144,9 @@ public static class SaveSystem
             Debug.LogError("[SaveSystem] Cannot restart episode: save is null.");
             return false;
         }
+
+        if (save.shownNotificationIds != null)
+            save.shownNotificationIds.Clear();
 
         if (string.IsNullOrEmpty(save.episodePath))
         {

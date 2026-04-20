@@ -7,9 +7,8 @@ using System.Collections.Generic;
 public class SaveData
 {
     // Player Progress
-    public string episodePath = "Episodes/episode_1";
-    public string currentNodeId = "E01_S01_start";
-    public int chapterNumber = 1;
+    public string episodePath;
+    public string currentNodeId;
 
     // Player Total Stats
     public int sparksTotal;
@@ -29,6 +28,13 @@ public class SaveData
     // Learning Progress
     public List<NoteState> notes = new List<NoteState>();
     public List<TestBestScore> testsBest = new List<TestBestScore>();
+
+    public void ResetEpisodeState()
+    {
+        appliedEffectNodes.Clear();
+        shownNotificationIds.Clear();
+        episodeRewardGranted = false;
+    }
 
     // helper methods to get or create note and test data
     public NoteState GetOrCreateNote(string noteId)

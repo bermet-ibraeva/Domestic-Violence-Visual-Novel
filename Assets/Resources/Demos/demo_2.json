@@ -1,0 +1,157 @@
+{
+    "episodeId": "E02",
+    "episodeTitle": "Соседняя дверь",
+  
+    "characters": [
+      { "characterId": "Narrator", "displayName": "", "portraitKey": null },
+      { "characterId": "Ainaz", "displayName": "Айназ", "portraitKey": "Ainaz" },
+      { "characterId": "Guldana", "displayName": "Гульдана", "portraitKey": "Guldana" }
+    ],
+  
+    "variables": {
+      "trust": { "AG": 0 },
+      "risk": 0,
+      "safety": 0
+    },
+  
+    "scenes": [
+  
+      {
+        "sceneId": "E02_S01",
+        "background": "guldana_house_night_quarell",
+        "leftCharacterId": "Ainaz",
+        "rightCharacterIds": [],
+        "startNode": "E02_S01_start",
+  
+        "nodes": [
+          {
+            "nodeId": "E02_S01_start",
+            "characterId": "Narrator",
+            "text": "Вечер. Айназ идёт домой. В воздухе холод, где-то лает собака.",
+            "nextNode": "E02_S01_narration_1"
+          },
+          {
+            "nodeId": "E02_S01_narration_1",
+            "characterId": "Narrator",
+            "text": "Она останавливается у знакомого дома. Изнутри слышится крик.",
+            "nextNode": "E02_S01_thought_1"
+          },
+          {
+            "nodeId": "E02_S01_thought_1",
+            "characterId": "Ainaz",
+            "isThought": true,
+            "emotion": "Fear",
+            "text": "Это… из дома Гульданы?",
+            "nextNode": "E02_S01_choice_setup"
+          },
+  
+          {
+            "nodeId": "E02_S01_choice_setup",
+            "characterId": "Narrator",
+            "text": "Айназ замирает, не зная, как поступить.",
+            "choices": [
+              {
+                "text": "Уйти домой",
+                "effects": [{ "op": "inc", "key": "safety", "value": 1 }],
+                "nextNode": "E02_S01_choice1"
+              },
+              {
+                "text": "Позвонить Гульдане",
+                "effects": [{ "op": "inc", "key": "risk", "value": 1 }],
+                "nextNode": "E02_S01_choice2"
+              }
+            ]
+          },
+  
+          {
+            "nodeId": "E02_S01_choice1",
+            "characterId": "Narrator",
+            "text": "Айназ отворачивается и быстро уходит домой, стараясь не думать о том, что услышала.",
+            "nextNode": "E02_S02_start"
+          },
+  
+          {
+            "nodeId": "E02_S01_choice2",
+            "characterId": "Narrator",
+            "text": "Айназ достаёт телефон и набирает номер.",
+            "notification": {
+              "mode": "toast",
+              "message": "Иногда вмешательство может быть рискованным"
+            },
+            "nextNode": "E02_S01_call_1"
+          },
+          {
+            "nodeId": "E02_S01_call_1",
+            "characterId": "Narrator",
+            "text": "Гудки идут долго… ответа нет.",
+            "nextNode": "E02_S02_start"
+          }
+        ]
+      },
+  
+      {
+        "sceneId": "E02_S02",
+        "background": "ainaz_room-night",
+        "leftCharacterId": "Ainaz",
+        "rightCharacterIds": [],
+        "startNode": "E02_S02_start",
+  
+        "nodes": [
+          {
+            "nodeId": "E02_S02_start",
+            "characterId": "Narrator",
+            "text": "Ночь. Айназ лежит в кровати и не может уснуть.",
+            "nextNode": "E02_S02_thought_1"
+          },
+          {
+            "nodeId": "E02_S02_thought_1",
+            "characterId": "Ainaz",
+            "isThought": true,
+            "emotion": "Anxiety",
+            "text": "Мне это не показалось…",
+            "nextNode": "E02_S02_thought_2"
+          },
+          {
+            "nodeId": "E02_S02_thought_2",
+            "characterId": "Ainaz",
+            "isThought": true,
+            "emotion": "Anxiety",
+            "text": "Но что я должна сделать?",
+            "nextNode": "E02_S02_end_text"
+          },
+  
+          {
+            "nodeId": "E02_S02_end_text",
+            "characterId": "Narrator",
+            "text": "Ответа нет. Но чувство тревоги остаётся.",
+            "nextNode": "E02_episode_end"
+          },
+  
+          {
+            "nodeId": "E02_episode_end",
+            "notification": {
+              "mode": "modal",
+              "title": "Эпизод завершён",
+              "message": "Иногда самые сложные решения — это те, которые мы откладываем."
+            },
+            "nextNode": "E02_summary"
+          }
+        ]
+      },
+  
+      {
+        "sceneId": "E02_SUMMARY",
+        "background": "black",
+        "leftCharacterId": "Ainaz",
+        "rightCharacterIds": [],
+        "startNode": "E02_summary",
+  
+        "nodes": [
+          {
+            "nodeId": "E02_summary",
+            "action": "summary_screen"
+          }
+        ]
+      }
+    ]
+}

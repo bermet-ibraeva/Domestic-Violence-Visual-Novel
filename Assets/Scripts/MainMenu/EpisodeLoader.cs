@@ -50,7 +50,7 @@ public static class EpisodeLoader
         TextAsset asset = Resources.Load<TextAsset>(episodePath);
         if (asset == null)
         {
-            Debug.LogError($"[EpisodeLoader] Episode json not found in Resources: '{episodePath}.json'");
+            Debug.LogError($"Episode not found in Resources: '{episodePath}'");
             return null;
         }
 
@@ -74,7 +74,7 @@ public static class EpisodeLoader
         if (episode.scenes == null || episode.scenes.Count == 0)
         {
             Debug.LogError($"[EpisodeLoader] Episode has no scenes: '{episodePath}'");
-            return episode;
+            return null;
         }
 
         // Build dictionaries
@@ -120,6 +120,10 @@ public static class EpisodeLoader
                 // Map node -> its scene (first wins)
                 if (!nodeToScene.ContainsKey(node.nodeId))
                     nodeToScene.Add(node.nodeId, scene);
+                else
+                {
+                    Debug.LogWarning($"[EpisodeLoader] Node '{node.nodeId}' already mapped to a scene.");
+                }
             }
         }
 

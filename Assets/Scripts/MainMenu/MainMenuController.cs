@@ -9,12 +9,10 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private ChapterInfoFromJson chapterInfoUI;
     [SerializeField] private TextMeshProUGUI playButtonText;
     [SerializeField] private Button playButton;
+    [SerializeField] private string episodePath = "Demos/demo_1";
 
     private SaveData currentSave;
 
-    private const string DEFAULT_EPISODE_PATH = "Episodes/episode_1";
-    private const string DEFAULT_NODE_ID = "E01_S01_start";
-    private const int DEFAULT_CHAPTER = 1;
 
     private void Start()
     {
@@ -26,7 +24,6 @@ public class MainMenuController : MonoBehaviour
     }
 
     // ================= SAVE =================
-
     private void LoadSave()
     {
         if (SaveSystem.HasSave())
@@ -37,6 +34,12 @@ public class MainMenuController : MonoBehaviour
             {
                 Debug.LogWarning("[MainMenu] Save corrupted. Clearing.");
                 SaveSystem.Clear();
+                currentSave = null;
+                return;
+            }
+
+            if (currentSave.episodePath != episodePath)
+            {
                 currentSave = null;
             }
         }
@@ -50,9 +53,9 @@ public class MainMenuController : MonoBehaviour
 
     private void UpdateUI()
     {
-        // 🔹 кнопка
+        // кнопка
         if (playButtonText != null)
-            playButtonText.text = currentSave != null ? "ПРОДОЛЖИТЬ" : "ИГРАТЬ";
+            playButtonText.text = (currentSave != null && currentSave.episodePath == episodePath) ? "ПРОДОЛЖИТЬ" : "ИГРАТЬ";
 
         if (chapterInfoUI == null)
         {
@@ -60,11 +63,11 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        // 🔹 если нет save → показываем дефолтный эпизод
+        // если нет save → показываем дефолтный эпизод
         if (currentSave == null)
         {
             EpisodeData episode = EpisodeLoader.LoadEpisode(
-                DEFAULT_EPISODE_PATH,
+                episodePath,
                 out _,
                 out _,
                 out _
@@ -72,11 +75,27 @@ public class MainMenuController : MonoBehaviour
 
             if (episode != null)
             {
+                string startNode = null;    
+                
+                foreach (var scene in episode.scenes)
+                {
+                    if (!string.IsNullOrEmpty(scene.startNode))
+                    {
+                        startNode = scene.startNode;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(startNode))
+                {
+                    Debug.LogError("[MainMenu] Cannot determine start node.");
+                    return;
+                }
+
                 SaveData temp = new SaveData
                 {
-                    episodePath = DEFAULT_EPISODE_PATH,
-                    currentNodeId = DEFAULT_NODE_ID,
-                    chapterNumber = DEFAULT_CHAPTER
+                    episodePath = episodePath,
+                    currentNodeId = startNode
                 };
 
                 chapterInfoUI.Show(temp, episode);
@@ -118,10 +137,11 @@ public class MainMenuController : MonoBehaviour
 
     private void OnPlayPressed()
     {
-        // 🔹 если нет save → начинаем новую игру
-        if (!SaveSystem.HasSave())
+        // если нет save или хочешь всегда запускать выбранный эпизод
+        if (currentSave == null || currentSave.episodePath != episodePath)
         {
-            SaveSystem.StartEpisode(DEFAULT_EPISODE_PATH);
+            SaveSystem.Clear();
+            SaveSystem.StartEpisode(episodePath);
         }
 
         SceneManager.LoadScene("EpisodePage");

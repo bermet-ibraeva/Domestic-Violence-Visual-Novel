@@ -48,7 +48,7 @@
     "scenes": [
       {
         "sceneId": "E02_S01",
-        "background": "street_evening_cold",
+        "background": "guldana_house_night_quarell",
         "leftCharacter": "Ainaz",
         "rightCharacters": [],
         "startNode": "E02_S01_start",

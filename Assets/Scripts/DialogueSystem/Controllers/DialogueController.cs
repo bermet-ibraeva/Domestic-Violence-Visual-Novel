@@ -85,13 +85,6 @@ public class DialogueController : MonoBehaviour
     [Header("Backgrounds")]
     public BackgroundController backgroundController;
 
-    [Header("Episode Settings")]
-    public string episodePath = "Episodes/episode_1";
-    public string startNodeId = "E01_S01_start";
-
-    [Header("Chapter")]
-    public int chapterNumber = 1;
-
     [Header("Episode End Panel UI")]
     public EpisodeEndPanel episodeEndPanel;
 
@@ -116,31 +109,33 @@ public class DialogueController : MonoBehaviour
 
     void Start()
     {
-        save = SaveSystem.Load();
+        save = SaveSystem.Load() ?? new SaveData();
 
-        if (save == null)
-            save = new SaveData();
-
-        if (save.appliedEffectNodes == null)
-            save.appliedEffectNodes = new List<string>();
-
-        if (save.shownNotificationIds == null)
-            save.shownNotificationIds = new List<string>();
-
-        episodePath = save.episodePath;
-        startNodeId = save.currentNodeId;
+        NormalizeSave();
 
         LoadEpisode();
 
         StatSystem.Instance.Init(save);
 
-        if (episodeEndPanel != null)
+        episodeEndPanel?.Init(this);
+        episodeEndPanel?.Hide();
+
+        if (string.IsNullOrEmpty(save.currentNodeId))
         {
-            episodeEndPanel.Init(this);
-            episodeEndPanel.Hide();
+            Debug.LogError("[DialogueController] currentNodeId is empty");
+            return;
         }
 
-        ShowNode(startNodeId);
+        ShowNode(save.currentNodeId);
+    }
+
+    void NormalizeSave()
+    {
+        if (save.appliedEffectNodes == null)
+            save.appliedEffectNodes = new List<string>();
+
+        if (save.shownNotificationIds == null)
+            save.shownNotificationIds = new List<string>();
     }
 
     void Update()
@@ -182,7 +177,7 @@ public class DialogueController : MonoBehaviour
 
     void LoadEpisode()
     {
-        episode = EpisodeLoader.LoadEpisode(episodePath, out nodeDict, out sceneDict, out nodeToScene);
+        episode = EpisodeLoader.LoadEpisode(save.episodePath, out nodeDict, out sceneDict, out nodeToScene);
 
         if (episode == null)
         {
@@ -385,9 +380,7 @@ public class DialogueController : MonoBehaviour
         SetupChoices(node);
 
         // Autosave
-        save.episodePath = episodePath;
         save.currentNodeId = nodeId;
-        save.chapterNumber = chapterNumber;
         SaveSystem.Save(save);
     }
 
@@ -502,7 +495,7 @@ public class DialogueController : MonoBehaviour
     void ApplyEffectsOnce(string nodeId, DialogueNode node)
     {
         if (node == null || node.effects == null) return;
-        string key = $"{episodePath}:{nodeId}";
+        string key = $"{save.episodePath}:{nodeId}";
         if (save.appliedEffectNodes.Contains(key)) return;
         ApplyEffects(node.effects);
         save.appliedEffectNodes.Add(key);
@@ -572,17 +565,6 @@ public class DialogueController : MonoBehaviour
         }
     }
 
-    private string GetEpisodeStartNode()
-    {
-        if (episode != null && episode.scenes != null && episode.scenes.Count > 0)
-        {
-            if (!string.IsNullOrEmpty(episode.scenes[0].startNode))
-                return episode.scenes[0].startNode;
-        }
-
-        return startNodeId;
-    }
-
     bool HasAction(DialogueNode node)
     {
         return node != null && !string.IsNullOrEmpty(node.action);
@@ -631,7 +613,10 @@ public class DialogueController : MonoBehaviour
                 ShowEpisodeEndPanel();
                 break;
             case "open_note":
-                UnlockNote(node.action);
+                if (!string.IsNullOrEmpty(node.noteId))
+                    UnlockNote(node.noteId);
+                else
+                    Debug.LogWarning("[DialogueController] noteId is missing in node");
                 break;
 
             default:
@@ -676,14 +661,14 @@ public class DialogueController : MonoBehaviour
 
     string GetNextEpisodeStartNode()
     {
-        if (string.IsNullOrEmpty(episodePath))
+        if (string.IsNullOrEmpty(save.episodePath))
             return null;
 
-        string fileName = episodePath.Substring(episodePath.LastIndexOf('_') + 1);
+        string fileName = save.episodePath.Substring(save.episodePath.LastIndexOf('_') + 1);
 
         if (!int.TryParse(fileName, out int currentEpisodeNumber))
         {
-            Debug.LogWarning("[DialogueController] Could not parse current episode number from path: " + episodePath);
+            Debug.LogWarning("[DialogueController] Could not parse current episode number from path: " + save.episodePath);
             return null;
         }
 
@@ -693,19 +678,24 @@ public class DialogueController : MonoBehaviour
 
     string GetNextEpisodePath()
     {
-        if (string.IsNullOrEmpty(episodePath))
+        if (string.IsNullOrEmpty(save.episodePath))
             return null;
 
-        string fileName = episodePath.Substring(episodePath.LastIndexOf('_') + 1);
+        int lastSlash = save.episodePath.LastIndexOf('/');
+        int lastUnderscore = save.episodePath.LastIndexOf('_');
 
-        if (!int.TryParse(fileName, out int currentEpisodeNumber))
-        {
-            Debug.LogWarning("[DialogueController] Could not parse current episode number from path: " + episodePath);
+        if (lastSlash < 0 || lastUnderscore < 0 || lastUnderscore <= lastSlash)
             return null;
-        }
 
-        int nextEpisodeNumber = currentEpisodeNumber + 1;
-        return $"Episodes/episode_{nextEpisodeNumber}";
+        string prefix = save.episodePath.Substring(0, lastUnderscore + 1); // "Demos/demo_"
+        string numberPart = save.episodePath.Substring(lastUnderscore + 1);
+
+        if (!int.TryParse(numberPart, out int currentNumber))
+            return null;
+
+        int nextNumber = currentNumber + 1;
+
+        return prefix + nextNumber;
     }
 
     public void StartNextEpisode(string newEpisodePath)

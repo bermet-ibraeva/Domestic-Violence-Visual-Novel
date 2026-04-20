@@ -18,22 +18,23 @@ public class ChapterInfoFromJson : MonoBehaviour
         }
 
         if (chapterNumberText != null)
-            chapterNumberText.text = $"Эпизод {ExtractEpisodeNumber(saveData.episodePath)}";
+            chapterNumberText.text = $"Эпизод {ExtractEpisodeNumber(episode.episodeId)}";
         if (chapterTitleText != null)
             chapterTitleText.text = episode.episodeTitle;
     }
 
-    int ExtractEpisodeNumber(string path)
+    int ExtractEpisodeNumber(string episodeId)
     {
-        if (string.IsNullOrEmpty(path))
+        if (string.IsNullOrEmpty(episodeId))
             return 1;
 
-        string fileName = path.Substring(path.LastIndexOf('_') + 1);
+        // например "E02" → "02"
+        string numberPart = episodeId.Replace("E", "");
 
-        if (int.TryParse(fileName, out int number))
+        if (int.TryParse(numberPart, out int number))
             return number;
 
-        Debug.LogWarning($"[ChapterInfo] Failed to parse episode number from: {path}");
+        Debug.LogWarning($"[ChapterInfo] Failed to parse episode number from: {episodeId}");
         return 1;
     }
 }
