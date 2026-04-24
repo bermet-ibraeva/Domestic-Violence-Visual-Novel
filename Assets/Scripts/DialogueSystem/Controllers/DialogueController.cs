@@ -113,17 +113,63 @@ public class DialogueController : MonoBehaviour
 
         NormalizeSave();
 
-        LoadEpisode();
+        if (string.IsNullOrEmpty(save.episodePath))
+        {
+            Debug.LogError("[DialogueController] No episodePath in save!");
+            return;
+        }
+
+        episode = EpisodeLoader.LoadEpisode(
+            save.episodePath,
+            out nodeDict,
+            out sceneDict,
+            out nodeToScene
+        );
+
+        if (episode == null)
+        {
+            Debug.LogError($"[DialogueController] Failed to load episode: {save.episodePath}");
+            return;
+        }
+
+        BuildCharacterMetaDict();
 
         StatSystem.Instance.Init(save);
 
         episodeEndPanel?.Init(this);
         episodeEndPanel?.Hide();
 
+        string startNode = null;
+
+        foreach (var scene in episode.scenes)
+        {
+            if (!string.IsNullOrEmpty(scene.startNode))
+            {
+                startNode = scene.startNode;
+                break;
+            }
+        }
+
+        if (string.IsNullOrEmpty(startNode))
+        {
+            Debug.LogError("[DialogueController] Cannot determine start node.");
+            return;
+        }
+
         if (string.IsNullOrEmpty(save.currentNodeId))
         {
-            Debug.LogError("[DialogueController] currentNodeId is empty");
-            return;
+            save.currentNodeId = startNode;
+
+            save.episodeStartSnapshot = new EpisodeSnapshot
+            {
+                sparks = save.sparksTotal,
+                trustAG = save.trustAGTotal,
+                trustJA = save.trustJATotal,
+                risk = save.riskTotal,
+                safety = save.safetyTotal
+            };
+
+            SaveSystem.Save(save);
         }
 
         ShowNode(save.currentNodeId);
@@ -290,8 +336,13 @@ public class DialogueController : MonoBehaviour
 
         if (HasAction(node))
         {
+            if (node.action.type == "summary_screen")
+            {
+                HandleActionNode(node);
+                return; // only this one stops flow
+            }
+
             HandleActionNode(node);
-            return;
         }
 
         ApplyEffectsOnce(nodeId, node);
@@ -567,61 +618,46 @@ public class DialogueController : MonoBehaviour
 
     bool HasAction(DialogueNode node)
     {
-        return node != null && !string.IsNullOrEmpty(node.action);
+        return node != null && node.action != null && !string.IsNullOrEmpty(node.action.type);
     }
 
+    
     void HandleActionNode(DialogueNode node)
     {
-        /*
-        ACTION SYSTEM на будущее:
+        if (node == null || node.action == null)
+            return;
 
-        action = это "что сделать"
-        requirements = это "когда это разрешено"
-
-        Использование:
-        - action: вызывает особое поведение (не диалог)
-            примеры:
-                "summary_screen"
-                "skip_scene"
-                "open_panel"
-                "play_cutscene"
-
-        - requirements: проверяет условия (risk, trust, safety и т.д.)
-            пример:
-                risk >= 2
-
-        Паттерн:
-            если requirements выполнены → выполняем action
-            если нет → игнорируем или идём по другой ветке
-
-        Важно:
-        НЕ зашивать условия внутрь action (типа "show_if_risk_2")
-        Всю логику условий держать в requirements.
-
-        Когда дойдём до ветвлений:
-        - использовать action + requirements для:
-            • пропуска сцен
-            • скрытых веток
-            • альтернативных концовок
-        */
-
-        if (node == null) return;
-
-        switch (node.action)
+        switch (node.action.type)
         {
             case "summary_screen":
                 ShowEpisodeEndPanel();
                 break;
-            case "open_note":
-                if (!string.IsNullOrEmpty(node.noteId))
-                    UnlockNote(node.noteId);
-                else
-                    Debug.LogWarning("[DialogueController] noteId is missing in node");
+
+            case "unlock_note":
+                HandleUnlockNote(node.action);
                 break;
 
             default:
-                Debug.LogWarning($"[DialogueController] Unknown action: {node.action}");
+                Debug.LogWarning($"[DialogueController] Unknown action type: {node.action.type}");
                 break;
+        }
+    }
+
+    void HandleUnlockNote(NodeAction action)
+    {
+        if (action == null || string.IsNullOrEmpty(action.noteId))
+        {
+            Debug.LogWarning("[DialogueController] unlock_note: noteId missing");
+            return;
+        }
+
+        if (action.status == "unlocked")
+        {
+            UnlockNote(action.noteId);
+        }
+        else
+        {
+            Debug.LogWarning($"[DialogueController] Unknown note status: {action.status}");
         }
     }
 
@@ -738,7 +774,7 @@ public class DialogueController : MonoBehaviour
 
         if (!note.isUnlocked)
         {
-            note.isUnlocked = true;
+            save.UnlockNote(noteId);
             SaveSystem.Save(save);
             Debug.Log("[DialogueController] Note unlocked: " + noteId);
         }

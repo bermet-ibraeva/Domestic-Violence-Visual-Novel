@@ -257,9 +257,6 @@ MonoBehaviour:
   LeftCharacterColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
   OtherColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
   backgroundController: {fileID: 2009236193}
-  episodePath: Episodes/episode_1
-  startNodeId: E01_S01_start
-  chapterNumber: 1
   episodeEndPanel: {fileID: 493890516}
   statFeedbackUI: {fileID: 151155865}
   notificationController: {fileID: 2054867274}

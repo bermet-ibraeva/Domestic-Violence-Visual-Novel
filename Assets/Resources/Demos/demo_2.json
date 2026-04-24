@@ -15,14 +15,12 @@
     },
   
     "scenes": [
-  
       {
         "sceneId": "E02_S01",
         "background": "guldana_house_night_quarell",
         "leftCharacterId": "Ainaz",
         "rightCharacterIds": [],
         "startNode": "E02_S01_start",
-  
         "nodes": [
           {
             "nodeId": "E02_S01_start",
@@ -44,7 +42,6 @@
             "text": "Это… из дома Гульданы?",
             "nextNode": "E02_S01_choice_setup"
           },
-  
           {
             "nodeId": "E02_S01_choice_setup",
             "characterId": "Narrator",
@@ -62,14 +59,12 @@
               }
             ]
           },
-  
           {
             "nodeId": "E02_S01_choice1",
             "characterId": "Narrator",
             "text": "Айназ отворачивается и быстро уходит домой, стараясь не думать о том, что услышала.",
             "nextNode": "E02_S02_start"
           },
-  
           {
             "nodeId": "E02_S01_choice2",
             "characterId": "Narrator",
@@ -88,14 +83,12 @@
           }
         ]
       },
-  
       {
         "sceneId": "E02_S02",
         "background": "ainaz_room-night",
         "leftCharacterId": "Ainaz",
         "rightCharacterIds": [],
         "startNode": "E02_S02_start",
-  
         "nodes": [
           {
             "nodeId": "E02_S02_start",
@@ -119,14 +112,12 @@
             "text": "Но что я должна сделать?",
             "nextNode": "E02_S02_end_text"
           },
-  
           {
             "nodeId": "E02_S02_end_text",
             "characterId": "Narrator",
             "text": "Ответа нет. Но чувство тревоги остаётся.",
             "nextNode": "E02_episode_end"
           },
-  
           {
             "nodeId": "E02_episode_end",
             "notification": {
@@ -138,14 +129,12 @@
           }
         ]
       },
-  
       {
         "sceneId": "E02_SUMMARY",
         "background": "black",
         "leftCharacterId": "Ainaz",
         "rightCharacterIds": [],
         "startNode": "E02_summary",
-  
         "nodes": [
           {
             "nodeId": "E02_summary",

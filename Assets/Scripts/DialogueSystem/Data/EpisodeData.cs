@@ -57,7 +57,6 @@ public class DialogueNode
     public string emotion;
     public string text;
     public string nextNode;
-    public string action;
 
     public bool isThought;
 
@@ -66,6 +65,7 @@ public class DialogueNode
     public NodeEffects effects;
     public RequirementData[] requirements;
     public NotificationData notification;
+    public NodeAction action;
     public AudioData audio;
 
 }
@@ -113,4 +113,12 @@ public class NotificationData
     public string mode;
     public string title;
     public string message;
+}
+
+[Serializable]
+public class NodeAction
+{
+    public string type;     // "unlock_note"
+    public string noteId;   // "note_rumors_01"
+    public string status;   // "unlocked" (на будущее)
 }

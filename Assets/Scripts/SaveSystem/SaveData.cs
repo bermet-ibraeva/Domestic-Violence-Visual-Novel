@@ -27,6 +27,7 @@ public class SaveData
 
     // Learning Progress
     public List<NoteState> notes = new List<NoteState>();
+    public static event Action OnNotesChanged;
     public List<TestBestScore> testsBest = new List<TestBestScore>();
 
     public void ResetEpisodeState()
@@ -34,6 +35,14 @@ public class SaveData
         appliedEffectNodes.Clear();
         shownNotificationIds.Clear();
         episodeRewardGranted = false;
+    }
+
+    public NoteState GetNote(string noteId)
+    {
+        if (notes == null)
+            return null;
+
+        return notes.Find(n => n.noteId == noteId);
     }
 
     // helper methods to get or create note and test data
@@ -58,6 +67,44 @@ public class SaveData
         }
 
         return note;
+    }
+
+    public void UnlockNote(string noteId)
+    {
+        var note = GetOrCreateNote(noteId);
+
+        if (!note.isUnlocked)
+        {
+            note.isUnlocked = true;
+            OnNotesChanged?.Invoke(); 
+        }
+    }
+
+    public void MarkNoteAsRead(string noteId)
+    {
+        var note = GetOrCreateNote(noteId);
+
+        if (!note.isRead)
+        {
+            note.isRead = true;
+            OnNotesChanged?.Invoke(); 
+        }
+    }
+
+    public int GetUnreadNotesCount()
+    {
+        if (notes == null)
+            return 0;
+
+        int count = 0;
+
+        foreach (var note in notes)
+        {
+            if (note != null && note.isUnlocked && !note.isRead)
+                count++;
+        }
+
+        return count;
     }
 
     // for tests we only track the best score, so we can easily calculate rewards and show progress in the UI

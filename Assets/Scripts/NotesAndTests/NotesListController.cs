@@ -148,8 +148,12 @@ public class NotesListController : MonoBehaviour
 
     private bool IsNoteUnlocked(NoteData note)
     {
-        NoteState noteState = save.GetOrCreateNote(note.noteId);
-        return noteState.isUnlocked;
+        if (note == null)
+            return false;
+
+        NoteState state = save.GetNote(note.noteId);
+
+        return state != null && state.isUnlocked;
     }
 
     private bool IsTestPassed(string testId)

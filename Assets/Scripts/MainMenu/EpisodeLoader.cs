@@ -9,7 +9,6 @@ and builds fast lookup dictionaries for nodes and scenes.
 
 Responsibilities:
 - Loads EpisodeData from a JSON file in Resources.
-  Example: episodePath = "Episodes/episode_1" -> Resources/Episodes/episode_1.json
 - Parses the JSON into EpisodeData object using JsonUtility.
 - Builds the following dictionaries for fast access:
     • nodeDict: nodeId -> DialogueNode

@@ -341,7 +341,7 @@ MonoBehaviour:
   cardsParent: {fileID: 589808231}
   noteCardPrefab: {fileID: 4601601593335633817, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}
   noteDetailSceneName: NoteDetailPage
-  showOnlyUnlocked: 0
+  showOnlyUnlocked: 1
 --- !u!1 &542957572
 GameObject:
   m_ObjectHideFlags: 0

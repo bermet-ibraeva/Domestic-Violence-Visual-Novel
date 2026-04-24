@@ -92,12 +92,8 @@ public static class SaveSystem
             return;
         }
 
-        if (!nodeDict.ContainsKey(save.currentNodeId))
-        {
-            Debug.LogError($"[SaveSystem] Invalid nodeId: {save.currentNodeId}");
-        }
+        save.currentNodeId = startNode;
 
-        // сохранить snapshot для рестарта
         save.episodeStartSnapshot = new EpisodeSnapshot
         {
             sparks = save.sparksTotal,
