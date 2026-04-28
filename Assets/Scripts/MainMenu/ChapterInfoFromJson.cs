@@ -1,7 +1,5 @@
 using UnityEngine;
 using TMPro;
-using System;
-
 
 public class ChapterInfoFromJson : MonoBehaviour
 {
@@ -17,10 +15,18 @@ public class ChapterInfoFromJson : MonoBehaviour
             return;
         }
 
-        if (chapterNumberText != null)
-            chapterNumberText.text = $"Эпизод {ExtractEpisodeNumber(episode.episodeId)}";
-        if (chapterTitleText != null)
-            chapterTitleText.text = episode.episodeTitle;
+        if (LocalizationManager.Instance == null)
+            return;
+
+        int number = ExtractEpisodeNumber(episode.episodeId);
+
+        // номер
+        string label = LocalizationManager.Instance.GetText("MainMenu", "episode_label");
+        chapterNumberText.text = string.Format(label, number);
+
+        // название
+        string key = $"episode_{number}_title";
+        chapterTitleText.text = LocalizationManager.Instance.GetText("MainMenu", key);
     }
 
     int ExtractEpisodeNumber(string episodeId)
@@ -28,7 +34,6 @@ public class ChapterInfoFromJson : MonoBehaviour
         if (string.IsNullOrEmpty(episodeId))
             return 1;
 
-        // например "E02" → "02"
         string numberPart = episodeId.Replace("E", "");
 
         if (int.TryParse(numberPart, out int number))

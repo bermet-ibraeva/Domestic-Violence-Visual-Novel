@@ -27,7 +27,7 @@ public class ToastUI : MonoBehaviour
 
     public void Show(NotificationData data)
     {
-        if (data == null || string.IsNullOrWhiteSpace(data.message))
+        if (data == null || string.IsNullOrWhiteSpace(data.messageKey))
             return;
 
         queue.Enqueue(data);
@@ -77,7 +77,7 @@ public class ToastUI : MonoBehaviour
             }
 
             if (messageText != null)
-                messageText.text = data.message ?? "";
+                messageText.text = LocalizationManager.Instance.GetText("Episode" + data.messageKey) ?? "";
 
             yield return FadeTo(1f);
             yield return new WaitForSeconds(visibleDuration);

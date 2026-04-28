@@ -392,26 +392,36 @@ public class DialogueController : MonoBehaviour
         ApplyNodeAudio(node);
 
         // Text + portraits
+        string localizedText = LocalizationManager.Instance.GetText("Episode", node.textKey);
+
         if (IsNarrator(node.characterId))
         {
-            ui.ShowAuthor(node.text);
+            ui.ShowAuthor(localizedText);
             HideAllCharacters();
         }
         else if (IsLeftCharacter(node.characterId))
         {
-            var meta = GetCharacterMeta(currentScene.leftCharacterId);
+            var leftMeta = GetCharacterMeta(currentScene.leftCharacterId);
 
-            ui.ShowLeftCharacter(meta?.displayName, node.text);
-            ShowLeft(meta?.portraitKey, node.emotion);
+            string leftName = leftMeta != null
+                ? LocalizationManager.Instance.GetText("Episode", leftMeta.displayNameKey)
+                : "";
+
+            ui.ShowLeftCharacter(leftName, localizedText);
+            ShowLeft(leftMeta?.portraitKey, node.emotion);
 
             if (HideRightWhenLeftSpeaks) HideRight();
         }
         else if (IsRightAllowed(node.characterId))
         {
-            var meta = GetCharacterMeta(node.characterId);
+            var rightMeta = GetCharacterMeta(node.characterId);
 
-            ui.ShowRightCharacter(meta?.displayName, node.text);
-            ShowRight(meta?.portraitKey, node.emotion);
+            string rightName = rightMeta != null
+                ? LocalizationManager.Instance.GetText("Episode", rightMeta.displayNameKey)
+                : "";
+
+            ui.ShowRightCharacter(rightName, localizedText);
+            ShowRight(rightMeta?.portraitKey, node.emotion);
 
             if (HideLeftWhenRightSpeaks) HideLeft();
             else if (!string.IsNullOrEmpty(currentScene?.leftCharacterId))
@@ -422,8 +432,13 @@ public class DialogueController : MonoBehaviour
         }
         else
         {
-            var meta = GetCharacterMeta(node.characterId);
-            ui.ShowRightCharacter(meta?.displayName ?? node.characterId, node.text);
+            var unknownMeta = GetCharacterMeta(node.characterId);
+
+            string unknownName = unknownMeta != null
+                ? LocalizationManager.Instance.GetText("Episode", unknownMeta.displayNameKey)
+                : node.characterId;
+
+            ui.ShowRightCharacter(unknownName, localizedText);
             HideAllCharacters();
         }
 

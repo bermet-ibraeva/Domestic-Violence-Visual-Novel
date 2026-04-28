@@ -2,19 +2,18 @@
   "episodeId": "E01",
   "episodeTitleKey": "E01_title",
   "characters": [
-    { "characterId": "Narrator", "displayName": "", "portraitKey": null },
-    { "characterId": "Ainaz", "displayName": "Айназ", "portraitKey": "Ainaz" },
-    { "characterId": "Guldana", "displayName": "Гульдана", "portraitKey": "Guldana" },
-    { "characterId": "Aigul", "displayName": "Айгуль", "portraitKey": "Aigul" },
-    { "characterId": "Timur", "displayName": "Тимур", "portraitKey": "Timur" },
-    { "characterId": "Bekzat", "displayName": "Бекзат", "portraitKey": "Bekzat" }
+    { "characterId": "Narrator", "displayNameKey": "", "portraitKey": null },
+    { "characterId": "Ainaz", "displayNameKey": "char_ainaz", "portraitKey": "Ainaz" },
+    { "characterId": "Guldana", "displayNameKey": "char_guldana", "portraitKey": "Guldana" },
+    { "characterId": "Aigul", "displayNameKey": "char_aigul", "portraitKey": "Aigul" },
+    { "characterId": "Timur", "displayNameKey": "char_timur", "portraitKey": "Timur" },
+    { "characterId": "Bekzat", "displayNameKey": "char_bekzat", "portraitKey": "Bekzat" }
   ],
   "variables": {
     "trust": { "AG": 0 },
     "risk": 0,
     "safety": 0
   },
-
   "scenes": [
     {
       "sceneId": "E01_S01",
@@ -22,7 +21,6 @@
       "leftCharacterId": "Ainaz",
       "rightCharacterIds": ["Guldana"],
       "startNode": "E01_S01_start",
-
       "nodes": [
         {
           "nodeId": "E01_S01_start",
@@ -126,7 +124,6 @@
             }
           ]
         },
-
         {
           "nodeId": "E01_S01_choice1_result",
           "characterId": "Narrator",
@@ -153,7 +150,6 @@
         }
       ]
     },
-
     {
       "sceneId": "E01_S02",
       "background": "school_hall_day",
@@ -162,7 +158,6 @@
       "leftCharacterId": "Ainaz",
       "rightCharacterIds": ["Guldana", "Aigul", "Timur", "Bekzat"],
       "startNode": "E01_S02_start",
-
       "nodes": [
         {
           "nodeId": "E01_S02_start",
@@ -195,67 +190,194 @@
           "characterId": "Aigul",
           "emotion": "Irritation",
           "textKey": "E01_S02_dialogue_3",
+          "nextNode": "E01_S02_narration_1"
+        },
+    
+        {
+          "nodeId": "E01_S02_narration_1",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_narration_1",
+          "nextNode": "E01_S02_dialogue_4"
+        },
+        {
+          "nodeId": "E01_S02_dialogue_4",
+          "characterId": "Ainaz",
+          "emotion": "Calm",
+          "textKey": "E01_S02_dialogue_4",
+          "nextNode": "E01_S02_dialogue_5"
+        },
+        {
+          "nodeId": "E01_S02_dialogue_5",
+          "characterId": "Aigul",
+          "emotion": "Irritation",
+          "textKey": "E01_S02_dialogue_5",
+          "nextNode": "E01_S02_dialogue_6"
+        },
+        {
+          "nodeId": "E01_S02_dialogue_6",
+          "characterId": "Guldana",
+          "emotion": "Irritation",
+          "textKey": "E01_S02_dialogue_6",
+          "nextNode": "E01_S02_narration_2"
+        },
+        {
+          "nodeId": "E01_S02_narration_2",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_narration_2",
+          "nextNode": "E01_S02_dialogue_7"
+        },
+        {
+          "nodeId": "E01_S02_dialogue_7",
+          "characterId": "Aigul",
+          "emotion": "Neutral",
+          "textKey": "E01_S02_dialogue_7",
+          "nextNode": "E01_S02_narration_3"
+        },
+        {
+          "nodeId": "E01_S02_narration_3",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_narration_3",
+          "nextNode": "E01_S02_dialogue_8"
+        },
+        {
+          "nodeId": "E01_S02_dialogue_8",
+          "characterId": "Guldana",
+          "emotion": "Sad",
+          "textKey": "E01_S02_dialogue_8",
           "nextNode": "E01_S02_choice_setup"
         },
-
+    
         {
           "nodeId": "E01_S02_choice_setup",
           "characterId": "Narrator",
-          "textKey": "E01_S02_start",
-
+          "textKey": "E01_S02_choice_setup",
+    
           "choices": [
             {
-              "textKey": "E01_S02_choice_1",
+              "textKey": "E01_S02_choice1_option_1",
               "effects": [{ "op": "inc", "key": "risk", "value": 1 }],
               "nextNode": "E01_S02_choice1_start"
             },
             {
-              "textKey": "E01_S02_choice_2",
+              "textKey": "E01_S02_choice1_option_2",
               "effects": [{ "op": "inc", "key": "trust.AG", "value": 1 }],
               "nextNode": "E01_S02_choice2_result"
             }
           ]
+        },    
+        {
+          "nodeId": "E01_S02_choice1_start",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_choice1_start",
+          "nextNode": "E01_S02_choice1_narration_1"
         },
-
+        {
+          "nodeId": "E01_S02_choice1_narration_1",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_choice1_narration_1",
+          "nextNode": "E01_S02_choice1_dialogue_1"
+        },
+        {
+          "nodeId": "E01_S02_choice1_dialogue_1",
+          "characterId": "Timur",
+          "textKey": "E01_S02_choice1_dialogue_1",
+          "nextNode": "E01_S02_choice1_dialogue_2"
+        },
+        {
+          "nodeId": "E01_S02_choice1_dialogue_2",
+          "characterId": "Ainaz",
+          "textKey": "E01_S02_choice1_dialogue_2",
+          "nextNode": "E01_S02_choice1_dialogue_3"
+        },
+        {
+          "nodeId": "E01_S02_choice1_dialogue_3",
+          "characterId": "Bekzat",
+          "textKey": "E01_S02_choice1_dialogue_3",
+          "nextNode": "E01_S02_choice1_dialogue_4"
+        },
+        {
+          "nodeId": "E01_S02_choice1_dialogue_4",
+          "characterId": "Timur",
+          "textKey": "E01_S02_choice1_dialogue_4",
+          "nextNode": "E01_S02_choice1_narration_2"
+        },
+        {
+          "nodeId": "E01_S02_choice1_narration_2",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_choice1_narration_2",
+          "nextNode": "E01_S02_choice1_dialogue_5"
+        },
+        {
+          "nodeId": "E01_S02_choice1_dialogue_5",
+          "characterId": "Bekzat",
+          "textKey": "E01_S02_choice1_dialogue_5",
+          "nextNode": "E01_S02_choice1_dialogue_6"
+        },
+        {
+          "nodeId": "E01_S02_choice1_dialogue_6",
+          "characterId": "Timur",
+          "textKey": "E01_S02_choice1_dialogue_6",
+          "nextNode": "E01_S02_choice1_narration_3"
+        },
+        {
+          "nodeId": "E01_S02_choice1_narration_3",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_choice1_narration_3",
+          "nextNode": "E01_S02_choice1_dialogue_7"
+        },
+        {
+          "nodeId": "E01_S02_choice1_dialogue_7",
+          "characterId": "Timur",
+          "textKey": "E01_S02_choice1_dialogue_7",
+          "nextNode": "E01_S02_choice1_narration_4"
+        },
+        {
+          "nodeId": "E01_S02_choice1_narration_4",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_choice1_narration_4",
+          "nextNode": "E01_S02_choice1_thought"
+        },
         {
           "nodeId": "E01_S02_choice1_thought",
           "characterId": "Ainaz",
           "isThought": true,
           "textKey": "E01_S02_choice1_thought",
+          "nextNode": "E01_S02_choice1_narration_5"
+        },
+        {
+          "nodeId": "E01_S02_choice1_narration_5",
+          "characterId": "Narrator",
+          "textKey": "E01_S02_choice1_narration_5",
           "nextNode": "E01_S02_choice1_end"
         },
-
         {
           "nodeId": "E01_S02_choice1_end",
           "characterId": "Narrator",
           "textKey": "E01_S02_choice1_end",
-
+    
           "notification": {
             "id": "note_unlock_rumors",
             "mode": "toast",
             "showOnce": true,
             "messageKey": "note_unlock"
           },
-
-          "nextNode": "E01_summary_start"
-        },
-
+    
+          "nextNode": "E01_summary_text"
+        },    
         {
           "nodeId": "E01_S02_choice2_result",
           "characterId": "Narrator",
           "textKey": "E01_S02_choice2_result",
-          "nextNode": "E01_summary_start"
+          "nextNode": "E01_summary_text"
         }
       ]
     },
-
     {
       "sceneId": "E01_SUMMARY",
       "background": "guldana_house_night_quarell",
       "leftCharacterId": "Ainaz",
       "rightCharacterIds": [],
       "startNode": "E01_summary_text",
-
       "nodes": [
         {
           "nodeId": "E01_summary_text",

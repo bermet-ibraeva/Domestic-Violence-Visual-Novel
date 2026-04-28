@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingsController : MonoBehaviour
@@ -37,11 +36,8 @@ public class SettingsController : MonoBehaviour
 
     [SerializeField] private ConfirmPopup confirmPopup;
 
-    private const string LanguageKey = "language";
     private const string MusicVolumeKey = "music_volume";
     private const string SfxVolumeKey = "sfx_volume";
-
-    private string currentLanguage = "KG";
 
     private void Start()
     {
@@ -52,6 +48,25 @@ public class SettingsController : MonoBehaviour
         RefreshLanguageUI();
         RefreshAudioUI();
     }
+
+    private void OnEnable()
+    {
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged(Language lang)
+    {
+        RefreshLanguageUI();
+    }
+
+    // ================= INIT =================
 
     private void InitializeUI()
     {
@@ -70,8 +85,6 @@ public class SettingsController : MonoBehaviour
 
     private void LoadSettings()
     {
-        currentLanguage = PlayerPrefs.GetString(LanguageKey, "KG");
-
         float musicVolume = PlayerPrefs.GetFloat(MusicVolumeKey, 0.8f);
         float sfxVolume = PlayerPrefs.GetFloat(SfxVolumeKey, 0.4f);
 
@@ -81,27 +94,52 @@ public class SettingsController : MonoBehaviour
         if (sfxSlider != null)
             sfxSlider.value = sfxVolume;
 
-        ApplyLanguage(currentLanguage, false);
         ApplyMusicVolume(musicVolume, false);
         ApplySfxVolume(sfxVolume, false);
     }
 
+    // ================= BUTTONS =================
+
     private void BindButtons()
     {
         if (enButton != null)
-            enButton.onClick.AddListener(() => OnLanguageSelected("EN"));
-
-        if (kgButton != null)
-            kgButton.onClick.AddListener(() => OnLanguageSelected("KG"));
+        {
+            enButton.onClick.RemoveAllListeners();
+            enButton.onClick.AddListener(() =>
+            {
+                LocalizationManager.Instance.SetLanguage(Language.English);
+            });
+        }
 
         if (ruButton != null)
-            ruButton.onClick.AddListener(() => OnLanguageSelected("RU"));
+        {
+            ruButton.onClick.RemoveAllListeners();
+            ruButton.onClick.AddListener(() =>
+            {
+                LocalizationManager.Instance.SetLanguage(Language.Russian);
+            });
+        }
+
+        if (kgButton != null)
+        {
+            kgButton.onClick.RemoveAllListeners();
+            kgButton.onClick.AddListener(() =>
+            {
+                LocalizationManager.Instance.SetLanguage(Language.Kyrgyz);
+            });
+        }
 
         if (restartEpisodeButton != null)
+        {
+            restartEpisodeButton.onClick.RemoveAllListeners();
             restartEpisodeButton.onClick.AddListener(OnRestartEpisodePressed);
+        }
 
         if (resetGameButton != null)
+        {
+            resetGameButton.onClick.RemoveAllListeners();
             resetGameButton.onClick.AddListener(OnResetGamePressed);
+        }
     }
 
     private void BindSliders()
@@ -113,24 +151,7 @@ public class SettingsController : MonoBehaviour
             sfxSlider.onValueChanged.AddListener(OnSfxSliderChanged);
     }
 
-    private void OnLanguageSelected(string languageCode)
-    {
-        ApplyLanguage(languageCode, true);
-        RefreshLanguageUI();
-    }
-
-    private void ApplyLanguage(string languageCode, bool save)
-    {
-        currentLanguage = languageCode;
-
-        // Локализацию подключишь позже
-
-        if (save)
-        {
-            PlayerPrefs.SetString(LanguageKey, languageCode);
-            PlayerPrefs.Save();
-        }
-    }
+    // ================= AUDIO =================
 
     private void OnMusicSliderChanged(float value)
     {
@@ -146,8 +167,6 @@ public class SettingsController : MonoBehaviour
 
     private void ApplyMusicVolume(float value, bool save)
     {
-        // AudioManager подключишь позже
-
         if (save)
         {
             PlayerPrefs.SetFloat(MusicVolumeKey, value);
@@ -157,8 +176,6 @@ public class SettingsController : MonoBehaviour
 
     private void ApplySfxVolume(float value, bool save)
     {
-        // AudioManager подключишь позже
-
         if (save)
         {
             PlayerPrefs.SetFloat(SfxVolumeKey, value);
@@ -166,11 +183,18 @@ public class SettingsController : MonoBehaviour
         }
     }
 
+    // ================= UI =================
+
     private void RefreshLanguageUI()
     {
-        UpdateLanguageButton(enButtonBackground, enButtonText, currentLanguage == "EN");
-        UpdateLanguageButton(kgButtonBackground, kgButtonText, currentLanguage == "KG");
-        UpdateLanguageButton(ruButtonBackground, ruButtonText, currentLanguage == "RU");
+        if (LocalizationManager.Instance == null)
+            return;
+
+        var lang = LocalizationManager.Instance.CurrentLanguage;
+
+        UpdateLanguageButton(enButtonBackground, enButtonText, lang == Language.English);
+        UpdateLanguageButton(kgButtonBackground, kgButtonText, lang == Language.Kyrgyz);
+        UpdateLanguageButton(ruButtonBackground, ruButtonText, lang == Language.Russian);
     }
 
     private void UpdateLanguageButton(Image background, TMP_Text label, bool isSelected)
@@ -182,7 +206,6 @@ public class SettingsController : MonoBehaviour
             label.color = isSelected ? selectedTextColor : unselectedTextColor;
     }
 
-
     private void RefreshAudioUI()
     {
         if (musicPercentText != null && musicSlider != null)
@@ -192,7 +215,7 @@ public class SettingsController : MonoBehaviour
             sfxPercentText.text = Mathf.RoundToInt(sfxSlider.value * 100f) + "%";
     }
 
-    // ================= CORE LOGIC =================
+    // ================= ACTIONS =================
 
     private void OnRestartEpisodePressed()
     {
@@ -200,7 +223,7 @@ public class SettingsController : MonoBehaviour
             return;
 
         confirmPopup.Show(
-            "Вы действительно хотите начать эпизод заново?",
+            "restart_confirm",
             () =>
             {
                 bool restarted = SaveSystem.RestartCurrentEpisode();
@@ -210,8 +233,6 @@ public class SettingsController : MonoBehaviour
 
                 if (StatSystem.Instance != null)
                     StatSystem.Instance.ResetEpisodeStats();
-
-                Debug.Log("Episode restarted");
             }
         );
     }
@@ -222,11 +243,10 @@ public class SettingsController : MonoBehaviour
             return;
 
         confirmPopup.Show(
-            "Вы действительно хотите начать игру заново?",
+            "reset_confirm",
             () =>
             {
                 SaveSystem.Clear();
-                Debug.Log("Game reset");
             }
         );
     }

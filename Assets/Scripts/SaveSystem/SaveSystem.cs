@@ -28,7 +28,7 @@ public static class SaveSystem
     public static SaveData Load()
     {
         if (!HasSave())
-            return CreateNew();
+            return null;
 
         string json = PlayerPrefs.GetString(KEY);
 
@@ -77,10 +77,12 @@ public static class SaveSystem
 
     public static void StartEpisode(string episodePath)
     {
-        SaveData save = SaveSystem.Load();
+        SaveData save = Load(); 
 
-        if (save.shownNotificationIds != null)
-            save.shownNotificationIds.Clear();
+        if (save == null)
+            save = new SaveData();
+
+        Normalize(save);
 
         save.episodePath = episodePath;
 
@@ -103,8 +105,9 @@ public static class SaveSystem
             safety = save.safetyTotal
         };
 
-        SaveSystem.Save(save);
-        Debug.Log($"[SaveSystem] Starting episode: {episodePath}");
+        Save(save);
+
+        Debug.Log($"[SaveSystem] Starting episode (WITHOUT RESET): {episodePath}");
     }
 
     private static string GetEpisodeStartNode(string episodePath)

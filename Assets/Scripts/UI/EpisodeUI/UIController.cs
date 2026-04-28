@@ -208,7 +208,10 @@ public class UIController : MonoBehaviour
                 continue;
 
             string nextNode = choices[i].nextNode;
-            string choiceText = choices[i].text;
+
+            string choiceText = LocalizationManager.Instance != null
+                ? LocalizationManager.Instance.GetText("Episode", choices[i].textKey)
+                : choices[i].textKey;
 
             btn.gameObject.SetActive(true);
             btn.SetText(choiceText);

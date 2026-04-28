@@ -24,10 +24,10 @@ public class ConfirmPopup : MonoBehaviour
         Hide();
     }
 
-    public void Show(string message, Action confirmAction)
+    public void Show(string messageKey, Action confirmAction)
     {
         if (messageText != null)
-            messageText.text = message;
+            messageText.text = LocalizationManager.Instance.GetText("SettingsPage", messageKey);
 
         onConfirm = confirmAction;
 

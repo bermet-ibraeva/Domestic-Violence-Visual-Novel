@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class EpisodeData
 {
     public string episodeId;
-    public string episodeTitle;
+    public string episodeTitleKey;
 
     public List<CharacterMeta> characters;
     public List<SceneData> scenes;
@@ -16,7 +16,7 @@ public class EpisodeData
 public class CharacterMeta
 {
     public string characterId;
-    public string displayName;
+    public string displayNameKey;
     public string portraitKey;
 }
 
@@ -55,7 +55,7 @@ public class DialogueNode
     // Dialogue
     public string characterId;
     public string emotion;
-    public string text;
+    public string textKey;
     public string nextNode;
 
     public bool isThought;
@@ -73,7 +73,7 @@ public class DialogueNode
 [Serializable]
 public class Choice
 {
-    public string text;
+    public string textKey;
     public string nextNode;
     public List<EffectOp> effects;
     public NotificationData notification;
@@ -111,8 +111,8 @@ public class NotificationData
     public string id;
     public bool showOnce = true;
     public string mode;
-    public string title;
-    public string message;
+    public string titleKey;
+    public string messageKey;
 }
 
 [Serializable]

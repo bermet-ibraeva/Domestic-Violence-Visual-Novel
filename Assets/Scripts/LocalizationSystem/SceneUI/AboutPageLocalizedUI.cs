@@ -11,7 +11,7 @@ public class AboutPageLocalizedUI : MonoBehaviour
     [SerializeField] private TMP_Text termsButtonText;
     [SerializeField] private TMP_Text privacyButtonText;
 
-    private void Start()
+    private void OnEnable()
     {
         RefreshUI();
 
@@ -19,11 +19,12 @@ public class AboutPageLocalizedUI : MonoBehaviour
             LocalizationManager.Instance.OnLanguageChanged += HandleLanguageChanged;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged -= HandleLanguageChanged;
     }
+
 
     private void HandleLanguageChanged(Language language)
     {

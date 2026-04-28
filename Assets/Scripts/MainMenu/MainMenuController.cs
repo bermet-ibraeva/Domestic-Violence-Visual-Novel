@@ -37,11 +37,6 @@ public class MainMenuController : MonoBehaviour
                 currentSave = null;
                 return;
             }
-
-            if (currentSave.episodePath != episodePath)
-            {
-                currentSave = null;
-            }
         }
         else
         {
@@ -55,7 +50,13 @@ public class MainMenuController : MonoBehaviour
     {
         // кнопка
         if (playButtonText != null)
-            playButtonText.text = (currentSave != null && currentSave.episodePath == episodePath) ? "ПРОДОЛЖИТЬ" : "ИГРАТЬ";
+        {
+            bool hasSave = currentSave != null && currentSave.episodePath == episodePath;
+
+            string key = hasSave ? "continue" : "play";
+
+            playButtonText.text = LocalizationManager.Instance.GetText("MainMenu", key);
+        }
 
         if (chapterInfoUI == null)
         {
@@ -137,10 +138,8 @@ public class MainMenuController : MonoBehaviour
 
     private void OnPlayPressed()
     {
-        // если нет save или хочешь всегда запускать выбранный эпизод
-        if (currentSave == null || currentSave.episodePath != episodePath)
+        if (currentSave == null)
         {
-            SaveSystem.Clear();
             SaveSystem.StartEpisode(episodePath);
         }
 

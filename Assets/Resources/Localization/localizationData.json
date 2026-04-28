@@ -1,0 +1,736 @@
+{
+    "MainMenu": {
+      "pageName": "MainMenu",
+      "items": [
+        {
+          "key": "episode_label",
+          "value": {
+            "ru": "Эпизод {0}",
+            "en": "Episode {0}",
+            "ky": "{0}-эпизод"
+          }
+        },
+        {
+          "key": "play",
+          "value": {
+            "ru": "ИГРАТЬ",
+            "en": "PLAY",
+            "ky": "ОЙНОО"
+          }
+        },
+        {
+          "key": "continue",
+          "value": {
+            "ru": "ПРОДОЛЖИТЬ",
+            "en": "CONTINUE",
+            "ky": "УЛАНТУУ"
+          }
+        },
+        {
+          "key": "settings",
+          "value": {
+            "ru": "НАСТРОЙКИ",
+            "en": "SETTINGS",
+            "ky": "ЖӨНДӨӨЛӨР"
+          }
+        },
+        {
+          "key": "about",
+          "value": {
+            "ru": "ОБ ИГРЕ",
+            "en": "ABOUT",
+            "ky": "ОЮН ЖӨНҮНДӨ"
+          }
+        },
+        {
+          "key": "notes",
+          "value": {
+            "ru": "ЗАМЕТКИ",
+            "en": "NOTES",
+            "ky": "ЭСКЕРТМЕЛЕР"
+          }
+        },
+        {
+          "key": "episode_1_title",
+          "value": {
+            "ru": "Первые звонки",
+            "en": "First Signs",
+            "ky": "Алгачкы белгилер"
+          }
+        },
+        {
+          "key": "episode_2_title",
+          "value": {
+            "ru": "Соседняя дверь",
+            "en": "Next Door",
+            "ky": "Коңшу эшик"
+          }
+        },
+        {
+          "key": "episode_3_title",
+          "value": {
+            "ru": "Молчание",
+            "en": "Silence",
+            "ky": "Тынчтык"
+          }
+        }
+      ]
+    },
+    "AboutPage": {
+      "pageName": "AboutPage",
+      "items": [
+        {
+          "key": "title",
+          "value": {
+            "ru": "Об игре",
+            "en": "About",
+            "ky": "Оюн тууралуу"
+          }
+        },
+        {
+          "key": "description",
+          "value": {
+            "ru": "<b>Когда гаснет свет</b> — это интерактивная история о выборе, доверии и внимании к тому, что часто остаётся незамеченным.\n\nИгра поднимает тему домашнего насилия — физического и психологического — и показывает ситуации, которые не всегда легко распознать.\n\nЗдесь нет правильных ответов.\nТолько твой путь.",
+            "en": "<b>When the Light Goes Out</b> is an interactive story about choice, trust, and noticing what often remains unseen.\n\nThe game addresses the topic of domestic violence — both physical and psychological — and shows situations that are not always easy to recognize.\n\nThere are no right answers.\nOnly your path.",
+            "ky": "<b>Жарык өчкөндө</b> — бул тандоо, ишеним жана көп учурда байкалбай калган нерселерге көңүл буруу тууралуу интерактивдүү окуя.\n\nОюн үй-бүлөлүк зомбулук темасын — физикалык жана психологиялык — көтөрүп чыгып, ар дайым оңой байкалбаган жагдайларды көрсөтөт.\n\nБул жерде туура жооп жок.\nСенин өз жолуң гана бар."
+          }
+        },
+        {
+          "key": "feedback_text",
+          "value": {
+            "ru": "Ваше мнение важно для нас",
+            "en": "Your opinion matters to us",
+            "ky": "Сиздин оюңуз биз үчүн маанилүү"
+          }
+        },
+        {
+          "key": "leave_feedback",
+          "value": {
+            "ru": "ОСТАВИТЬ ОТЗЫВ",
+            "en": "LEAVE FEEDBACK",
+            "ky": "ПИКИР КАЛТЫРУУ"
+          }
+        },
+        {
+          "key": "terms",
+          "value": {
+            "ru": "Условия использования",
+            "en": "Terms & Conditions",
+            "ky": "Колдонуу шарттары"
+          }
+        },
+        {
+          "key": "privacy",
+          "value": {
+            "ru": "Политика конфиденциальности",
+            "en": "Privacy Policy",
+            "ky": "Купуялык саясаты"
+          }
+        }
+      ]
+    },
+
+    "SettingsPage": {
+      "pageName": "SettingsPage",
+      "items": [
+        {
+          "key": "title",
+          "value": {
+            "ru": "Настройки",
+            "en": "Settings",
+            "ky": "Жөндөөлөр"
+          }
+        },
+        {
+          "key": "language",
+          "value": {
+            "ru": "Язык",
+            "en": "Language",
+            "ky": "Тил"
+          }
+        },
+        {
+          "key": "audio",
+          "value": {
+            "ru": "Аудио",
+            "en": "Audio",
+            "ky": "Аудио"
+          }
+        },
+        {
+          "key": "progress",
+          "value": {
+            "ru": "Прогресс игры",
+            "en": "Game Progress",
+            "ky": "Оюндун прогресси"
+          }
+        },
+        {
+          "key": "music",
+          "value": {
+            "ru": "Фоновая музыка",
+            "en": "Background Music",
+            "ky": "Фон музыкасы"
+          }
+        },
+        {
+          "key": "sfx",
+          "value": {
+            "ru": "Звук в игре",
+            "en": "Game Sound",
+            "ky": "Оюндагы үн"
+          }
+        },
+        {
+          "key": "restart_episode",
+          "value": {
+            "ru": "Перезапустить эпизод",
+            "en": "Restart Episode",
+            "ky": "Эпизодду кайра баштоо"
+          }
+        },
+        {
+          "key": "new_game",
+          "value": {
+            "ru": "Начать игру заново",
+            "en": "Start New Game",
+            "ky": "Оюнду кайра баштоо"
+          }
+        },
+        {
+          "key": "yes",
+          "value": {
+            "ru": "Да",
+            "en": "Yes",
+            "ky": "Ооба"
+          }
+        },
+        {
+          "key": "no",
+          "value": {
+            "ru": "Нет",
+            "en": "No",
+            "ky": "Жок"
+          }
+        }
+      ]
+    },
+
+    "Stats": {
+      "pageName": "Stats",
+      "items": [
+        {
+          "key": "trustAG",
+          "value": {
+            "ru": "Доверие А и Г",
+            "en": "Trust A and G",
+            "ky": "Ишеним A жана Г"
+          }
+        },
+        {
+          "key": "trustJA",
+          "value": {
+            "ru": "Доверие Ж и А",
+            "en": "Trust J and A",
+            "ky": "Ишеним Ж жана А"
+          }
+        },
+        {
+          "key": "risk",
+          "value": {
+            "ru": "Риск",
+            "en": "Risk",
+            "ky": "Коркунуч"
+          }
+        },
+        {
+          "key": "safety",
+          "value": {
+            "ru": "Безопасность",
+            "en": "Safety",
+            "ky": "Коопсуздук"
+          }
+        },
+        {
+          "key": "sparks",
+          "value": {
+            "ru": "Искры",
+            "en": "Sparks",
+            "ky": "Учкундар"
+          }
+        }
+      ]
+    },
+    "Episode": {
+      "pageName": "Episode",
+      "items": [
+        {
+          "key": "char_ainaz",
+          "value": {
+            "ru": "Айназ",
+            "en": "Ainaz",
+            "ky": "Айназ"
+          }
+        },
+        {
+          "key": "char_guldana",
+          "value": {
+            "ru": "Гульдана",
+            "en": "Guldana",
+            "ky": "Гүлдана"
+          }
+        },
+        {
+          "key": "char_aigul",
+          "value": {
+            "ru": "Айгуль",
+            "en": "Aigul",
+            "ky": "Айгүл"
+          }
+        },
+        {
+          "key": "char_timur",
+          "value": {
+            "ru": "Тимур",
+            "en": "Timur",
+            "ky": "Тимур"
+          }
+        },
+        {
+          "key": "char_bekzat",
+          "value": {
+            "ru": "Бекзат",
+            "en": "Bekzat",
+            "ky": "Бекзат"
+          }
+        },
+        {
+          "key": "E01_S01_start",
+          "value": {
+            "ru": "Утро. Айназ и Гульдана встречаются у поворота дороги — как обычно.",
+            "en": "Morning. Ainaz and Guldana meet at the turn of the road — as usual.",
+            "ky": "Эртең менен. Айназ менен Гүлдана адаттагыдай жол бурулушунда жолугушат."
+          }
+        },
+        {
+          "key": "E01_S01_dialogue_0",
+          "value": {
+            "ru": "Они живут не рядом, но в школу всегда идут вместе. Воздух холодный, солнце светит низко и слепит глаза.",
+            "en": "They don’t live close, but they always walk to school together. The air is cold, and the low sun blinds their eyes.",
+            "ky": "Алар жакын жашабайт, бирок мектепке дайыма чогуу барышат. Аба суук, күн төмөндөн тийип көздү чагылдырат."
+          }
+        },
+        {
+          "key": "E01_S01_dialogue_1",
+          "value": {
+            "ru": "Ты сегодня рано. Ты же всегда опаздываешь?",
+            "en": "You’re early today. Aren’t you usually late?",
+            "ky": "Бүгүн эрте келдиң. Сен адатта кечикчү эмес белең?"
+          }
+        },
+        {
+          "key": "E01_S01_dialogue_2",
+          "value": {
+            "ru": "Да, сегодня просто так вышло. В другой раз обязательно опоздаем.",
+            "en": "Yeah, it just happened today. Next time we’ll definitely be late.",
+            "ky": "Ооба, бүгүн жөн эле ушундай болду. Кийинкиде сөзсүз кечигебиз."
+          }
+        },
+        {
+          "key": "E01_S01_dialogue_3",
+          "value": {
+            "ru": "Хорошо.",
+            "en": "Okay.",
+            "ky": "Макул."
+          }
+        },
+        {
+          "key": "E01_S01_narration_1",
+          "value": {
+            "ru": "Гульдана идёт чуть впереди. Айназ ускоряет шаг, чтобы идти рядом.",
+            "en": "Guldana walks slightly ahead. Ainaz quickens her pace to catch up.",
+            "ky": "Гүлдана бир аз алдыда басат. Айназ жанаша басыш үчүн кадамын ылдамдатат."
+          }
+        },
+        {
+          "key": "E01_S01_dialogue_4",
+          "value": {
+            "ru": "Анара Айзатовна снова задала кучу домашки. Весь вечер просидела над уроками. Кстати, у тебя получился последний номер по математике?",
+            "en": "Anara Aizatovna gave us tons of homework again. I spent the whole evening studying. By the way, did you solve the last math problem?",
+            "ky": "Анара Айзатовна кайра көп тапшырма берди. Кечинде толугу менен сабак кылдым. Айтмакчы, акыркы математика маселесин чыгара алдыңбы?"
+          }
+        },
+        {
+          "key": "E01_S01_dialogue_5",
+          "value": {
+            "ru": "Почти. Но я не думаю, что это правильный ответ.",
+            "en": "Almost. But I don’t think it’s correct.",
+            "ky": "Дээрлик. Бирок туура жооп эмес окшойт."
+          }
+        },
+        {
+          "key": "E01_S01_dialogue_6",
+          "value": {
+            "ru": "Покажешь?",
+            "en": "Will you show me?",
+            "ky": "Көрсөтөсүңбү?"
+          }
+        },
+        {
+          "key": "E01_S01_dialogue_7",
+          "value": {
+            "ru": "Конечно.",
+            "en": "Of course.",
+            "ky": "Албетте."
+          }
+        },
+        {
+          "key": "E01_S01_choice_setup",
+          "value": {
+            "ru": "Айназ улыбается и что-то напевает себе под нос, но Гульдана не улыбается в ответ.",
+            "en": "Ainaz smiles and hums softly, but Guldana doesn’t smile back.",
+            "ky": "Айназ жылмайып, акырын обон созот, бирок Гүлдана жооп кылып жылмайбайт."
+          }
+        },
+  
+        {
+          "key": "E01_S01_choice_1",
+          "value": {
+            "ru": "Спросить, всё ли у неё в порядке",
+            "en": "Ask if she’s okay",
+            "ky": "Баары жайындабы деп сура"
+          }
+        },
+        {
+          "key": "E01_S01_choice_2",
+          "value": {
+            "ru": "Сделать вид, что ничего не замечаешь",
+            "en": "Pretend you didn’t notice anything",
+            "ky": "Эч нерсе байкабагандай кыл"
+          }
+        },
+        {
+          "key": "E01_S01_choice_3",
+          "value": {
+            "ru": "Пошутить, чтобы разрядить обстановку",
+            "en": "Make a joke to lighten the mood",
+            "ky": "Абалды жеңилдетүү үчүн тамаша кыл"
+          }
+        },
+  
+        {
+          "key": "E01_S01_choice1_result",
+          "value": {
+            "ru": "Гульдана отвечает коротко и уклончиво, будто не хочет вдаваться в подробности.",
+            "en": "Guldana answers briefly and vaguely, as if she doesn’t want to go into details.",
+            "ky": "Гүлдана кыска жана бүдөмүк жооп берет, деталдарга киргиси келбегендей."
+          }
+        },
+        {
+          "key": "E01_S01_choice1_result1",
+          "value": {
+            "ru": "Но она запоминает сам вопрос и то, как внимательно Айназ на неё посмотрела.",
+            "en": "But she remembers the question and the way Ainaz looked at her.",
+            "ky": "Бирок ал суроону жана Айназдын кандай караганын эстеп калат."
+          }
+        },
+        {
+          "key": "E01_S01_choice2_result",
+          "value": {
+            "ru": "Разговор продолжается, но между ними остаётся небольшая дистанция.",
+            "en": "The conversation continues, but a small distance remains between them.",
+            "ky": "Сүйлөшүү уланат, бирок алардын ортосунда бир аз аралык калат."
+          }
+        },
+        {
+          "key": "E01_S01_choice3_result",
+          "value": {
+            "ru": "Гульдана слабо улыбается, но быстро снова закрывается.",
+            "en": "Guldana smiles faintly, then quickly closes off again.",
+            "ky": "Гүлдана жай жылмайып, кайра жабылып калат."
+          }
+        },
+      
+        {
+          "key": "E01_S02_start",
+          "value": {
+            "ru": "Айназ стоит с Гульданой у стены школы. Вокруг шумно.",
+            "en": "Ainaz stands with Guldana by the school wall. It’s noisy around them.",
+            "ky": "Айназ Гүлдана менен мектептин дубалынын жанында турат. Айлана ызы-чуу."
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_0",
+          "value": {
+            "ru": "К ним подходит Айгуль, одноклассница.",
+            "en": "Aigul, their classmate, approaches them.",
+            "ky": "Аларга классташы Айгүл жакындайт."
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_1",
+          "value": {
+            "ru": "Ты опять сегодня в библиотеке будешь сидеть пока не выгонят?",
+            "en": "Are you going to stay in the library again until they kick you out?",
+            "ky": "Бүгүн дагы китепканада отуруп, кууп чыкканча каласыңбы?"
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_2",
+          "value": {
+            "ru": "(молчит)",
+            "en": "(silent)",
+            "ky": "(үн катпайт)"
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_3",
+          "value": {
+            "ru": "Конечно. Тебе же… некуда торопиться.",
+            "en": "Of course. You’ve got… nowhere to rush to.",
+            "ky": "Албетте. Сенин… шашчу жериң жок да."
+          }
+        },
+        {
+          "key": "E01_S02_narration_1",
+          "value": {
+            "ru": "Айгуль смотрит на Айназ, будто ожидая, что та всё поймёт.",
+            "en": "Aigul looks at Ainaz as if expecting her to understand everything.",
+            "ky": "Айгүл Айназга карап, ал баарын түшүнөт деп күткөндөй."
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_4",
+          "value": {
+            "ru": "Ты о чём?",
+            "en": "What are you talking about?",
+            "ky": "Эмне жөнүндө айтып жатасың?"
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_5",
+          "value": {
+            "ru": "Серьёзно? Ты ей не сказала?",
+            "en": "Seriously? You didn’t tell her?",
+            "ky": "Чын элеби? Сен ага айткан жоксуңбу?"
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_6",
+          "value": {
+            "ru": "Хватит.",
+            "en": "Enough.",
+            "ky": "Жетишет."
+          }
+        },
+        {
+          "key": "E01_S02_narration_2",
+          "value": {
+            "ru": "На секунду вокруг становится будто тише.",
+            "en": "For a moment, everything around seems quieter.",
+            "ky": "Бир саамга айлана тынчып калгандай сезилет."
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_7",
+          "value": {
+            "ru": "Ладно. Не моё дело.",
+            "en": "Fine. Not my business.",
+            "ky": "Макул. Бул менин ишим эмес."
+          }
+        },
+        {
+          "key": "E01_S02_narration_3",
+          "value": {
+            "ru": "Айгуль пожимает плечами и уходит в класс.",
+            "en": "Aigul shrugs and walks back into the classroom.",
+            "ky": "Айгүл ийнин куушуруп, класска кирип кетет."
+          }
+        },
+        {
+          "key": "E01_S02_dialogue_8",
+          "value": {
+            "ru": "Я в уборную.",
+            "en": "I’m going to the restroom.",
+            "ky": "Мен дааратканага барам."
+          }
+        },
+        {
+          "key": "E01_S02_choice_setup",
+          "value": {
+            "ru": "Она уходит. Айназ остаётся стоять, чувствуя неловкость и странное беспокойство.",
+            "en": "She leaves. Ainaz stays standing, feeling awkward and strangely uneasy.",
+            "ky": "Ал кетип калды. Айназ ордунда туруп, ыңгайсыздык менен белгисиз тынчсызданууну сезет."
+          }
+        },
+        {
+          "key": "E01_S02_choice1_option_1",
+          "value": {
+            "ru": "Попытаться узнать у других, о чём слухи",
+            "en": "Try to ask others what the rumors are about",
+            "ky": "Башкалардан ушактар эмне жөнүндө экенин билүүгө аракет кылуу"
+          }
+        },
+        {
+          "key": "E01_S02_choice1_option_2",
+          "value": {
+            "ru": "Проигнорировать и дождаться Гульдану",
+            "en": "Ignore it and wait for Guldana",
+            "ky": "Эске албай, Гүлдананы күтүп туруу"
+          }
+        },
+        {
+          "key": "E01_S02_choice1_start",
+          "value": {
+            "ru": "Айназ подходит к ребятам.",
+            "en": "Ainaz approaches the group.",
+            "ky": "Айназ балдарга жакындайт."
+          }
+        },
+        {
+          "key": "toast_curiosity",
+          "value": {
+            "ru": "Иногда любопытство имеет последствия",
+            "en": "Sometimes curiosity has consequences",
+            "ky": "Кээде кызыгуу кесепеттерге алып келет"
+          }
+        },
+        {
+          "key": "E01_S02_choice1_narration_1",
+          "value": {
+            "ru": "Разговор сначала затихает, потом продолжается тише, но уже не скрываясь.",
+            "en": "The conversation first quiets down, then continues more quietly, but no longer hiding.",
+            "ky": "Сүйлөшүү адегенде басаңдайт, анан акырын уланат, бирок жашырбай."
+          }
+        },
+        {
+          "key": "E01_S02_choice1_dialogue_1",
+          "value": {
+            "ru": "Ты правда не знаешь?",
+            "en": "You really don’t know?",
+            "ky": "Чын эле билбейсиңби?"
+          }
+        },
+        {
+          "key": "E01_S02_choice1_dialogue_2",
+          "value": {
+            "ru": "Не знаю… чего?",
+            "en": "I don’t know… what?",
+            "ky": "Билбейм… эмнени?"
+          }
+        },
+        {
+          "key": "E01_S02_choice1_dialogue_3",
+          "value": {
+            "ru": "Ну да, ты же не местная.",
+            "en": "Well yeah, you’re not from here.",
+            "ky": "Ооба, сен бул жактан эмессиң да."
+          }
+        },
+        {
+          "key": "E01_S02_choice1_dialogue_4",
+          "value": {
+            "ru": "Ты сюда сколько лет назад переехала? Три-четыре?",
+            "en": "How many years ago did you move here? Three or four?",
+            "ky": "Бул жакка канча жыл мурун көчүп келгенсиң? Үч-төрт жылбы?"
+          }
+        },
+        {
+          "key": "E01_S02_choice1_narration_2",
+          "value": {
+            "ru": "Айназ кивает.",
+            "en": "Ainaz nods.",
+            "ky": "Айназ башын ийкейт."
+          }
+        },
+        {
+          "key": "E01_S02_choice1_dialogue_5",
+          "value": {
+            "ru": "Тогда понятно.",
+            "en": "That makes sense.",
+            "ky": "Анда түшүнүктүү."
+          }
+        },
+        {
+          "key": "E01_S02_choice1_dialogue_6",
+          "value": {
+            "ru": "Это произошло, когда мы только в школу пошли.",
+            "en": "It happened when we had just started school.",
+            "ky": "Бул биз мектепке жаңы барганда болгон."
+          }
+        },
+        {
+          "key": "E01_S02_choice1_narration_3",
+          "value": {
+            "ru": "Наступает короткая пауза. Кто-то из ребят опускает взгляд.",
+            "en": "A short pause follows. Someone looks down.",
+            "ky": "Кыскача тыным болот. Кимдир бирөө көзүн төмөн түшүрөт."
+          }
+        },
+        {
+          "key": "E01_S02_choice1_dialogue_7",
+          "value": {
+            "ru": "Ладно, неважно. Кто после школы в футбол?",
+            "en": "Alright, never mind. Who’s playing football after school?",
+            "ky": "Макул, маанилүү эмес. Сабактан кийин ким футбол ойнойт?"
+          }
+        },
+        {
+          "key": "E01_S02_choice1_narration_4",
+          "value": {
+            "ru": "Тимур усмехается. Айгуль фыркает и отворачивается. Разговор уходит в сторону.",
+            "en": "Timur smirks. Aigul snorts and turns away. The conversation drifts off.",
+            "ky": "Тимур жылмайып коёт. Айгүл кыңшылап, бурулуп кетет. Сүйлөшүү башка жакка бурулат."
+          }
+        },
+        {
+          "key": "E01_S02_choice1_thought",
+          "value": {
+            "ru": "Что это было?",
+            "en": "What was that?",
+            "ky": "Бул эмне болду?"
+          }
+        },
+        {
+          "key": "E01_S02_choice1_narration_5",
+          "value": {
+            "ru": "Айназ понимает, что разговор шёл не о школе и не о каком-то пустяке. Но продолжать его никто не собирается.",
+            "en": "Ainaz realizes the conversation wasn’t about school or something trivial. But no one intends to continue it.",
+            "ky": "Айназ сүйлөшүү мектеп же жөн эле нерсе жөнүндө эмес экенин түшүнөт. Бирок аны уланткысы келген эч ким жок."
+          }
+        },
+        {
+          "key": "note_unlock_rumors_title",
+          "value": {
+            "ru": "Новая заметка",
+            "en": "New Note",
+            "ky": "Жаңы жазуу"
+          }
+        },
+        {
+          "key": "note_unlock_rumors_message",
+          "value": {
+            "ru": "Вам доступна новая заметка: «Слухи»",
+            "en": "A new note is available: “Rumors”",
+            "ky": "Сизге жаңы жазуу жеткиликтүү: «Ушактар»"
+          }
+        },
+        {
+          "key": "E01_S02_choice2_result",
+          "value": {
+            "ru": "Когда Гульдана возвращается, она замечает, что Айназ не ушла и не стала обсуждать её с другими. Это немного успокаивает.",
+            "en": "When Guldana returns, she notices that Ainaz stayed and didn’t talk about her with others. It reassures her a little.",
+            "ky": "Гүлдана кайтып келгенде, Айназ кетпегенин жана аны башкалар менен талкуулабаганын байкайт. Бул аны бир аз тынчтандырат."
+          }
+        },
+        {
+          "key": "E01_summary_text",
+          "value": {
+            "ru": "Айназ понимает, что за этими разговорами скрывается что-то важное, но пока никто не готов говорить об этом вслух.",
+            "en": "Ainaz realizes that something important lies behind these conversations, but no one is ready to talk about it openly yet.",
+            "ky": "Айназ бул сүйлөшүүлөрдүн артында маанилүү нерсе бар экенин түшүнөт, бирок азырынча эч ким бул тууралуу ачык айтууга даяр эмес."
+          }
+        }
+      ]
+    }
+}

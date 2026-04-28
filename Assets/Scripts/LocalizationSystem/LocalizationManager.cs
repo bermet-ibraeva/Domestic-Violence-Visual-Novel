@@ -4,7 +4,28 @@ using UnityEngine;
 
 public class LocalizationManager : MonoBehaviour
 {
-    public static LocalizationManager Instance { get; private set; }
+    private static LocalizationManager instance;
+
+    public static LocalizationManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<LocalizationManager>();
+
+                if (instance == null)
+                {
+                    GameObject obj = new GameObject("LocalizationManager");
+                    instance = obj.AddComponent<LocalizationManager>();
+
+                    Debug.Log("[Localization] Auto-created LocalizationManager");
+                }
+            }
+
+            return instance;
+        }
+    }
 
     [Header("JSON file in Resources/Localization")]
     [SerializeField] private string jsonFileName = "localizationData";
@@ -22,18 +43,20 @@ public class LocalizationManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        Instance = this;
+        instance = this;
         DontDestroyOnLoad(gameObject);
 
         LoadSavedLanguage();
         LoadLocalizationJson();
     }
+
+    // ================= LANGUAGE =================
 
     private void LoadSavedLanguage()
     {
@@ -55,6 +78,9 @@ public class LocalizationManager : MonoBehaviour
 
     public void SetLanguage(Language language)
     {
+        if (CurrentLanguage == language)
+            return;
+
         CurrentLanguage = language;
         HasSelectedLanguage = true;
 
@@ -62,16 +88,16 @@ public class LocalizationManager : MonoBehaviour
         PlayerPrefs.SetInt(LanguageSelectedPrefKey, 1);
         PlayerPrefs.Save();
 
+        Debug.Log($"[Localization] Language set to: {CurrentLanguage}");
+
         OnLanguageChanged?.Invoke(CurrentLanguage);
     }
 
     public void SetDefaultLanguage()
     {
-        // if language was already selected, do not override it with default
         if (HasSelectedLanguage)
             return;
 
-        // put russian as default language, because it's the most complete one and will be used as fallback for missing translations in other languages
         SetLanguage(Language.Russian);
 
         Debug.Log("[Localization] Default language applied.");
@@ -81,6 +107,8 @@ public class LocalizationManager : MonoBehaviour
     {
         return !HasSelectedLanguage;
     }
+
+    // ================= GET TEXT =================
 
     public string GetText(string pageName, string key)
     {
@@ -139,6 +167,8 @@ public class LocalizationManager : MonoBehaviour
         return $"#{pageName}.{key}";
     }
 
+    // ================= LOAD JSON =================
+
     private void LoadLocalizationJson()
     {
         pages.Clear();
@@ -159,6 +189,7 @@ public class LocalizationManager : MonoBehaviour
         }
 
         AddPage(localizationData.MainMenu);
+        AddPage(localizationData.Episode);
         AddPage(localizationData.AboutPage);
         AddPage(localizationData.SettingsPage);
 

@@ -51,6 +51,7 @@ public class PageData
 [Serializable]
 public class LocalizationRoot
 {
+    public PageData Episode;
     public PageData MainMenu;
     public PageData AboutPage;
     public PageData SettingsPage;

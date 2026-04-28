@@ -55,10 +55,10 @@ public class ModalUI : MonoBehaviour
         }
 
         if (titleText != null)
-            titleText.text = data.title ?? "";
+            titleText.text = LocalizationManager.Instance.GetText("Episode" + data.titleKey) ?? "";
 
         if (messageText != null)
-            messageText.text = data.message ?? "";
+            messageText.text = LocalizationManager.Instance.GetText("Episode" + data.messageKey) ?? "";
 
         onClose = callback;
         isVisible = true;

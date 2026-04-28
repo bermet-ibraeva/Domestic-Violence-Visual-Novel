@@ -11,10 +11,7 @@ public class StatFeedbackUI : MonoBehaviour
     public Image iconImage;
     public TextMeshProUGUI labelText;
 
-    [Tooltip("RectTransform объекта StatePanel, на котором висит Horizontal Layout Group + Content Size Fitter")]
     public RectTransform statePanelRect;
-
-    [Tooltip("Скрипт TextMaxWidthClamp на LabelReward или LabelContainer")]
     public TextMaxWidthClamp labelWidthClamp;
 
     [Header("Icons")]
@@ -32,7 +29,7 @@ public class StatFeedbackUI : MonoBehaviour
     public float startYOffset = 18f;
     public float endYOffset = 0f;
 
-    private readonly Queue<StatPopupData> queue = new Queue<StatPopupData>();
+    private readonly Queue<StatPopupData> queue = new();
 
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
@@ -61,6 +58,8 @@ public class StatFeedbackUI : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
     }
 
+    // ================= PUBLIC =================
+
     public void ShowStatChange(string statKey, int value)
     {
         if (value == 0 || string.IsNullOrEmpty(statKey))
@@ -76,6 +75,19 @@ public class StatFeedbackUI : MonoBehaviour
         if (playRoutine == null)
             playRoutine = StartCoroutine(ProcessQueue());
     }
+
+    public void WaitUntilFinished(Action callback)
+    {
+        if (!IsShowing)
+        {
+            callback?.Invoke();
+            return;
+        }
+
+        onFinished += callback;
+    }
+
+    // ================= CORE =================
 
     private IEnumerator ProcessQueue()
     {
@@ -94,17 +106,19 @@ public class StatFeedbackUI : MonoBehaviour
         if (rectTransform == null || canvasGroup == null || labelText == null)
             yield break;
 
+        // icon
         if (iconImage != null)
         {
             iconImage.sprite = data.icon;
             iconImage.enabled = data.icon != null;
         }
 
+        // text
         labelText.text = data.text;
 
-        // ВОТ ГЛАВНОЕ:
-        // после смены текста обновляем ограничение ширины
-        // и пересобираем layout, чтобы StatePanel остался по центру.
+        // цвет (UX улучшение)
+        labelText.color = data.value > 0 ? new Color(0.4f, 0.9f, 0.4f) : new Color(1f, 0.4f, 0.4f);
+
         RefreshFeedbackLayout();
 
         canvasGroup.alpha = 0f;
@@ -112,6 +126,7 @@ public class StatFeedbackUI : MonoBehaviour
 
         float time = 0f;
 
+        // fade in
         while (time < fadeInDuration)
         {
             time += Time.deltaTime;
@@ -129,12 +144,12 @@ public class StatFeedbackUI : MonoBehaviour
         }
 
         canvasGroup.alpha = 1f;
-        rectTransform.anchoredPosition = baseAnchoredPos + new Vector2(0f, endYOffset);
 
         yield return new WaitForSeconds(visibleDuration);
 
         time = 0f;
 
+        // fade out
         while (time < fadeOutDuration)
         {
             time += Time.deltaTime;
@@ -152,8 +167,6 @@ public class StatFeedbackUI : MonoBehaviour
         }
 
         canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
         rectTransform.anchoredPosition = baseAnchoredPos;
     }
 
@@ -174,29 +187,56 @@ public class StatFeedbackUI : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
     }
 
+    // ================= DATA =================
+
     private StatPopupData BuildPopupData(string statKey, int value)
     {
+        // ❌ не показываем sparks
+        if (statKey == "sparks")
+            return new StatPopupData(null, null, value);
+
         string amountText = value > 0 ? $"+{value}" : value.ToString();
 
+        string label = LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.GetText("Stats", GetStatKey(statKey))
+            : statKey;
+
+        Sprite icon = GetIcon(statKey);
+
+        return new StatPopupData($"{amountText} {label}", icon, value);
+    }
+
+    private string GetStatKey(string statKey)
+    {
         switch (statKey)
         {
             case "trust.AG":
-                return new StatPopupData($"{amountText} Доверие А–Г", trustAGIcon);
+            case "trustAG": return "trustAG";
 
             case "trust.JA":
-                return new StatPopupData($"{amountText} Доверие Ж–А", trustJAIcon);
+            case "trustJA": return "trustJA";
 
-            case "safety":
-                return new StatPopupData($"{amountText} Безопасность", safetyIcon);
+            case "risk": return "risk";
+            case "safety": return "safety";
 
-            case "risk":
-                return new StatPopupData($"{amountText} Риск", riskIcon);
+            default: return statKey;
+        }
+    }
 
-            case "sparks":
-                return new StatPopupData(null, null);
+    private Sprite GetIcon(string statKey)
+    {
+        switch (statKey)
+        {
+            case "trust.AG":
+            case "trustAG": return trustAGIcon;
 
-            default:
-                return new StatPopupData($"{amountText} {statKey}", null);
+            case "trust.JA":
+            case "trustJA": return trustJAIcon;
+
+            case "risk": return riskIcon;
+            case "safety": return safetyIcon;
+
+            default: return null;
         }
     }
 
@@ -209,22 +249,13 @@ public class StatFeedbackUI : MonoBehaviour
     {
         public string text;
         public Sprite icon;
+        public int value;
 
-        public StatPopupData(string text, Sprite icon)
+        public StatPopupData(string text, Sprite icon, int value)
         {
             this.text = text;
             this.icon = icon;
+            this.value = value;
         }
-    }
-
-    public void WaitUntilFinished(Action callback)
-    {
-        if (!IsShowing)
-        {
-            callback?.Invoke();
-            return;
-        }
-
-        onFinished += callback;
     }
 }
