@@ -77,7 +77,7 @@ public class ToastUI : MonoBehaviour
             }
 
             if (messageText != null)
-                messageText.text = LocalizationManager.Instance.GetText("Episode" + data.messageKey) ?? "";
+                messageText.text = LocalizationManager.Instance.GetText("Notifications", data.messageKey);
 
             yield return FadeTo(1f);
             yield return new WaitForSeconds(visibleDuration);

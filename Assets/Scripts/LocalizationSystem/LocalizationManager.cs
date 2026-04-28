@@ -192,6 +192,8 @@ public class LocalizationManager : MonoBehaviour
         AddPage(localizationData.Episode);
         AddPage(localizationData.AboutPage);
         AddPage(localizationData.SettingsPage);
+        AddPage(localizationData.Stats);
+        AddPage(localizationData.Notifications);
 
         Debug.Log($"[Localization] Loaded pages: {pages.Count}");
     }

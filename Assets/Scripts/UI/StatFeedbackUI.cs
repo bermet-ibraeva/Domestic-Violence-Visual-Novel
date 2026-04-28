@@ -116,9 +116,6 @@ public class StatFeedbackUI : MonoBehaviour
         // text
         labelText.text = data.text;
 
-        // цвет (UX улучшение)
-        labelText.color = data.value > 0 ? new Color(0.4f, 0.9f, 0.4f) : new Color(1f, 0.4f, 0.4f);
-
         RefreshFeedbackLayout();
 
         canvasGroup.alpha = 0f;

@@ -2050,6 +2050,7 @@ MonoBehaviour:
   safetyRow: {fileID: 2101313039}
   sparksRow: {fileID: 1535503557}
   continueButton: {fileID: 556053990}
+  continueButtonText: {fileID: 322859002}
   totalValueColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
   positiveDeltaColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}
   negativeDeltaColor: {r: 0.22745098, g: 0.20392157, b: 0.26666668, a: 1}

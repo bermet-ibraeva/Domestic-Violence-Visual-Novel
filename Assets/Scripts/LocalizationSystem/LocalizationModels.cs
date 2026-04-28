@@ -55,4 +55,6 @@ public class LocalizationRoot
     public PageData MainMenu;
     public PageData AboutPage;
     public PageData SettingsPage;
+    public PageData Stats; 
+    public PageData Notifications;
 }

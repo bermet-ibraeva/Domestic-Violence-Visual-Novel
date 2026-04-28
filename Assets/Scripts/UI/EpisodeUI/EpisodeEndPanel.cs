@@ -22,6 +22,7 @@ public class EpisodeEndPanel : MonoBehaviour
 
     [Header("Buttons")]
     public Button continueButton;
+    [SerializeField] private TMP_Text continueButtonText;
 
     [Header("Colors")]
     public Color totalValueColor = new Color32(58, 52, 68, 255);   // #FDFDF9
@@ -70,6 +71,12 @@ public class EpisodeEndPanel : MonoBehaviour
             });
         }
 
+        if (continueButtonText != null)
+        {
+            continueButtonText.text =
+                LocalizationManager.Instance.GetText("Episode", "continue");
+        }
+
         Canvas.ForceUpdateCanvases();
 
         RectTransform rootRect = GetComponent<RectTransform>();
@@ -89,7 +96,7 @@ public class EpisodeEndPanel : MonoBehaviour
 
         titleText.enableAutoSizing = false;
         titleText.fontSize = fixedTitleFontSize;
-        titleText.text = "ЭПИЗОД ЗАВЕРШЁН!"; // TODO: replace with Localization.Get("episode_end_title")
+        titleText.text = LocalizationManager.Instance.GetText("Episode", "episode_end_title");
 
         titleText.enableWordWrapping = true;
         titleText.overflowMode = TextOverflowModes.Masking;
@@ -120,33 +127,8 @@ public class EpisodeEndPanel : MonoBehaviour
         textField.enableWordWrapping = true;
         textField.overflowMode = TextOverflowModes.Masking;
 
-        string label = GetTempLabel(statKey); // TODO: replace with Localization.Get(statKey)
+        string label = LocalizationManager.Instance.GetText("Stats", statKey);
         textField.text = FormatStatText(label, totalValue, deltaValue);
-    }
-
-    private string GetTempLabel(string statKey)
-    {
-        // TODO: replace with proper localization system later
-        switch (statKey)
-        {
-            case "trust_ag":
-                return "Доверие Айназ и Гульданы";
-
-            case "trust_ja":
-                return "Доверие Жамили и Айды";
-
-            case "risk":
-                return "Риск";
-
-            case "safety":
-                return "Безопасность";
-
-            case "sparks":
-                return "Искорки";
-
-            default:
-                return "Стат";
-        }
     }
 
     private string FormatStatText(string label, int totalValue, int deltaValue)

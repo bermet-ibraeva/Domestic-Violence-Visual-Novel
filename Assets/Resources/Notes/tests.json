@@ -1,127 +1,127 @@
 {
   "tests": [
     {
-      "testId": "test_signs_01",
-      "noteId": "note_signs_01",
-      "title": "Тревожные сигналы",
+      "testId": "test_signs",
+      "noteId": "note_signs",
+      "titleKey": "test_signs_title",
       "maxReward": 3,
       "questionsPerRun": 5,
       "questions": [
         {
           "questionId": "q1",
-          "questionText": "Какое изменение в поведении может быть тревожным сигналом?",
+          "questionKey": "test_signs_q1",
           "answers": [
-            { "answerId": "a1", "text": "Человек стал говорить меньше и избегает разговоров", "isCorrect": true },
-            { "answerId": "a2", "text": "Человек начал больше шутить", "isCorrect": false },
-            { "answerId": "a3", "text": "Человек стал чаще заниматься спортом", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_signs_q1_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_signs_q1_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_signs_q1_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q2",
-          "questionText": "Что из этого может указывать на внутреннюю тревогу?",
+          "questionKey": "test_signs_q2",
           "answers": [
-            { "answerId": "a1", "text": "Резкая реакция на громкие звуки", "isCorrect": true },
-            { "answerId": "a2", "text": "Любовь к тихой музыке", "isCorrect": false },
-            { "answerId": "a3", "text": "Желание больше спать на выходных", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_signs_q2_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_signs_q2_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_signs_q2_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q3",
-          "questionText": "Почему улыбка может быть тревожным сигналом?",
+          "questionKey": "test_signs_q3",
           "answers": [
-            { "answerId": "a1", "text": "Она может выглядеть натянутой и неискренней", "isCorrect": true },
-            { "answerId": "a2", "text": "Потому что человек всегда должен быть серьёзным", "isCorrect": false },
-            { "answerId": "a3", "text": "Потому что улыбка означает радость", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_signs_q3_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_signs_q3_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_signs_q3_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q4",
-          "questionText": "Какое поведение может говорить о том, что человеку тяжело дома?",
+          "questionKey": "test_signs_q4",
           "answers": [
-            { "answerId": "a1", "text": "Он(-a) не хочет идти домой и придумывает причины не возвращаться", "isCorrect": true },
-            { "answerId": "a2", "text": "Он(-a) любит гулять с друзьями", "isCorrect": false },
-            { "answerId": "a3", "text": "Он(-a) часто сидит в телефоне", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_signs_q4_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_signs_q4_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_signs_q4_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q5",
-          "questionText": "Что важно сделать, если ты замечаешь тревожные сигналы?",
+          "questionKey": "test_signs_q5",
           "answers": [
-            { "answerId": "a1", "text": "Не игнорировать и понимать, что человеку может быть тяжело", "isCorrect": true },
-            { "answerId": "a2", "text": "Сразу обвинить человека в странном поведении", "isCorrect": false },
-            { "answerId": "a3", "text": "Полностью игнорировать ситуацию", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_signs_q5_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_signs_q5_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_signs_q5_a3", "isCorrect": false }
           ]
         }
       ]
     },
     {
-      "testId": "test_rumors_01",
-      "noteId": "note_rumors_01",
-      "title": "Слухи",
+      "testId": "test_rumors",
+      "noteId": "note_rumors",
+      "titleKey": "test_rumors_title",
       "maxReward": 3,
       "questionsPerRun": 5,
       "questions": [
         {
           "questionId": "q1",
-          "questionText": "Почему слух может сильно измениться по сравнению с оригинальной историей?",
+          "questionKey": "test_rumors_q1",
           "answers": [
-            { "answerId": "a1", "text": "Каждый пересказывает по-своему и добавляет детали", "isCorrect": true },
-            { "answerId": "a2", "text": "Люди специально хотят соврать", "isCorrect": false },
-            { "answerId": "a3", "text": "Информация становится точнее со временем", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_rumors_q1_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_rumors_q1_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_rumors_q1_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q2",
-          "questionText": "Ты слышишь слух о знакомом человеке, и он звучит правдоподобно. Что сделать правильнее?",
+          "questionKey": "test_rumors_q2",
           "answers": [
-            { "answerId": "a1", "text": "Поделиться только с близкими друзьями, чтобы обсудить", "isCorrect": false },
-            { "answerId": "a2", "text": "Не распространять и не делать выводов без фактов", "isCorrect": true },
-            { "answerId": "a3", "text": "Сразу поверить, если это звучит логично", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_rumors_q2_a1", "isCorrect": false },
+            { "answerId": "a2", "textKey": "test_rumors_q2_a2", "isCorrect": true },
+            { "answerId": "a3", "textKey": "test_rumors_q2_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q3",
-          "questionText": "Почему даже «просто слушать» слухи может быть проблемой?",
+          "questionKey": "test_rumors_q3",
           "answers": [
-            { "answerId": "a1", "text": "Потому что это поддерживает распространение и делает это нормой", "isCorrect": true },
-            { "answerId": "a2", "text": "Потому что это занимает много времени", "isCorrect": false },
-            { "answerId": "a3", "text": "Потому что это всегда скучно", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_rumors_q3_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_rumors_q3_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_rumors_q3_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q4",
-          "questionText": "Ты замечаешь, что о человеке говорят за спиной, но никто не подходит к нему напрямую. Почему это происходит?",
+          "questionKey": "test_rumors_q4",
           "answers": [
-            { "answerId": "a1", "text": "Людям проще обсуждать, чем вступать в прямой разговор", "isCorrect": true },
-            { "answerId": "a2", "text": "Потому что им всё равно", "isCorrect": false },
-            { "answerId": "a3", "text": "Потому что они знают правду", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_rumors_q4_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_rumors_q4_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_rumors_q4_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q5",
-          "questionText": "Ты в компании, где обсуждают слух. Если ты резко скажешь «перестаньте», это может создать напряжение. Что сделать лучше?",
+          "questionKey": "test_rumors_q5",
           "answers": [
-            { "answerId": "a1", "text": "Аккуратно сменить тему или не поддерживать разговор", "isCorrect": true },
-            { "answerId": "a2", "text": "Активно участвовать, чтобы не выделяться", "isCorrect": false },
-            { "answerId": "a3", "text": "Сразу уйти, ничего не объяснив", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_rumors_q5_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_rumors_q5_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_rumors_q5_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q6",
-          "questionText": "Человек, о котором ходят слухи, говорит «всё нормально», но выглядит напряжённым. Как лучше отреагировать?",
+          "questionKey": "test_rumors_q6",
           "answers": [
-            { "answerId": "a1", "text": "Принять слова буквально и не вмешиваться", "isCorrect": false },
-            { "answerId": "a2", "text": "Аккуратно показать поддержку, не давя на него", "isCorrect": true },
-            { "answerId": "a3", "text": "Спросить прямо при всех, что происходит", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_rumors_q6_a1", "isCorrect": false },
+            { "answerId": "a2", "textKey": "test_rumors_q6_a2", "isCorrect": true },
+            { "answerId": "a3", "textKey": "test_rumors_q6_a3", "isCorrect": false }
           ]
         },
         {
           "questionId": "q7",
-          "questionText": "Почему слухи могут усиливать чувство одиночества?",
+          "questionKey": "test_rumors_q7",
           "answers": [
-            { "answerId": "a1", "text": "Потому что человек остаётся один с чужими словами о себе", "isCorrect": true },
-            { "answerId": "a2", "text": "Потому что люди начинают больше с ним общаться", "isCorrect": false },
-            { "answerId": "a3", "text": "Потому что слухи быстро забываются", "isCorrect": false }
+            { "answerId": "a1", "textKey": "test_rumors_q7_a1", "isCorrect": true },
+            { "answerId": "a2", "textKey": "test_rumors_q7_a2", "isCorrect": false },
+            { "answerId": "a3", "textKey": "test_rumors_q7_a3", "isCorrect": false }
           ]
         }
       ]

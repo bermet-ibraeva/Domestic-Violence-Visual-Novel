@@ -29,8 +29,21 @@ public class ConfirmPopup : MonoBehaviour
         if (messageText != null)
             messageText.text = LocalizationManager.Instance.GetText("SettingsPage", messageKey);
 
-        onConfirm = confirmAction;
+        if (yesButton != null)
+        {
+            TMP_Text yesText = yesButton.GetComponentInChildren<TMP_Text>();
+            if (yesText != null)
+                yesText.text = LocalizationManager.Instance.GetText("SettingsPage", "yes");
+        }
 
+        if (noButton != null)
+        {
+            TMP_Text noText = noButton.GetComponentInChildren<TMP_Text>();
+            if (noText != null)
+                noText.text = LocalizationManager.Instance.GetText("SettingsPage", "no");
+        }
+
+        onConfirm = confirmAction;
         root.SetActive(true);
     }
 

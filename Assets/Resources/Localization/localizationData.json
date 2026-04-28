@@ -198,6 +198,22 @@
           }
         },
         {
+          "key": "restart_confirm",
+          "value": {
+            "ru": "Вы уверены, что хотите перезапустить эпизод?",
+            "en": "Are you sure you want to restart the episode?",
+            "ky": "Эпизодду кайра баштагыңыз келеби?"
+          }
+        },
+        {
+          "key": "reset_confirm",
+          "value": {
+            "ru": "Вы уверены, что хотите начать игру заново?",
+            "en": "Are you sure you want to start a new game?",
+            "ky": "Оюнду кайра баштагыңыз келеби?"
+          }
+        },
+        {
           "key": "yes",
           "value": {
             "ru": "Да",
@@ -257,6 +273,51 @@
             "ru": "Искры",
             "en": "Sparks",
             "ky": "Учкундар"
+          }
+        },
+        {
+          "key": "trust_ag",
+          "value": {
+            "ru": "Доверие Айназ и Гульданы",
+            "en": "Trust Ainaz & Guldana",
+            "ky": "Айназ менен Гүлдананын ишеними"
+          }
+        },
+        {
+          "key": "trust_ja",
+          "value": {
+            "ru": "Доверие Жамили и Айды",
+            "en": "Trust Jamilya & Aida",
+            "ky": "Жамиля менен Айданын ишеними"
+          }
+        }
+      ]
+    },
+    "Notifications": {
+      "pageName": "Notifications",
+      "items": [
+        {
+          "key": "tutorial_trust_title",
+          "value": {
+            "ru": "Обучение",
+            "en": "Tutorial",
+            "ky": "Окутуу"
+          }
+        },
+        {
+          "key": "tutorial_trust_message",
+          "value": {
+            "ru": "Некоторые решения влияют на отношения между персонажами.\n\nДоверие может расти или снижаться — и это влияет на дальнейшие события.",
+            "en": "Some decisions affect relationships between characters.\n\nTrust can increase or decrease, and this affects future events.",
+            "ky": "Кээ бир чечимдер каармандардын ортосундагы мамилелерге таасир этет.\n\nИшеним өсүшү же төмөндөшү мүмкүн — бул кийинки окуяларга таасир этет."
+          }
+        },
+        {
+          "key": "note_unlock_rumors_message",
+          "value": {
+            "ru": "Вам доступна новая заметка: «Слухи»",
+            "en": "A new note is available: “Rumors”",
+            "ky": "Сизге жаңы жазуу жеткиликтүү: «Ушактар»"
           }
         }
       ]
@@ -588,14 +649,6 @@
           }
         },
         {
-          "key": "toast_curiosity",
-          "value": {
-            "ru": "Иногда любопытство имеет последствия",
-            "en": "Sometimes curiosity has consequences",
-            "ky": "Кээде кызыгуу кесепеттерге алып келет"
-          }
-        },
-        {
           "key": "E01_S02_choice1_narration_1",
           "value": {
             "ru": "Разговор сначала затихает, потом продолжается тише, но уже не скрываясь.",
@@ -700,26 +753,10 @@
           }
         },
         {
-          "key": "note_unlock_rumors_title",
-          "value": {
-            "ru": "Новая заметка",
-            "en": "New Note",
-            "ky": "Жаңы жазуу"
-          }
-        },
-        {
-          "key": "note_unlock_rumors_message",
-          "value": {
-            "ru": "Вам доступна новая заметка: «Слухи»",
-            "en": "A new note is available: “Rumors”",
-            "ky": "Сизге жаңы жазуу жеткиликтүү: «Ушактар»"
-          }
-        },
-        {
           "key": "E01_S02_choice2_result",
           "value": {
             "ru": "Когда Гульдана возвращается, она замечает, что Айназ не ушла и не стала обсуждать её с другими. Это немного успокаивает.",
-            "en": "When Guldana returns, she notices that Ainaz stayed and didn’t talk about her with others. It reassures her a little.",
+            "en": "When Guldana returns, she notices that Ainaz stayed and didn't talk about her with others. It reassures her a little.",
             "ky": "Гүлдана кайтып келгенде, Айназ кетпегенин жана аны башкалар менен талкуулабаганын байкайт. Бул аны бир аз тынчтандырат."
           }
         },
@@ -729,6 +766,254 @@
             "ru": "Айназ понимает, что за этими разговорами скрывается что-то важное, но пока никто не готов говорить об этом вслух.",
             "en": "Ainaz realizes that something important lies behind these conversations, but no one is ready to talk about it openly yet.",
             "ky": "Айназ бул сүйлөшүүлөрдүн артында маанилүү нерсе бар экенин түшүнөт, бирок азырынча эч ким бул тууралуу ачык айтууга даяр эмес."
+          }
+        },
+        {
+          "key": "episode_end_title",
+          "value": {
+            "ru": "ЭПИЗОД ЗАВЕРШЁН!",
+            "en": "EPISODE COMPLETED!",
+            "ky": "ЭПИЗОД БҮТТҮ!"
+          }
+        },
+        {
+          "key": "continue",
+          "value": {
+            "ru": "Продолжить",
+            "en": "Continue",
+            "ky": "Улантуу"
+          }
+        }
+      ]
+    },
+    "Notes": {
+      "items": [
+        {
+          "key": "note_signs_title",
+          "value": {
+            "ru": "Что-то не так",
+            "en": "Something Feels Off",
+            "ky": "Бир нерсе туура эмес"
+          }
+        },
+        {
+          "key": "note_signs_preview",
+          "value": {
+            "ru": "Иногда ты просто чувствуешь: что-то изменилось.",
+            "en": "Sometimes you just feel like something has changed.",
+            "ky": "Кээде жөн гана бир нерсе өзгөргөнүн сезесиң."
+          }
+        },
+        {
+          "key": "note_signs_text",
+          "value": {
+            "ru": "Иногда ты не можешь объяснить, что именно не так.\nПросто в какой-то момент начинаешь замечать:<b>человек изменился.</b>\nОн может говорить меньше,\nотвечать коротко,\nили будто всё время быть где-то в своих мыслях.\nИногда он становится тише, осторожнее,\nкак будто старается занимать меньше места.\n\n<b>Ты можешь заметить:</b>\n— усталость, которая не проходит\n— тревогу без явной причины\n— резкую реакцию на громкие звуки\n— избегание разговоров о доме\n\nИногда он улыбается,\nно это выглядит натянуто,\nсловно это привычка, а не настоящее чувство.\n\nБывает, что человек:\n— не хочет идти домой\n— задерживается после школы или где угодно\n— придумывает причины не возвращаться\n— отвечает уклончиво, когда его спрашивают\nИ при этом говорит:\n«всё нормально».\n\nСо стороны это может казаться мелочами.\nОбычным настроением.\nУсталостью.\nНо если это повторяется,\nесли внутри остаётся чувство тревоги —\nэто важно.\n\nТы не обязан сразу понимать, что происходит.\nНо ты можешь заметить,\nчто человеку тяжело.\nИногда этого уже достаточно,\nчтобы не пройти мимо.",
+            "en": "Sometimes you can’t explain what exactly is wrong.\nBut at some point, you start noticing:<b>the person has changed.</b>\nThey may speak less,\nreply shortly,\nor seem lost in their own thoughts.\nSometimes they become quieter, more осторожнее,\nas if trying to take up less space.\n\n<b>You might notice:</b>\n— constant tiredness\n— anxiety without a clear reason\n— strong reactions to loud sounds\n— avoiding conversations about home\n\nSometimes they smile,\nbut it feels forced,\nlike a habit rather than a real feeling.\n\nSometimes a person:\n— doesn’t want to go home\n— stays out longer after school or anywhere else\n— makes excuses not to return\n— answers vaguely when asked\nAnd at the same time says:\n\"everything is fine\".\n\nFrom the outside, it may seem like small things.\nJust a mood.\nFatigue.\nBut if it repeats,\nif the feeling of тревога stays —\nit matters.\n\nYou don’t have to understand everything right away.\nBut you can notice\nthat the person is struggling.\nSometimes that alone is enough\nnot to walk past.",
+            "ky": "Кээде сен эмне туура эмес экенин түшүндүрө албайсың.\nБирок бир убакта байкай баштайсың:<b>адам өзгөрдү.</b>\nАл азыраак сүйлөшү мүмкүн,\nкыска жооп берет,\nже дайыма өз ойлорунда жүргөндөй сезилет.\nКээде ал тынчыраак, сак болуп калат,\nаз орун ээлегендей аракет кылат.\n\n<b>Сен байкай аласың:</b>\n— кетпеген чарчоо\n— себепсиз тынчсыздануу\n— катуу үндөргө катуу реакция\n— үй тууралуу сүйлөшүүдөн качуу\n\nКээде ал жылмайат,\nбирок бул жасалма көрүнөт,\nчын сезим эмес, адат сыяктуу.\n\nКээде адам:\n— үйгө баргысы келбейт\n— мектептен же башка жерден кеч кайтып келет\n— кайтып барбоо үчүн себеп табат\n— суроолорго так жооп бербейт\nЖана ошол эле учурда:\n«баары жакшы» деп айтат.\n\nСыртынан бул майда нерседей көрүнүшү мүмкүн.\nЖөн эле маанай.\nЧарчоо.\nБирок эгер бул кайталанса,\nичинде тынчсыздануу калса —\nбул маанилүү.\n\nСен дароо баарын түшүнүүгө милдеттүү эмессиң.\nБирок сен байкай аласың,\nадамга кыйын болуп жатканын.\nКээде ушул эле жетиштүү —\nжанынан өтүп кетпөө үчүн."
+          }
+        },
+  
+        {
+          "key": "note_rumors_title",
+          "value": {
+            "ru": "Слухи",
+            "en": "Rumors",
+            "ky": "Ушактар"
+          }
+        },
+        {
+          "key": "note_rumors_preview",
+          "value": {
+            "ru": "Слухи начинаются тихо — но ранят сильно.",
+            "en": "Rumors start quietly — but hurt deeply.",
+            "ky": "Ушактар жай башталат — бирок катуу жаралайт."
+          }
+        },
+        {
+          "key": "note_rumors_text",
+          "value": {
+            "ru": "Иногда разговор начинается с простого:\n«Ты слышала?»\nКто-то что-то сказал,\nкто-то добавил детали,\nкто-то пересказал — уже по-своему.\nИ вот это уже не история,\nа слух.\n\nСлухи распространяются быстро.\nОсобенно там, где много людей —\nв школе, в классе, в коридорах.\nОни могут звучать как обычный разговор.\nКак шутка.\nКак что-то неважное.\n\nНо для человека, о котором говорят,\nэто совсем не так.\nОн может даже не знать,\nчто о нём говорят.\nИли наоборот —\nчувствовать взгляды,\nзамечать шёпот,\nпонимать, что что-то обсуждают за его спиной.\n\nОсобенно больно,\nкогда речь идёт о чём-то личном.\nО том, о чём человек не готов говорить.\nИли не может.\n\nИногда за слухами скрывается настоящая проблема.\nНо вместо того чтобы кто-то подошёл и спросил:\n«ты в порядке?»\nчеловек остаётся один\nс чужими словами о себе.\n\nСлухи не помогают понять ситуацию.\nОни только создают дистанцию.\nИ делают так,\nчто говорить становится ещё сложнее.",
+            "en": "Sometimes it starts with something simple:\n\"Did you hear?\"\nSomeone says something,\nsomeone adds details,\nsomeone retells it in their own way.\nAnd suddenly, it’s no longer a story,\nbut a rumor.\n\nRumors spread quickly.\nEspecially in places with many people —\nat school, in classrooms, in hallways.\nThey may sound like normal conversation.\nLike a joke.\nLike something unimportant.\n\nBut for the person being talked about,\nit’s not like that at all.\nThey may not even know\nthat people are talking about them.\nOr наоборот —\nthey feel the looks,\nnotice whispers,\nunderstand something is being discussed behind their back.\n\nIt hurts the most\nwhen it’s something personal.\nSomething the person is not ready to talk about.\nOr cannot.\n\nSometimes real problems hide behind rumors.\nBut instead of someone asking:\n\"are you okay?\"\nthe person is left alone\nwith чужие слова about themselves.\n\nRumors don’t help understand the situation.\nThey only create distance.\nAnd make it even harder\nto speak.",
+            "ky": "Кээде баары жөнөкөй сөздөн башталат:\n«Уктуңбу?»\nБирөө бир нерсе айтат,\nбашкасы кошумчалайт,\nдагы бири өзүнчө айтып берет.\nОшондо бул эми окуя эмес,\nушак болуп калат.\n\nУшактар бат тарайт.\nАйрыкча адамдар көп жерде —\nмектепте, класста, коридордо.\nАлар кадимки сүйлөшүүдөй угулушу мүмкүн.\nТамаша сыяктуу.\nМаанисиз нерсе сыяктуу.\n\nБирок ал адам үчүн\nбул таптакыр башкача.\nАл билбеши мүмкүн\nалар ал жөнүндө сүйлөшүп жатканын.\nЖе тескерисинче —\nкөз караштарды сезет,\nшыбырашты байкайт,\nартынан сүйлөшүп жатканын түшүнөт.\n\nАйрыкча оор болот,\nэгер бул жеке нерсе болсо.\nАдам айтууга даяр эмес нерсе.\nЖе айта албайт.\n\nКээде ушактардын артында чыныгы көйгөй жашынат.\nБирок кимдир бирөө:\n«сен жакшысыңбы?» деп сурагандын ордуна,\nадам жалгыз калат\nбашкалардын сөздөрү менен.\n\nУшактар кырдаалды түшүнүүгө жардам бербейт.\nАлар болгону аралык жаратат.\nЖана сүйлөөнү дагы да кыйын кылат."
+          }
+        }
+      ]
+    },
+    
+    "Tests": {
+      "items": [
+        {
+          "key": "test_signs_title",
+          "value": {
+            "ru": "Тревожные сигналы",
+            "en": "Warning Signs",
+            "ky": "Кооптуу белгилер"
+          }
+        },
+        {
+          "key": "test_signs_q1",
+          "value": {
+            "ru": "Какое изменение в поведении может быть тревожным сигналом?",
+            "en": "Which change in behavior can be a warning sign?",
+            "ky": "Кайсы жүрүм-турум өзгөрүүсү кооптуу белги болушу мүмкүн?"
+          }
+        },
+        {
+          "key": "test_signs_q1_a1",
+          "value": {
+            "ru": "Человек стал говорить меньше и избегает разговоров",
+            "en": "The person speaks less and avoids conversations",
+            "ky": "Адам азыраак сүйлөп, сүйлөшүүдөн качат"
+          }
+        },
+        {
+          "key": "test_signs_q1_a2",
+          "value": {
+            "ru": "Человек начал больше шутить",
+            "en": "The person started joking more",
+            "ky": "Адам көбүрөөк тамашалай баштады"
+          }
+        },
+        {
+          "key": "test_signs_q1_a3",
+          "value": {
+            "ru": "Человек стал чаще заниматься спортом",
+            "en": "The person started exercising more",
+            "ky": "Адам спорт менен көбүрөөк алектене баштады"
+          }
+        },
+        {
+          "key": "test_signs_q2",
+          "value": {
+            "ru": "Что из этого может указывать на внутреннюю тревогу?",
+            "en": "Which of these may indicate inner anxiety?",
+            "ky": "Булардын кайсынысы ички тынчсызданууну көрсөтөт?"
+          }
+        },
+        {
+          "key": "test_signs_q2_a1",
+          "value": {
+            "ru": "Резкая реакция на громкие звуки",
+            "en": "Strong reaction to loud sounds",
+            "ky": "Катуу үндөргө катуу реакция"
+          }
+        },
+        {
+          "key": "test_signs_q2_a2",
+          "value": {
+            "ru": "Любовь к тихой музыке",
+            "en": "Preference for quiet music",
+            "ky": "Жай музыканы жактыруу"
+          }
+        },
+        {
+          "key": "test_signs_q2_a3",
+          "value": {
+            "ru": "Желание больше спать на выходных",
+            "en": "Wanting to sleep more on weekends",
+            "ky": "Дем алышта көбүрөөк уктагысы келүү"
+          }
+        },
+      
+        {
+          "key": "test_signs_q3",
+          "value": {
+            "ru": "Почему улыбка может быть тревожным сигналом?",
+            "en": "Why can a smile be a warning sign?",
+            "ky": "Эмне үчүн жылмайуу кооптуу белги болушу мүмкүн?"
+          }
+        },
+      
+        {
+          "key": "test_signs_q3_a1",
+          "value": {
+            "ru": "Она может выглядеть натянутой и неискренней",
+            "en": "It may look forced and not genuine",
+            "ky": "Ал жасалма жана чыныгы эмес көрүнүшү мүмкүн"
+          }
+        },
+        {
+          "key": "test_signs_q3_a2",
+          "value": {
+            "ru": "Потому что человек всегда должен быть серьёзным",
+            "en": "Because a person should always be serious",
+            "ky": "Анткени адам дайыма олуттуу болушу керек"
+          }
+        },
+        {
+          "key": "test_signs_q3_a3",
+          "value": {
+            "ru": "Потому что улыбка означает радость",
+            "en": "Because a smile always means happiness",
+            "ky": "Анткени жылмайуу ар дайым кубанычты билдирет"
+          }
+        },
+      
+        {
+          "key": "test_signs_q4",
+          "value": {
+            "ru": "Какое поведение может говорить о том, что человеку тяжело дома?",
+            "en": "Which behavior may show that a person is struggling at home?",
+            "ky": "Кайсы жүрүм-турум адамга үйдө кыйын экенин көрсөтөт?"
+          }
+        },
+      
+        {
+          "key": "test_signs_q4_a1",
+          "value": {
+            "ru": "Он(-a) не хочет идти домой и придумывает причины не возвращаться",
+            "en": "They don’t want to go home and make excuses not to return",
+            "ky": "Ал үйгө баргысы келбей, кайтып барбоо үчүн себеп табат"
+          }
+        },
+        {
+          "key": "test_signs_q4_a2",
+          "value": {
+            "ru": "Он(-a) любит гулять с друзьями",
+            "en": "They enjoy spending time with friends",
+            "ky": "Ал достору менен убакыт өткөргөндү жакшы көрөт"
+          }
+        },
+        {
+          "key": "test_signs_q4_a3",
+          "value": {
+            "ru": "Он(-a) часто сидит в телефоне",
+            "en": "They often spend time on their phone",
+            "ky": "Ал телефонду көп колдонот"
+          }
+        },
+      
+        {
+          "key": "test_signs_q5",
+          "value": {
+            "ru": "Что важно сделать, если ты замечаешь тревожные сигналы?",
+            "en": "What is important to do if you notice warning signs?",
+            "ky": "Эгер сен кооптуу белгилерди байкасаң, эмне кылуу маанилүү?"
+          }
+        },
+      
+        {
+          "key": "test_signs_q5_a1",
+          "value": {
+            "ru": "Не игнорировать и понимать, что человеку может быть тяжело",
+            "en": "Do not ignore it and understand the person may be struggling",
+            "ky": "Аны көз жаздымда калтырбай, адамга кыйын болушу мүмкүн экенин түшүнүү"
+          }
+        },
+        {
+          "key": "test_signs_q5_a2",
+          "value": {
+            "ru": "Сразу обвинить человека в странном поведении",
+            "en": "Immediately blame the person for strange behavior",
+            "ky": "Дароо адамды күнөөлөө"
+          }
+        },
+        {
+          "key": "test_signs_q5_a3",
+          "value": {
+            "ru": "Полностью игнорировать ситуацию",
+            "en": "Completely ignore the situation",
+            "ky": "Абалды толугу менен көрмөксөнгө салуу"
           }
         }
       ]

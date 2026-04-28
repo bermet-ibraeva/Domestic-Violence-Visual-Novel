@@ -1,6 +1,6 @@
 {
   "episodeId": "E01",
-  "episodeTitleKey": "E01_title",
+  "episodeTitleKey": "episode_1_title",
   "characters": [
     { "characterId": "Narrator", "displayNameKey": "", "portraitKey": null },
     { "characterId": "Ainaz", "displayNameKey": "char_ainaz", "portraitKey": "Ainaz" },
@@ -101,7 +101,7 @@
             "showOnce": true,
             "mode": "modal",
             "type": "tutorial",
-            "titleKey": "tutorial_title",
+            "titleKey": "tutorial_trust_title",
             "messageKey": "tutorial_trust_message",
             "icon": "trust"
           },
@@ -348,20 +348,12 @@
           "nodeId": "E01_S02_choice1_narration_5",
           "characterId": "Narrator",
           "textKey": "E01_S02_choice1_narration_5",
-          "nextNode": "E01_S02_choice1_end"
-        },
-        {
-          "nodeId": "E01_S02_choice1_end",
-          "characterId": "Narrator",
-          "textKey": "E01_S02_choice1_end",
-    
           "notification": {
             "id": "note_unlock_rumors",
             "mode": "toast",
             "showOnce": true,
-            "messageKey": "note_unlock"
+            "messageKey": "note_unlock_rumors_message"
           },
-    
           "nextNode": "E01_summary_text"
         },    
         {
