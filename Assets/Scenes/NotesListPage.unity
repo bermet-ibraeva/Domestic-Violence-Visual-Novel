@@ -342,6 +342,8 @@ MonoBehaviour:
   noteCardPrefab: {fileID: 4601601593335633817, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}
   noteDetailSceneName: NoteDetailPage
   showOnlyUnlocked: 1
+  pageTitleText: {fileID: 44322275}
+  introText: {fileID: 2004195116}
 --- !u!1 &542957572
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,6 +1567,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2311176691160207019, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2311176691160207019, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2311176691160207019, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1602,6 +1612,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5788019019695454850, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788019019695454850, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788019019695454850, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5788019019695454850, guid: 99fdb876544f4364e8dd6aa21f3822f4, type: 3}

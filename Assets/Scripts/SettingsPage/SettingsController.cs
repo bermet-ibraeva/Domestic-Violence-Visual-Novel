@@ -145,10 +145,16 @@ public class SettingsController : MonoBehaviour
     private void BindSliders()
     {
         if (musicSlider != null)
+        {
+            musicSlider.onValueChanged.RemoveAllListeners();
             musicSlider.onValueChanged.AddListener(OnMusicSliderChanged);
+        }
 
         if (sfxSlider != null)
+        {
+            sfxSlider.onValueChanged.RemoveAllListeners();
             sfxSlider.onValueChanged.AddListener(OnSfxSliderChanged);
+        }
     }
 
     // ================= AUDIO =================

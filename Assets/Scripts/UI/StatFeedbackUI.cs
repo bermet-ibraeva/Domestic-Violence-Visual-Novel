@@ -36,6 +36,7 @@ public class StatFeedbackUI : MonoBehaviour
     private Coroutine playRoutine;
     private Vector2 baseAnchoredPos;
     private Action onFinished;
+    private string lastStatKey;
 
     public bool IsShowing => playRoutine != null;
 
@@ -58,12 +59,17 @@ public class StatFeedbackUI : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
     }
 
-    // ================= PUBLIC =================
 
+    // ================= PUBLIC =================
     public void ShowStatChange(string statKey, int value)
     {
         if (value == 0 || string.IsNullOrEmpty(statKey))
             return;
+
+        if (IsShowing && statKey == lastStatKey)
+            return;
+
+        lastStatKey = statKey;
 
         StatPopupData data = BuildPopupData(statKey, value);
 
@@ -87,14 +93,15 @@ public class StatFeedbackUI : MonoBehaviour
         onFinished += callback;
     }
 
-    // ================= CORE =================
 
+    // ================= CORE =================
     private IEnumerator ProcessQueue()
     {
         while (queue.Count > 0)
             yield return ShowBanner(queue.Dequeue());
 
         playRoutine = null;
+        lastStatKey = null;
 
         var callback = onFinished;
         onFinished = null;
@@ -188,8 +195,7 @@ public class StatFeedbackUI : MonoBehaviour
 
     private StatPopupData BuildPopupData(string statKey, int value)
     {
-        // ❌ не показываем sparks
-        if (statKey == "sparks")
+        if (statKey.Contains("sparks"))
             return new StatPopupData(null, null, value);
 
         string amountText = value > 0 ? $"+{value}" : value.ToString();

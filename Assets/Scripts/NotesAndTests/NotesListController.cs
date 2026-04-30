@@ -22,10 +22,13 @@ public class NotesListController : MonoBehaviour
     private readonly List<GameObject> spawnedCards = new List<GameObject>();
     private NotesDatabase database;
     private SaveData save;
+    [SerializeField] private TMP_Text pageTitleText;
+    [SerializeField] private TMP_Text introText;
 
     private void Start()
     {
         save = SaveSystem.Load();
+        UpdateTexts();
         LoadDatabase();
         BuildNotesList();
     }
@@ -56,8 +59,8 @@ public class NotesListController : MonoBehaviour
 
         if (save == null)
         {
-            Debug.LogError("[NotesListController] SaveData is null.");
-            return;
+            Debug.LogWarning("[NotesListController] SaveData was null → creating new");
+            save = SaveSystem.CreateNew();
         }
 
         if (cardsParent == null)
@@ -138,12 +141,13 @@ public class NotesListController : MonoBehaviour
         NoteState noteState = save.GetOrCreateNote(note.noteId);
 
         if (IsTestPassed(note.testId))
-            return "Тест пройден";
+            return LocalizationManager.Instance.GetText("Notes", "note_status_test_passed");
+
 
         if (noteState.isRead)
-            return "Прочитано";
+            return LocalizationManager.Instance.GetText("Notes", "note_status_read");
 
-        return "Новая";
+        return LocalizationManager.Instance.GetText("Notes", "note_status_new");
     }
 
     private bool IsNoteUnlocked(NoteData note)
@@ -184,5 +188,35 @@ public class NotesListController : MonoBehaviour
     public void RefreshList()
     {
         BuildNotesList();
+    }
+
+    private void UpdateTexts()
+    {
+        if (pageTitleText != null)
+            pageTitleText.text = LocalizationManager.Instance.GetText("Notes", "notes_page_title");
+
+        if (introText != null)
+            introText.text = LocalizationManager.Instance.GetText("Notes", "notes_intro");
+    }
+    
+    private void OnEnable()
+    {
+        save = SaveSystem.Load(); 
+        RefreshList();
+
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged(Language lang)
+    {
+        UpdateTexts();
+        RefreshList(); 
     }
 }

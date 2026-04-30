@@ -4,10 +4,20 @@ using TMPro;
 
 public class AnswerButton : MonoBehaviour
 {
+    public enum State
+    {
+        Default,
+        Selected,
+        Correct,
+        Wrong,
+        Disabled
+    }
+
     [Header("UI")]
     [SerializeField] private TMP_Text text;
     [SerializeField] private Image background;
     [SerializeField] private Image radio;
+    [SerializeField] private Button button;
 
     [Header("Background Sprites")]
     [SerializeField] private Sprite bgDefault;
@@ -23,19 +33,18 @@ public class AnswerButton : MonoBehaviour
 
     private AnswerData data;
     private TestController controller;
-    private bool isLocked = false;
-    private Button button;
 
-    // ================= SETUP =================
+    private State currentState = State.Default;
 
+
+    // ================= INIT =================
     private void Awake()
     {
-        button = GetComponent<Button>();
+        if (button == null)
+            button = GetComponent<Button>();
 
         if (button == null)
-        {
             Debug.LogError("AnswerButton has no Button component!");
-        }
     }
 
     public void Setup(AnswerData answer, TestController ctrl)
@@ -43,53 +52,83 @@ public class AnswerButton : MonoBehaviour
         data = answer;
         controller = ctrl;
 
-        text.text = answer.text;
+        RefreshText();
 
-        background.sprite = bgDefault;
-        radio.sprite = radioDefault;
+        SetState(State.Default);
 
-        isLocked = false;
+        button.interactable = true;
 
-        if (button != null)
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(OnClick);
+    }
+
+
+    // ================= STATE =================
+    public void SetState(State state)
+    {
+        currentState = state;
+        ApplyState();
+    }
+
+    private void ApplyState()
+    {
+        switch (currentState)
         {
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(OnClick);
+            case State.Default:
+                background.sprite = bgDefault;
+                radio.sprite = radioDefault;
+                break;
+
+            case State.Selected:
+                background.sprite = bgSelected;
+                radio.sprite = radioSelected;
+                break;
+
+            case State.Correct:
+                background.sprite = bgCorrect;
+                radio.sprite = radioCorrect;
+                break;
+
+            case State.Wrong:
+                background.sprite = bgWrong;
+                radio.sprite = radioWrong;
+                break;
+
+            case State.Disabled:
+                background.sprite = bgDefault;
+                radio.sprite = radioDefault;
+                break;
         }
     }
 
-    // ================= CLICK =================
 
-    public void OnClick()
+    // ================= LOCALIZATION =================
+    public void RefreshText()
     {
-        if (isLocked) return;
-        if (data == null)
-        {
-            Debug.LogError("AnswerData is NULL!");
+        if (data == null || string.IsNullOrEmpty(data.textKey))
             return;
-        }
 
-        background.sprite = bgSelected;
-        radio.sprite = radioSelected;
+        text.text = LocalizationManager.Instance.GetText("Tests", data.textKey);
+    }
 
-        Debug.Log($"Clicked: {data.text} | Correct: {data.isCorrect}");
+
+    // ================= INTERACTION =================
+    private void OnClick()
+    {
+        if (!button.interactable || data == null)
+            return;
+
+        SetState(State.Selected);
+
+#if UNITY_EDITOR
+                Debug.Log($"Clicked answer: {data.textKey} | Correct: {data.isCorrect}");
+#endif
 
         controller.OnAnswerSelected(this, data);
     }
 
-    // ================= STATES =================
 
-    public void SetCorrect()
-    {
-        background.sprite = bgCorrect;
-        radio.sprite = radioCorrect;
-    }
-
-    public void SetWrong()
-    {
-        background.sprite = bgWrong;
-        radio.sprite = radioWrong;
-    }
-
+    // ================= HELPERS =================
     public bool IsCorrect()
     {
         return data != null && data.isCorrect;
@@ -97,9 +136,17 @@ public class AnswerButton : MonoBehaviour
 
     public void Lock()
     {
-        isLocked = true;
+        button.interactable = false;
+        SetState(State.Disabled);
+    }
 
-        if (button != null)
-            button.interactable = false;
+    public void MarkCorrect()
+    {
+        SetState(State.Correct);
+    }
+
+    public void MarkWrong()
+    {
+        SetState(State.Wrong);
     }
 }

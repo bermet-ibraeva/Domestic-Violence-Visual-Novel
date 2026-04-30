@@ -9,6 +9,8 @@ public class StatSystem : MonoBehaviour
 
     private SaveData saveData;
 
+    private HashSet<string> appliedEffects = new();
+
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -23,11 +25,12 @@ public class StatSystem : MonoBehaviour
     public void ResetEpisodeStats()
     {
         TempGameContext.ResetEpisode();
+        appliedEffects.Clear(); 
         Debug.Log("[StatSystem] Episode stats reset.");
     }
 
-    // ================= APPLY =================
 
+    // ================= APPLY =================
     public void ApplyChoiceEffects(List<EffectOp> effects)
     {
         if (effects == null || effects.Count == 0) return;
@@ -50,6 +53,13 @@ public class StatSystem : MonoBehaviour
     public void ApplyEffect(EffectOp effect)
     {
         if (effect == null) return;
+
+        string uniqueKey = $"{effect.key}_{effect.op}_{effect.value}";
+
+        if (appliedEffects.Contains(uniqueKey))
+            return;
+
+        appliedEffects.Add(uniqueKey);
 
         int value = effect.op switch
         {
@@ -74,8 +84,8 @@ public class StatSystem : MonoBehaviour
         AddStat(effect.key, value);
     }
 
-    // ================= CORE =================
 
+    // ================= CORE =================
     private void AddStat(string key, int value)
     {
         if (saveData == null)
@@ -91,16 +101,16 @@ public class StatSystem : MonoBehaviour
             return;
         }
 
+        key = NormalizeKey(key);
+
         switch (key)
         {
-            case "trust.AG":
             case "trustAG":
                 saveData.trustAGTotal += value;
                 ep.trustAG += value;
                 LogStat("stat_trustAG", value, ep.trustAG, saveData.trustAGTotal);
                 break;
 
-            case "trust.JA":
             case "trustJA":
                 saveData.trustJATotal += value;
                 ep.trustJA += value;
@@ -130,7 +140,6 @@ public class StatSystem : MonoBehaviour
                 break;
         }
 
-        // ❗ НЕ показываем sparks
         if (statFeedbackUI != null && key != "sparks")
         {
             statFeedbackUI.ShowStatChange(key, value);
@@ -144,7 +153,7 @@ public class StatSystem : MonoBehaviour
         var ep = TempGameContext.CurrentEpisode;
         if (ep == null) return;
 
-        key = key?.Trim();
+        key = NormalizeKey(key);
 
         switch (key)
         {
@@ -175,7 +184,12 @@ public class StatSystem : MonoBehaviour
         }
     }
 
-    // ================= DEBUG =================
+    // ================= HELPERS =================
+
+    private string NormalizeKey(string key)
+    {
+        return key?.Replace(".", "").Trim();
+    }
 
     public void AddEpisodeReward(int sparksReward)
     {
@@ -199,7 +213,6 @@ public class StatSystem : MonoBehaviour
     private void LogStat(string key, int delta, int episodeValue, int totalValue)
     {
         string label = GetText(key);
-
         Debug.Log($"[StatSystem] {label}: {FormatSigned(delta)} | Эпизод: {episodeValue} | Всего: {totalValue}");
     }
 

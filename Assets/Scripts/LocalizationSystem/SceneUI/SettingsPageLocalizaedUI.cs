@@ -41,18 +41,33 @@ public class SettingsPageLocalizedUI : MonoBehaviour
         if (LocalizationManager.Instance == null)
             return;
 
-        // Заголовки
-        titleText.text = LocalizationManager.Instance.GetText("SettingsPage", "title");
-        languageLabelText.text = LocalizationManager.Instance.GetText("SettingsPage", "language");
-        audioLabelText.text = LocalizationManager.Instance.GetText("SettingsPage", "audio");
-        progressLabelText.text = LocalizationManager.Instance.GetText("SettingsPage", "progress");
+        if (titleText != null)
+            titleText.text = L("title");
 
-        // Аудио
-        musicLabelText.text = LocalizationManager.Instance.GetText("SettingsPage", "music");
-        sfxLabelText.text = LocalizationManager.Instance.GetText("SettingsPage", "sfx");
+        if (languageLabelText != null)
+            languageLabelText.text = L("language");
 
-        // Кнопки
-        restartEpisodeText.text = LocalizationManager.Instance.GetText("SettingsPage", "restart_episode");
-        newGameText.text = LocalizationManager.Instance.GetText("SettingsPage", "new_game");
+        if (audioLabelText != null)
+            audioLabelText.text = L("audio");
+
+        if (progressLabelText != null)
+            progressLabelText.text = L("progress");
+
+        if (musicLabelText != null)
+            musicLabelText.text = L("music");
+
+        if (sfxLabelText != null)
+            sfxLabelText.text = L("sfx");
+
+        if (restartEpisodeText != null)
+            restartEpisodeText.text = L("restart_episode");
+
+        if (newGameText != null)
+            newGameText.text = L("new_game");
+    }
+
+    string L(string key)
+    {
+        return LocalizationManager.Instance.GetText("SettingsPage", key);
     }
 }

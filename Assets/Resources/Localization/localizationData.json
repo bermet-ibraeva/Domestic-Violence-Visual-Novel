@@ -1,1021 +1,1468 @@
 {
-    "MainMenu": {
-      "pageName": "MainMenu",
-      "items": [
-        {
-          "key": "episode_label",
-          "value": {
-            "ru": "Эпизод {0}",
-            "en": "Episode {0}",
-            "ky": "{0}-эпизод"
-          }
-        },
-        {
-          "key": "play",
-          "value": {
-            "ru": "ИГРАТЬ",
-            "en": "PLAY",
-            "ky": "ОЙНОО"
-          }
-        },
-        {
-          "key": "continue",
-          "value": {
-            "ru": "ПРОДОЛЖИТЬ",
-            "en": "CONTINUE",
-            "ky": "УЛАНТУУ"
-          }
-        },
-        {
-          "key": "settings",
-          "value": {
-            "ru": "НАСТРОЙКИ",
-            "en": "SETTINGS",
-            "ky": "ЖӨНДӨӨЛӨР"
-          }
-        },
-        {
-          "key": "about",
-          "value": {
-            "ru": "ОБ ИГРЕ",
-            "en": "ABOUT",
-            "ky": "ОЮН ЖӨНҮНДӨ"
-          }
-        },
-        {
-          "key": "notes",
-          "value": {
-            "ru": "ЗАМЕТКИ",
-            "en": "NOTES",
-            "ky": "ЭСКЕРТМЕЛЕР"
-          }
-        },
-        {
-          "key": "episode_1_title",
-          "value": {
-            "ru": "Первые звонки",
-            "en": "First Signs",
-            "ky": "Алгачкы белгилер"
-          }
-        },
-        {
-          "key": "episode_2_title",
-          "value": {
-            "ru": "Соседняя дверь",
-            "en": "Next Door",
-            "ky": "Коңшу эшик"
-          }
-        },
-        {
-          "key": "episode_3_title",
-          "value": {
-            "ru": "Молчание",
-            "en": "Silence",
-            "ky": "Тынчтык"
-          }
+  "MainMenu": {
+    "pageName": "MainMenu",
+    "items": [
+      {
+        "key": "episode_label",
+        "value": {
+          "ru": "Эпизод {0}",
+          "en": "Episode {0}",
+          "ky": "{0}-эпизод"
         }
-      ]
-    },
-    "AboutPage": {
-      "pageName": "AboutPage",
-      "items": [
-        {
-          "key": "title",
-          "value": {
-            "ru": "Об игре",
-            "en": "About",
-            "ky": "Оюн тууралуу"
-          }
-        },
-        {
-          "key": "description",
-          "value": {
-            "ru": "<b>Когда гаснет свет</b> — это интерактивная история о выборе, доверии и внимании к тому, что часто остаётся незамеченным.\n\nИгра поднимает тему домашнего насилия — физического и психологического — и показывает ситуации, которые не всегда легко распознать.\n\nЗдесь нет правильных ответов.\nТолько твой путь.",
-            "en": "<b>When the Light Goes Out</b> is an interactive story about choice, trust, and noticing what often remains unseen.\n\nThe game addresses the topic of domestic violence — both physical and psychological — and shows situations that are not always easy to recognize.\n\nThere are no right answers.\nOnly your path.",
-            "ky": "<b>Жарык өчкөндө</b> — бул тандоо, ишеним жана көп учурда байкалбай калган нерселерге көңүл буруу тууралуу интерактивдүү окуя.\n\nОюн үй-бүлөлүк зомбулук темасын — физикалык жана психологиялык — көтөрүп чыгып, ар дайым оңой байкалбаган жагдайларды көрсөтөт.\n\nБул жерде туура жооп жок.\nСенин өз жолуң гана бар."
-          }
-        },
-        {
-          "key": "feedback_text",
-          "value": {
-            "ru": "Ваше мнение важно для нас",
-            "en": "Your opinion matters to us",
-            "ky": "Сиздин оюңуз биз үчүн маанилүү"
-          }
-        },
-        {
-          "key": "leave_feedback",
-          "value": {
-            "ru": "ОСТАВИТЬ ОТЗЫВ",
-            "en": "LEAVE FEEDBACK",
-            "ky": "ПИКИР КАЛТЫРУУ"
-          }
-        },
-        {
-          "key": "terms",
-          "value": {
-            "ru": "Условия использования",
-            "en": "Terms & Conditions",
-            "ky": "Колдонуу шарттары"
-          }
-        },
-        {
-          "key": "privacy",
-          "value": {
-            "ru": "Политика конфиденциальности",
-            "en": "Privacy Policy",
-            "ky": "Купуялык саясаты"
-          }
+      },
+      {
+        "key": "play",
+        "value": {
+          "ru": "ИГРАТЬ",
+          "en": "PLAY",
+          "ky": "ОЙНОО"
         }
-      ]
-    },
+      },
+      {
+        "key": "continue",
+        "value": {
+          "ru": "ПРОДОЛЖИТЬ",
+          "en": "CONTINUE",
+          "ky": "УЛАНТУУ"
+        }
+      },
+      {
+        "key": "settings",
+        "value": {
+          "ru": "НАСТРОЙКИ",
+          "en": "SETTINGS",
+          "ky": "ЖӨНДӨӨЛӨР"
+        }
+      },
+      {
+        "key": "about",
+        "value": {
+          "ru": "ОБ ИГРЕ",
+          "en": "ABOUT",
+          "ky": "ОЮН ЖӨНҮНДӨ"
+        }
+      },
+      {
+        "key": "notes",
+        "value": {
+          "ru": "ЗАМЕТКИ",
+          "en": "NOTES",
+          "ky": "ЭСКЕРТМЕЛЕР"
+        }
+      },
+      {
+        "key": "episode_1_title",
+        "value": {
+          "ru": "Первые звонки",
+          "en": "First Signs",
+          "ky": "Алгачкы белгилер"
+        }
+      },
+      {
+        "key": "episode_2_title",
+        "value": {
+          "ru": "Соседняя дверь",
+          "en": "Next Door",
+          "ky": "Коңшу эшик"
+        }
+      },
+      {
+        "key": "episode_3_title",
+        "value": {
+          "ru": "Молчание",
+          "en": "Silence",
+          "ky": "Тынчтык"
+        }
+      }
+    ]
+  },
+  "AboutPage": {
+    "pageName": "AboutPage",
+    "items": [
+      {
+        "key": "title",
+        "value": {
+          "ru": "Об игре",
+          "en": "About",
+          "ky": "Оюн тууралуу"
+        }
+      },
+      {
+        "key": "description",
+        "value": {
+          "ru": "<b>Когда гаснет свет</b> — это интерактивная история о выборе, доверии и внимании к тому, что часто остаётся незамеченным.\n\nИгра поднимает тему домашнего насилия — физического и психологического — и показывает ситуации, которые не всегда легко распознать.\n\nЗдесь нет правильных ответов.\nТолько твой путь.",
+          "en": "<b>When the Light Goes Out</b> is an interactive story about choice, trust, and noticing what often remains unseen.\n\nThe game addresses the topic of domestic violence — both physical and psychological — and shows situations that are not always easy to recognize.\n\nThere are no right answers.\nOnly your path.",
+          "ky": "<b>Жарык өчкөндө</b> — бул тандоо, ишеним жана көп учурда байкалбай калган нерселерге көңүл буруу тууралуу интерактивдүү окуя.\n\nОюн үй-бүлөлүк зомбулук темасын — физикалык жана психологиялык — көтөрүп чыгып, ар дайым оңой байкалбаган жагдайларды көрсөтөт.\n\nБул жерде туура жооп жок.\nСенин өз жолуң гана бар."
+        }
+      },
+      {
+        "key": "feedback_text",
+        "value": {
+          "ru": "Ваше мнение важно для нас",
+          "en": "Your opinion matters to us",
+          "ky": "Сиздин оюңуз биз үчүн маанилүү"
+        }
+      },
+      {
+        "key": "leave_feedback",
+        "value": {
+          "ru": "ОСТАВИТЬ ОТЗЫВ",
+          "en": "LEAVE FEEDBACK",
+          "ky": "ПИКИР КАЛТЫРУУ"
+        }
+      },
+      {
+        "key": "terms",
+        "value": {
+          "ru": "Условия использования",
+          "en": "Terms & Conditions",
+          "ky": "Колдонуу шарттары"
+        }
+      },
+      {
+        "key": "privacy",
+        "value": {
+          "ru": "Политика конфиденциальности",
+          "en": "Privacy Policy",
+          "ky": "Купуялык саясаты"
+        }
+      }
+    ]
+  },
 
-    "SettingsPage": {
-      "pageName": "SettingsPage",
-      "items": [
-        {
-          "key": "title",
-          "value": {
-            "ru": "Настройки",
-            "en": "Settings",
-            "ky": "Жөндөөлөр"
-          }
-        },
-        {
-          "key": "language",
-          "value": {
-            "ru": "Язык",
-            "en": "Language",
-            "ky": "Тил"
-          }
-        },
-        {
-          "key": "audio",
-          "value": {
-            "ru": "Аудио",
-            "en": "Audio",
-            "ky": "Аудио"
-          }
-        },
-        {
-          "key": "progress",
-          "value": {
-            "ru": "Прогресс игры",
-            "en": "Game Progress",
-            "ky": "Оюндун прогресси"
-          }
-        },
-        {
-          "key": "music",
-          "value": {
-            "ru": "Фоновая музыка",
-            "en": "Background Music",
-            "ky": "Фон музыкасы"
-          }
-        },
-        {
-          "key": "sfx",
-          "value": {
-            "ru": "Звук в игре",
-            "en": "Game Sound",
-            "ky": "Оюндагы үн"
-          }
-        },
-        {
-          "key": "restart_episode",
-          "value": {
-            "ru": "Перезапустить эпизод",
-            "en": "Restart Episode",
-            "ky": "Эпизодду кайра баштоо"
-          }
-        },
-        {
-          "key": "new_game",
-          "value": {
-            "ru": "Начать игру заново",
-            "en": "Start New Game",
-            "ky": "Оюнду кайра баштоо"
-          }
-        },
-        {
-          "key": "restart_confirm",
-          "value": {
-            "ru": "Вы уверены, что хотите перезапустить эпизод?",
-            "en": "Are you sure you want to restart the episode?",
-            "ky": "Эпизодду кайра баштагыңыз келеби?"
-          }
-        },
-        {
-          "key": "reset_confirm",
-          "value": {
-            "ru": "Вы уверены, что хотите начать игру заново?",
-            "en": "Are you sure you want to start a new game?",
-            "ky": "Оюнду кайра баштагыңыз келеби?"
-          }
-        },
-        {
-          "key": "yes",
-          "value": {
-            "ru": "Да",
-            "en": "Yes",
-            "ky": "Ооба"
-          }
-        },
-        {
-          "key": "no",
-          "value": {
-            "ru": "Нет",
-            "en": "No",
-            "ky": "Жок"
-          }
+  "SettingsPage": {
+    "pageName": "SettingsPage",
+    "items": [
+      {
+        "key": "title",
+        "value": {
+          "ru": "Настройки",
+          "en": "Settings",
+          "ky": "Жөндөөлөр"
         }
-      ]
-    },
+      },
+      {
+        "key": "language",
+        "value": {
+          "ru": "Язык",
+          "en": "Language",
+          "ky": "Тил"
+        }
+      },
+      {
+        "key": "audio",
+        "value": {
+          "ru": "Аудио",
+          "en": "Audio",
+          "ky": "Аудио"
+        }
+      },
+      {
+        "key": "progress",
+        "value": {
+          "ru": "Прогресс игры",
+          "en": "Game Progress",
+          "ky": "Оюндун прогресси"
+        }
+      },
+      {
+        "key": "music",
+        "value": {
+          "ru": "Фоновая музыка",
+          "en": "Background Music",
+          "ky": "Фон музыкасы"
+        }
+      },
+      {
+        "key": "sfx",
+        "value": {
+          "ru": "Звук в игре",
+          "en": "Game Sound",
+          "ky": "Оюндагы үн"
+        }
+      },
+      {
+        "key": "restart_episode",
+        "value": {
+          "ru": "Перезапустить эпизод",
+          "en": "Restart Episode",
+          "ky": "Эпизодду кайра баштоо"
+        }
+      },
+      {
+        "key": "new_game",
+        "value": {
+          "ru": "Начать игру заново",
+          "en": "Start New Game",
+          "ky": "Оюнду кайра баштоо"
+        }
+      },
+      {
+        "key": "restart_confirm",
+        "value": {
+          "ru": "Вы уверены, что хотите перезапустить эпизод?",
+          "en": "Are you sure you want to restart the episode?",
+          "ky": "Эпизодду кайра баштагыңыз келеби?"
+        }
+      },
+      {
+        "key": "reset_confirm",
+        "value": {
+          "ru": "Вы уверены, что хотите начать игру заново?",
+          "en": "Are you sure you want to start a new game?",
+          "ky": "Оюнду кайра баштагыңыз келеби?"
+        }
+      },
+      {
+        "key": "yes",
+        "value": {
+          "ru": "Да",
+          "en": "Yes",
+          "ky": "Ооба"
+        }
+      },
+      {
+        "key": "no",
+        "value": {
+          "ru": "Нет",
+          "en": "No",
+          "ky": "Жок"
+        }
+      }
+    ]
+  },
 
-    "Stats": {
-      "pageName": "Stats",
-      "items": [
-        {
-          "key": "trustAG",
-          "value": {
-            "ru": "Доверие А и Г",
-            "en": "Trust A and G",
-            "ky": "Ишеним A жана Г"
-          }
-        },
-        {
-          "key": "trustJA",
-          "value": {
-            "ru": "Доверие Ж и А",
-            "en": "Trust J and A",
-            "ky": "Ишеним Ж жана А"
-          }
-        },
-        {
-          "key": "risk",
-          "value": {
-            "ru": "Риск",
-            "en": "Risk",
-            "ky": "Коркунуч"
-          }
-        },
-        {
-          "key": "safety",
-          "value": {
-            "ru": "Безопасность",
-            "en": "Safety",
-            "ky": "Коопсуздук"
-          }
-        },
-        {
-          "key": "sparks",
-          "value": {
-            "ru": "Искры",
-            "en": "Sparks",
-            "ky": "Учкундар"
-          }
-        },
-        {
-          "key": "trust_ag",
-          "value": {
-            "ru": "Доверие Айназ и Гульданы",
-            "en": "Trust Ainaz & Guldana",
-            "ky": "Айназ менен Гүлдананын ишеними"
-          }
-        },
-        {
-          "key": "trust_ja",
-          "value": {
-            "ru": "Доверие Жамили и Айды",
-            "en": "Trust Jamilya & Aida",
-            "ky": "Жамиля менен Айданын ишеними"
-          }
+  "Stats": {
+    "pageName": "Stats",
+    "items": [
+      {
+        "key": "trustAG",
+        "value": {
+          "ru": "Доверие А и Г",
+          "en": "Trust A and G",
+          "ky": "Ишеним A жана Г"
         }
-      ]
-    },
-    "Notifications": {
-      "pageName": "Notifications",
-      "items": [
-        {
-          "key": "tutorial_trust_title",
-          "value": {
-            "ru": "Обучение",
-            "en": "Tutorial",
-            "ky": "Окутуу"
-          }
-        },
-        {
-          "key": "tutorial_trust_message",
-          "value": {
-            "ru": "Некоторые решения влияют на отношения между персонажами.\n\nДоверие может расти или снижаться — и это влияет на дальнейшие события.",
-            "en": "Some decisions affect relationships between characters.\n\nTrust can increase or decrease, and this affects future events.",
-            "ky": "Кээ бир чечимдер каармандардын ортосундагы мамилелерге таасир этет.\n\nИшеним өсүшү же төмөндөшү мүмкүн — бул кийинки окуяларга таасир этет."
-          }
-        },
-        {
-          "key": "note_unlock_rumors_message",
-          "value": {
-            "ru": "Вам доступна новая заметка: «Слухи»",
-            "en": "A new note is available: “Rumors”",
-            "ky": "Сизге жаңы жазуу жеткиликтүү: «Ушактар»"
-          }
+      },
+      {
+        "key": "trustJA",
+        "value": {
+          "ru": "Доверие Ж и А",
+          "en": "Trust J and A",
+          "ky": "Ишеним Ж жана А"
         }
-      ]
-    },
-    "Episode": {
-      "pageName": "Episode",
-      "items": [
-        {
-          "key": "char_ainaz",
-          "value": {
-            "ru": "Айназ",
-            "en": "Ainaz",
-            "ky": "Айназ"
-          }
-        },
-        {
-          "key": "char_guldana",
-          "value": {
-            "ru": "Гульдана",
-            "en": "Guldana",
-            "ky": "Гүлдана"
-          }
-        },
-        {
-          "key": "char_aigul",
-          "value": {
-            "ru": "Айгуль",
-            "en": "Aigul",
-            "ky": "Айгүл"
-          }
-        },
-        {
-          "key": "char_timur",
-          "value": {
-            "ru": "Тимур",
-            "en": "Timur",
-            "ky": "Тимур"
-          }
-        },
-        {
-          "key": "char_bekzat",
-          "value": {
-            "ru": "Бекзат",
-            "en": "Bekzat",
-            "ky": "Бекзат"
-          }
-        },
-        {
-          "key": "E01_S01_start",
-          "value": {
-            "ru": "Утро. Айназ и Гульдана встречаются у поворота дороги — как обычно.",
-            "en": "Morning. Ainaz and Guldana meet at the turn of the road — as usual.",
-            "ky": "Эртең менен. Айназ менен Гүлдана адаттагыдай жол бурулушунда жолугушат."
-          }
-        },
-        {
-          "key": "E01_S01_dialogue_0",
-          "value": {
-            "ru": "Они живут не рядом, но в школу всегда идут вместе. Воздух холодный, солнце светит низко и слепит глаза.",
-            "en": "They don’t live close, but they always walk to school together. The air is cold, and the low sun blinds their eyes.",
-            "ky": "Алар жакын жашабайт, бирок мектепке дайыма чогуу барышат. Аба суук, күн төмөндөн тийип көздү чагылдырат."
-          }
-        },
-        {
-          "key": "E01_S01_dialogue_1",
-          "value": {
-            "ru": "Ты сегодня рано. Ты же всегда опаздываешь?",
-            "en": "You’re early today. Aren’t you usually late?",
-            "ky": "Бүгүн эрте келдиң. Сен адатта кечикчү эмес белең?"
-          }
-        },
-        {
-          "key": "E01_S01_dialogue_2",
-          "value": {
-            "ru": "Да, сегодня просто так вышло. В другой раз обязательно опоздаем.",
-            "en": "Yeah, it just happened today. Next time we’ll definitely be late.",
-            "ky": "Ооба, бүгүн жөн эле ушундай болду. Кийинкиде сөзсүз кечигебиз."
-          }
-        },
-        {
-          "key": "E01_S01_dialogue_3",
-          "value": {
-            "ru": "Хорошо.",
-            "en": "Okay.",
-            "ky": "Макул."
-          }
-        },
-        {
-          "key": "E01_S01_narration_1",
-          "value": {
-            "ru": "Гульдана идёт чуть впереди. Айназ ускоряет шаг, чтобы идти рядом.",
-            "en": "Guldana walks slightly ahead. Ainaz quickens her pace to catch up.",
-            "ky": "Гүлдана бир аз алдыда басат. Айназ жанаша басыш үчүн кадамын ылдамдатат."
-          }
-        },
-        {
-          "key": "E01_S01_dialogue_4",
-          "value": {
-            "ru": "Анара Айзатовна снова задала кучу домашки. Весь вечер просидела над уроками. Кстати, у тебя получился последний номер по математике?",
-            "en": "Anara Aizatovna gave us tons of homework again. I spent the whole evening studying. By the way, did you solve the last math problem?",
-            "ky": "Анара Айзатовна кайра көп тапшырма берди. Кечинде толугу менен сабак кылдым. Айтмакчы, акыркы математика маселесин чыгара алдыңбы?"
-          }
-        },
-        {
-          "key": "E01_S01_dialogue_5",
-          "value": {
-            "ru": "Почти. Но я не думаю, что это правильный ответ.",
-            "en": "Almost. But I don’t think it’s correct.",
-            "ky": "Дээрлик. Бирок туура жооп эмес окшойт."
-          }
-        },
-        {
-          "key": "E01_S01_dialogue_6",
-          "value": {
-            "ru": "Покажешь?",
-            "en": "Will you show me?",
-            "ky": "Көрсөтөсүңбү?"
-          }
-        },
-        {
-          "key": "E01_S01_dialogue_7",
-          "value": {
-            "ru": "Конечно.",
-            "en": "Of course.",
-            "ky": "Албетте."
-          }
-        },
-        {
-          "key": "E01_S01_choice_setup",
-          "value": {
-            "ru": "Айназ улыбается и что-то напевает себе под нос, но Гульдана не улыбается в ответ.",
-            "en": "Ainaz smiles and hums softly, but Guldana doesn’t smile back.",
-            "ky": "Айназ жылмайып, акырын обон созот, бирок Гүлдана жооп кылып жылмайбайт."
-          }
-        },
-  
-        {
-          "key": "E01_S01_choice_1",
-          "value": {
-            "ru": "Спросить, всё ли у неё в порядке",
-            "en": "Ask if she’s okay",
-            "ky": "Баары жайындабы деп сура"
-          }
-        },
-        {
-          "key": "E01_S01_choice_2",
-          "value": {
-            "ru": "Сделать вид, что ничего не замечаешь",
-            "en": "Pretend you didn’t notice anything",
-            "ky": "Эч нерсе байкабагандай кыл"
-          }
-        },
-        {
-          "key": "E01_S01_choice_3",
-          "value": {
-            "ru": "Пошутить, чтобы разрядить обстановку",
-            "en": "Make a joke to lighten the mood",
-            "ky": "Абалды жеңилдетүү үчүн тамаша кыл"
-          }
-        },
-  
-        {
-          "key": "E01_S01_choice1_result",
-          "value": {
-            "ru": "Гульдана отвечает коротко и уклончиво, будто не хочет вдаваться в подробности.",
-            "en": "Guldana answers briefly and vaguely, as if she doesn’t want to go into details.",
-            "ky": "Гүлдана кыска жана бүдөмүк жооп берет, деталдарга киргиси келбегендей."
-          }
-        },
-        {
-          "key": "E01_S01_choice1_result1",
-          "value": {
-            "ru": "Но она запоминает сам вопрос и то, как внимательно Айназ на неё посмотрела.",
-            "en": "But she remembers the question and the way Ainaz looked at her.",
-            "ky": "Бирок ал суроону жана Айназдын кандай караганын эстеп калат."
-          }
-        },
-        {
-          "key": "E01_S01_choice2_result",
-          "value": {
-            "ru": "Разговор продолжается, но между ними остаётся небольшая дистанция.",
-            "en": "The conversation continues, but a small distance remains between them.",
-            "ky": "Сүйлөшүү уланат, бирок алардын ортосунда бир аз аралык калат."
-          }
-        },
-        {
-          "key": "E01_S01_choice3_result",
-          "value": {
-            "ru": "Гульдана слабо улыбается, но быстро снова закрывается.",
-            "en": "Guldana smiles faintly, then quickly closes off again.",
-            "ky": "Гүлдана жай жылмайып, кайра жабылып калат."
-          }
-        },
-      
-        {
-          "key": "E01_S02_start",
-          "value": {
-            "ru": "Айназ стоит с Гульданой у стены школы. Вокруг шумно.",
-            "en": "Ainaz stands with Guldana by the school wall. It’s noisy around them.",
-            "ky": "Айназ Гүлдана менен мектептин дубалынын жанында турат. Айлана ызы-чуу."
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_0",
-          "value": {
-            "ru": "К ним подходит Айгуль, одноклассница.",
-            "en": "Aigul, their classmate, approaches them.",
-            "ky": "Аларга классташы Айгүл жакындайт."
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_1",
-          "value": {
-            "ru": "Ты опять сегодня в библиотеке будешь сидеть пока не выгонят?",
-            "en": "Are you going to stay in the library again until they kick you out?",
-            "ky": "Бүгүн дагы китепканада отуруп, кууп чыкканча каласыңбы?"
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_2",
-          "value": {
-            "ru": "(молчит)",
-            "en": "(silent)",
-            "ky": "(үн катпайт)"
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_3",
-          "value": {
-            "ru": "Конечно. Тебе же… некуда торопиться.",
-            "en": "Of course. You’ve got… nowhere to rush to.",
-            "ky": "Албетте. Сенин… шашчу жериң жок да."
-          }
-        },
-        {
-          "key": "E01_S02_narration_1",
-          "value": {
-            "ru": "Айгуль смотрит на Айназ, будто ожидая, что та всё поймёт.",
-            "en": "Aigul looks at Ainaz as if expecting her to understand everything.",
-            "ky": "Айгүл Айназга карап, ал баарын түшүнөт деп күткөндөй."
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_4",
-          "value": {
-            "ru": "Ты о чём?",
-            "en": "What are you talking about?",
-            "ky": "Эмне жөнүндө айтып жатасың?"
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_5",
-          "value": {
-            "ru": "Серьёзно? Ты ей не сказала?",
-            "en": "Seriously? You didn’t tell her?",
-            "ky": "Чын элеби? Сен ага айткан жоксуңбу?"
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_6",
-          "value": {
-            "ru": "Хватит.",
-            "en": "Enough.",
-            "ky": "Жетишет."
-          }
-        },
-        {
-          "key": "E01_S02_narration_2",
-          "value": {
-            "ru": "На секунду вокруг становится будто тише.",
-            "en": "For a moment, everything around seems quieter.",
-            "ky": "Бир саамга айлана тынчып калгандай сезилет."
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_7",
-          "value": {
-            "ru": "Ладно. Не моё дело.",
-            "en": "Fine. Not my business.",
-            "ky": "Макул. Бул менин ишим эмес."
-          }
-        },
-        {
-          "key": "E01_S02_narration_3",
-          "value": {
-            "ru": "Айгуль пожимает плечами и уходит в класс.",
-            "en": "Aigul shrugs and walks back into the classroom.",
-            "ky": "Айгүл ийнин куушуруп, класска кирип кетет."
-          }
-        },
-        {
-          "key": "E01_S02_dialogue_8",
-          "value": {
-            "ru": "Я в уборную.",
-            "en": "I’m going to the restroom.",
-            "ky": "Мен дааратканага барам."
-          }
-        },
-        {
-          "key": "E01_S02_choice_setup",
-          "value": {
-            "ru": "Она уходит. Айназ остаётся стоять, чувствуя неловкость и странное беспокойство.",
-            "en": "She leaves. Ainaz stays standing, feeling awkward and strangely uneasy.",
-            "ky": "Ал кетип калды. Айназ ордунда туруп, ыңгайсыздык менен белгисиз тынчсызданууну сезет."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_option_1",
-          "value": {
-            "ru": "Попытаться узнать у других, о чём слухи",
-            "en": "Try to ask others what the rumors are about",
-            "ky": "Башкалардан ушактар эмне жөнүндө экенин билүүгө аракет кылуу"
-          }
-        },
-        {
-          "key": "E01_S02_choice1_option_2",
-          "value": {
-            "ru": "Проигнорировать и дождаться Гульдану",
-            "en": "Ignore it and wait for Guldana",
-            "ky": "Эске албай, Гүлдананы күтүп туруу"
-          }
-        },
-        {
-          "key": "E01_S02_choice1_start",
-          "value": {
-            "ru": "Айназ подходит к ребятам.",
-            "en": "Ainaz approaches the group.",
-            "ky": "Айназ балдарга жакындайт."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_narration_1",
-          "value": {
-            "ru": "Разговор сначала затихает, потом продолжается тише, но уже не скрываясь.",
-            "en": "The conversation first quiets down, then continues more quietly, but no longer hiding.",
-            "ky": "Сүйлөшүү адегенде басаңдайт, анан акырын уланат, бирок жашырбай."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_dialogue_1",
-          "value": {
-            "ru": "Ты правда не знаешь?",
-            "en": "You really don’t know?",
-            "ky": "Чын эле билбейсиңби?"
-          }
-        },
-        {
-          "key": "E01_S02_choice1_dialogue_2",
-          "value": {
-            "ru": "Не знаю… чего?",
-            "en": "I don’t know… what?",
-            "ky": "Билбейм… эмнени?"
-          }
-        },
-        {
-          "key": "E01_S02_choice1_dialogue_3",
-          "value": {
-            "ru": "Ну да, ты же не местная.",
-            "en": "Well yeah, you’re not from here.",
-            "ky": "Ооба, сен бул жактан эмессиң да."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_dialogue_4",
-          "value": {
-            "ru": "Ты сюда сколько лет назад переехала? Три-четыре?",
-            "en": "How many years ago did you move here? Three or four?",
-            "ky": "Бул жакка канча жыл мурун көчүп келгенсиң? Үч-төрт жылбы?"
-          }
-        },
-        {
-          "key": "E01_S02_choice1_narration_2",
-          "value": {
-            "ru": "Айназ кивает.",
-            "en": "Ainaz nods.",
-            "ky": "Айназ башын ийкейт."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_dialogue_5",
-          "value": {
-            "ru": "Тогда понятно.",
-            "en": "That makes sense.",
-            "ky": "Анда түшүнүктүү."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_dialogue_6",
-          "value": {
-            "ru": "Это произошло, когда мы только в школу пошли.",
-            "en": "It happened when we had just started school.",
-            "ky": "Бул биз мектепке жаңы барганда болгон."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_narration_3",
-          "value": {
-            "ru": "Наступает короткая пауза. Кто-то из ребят опускает взгляд.",
-            "en": "A short pause follows. Someone looks down.",
-            "ky": "Кыскача тыным болот. Кимдир бирөө көзүн төмөн түшүрөт."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_dialogue_7",
-          "value": {
-            "ru": "Ладно, неважно. Кто после школы в футбол?",
-            "en": "Alright, never mind. Who’s playing football after school?",
-            "ky": "Макул, маанилүү эмес. Сабактан кийин ким футбол ойнойт?"
-          }
-        },
-        {
-          "key": "E01_S02_choice1_narration_4",
-          "value": {
-            "ru": "Тимур усмехается. Айгуль фыркает и отворачивается. Разговор уходит в сторону.",
-            "en": "Timur smirks. Aigul snorts and turns away. The conversation drifts off.",
-            "ky": "Тимур жылмайып коёт. Айгүл кыңшылап, бурулуп кетет. Сүйлөшүү башка жакка бурулат."
-          }
-        },
-        {
-          "key": "E01_S02_choice1_thought",
-          "value": {
-            "ru": "Что это было?",
-            "en": "What was that?",
-            "ky": "Бул эмне болду?"
-          }
-        },
-        {
-          "key": "E01_S02_choice1_narration_5",
-          "value": {
-            "ru": "Айназ понимает, что разговор шёл не о школе и не о каком-то пустяке. Но продолжать его никто не собирается.",
-            "en": "Ainaz realizes the conversation wasn’t about school or something trivial. But no one intends to continue it.",
-            "ky": "Айназ сүйлөшүү мектеп же жөн эле нерсе жөнүндө эмес экенин түшүнөт. Бирок аны уланткысы келген эч ким жок."
-          }
-        },
-        {
-          "key": "E01_S02_choice2_result",
-          "value": {
-            "ru": "Когда Гульдана возвращается, она замечает, что Айназ не ушла и не стала обсуждать её с другими. Это немного успокаивает.",
-            "en": "When Guldana returns, she notices that Ainaz stayed and didn't talk about her with others. It reassures her a little.",
-            "ky": "Гүлдана кайтып келгенде, Айназ кетпегенин жана аны башкалар менен талкуулабаганын байкайт. Бул аны бир аз тынчтандырат."
-          }
-        },
-        {
-          "key": "E01_summary_text",
-          "value": {
-            "ru": "Айназ понимает, что за этими разговорами скрывается что-то важное, но пока никто не готов говорить об этом вслух.",
-            "en": "Ainaz realizes that something important lies behind these conversations, but no one is ready to talk about it openly yet.",
-            "ky": "Айназ бул сүйлөшүүлөрдүн артында маанилүү нерсе бар экенин түшүнөт, бирок азырынча эч ким бул тууралуу ачык айтууга даяр эмес."
-          }
-        },
-        {
-          "key": "episode_end_title",
-          "value": {
-            "ru": "ЭПИЗОД ЗАВЕРШЁН!",
-            "en": "EPISODE COMPLETED!",
-            "ky": "ЭПИЗОД БҮТТҮ!"
-          }
-        },
-        {
-          "key": "continue",
-          "value": {
-            "ru": "Продолжить",
-            "en": "Continue",
-            "ky": "Улантуу"
-          }
+      },
+      {
+        "key": "risk",
+        "value": {
+          "ru": "Риск",
+          "en": "Risk",
+          "ky": "Коркунуч"
         }
-      ]
-    },
-    "Notes": {
-      "items": [
-        {
-          "key": "note_signs_title",
-          "value": {
-            "ru": "Что-то не так",
-            "en": "Something Feels Off",
-            "ky": "Бир нерсе туура эмес"
-          }
-        },
-        {
-          "key": "note_signs_preview",
-          "value": {
-            "ru": "Иногда ты просто чувствуешь: что-то изменилось.",
-            "en": "Sometimes you just feel like something has changed.",
-            "ky": "Кээде жөн гана бир нерсе өзгөргөнүн сезесиң."
-          }
-        },
-        {
-          "key": "note_signs_text",
-          "value": {
-            "ru": "Иногда ты не можешь объяснить, что именно не так.\nПросто в какой-то момент начинаешь замечать:<b>человек изменился.</b>\nОн может говорить меньше,\nотвечать коротко,\nили будто всё время быть где-то в своих мыслях.\nИногда он становится тише, осторожнее,\nкак будто старается занимать меньше места.\n\n<b>Ты можешь заметить:</b>\n— усталость, которая не проходит\n— тревогу без явной причины\n— резкую реакцию на громкие звуки\n— избегание разговоров о доме\n\nИногда он улыбается,\nно это выглядит натянуто,\nсловно это привычка, а не настоящее чувство.\n\nБывает, что человек:\n— не хочет идти домой\n— задерживается после школы или где угодно\n— придумывает причины не возвращаться\n— отвечает уклончиво, когда его спрашивают\nИ при этом говорит:\n«всё нормально».\n\nСо стороны это может казаться мелочами.\nОбычным настроением.\nУсталостью.\nНо если это повторяется,\nесли внутри остаётся чувство тревоги —\nэто важно.\n\nТы не обязан сразу понимать, что происходит.\nНо ты можешь заметить,\nчто человеку тяжело.\nИногда этого уже достаточно,\nчтобы не пройти мимо.",
-            "en": "Sometimes you can’t explain what exactly is wrong.\nBut at some point, you start noticing:<b>the person has changed.</b>\nThey may speak less,\nreply shortly,\nor seem lost in their own thoughts.\nSometimes they become quieter, more осторожнее,\nas if trying to take up less space.\n\n<b>You might notice:</b>\n— constant tiredness\n— anxiety without a clear reason\n— strong reactions to loud sounds\n— avoiding conversations about home\n\nSometimes they smile,\nbut it feels forced,\nlike a habit rather than a real feeling.\n\nSometimes a person:\n— doesn’t want to go home\n— stays out longer after school or anywhere else\n— makes excuses not to return\n— answers vaguely when asked\nAnd at the same time says:\n\"everything is fine\".\n\nFrom the outside, it may seem like small things.\nJust a mood.\nFatigue.\nBut if it repeats,\nif the feeling of тревога stays —\nit matters.\n\nYou don’t have to understand everything right away.\nBut you can notice\nthat the person is struggling.\nSometimes that alone is enough\nnot to walk past.",
-            "ky": "Кээде сен эмне туура эмес экенин түшүндүрө албайсың.\nБирок бир убакта байкай баштайсың:<b>адам өзгөрдү.</b>\nАл азыраак сүйлөшү мүмкүн,\nкыска жооп берет,\nже дайыма өз ойлорунда жүргөндөй сезилет.\nКээде ал тынчыраак, сак болуп калат,\nаз орун ээлегендей аракет кылат.\n\n<b>Сен байкай аласың:</b>\n— кетпеген чарчоо\n— себепсиз тынчсыздануу\n— катуу үндөргө катуу реакция\n— үй тууралуу сүйлөшүүдөн качуу\n\nКээде ал жылмайат,\nбирок бул жасалма көрүнөт,\nчын сезим эмес, адат сыяктуу.\n\nКээде адам:\n— үйгө баргысы келбейт\n— мектептен же башка жерден кеч кайтып келет\n— кайтып барбоо үчүн себеп табат\n— суроолорго так жооп бербейт\nЖана ошол эле учурда:\n«баары жакшы» деп айтат.\n\nСыртынан бул майда нерседей көрүнүшү мүмкүн.\nЖөн эле маанай.\nЧарчоо.\nБирок эгер бул кайталанса,\nичинде тынчсыздануу калса —\nбул маанилүү.\n\nСен дароо баарын түшүнүүгө милдеттүү эмессиң.\nБирок сен байкай аласың,\nадамга кыйын болуп жатканын.\nКээде ушул эле жетиштүү —\nжанынан өтүп кетпөө үчүн."
-          }
-        },
-  
-        {
-          "key": "note_rumors_title",
-          "value": {
-            "ru": "Слухи",
-            "en": "Rumors",
-            "ky": "Ушактар"
-          }
-        },
-        {
-          "key": "note_rumors_preview",
-          "value": {
-            "ru": "Слухи начинаются тихо — но ранят сильно.",
-            "en": "Rumors start quietly — but hurt deeply.",
-            "ky": "Ушактар жай башталат — бирок катуу жаралайт."
-          }
-        },
-        {
-          "key": "note_rumors_text",
-          "value": {
-            "ru": "Иногда разговор начинается с простого:\n«Ты слышала?»\nКто-то что-то сказал,\nкто-то добавил детали,\nкто-то пересказал — уже по-своему.\nИ вот это уже не история,\nа слух.\n\nСлухи распространяются быстро.\nОсобенно там, где много людей —\nв школе, в классе, в коридорах.\nОни могут звучать как обычный разговор.\nКак шутка.\nКак что-то неважное.\n\nНо для человека, о котором говорят,\nэто совсем не так.\nОн может даже не знать,\nчто о нём говорят.\nИли наоборот —\nчувствовать взгляды,\nзамечать шёпот,\nпонимать, что что-то обсуждают за его спиной.\n\nОсобенно больно,\nкогда речь идёт о чём-то личном.\nО том, о чём человек не готов говорить.\nИли не может.\n\nИногда за слухами скрывается настоящая проблема.\nНо вместо того чтобы кто-то подошёл и спросил:\n«ты в порядке?»\nчеловек остаётся один\nс чужими словами о себе.\n\nСлухи не помогают понять ситуацию.\nОни только создают дистанцию.\nИ делают так,\nчто говорить становится ещё сложнее.",
-            "en": "Sometimes it starts with something simple:\n\"Did you hear?\"\nSomeone says something,\nsomeone adds details,\nsomeone retells it in their own way.\nAnd suddenly, it’s no longer a story,\nbut a rumor.\n\nRumors spread quickly.\nEspecially in places with many people —\nat school, in classrooms, in hallways.\nThey may sound like normal conversation.\nLike a joke.\nLike something unimportant.\n\nBut for the person being talked about,\nit’s not like that at all.\nThey may not even know\nthat people are talking about them.\nOr наоборот —\nthey feel the looks,\nnotice whispers,\nunderstand something is being discussed behind their back.\n\nIt hurts the most\nwhen it’s something personal.\nSomething the person is not ready to talk about.\nOr cannot.\n\nSometimes real problems hide behind rumors.\nBut instead of someone asking:\n\"are you okay?\"\nthe person is left alone\nwith чужие слова about themselves.\n\nRumors don’t help understand the situation.\nThey only create distance.\nAnd make it even harder\nto speak.",
-            "ky": "Кээде баары жөнөкөй сөздөн башталат:\n«Уктуңбу?»\nБирөө бир нерсе айтат,\nбашкасы кошумчалайт,\nдагы бири өзүнчө айтып берет.\nОшондо бул эми окуя эмес,\nушак болуп калат.\n\nУшактар бат тарайт.\nАйрыкча адамдар көп жерде —\nмектепте, класста, коридордо.\nАлар кадимки сүйлөшүүдөй угулушу мүмкүн.\nТамаша сыяктуу.\nМаанисиз нерсе сыяктуу.\n\nБирок ал адам үчүн\nбул таптакыр башкача.\nАл билбеши мүмкүн\nалар ал жөнүндө сүйлөшүп жатканын.\nЖе тескерисинче —\nкөз караштарды сезет,\nшыбырашты байкайт,\nартынан сүйлөшүп жатканын түшүнөт.\n\nАйрыкча оор болот,\nэгер бул жеке нерсе болсо.\nАдам айтууга даяр эмес нерсе.\nЖе айта албайт.\n\nКээде ушактардын артында чыныгы көйгөй жашынат.\nБирок кимдир бирөө:\n«сен жакшысыңбы?» деп сурагандын ордуна,\nадам жалгыз калат\nбашкалардын сөздөрү менен.\n\nУшактар кырдаалды түшүнүүгө жардам бербейт.\nАлар болгону аралык жаратат.\nЖана сүйлөөнү дагы да кыйын кылат."
-          }
+      },
+      {
+        "key": "safety",
+        "value": {
+          "ru": "Безопасность",
+          "en": "Safety",
+          "ky": "Коопсуздук"
         }
-      ]
-    },
+      },
+      {
+        "key": "sparks",
+        "value": {
+          "ru": "Искры",
+          "en": "Sparks",
+          "ky": "Учкундар"
+        }
+      },
+      {
+        "key": "trust_ag",
+        "value": {
+          "ru": "Доверие Айназ и Гульданы",
+          "en": "Trust Ainaz & Guldana",
+          "ky": "Айназ менен Гүлдананын ишеними"
+        }
+      },
+      {
+        "key": "trust_ja",
+        "value": {
+          "ru": "Доверие Жамили и Айды",
+          "en": "Trust Jamilya & Aida",
+          "ky": "Жамиля менен Айданын ишеними"
+        }
+      }
+    ]
+  },
+  "Notifications": {
+    "pageName": "Notifications",
+    "items": [
+      {
+        "key": "tutorial_trust_title",
+        "value": {
+          "ru": "Обучение",
+          "en": "Tutorial",
+          "ky": "Окутуу"
+        }
+      },
+      {
+        "key": "tutorial_trust_message",
+        "value": {
+          "ru": "Некоторые решения влияют на отношения между персонажами.\n\nДоверие может расти или снижаться — и это влияет на дальнейшие события.",
+          "en": "Some decisions affect relationships between characters.\n\nTrust can increase or decrease, and this affects future events.",
+          "ky": "Кээ бир чечимдер каармандардын ортосундагы мамилелерге таасир этет.\n\nИшеним өсүшү же төмөндөшү мүмкүн — бул кийинки окуяларга таасир этет."
+        }
+      },
+      {
+        "key": "note_unlock_rumors_message",
+        "value": {
+          "ru": "Вам доступна новая заметка: «Слухи»",
+          "en": "A new note is available: “Rumors”",
+          "ky": "Сизге жаңы жазуу жеткиликтүү: «Ушактар»"
+        }
+      }
+    ]
+  },
+  "Episode": {
+    "pageName": "Episode",
+    "items": [
+      {
+        "key": "char_ainaz",
+        "value": {
+          "ru": "Айназ",
+          "en": "Ainaz",
+          "ky": "Айназ"
+        }
+      },
+      {
+        "key": "char_guldana",
+        "value": {
+          "ru": "Гульдана",
+          "en": "Guldana",
+          "ky": "Гүлдана"
+        }
+      },
+      {
+        "key": "char_aigul",
+        "value": {
+          "ru": "Айгуль",
+          "en": "Aigul",
+          "ky": "Айгүл"
+        }
+      },
+      {
+        "key": "char_timur",
+        "value": {
+          "ru": "Тимур",
+          "en": "Timur",
+          "ky": "Тимур"
+        }
+      },
+      {
+        "key": "char_bekzat",
+        "value": {
+          "ru": "Бекзат",
+          "en": "Bekzat",
+          "ky": "Бекзат"
+        }
+      },
+      {
+        "key": "E01_S01_start",
+        "value": {
+          "ru": "Утро. Айназ и Гульдана встречаются у поворота дороги — как обычно.",
+          "en": "Morning. Ainaz and Guldana meet at the turn of the road — as usual.",
+          "ky": "Эртең менен. Айназ менен Гүлдана адаттагыдай жол бурулушунда жолугушат."
+        }
+      },
+      {
+        "key": "E01_S01_dialogue_0",
+        "value": {
+          "ru": "Они живут не рядом, но в школу всегда идут вместе. Воздух холодный, солнце светит низко и слепит глаза.",
+          "en": "They don’t live close, but they always walk to school together. The air is cold, and the low sun blinds their eyes.",
+          "ky": "Алар жакын жашабайт, бирок мектепке дайыма чогуу барышат. Аба суук, күн төмөндөн тийип көздү чагылдырат."
+        }
+      },
+      {
+        "key": "E01_S01_dialogue_1",
+        "value": {
+          "ru": "Ты сегодня рано. Ты же всегда опаздываешь?",
+          "en": "You’re early today. Aren’t you usually late?",
+          "ky": "Бүгүн эрте келдиң. Сен адатта кечикчү эмес белең?"
+        }
+      },
+      {
+        "key": "E01_S01_dialogue_2",
+        "value": {
+          "ru": "Да, сегодня просто так вышло. В другой раз обязательно опоздаем.",
+          "en": "Yeah, it just happened today. Next time we’ll definitely be late.",
+          "ky": "Ооба, бүгүн жөн эле ушундай болду. Кийинкиде сөзсүз кечигебиз."
+        }
+      },
+      {
+        "key": "E01_S01_dialogue_3",
+        "value": {
+          "ru": "Хорошо.",
+          "en": "Okay.",
+          "ky": "Макул."
+        }
+      },
+      {
+        "key": "E01_S01_narration_1",
+        "value": {
+          "ru": "Гульдана идёт чуть впереди. Айназ ускоряет шаг, чтобы идти рядом.",
+          "en": "Guldana walks slightly ahead. Ainaz quickens her pace to catch up.",
+          "ky": "Гүлдана бир аз алдыда басат. Айназ жанаша басыш үчүн кадамын ылдамдатат."
+        }
+      },
+      {
+        "key": "E01_S01_dialogue_4",
+        "value": {
+          "ru": "Анара Айзатовна снова задала кучу домашки. Весь вечер просидела над уроками. Кстати, у тебя получился последний номер по математике?",
+          "en": "Anara Aizatovna gave us tons of homework again. I spent the whole evening studying. By the way, did you solve the last math problem?",
+          "ky": "Анара Айзатовна кайра көп тапшырма берди. Кечинде толугу менен сабак кылдым. Айтмакчы, акыркы математика маселесин чыгара алдыңбы?"
+        }
+      },
+      {
+        "key": "E01_S01_dialogue_5",
+        "value": {
+          "ru": "Почти. Но я не думаю, что это правильный ответ.",
+          "en": "Almost. But I don’t think it’s correct.",
+          "ky": "Дээрлик. Бирок туура жооп эмес окшойт."
+        }
+      },
+      {
+        "key": "E01_S01_dialogue_6",
+        "value": {
+          "ru": "Покажешь?",
+          "en": "Will you show me?",
+          "ky": "Көрсөтөсүңбү?"
+        }
+      },
+      {
+        "key": "E01_S01_dialogue_7",
+        "value": {
+          "ru": "Конечно.",
+          "en": "Of course.",
+          "ky": "Албетте."
+        }
+      },
+      {
+        "key": "E01_S01_choice_setup",
+        "value": {
+          "ru": "Айназ улыбается и что-то напевает себе под нос, но Гульдана не улыбается в ответ.",
+          "en": "Ainaz smiles and hums softly, but Guldana doesn’t smile back.",
+          "ky": "Айназ жылмайып, акырын обон созот, бирок Гүлдана жооп кылып жылмайбайт."
+        }
+      },
+
+      {
+        "key": "E01_S01_choice_1",
+        "value": {
+          "ru": "Спросить, всё ли у неё в порядке",
+          "en": "Ask if she’s okay",
+          "ky": "Баары жайындабы деп сура"
+        }
+      },
+      {
+        "key": "E01_S01_choice_2",
+        "value": {
+          "ru": "Сделать вид, что ничего не замечаешь",
+          "en": "Pretend you didn’t notice anything",
+          "ky": "Эч нерсе байкабагандай кыл"
+        }
+      },
+      {
+        "key": "E01_S01_choice_3",
+        "value": {
+          "ru": "Пошутить, чтобы разрядить обстановку",
+          "en": "Make a joke to lighten the mood",
+          "ky": "Абалды жеңилдетүү үчүн тамаша кыл"
+        }
+      },
+
+      {
+        "key": "E01_S01_choice1_result",
+        "value": {
+          "ru": "Гульдана отвечает коротко и уклончиво, будто не хочет вдаваться в подробности.",
+          "en": "Guldana answers briefly and vaguely, as if she doesn’t want to go into details.",
+          "ky": "Гүлдана кыска жана бүдөмүк жооп берет, деталдарга киргиси келбегендей."
+        }
+      },
+      {
+        "key": "E01_S01_choice1_result1",
+        "value": {
+          "ru": "Но она запоминает сам вопрос и то, как внимательно Айназ на неё посмотрела.",
+          "en": "But she remembers the question and the way Ainaz looked at her.",
+          "ky": "Бирок ал суроону жана Айназдын кандай караганын эстеп калат."
+        }
+      },
+      {
+        "key": "E01_S01_choice2_result",
+        "value": {
+          "ru": "Разговор продолжается, но между ними остаётся небольшая дистанция.",
+          "en": "The conversation continues, but a small distance remains between them.",
+          "ky": "Сүйлөшүү уланат, бирок алардын ортосунда бир аз аралык калат."
+        }
+      },
+      {
+        "key": "E01_S01_choice3_result",
+        "value": {
+          "ru": "Гульдана слабо улыбается, но быстро снова закрывается.",
+          "en": "Guldana smiles faintly, then quickly closes off again.",
+          "ky": "Гүлдана жай жылмайып, кайра жабылып калат."
+        }
+      },
     
-    "Tests": {
-      "items": [
-        {
-          "key": "test_signs_title",
-          "value": {
-            "ru": "Тревожные сигналы",
-            "en": "Warning Signs",
-            "ky": "Кооптуу белгилер"
-          }
-        },
-        {
-          "key": "test_signs_q1",
-          "value": {
-            "ru": "Какое изменение в поведении может быть тревожным сигналом?",
-            "en": "Which change in behavior can be a warning sign?",
-            "ky": "Кайсы жүрүм-турум өзгөрүүсү кооптуу белги болушу мүмкүн?"
-          }
-        },
-        {
-          "key": "test_signs_q1_a1",
-          "value": {
-            "ru": "Человек стал говорить меньше и избегает разговоров",
-            "en": "The person speaks less and avoids conversations",
-            "ky": "Адам азыраак сүйлөп, сүйлөшүүдөн качат"
-          }
-        },
-        {
-          "key": "test_signs_q1_a2",
-          "value": {
-            "ru": "Человек начал больше шутить",
-            "en": "The person started joking more",
-            "ky": "Адам көбүрөөк тамашалай баштады"
-          }
-        },
-        {
-          "key": "test_signs_q1_a3",
-          "value": {
-            "ru": "Человек стал чаще заниматься спортом",
-            "en": "The person started exercising more",
-            "ky": "Адам спорт менен көбүрөөк алектене баштады"
-          }
-        },
-        {
-          "key": "test_signs_q2",
-          "value": {
-            "ru": "Что из этого может указывать на внутреннюю тревогу?",
-            "en": "Which of these may indicate inner anxiety?",
-            "ky": "Булардын кайсынысы ички тынчсызданууну көрсөтөт?"
-          }
-        },
-        {
-          "key": "test_signs_q2_a1",
-          "value": {
-            "ru": "Резкая реакция на громкие звуки",
-            "en": "Strong reaction to loud sounds",
-            "ky": "Катуу үндөргө катуу реакция"
-          }
-        },
-        {
-          "key": "test_signs_q2_a2",
-          "value": {
-            "ru": "Любовь к тихой музыке",
-            "en": "Preference for quiet music",
-            "ky": "Жай музыканы жактыруу"
-          }
-        },
-        {
-          "key": "test_signs_q2_a3",
-          "value": {
-            "ru": "Желание больше спать на выходных",
-            "en": "Wanting to sleep more on weekends",
-            "ky": "Дем алышта көбүрөөк уктагысы келүү"
-          }
-        },
-      
-        {
-          "key": "test_signs_q3",
-          "value": {
-            "ru": "Почему улыбка может быть тревожным сигналом?",
-            "en": "Why can a smile be a warning sign?",
-            "ky": "Эмне үчүн жылмайуу кооптуу белги болушу мүмкүн?"
-          }
-        },
-      
-        {
-          "key": "test_signs_q3_a1",
-          "value": {
-            "ru": "Она может выглядеть натянутой и неискренней",
-            "en": "It may look forced and not genuine",
-            "ky": "Ал жасалма жана чыныгы эмес көрүнүшү мүмкүн"
-          }
-        },
-        {
-          "key": "test_signs_q3_a2",
-          "value": {
-            "ru": "Потому что человек всегда должен быть серьёзным",
-            "en": "Because a person should always be serious",
-            "ky": "Анткени адам дайыма олуттуу болушу керек"
-          }
-        },
-        {
-          "key": "test_signs_q3_a3",
-          "value": {
-            "ru": "Потому что улыбка означает радость",
-            "en": "Because a smile always means happiness",
-            "ky": "Анткени жылмайуу ар дайым кубанычты билдирет"
-          }
-        },
-      
-        {
-          "key": "test_signs_q4",
-          "value": {
-            "ru": "Какое поведение может говорить о том, что человеку тяжело дома?",
-            "en": "Which behavior may show that a person is struggling at home?",
-            "ky": "Кайсы жүрүм-турум адамга үйдө кыйын экенин көрсөтөт?"
-          }
-        },
-      
-        {
-          "key": "test_signs_q4_a1",
-          "value": {
-            "ru": "Он(-a) не хочет идти домой и придумывает причины не возвращаться",
-            "en": "They don’t want to go home and make excuses not to return",
-            "ky": "Ал үйгө баргысы келбей, кайтып барбоо үчүн себеп табат"
-          }
-        },
-        {
-          "key": "test_signs_q4_a2",
-          "value": {
-            "ru": "Он(-a) любит гулять с друзьями",
-            "en": "They enjoy spending time with friends",
-            "ky": "Ал достору менен убакыт өткөргөндү жакшы көрөт"
-          }
-        },
-        {
-          "key": "test_signs_q4_a3",
-          "value": {
-            "ru": "Он(-a) часто сидит в телефоне",
-            "en": "They often spend time on their phone",
-            "ky": "Ал телефонду көп колдонот"
-          }
-        },
-      
-        {
-          "key": "test_signs_q5",
-          "value": {
-            "ru": "Что важно сделать, если ты замечаешь тревожные сигналы?",
-            "en": "What is important to do if you notice warning signs?",
-            "ky": "Эгер сен кооптуу белгилерди байкасаң, эмне кылуу маанилүү?"
-          }
-        },
-      
-        {
-          "key": "test_signs_q5_a1",
-          "value": {
-            "ru": "Не игнорировать и понимать, что человеку может быть тяжело",
-            "en": "Do not ignore it and understand the person may be struggling",
-            "ky": "Аны көз жаздымда калтырбай, адамга кыйын болушу мүмкүн экенин түшүнүү"
-          }
-        },
-        {
-          "key": "test_signs_q5_a2",
-          "value": {
-            "ru": "Сразу обвинить человека в странном поведении",
-            "en": "Immediately blame the person for strange behavior",
-            "ky": "Дароо адамды күнөөлөө"
-          }
-        },
-        {
-          "key": "test_signs_q5_a3",
-          "value": {
-            "ru": "Полностью игнорировать ситуацию",
-            "en": "Completely ignore the situation",
-            "ky": "Абалды толугу менен көрмөксөнгө салуу"
-          }
+      {
+        "key": "E01_S02_start",
+        "value": {
+          "ru": "Айназ стоит с Гульданой у стены школы. Вокруг шумно.",
+          "en": "Ainaz stands with Guldana by the school wall. It’s noisy around them.",
+          "ky": "Айназ Гүлдана менен мектептин дубалынын жанында турат. Айлана ызы-чуу."
         }
-      ]
-    }
+      },
+      {
+        "key": "E01_S02_dialogue_0",
+        "value": {
+          "ru": "К ним подходит Айгуль, одноклассница.",
+          "en": "Aigul, their classmate, approaches them.",
+          "ky": "Аларга классташы Айгүл жакындайт."
+        }
+      },
+      {
+        "key": "E01_S02_dialogue_1",
+        "value": {
+          "ru": "Ты опять сегодня в библиотеке будешь сидеть пока не выгонят?",
+          "en": "Are you going to stay in the library again until they kick you out?",
+          "ky": "Бүгүн дагы китепканада отуруп, кууп чыкканча каласыңбы?"
+        }
+      },
+      {
+        "key": "E01_S02_dialogue_2",
+        "value": {
+          "ru": "(молчит)",
+          "en": "(silent)",
+          "ky": "(үн катпайт)"
+        }
+      },
+      {
+        "key": "E01_S02_dialogue_3",
+        "value": {
+          "ru": "Конечно. Тебе же… некуда торопиться.",
+          "en": "Of course. You’ve got… nowhere to rush to.",
+          "ky": "Албетте. Сенин… шашчу жериң жок да."
+        }
+      },
+      {
+        "key": "E01_S02_narration_1",
+        "value": {
+          "ru": "Айгуль смотрит на Айназ, будто ожидая, что та всё поймёт.",
+          "en": "Aigul looks at Ainaz as if expecting her to understand everything.",
+          "ky": "Айгүл Айназга карап, ал баарын түшүнөт деп күткөндөй."
+        }
+      },
+      {
+        "key": "E01_S02_dialogue_4",
+        "value": {
+          "ru": "Ты о чём?",
+          "en": "What are you talking about?",
+          "ky": "Эмне жөнүндө айтып жатасың?"
+        }
+      },
+      {
+        "key": "E01_S02_dialogue_5",
+        "value": {
+          "ru": "Серьёзно? Ты ей не сказала?",
+          "en": "Seriously? You didn’t tell her?",
+          "ky": "Чын элеби? Сен ага айткан жоксуңбу?"
+        }
+      },
+      {
+        "key": "E01_S02_dialogue_6",
+        "value": {
+          "ru": "Хватит.",
+          "en": "Enough.",
+          "ky": "Жетишет."
+        }
+      },
+      {
+        "key": "E01_S02_narration_2",
+        "value": {
+          "ru": "На секунду вокруг становится будто тише.",
+          "en": "For a moment, everything around seems quieter.",
+          "ky": "Бир саамга айлана тынчып калгандай сезилет."
+        }
+      },
+      {
+        "key": "E01_S02_dialogue_7",
+        "value": {
+          "ru": "Ладно. Не моё дело.",
+          "en": "Fine. Not my business.",
+          "ky": "Макул. Бул менин ишим эмес."
+        }
+      },
+      {
+        "key": "E01_S02_narration_3",
+        "value": {
+          "ru": "Айгуль пожимает плечами и уходит в класс.",
+          "en": "Aigul shrugs and walks back into the classroom.",
+          "ky": "Айгүл ийнин куушуруп, класска кирип кетет."
+        }
+      },
+      {
+        "key": "E01_S02_dialogue_8",
+        "value": {
+          "ru": "Я в уборную.",
+          "en": "I’m going to the restroom.",
+          "ky": "Мен дааратканага барам."
+        }
+      },
+      {
+        "key": "E01_S02_choice_setup",
+        "value": {
+          "ru": "Она уходит. Айназ остаётся стоять, чувствуя неловкость и странное беспокойство.",
+          "en": "She leaves. Ainaz stays standing, feeling awkward and strangely uneasy.",
+          "ky": "Ал кетип калды. Айназ ордунда туруп, ыңгайсыздык менен белгисиз тынчсызданууну сезет."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_option_1",
+        "value": {
+          "ru": "Попытаться узнать у других, о чём слухи",
+          "en": "Try to ask others what the rumors are about",
+          "ky": "Башкалардан ушактар эмне жөнүндө экенин билүүгө аракет кылуу"
+        }
+      },
+      {
+        "key": "E01_S02_choice1_option_2",
+        "value": {
+          "ru": "Проигнорировать и дождаться Гульдану",
+          "en": "Ignore it and wait for Guldana",
+          "ky": "Эске албай, Гүлдананы күтүп туруу"
+        }
+      },
+      {
+        "key": "E01_S02_choice1_start",
+        "value": {
+          "ru": "Айназ подходит к ребятам.",
+          "en": "Ainaz approaches the group.",
+          "ky": "Айназ балдарга жакындайт."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_narration_1",
+        "value": {
+          "ru": "Разговор сначала затихает, потом продолжается тише, но уже не скрываясь.",
+          "en": "The conversation first quiets down, then continues more quietly, but no longer hiding.",
+          "ky": "Сүйлөшүү адегенде басаңдайт, анан акырын уланат, бирок жашырбай."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_dialogue_1",
+        "value": {
+          "ru": "Ты правда не знаешь?",
+          "en": "You really don’t know?",
+          "ky": "Чын эле билбейсиңби?"
+        }
+      },
+      {
+        "key": "E01_S02_choice1_dialogue_2",
+        "value": {
+          "ru": "Не знаю… чего?",
+          "en": "I don’t know… what?",
+          "ky": "Билбейм… эмнени?"
+        }
+      },
+      {
+        "key": "E01_S02_choice1_dialogue_3",
+        "value": {
+          "ru": "Ну да, ты же не местная.",
+          "en": "Well yeah, you’re not from here.",
+          "ky": "Ооба, сен бул жактан эмессиң да."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_dialogue_4",
+        "value": {
+          "ru": "Ты сюда сколько лет назад переехала? Три-четыре?",
+          "en": "How many years ago did you move here? Three or four?",
+          "ky": "Бул жакка канча жыл мурун көчүп келгенсиң? Үч-төрт жылбы?"
+        }
+      },
+      {
+        "key": "E01_S02_choice1_narration_2",
+        "value": {
+          "ru": "Айназ кивает.",
+          "en": "Ainaz nods.",
+          "ky": "Айназ башын ийкейт."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_dialogue_5",
+        "value": {
+          "ru": "Тогда понятно.",
+          "en": "That makes sense.",
+          "ky": "Анда түшүнүктүү."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_dialogue_6",
+        "value": {
+          "ru": "Это произошло, когда мы только в школу пошли.",
+          "en": "It happened when we had just started school.",
+          "ky": "Бул биз мектепке жаңы барганда болгон."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_narration_3",
+        "value": {
+          "ru": "Наступает короткая пауза. Кто-то из ребят опускает взгляд.",
+          "en": "A short pause follows. Someone looks down.",
+          "ky": "Кыскача тыным болот. Кимдир бирөө көзүн төмөн түшүрөт."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_dialogue_7",
+        "value": {
+          "ru": "Ладно, неважно. Кто после школы в футбол?",
+          "en": "Alright, never mind. Who’s playing football after school?",
+          "ky": "Макул, маанилүү эмес. Сабактан кийин ким футбол ойнойт?"
+        }
+      },
+      {
+        "key": "E01_S02_choice1_narration_4",
+        "value": {
+          "ru": "Тимур усмехается. Айгуль фыркает и отворачивается. Разговор уходит в сторону.",
+          "en": "Timur smirks. Aigul snorts and turns away. The conversation drifts off.",
+          "ky": "Тимур жылмайып коёт. Айгүл кыңшылап, бурулуп кетет. Сүйлөшүү башка жакка бурулат."
+        }
+      },
+      {
+        "key": "E01_S02_choice1_thought",
+        "value": {
+          "ru": "Что это было?",
+          "en": "What was that?",
+          "ky": "Бул эмне болду?"
+        }
+      },
+      {
+        "key": "E01_S02_choice1_narration_5",
+        "value": {
+          "ru": "Айназ понимает, что разговор шёл не о школе и не о каком-то пустяке. Но продолжать его никто не собирается.",
+          "en": "Ainaz realizes the conversation wasn’t about school or something trivial. But no one intends to continue it.",
+          "ky": "Айназ сүйлөшүү мектеп же жөн эле нерсе жөнүндө эмес экенин түшүнөт. Бирок аны уланткысы келген эч ким жок."
+        }
+      },
+      {
+        "key": "E01_S02_choice2_result",
+        "value": {
+          "ru": "Когда Гульдана возвращается, она замечает, что Айназ не ушла и не стала обсуждать её с другими. Это немного успокаивает.",
+          "en": "When Guldana returns, she notices that Ainaz stayed and didn't talk about her with others. It reassures her a little.",
+          "ky": "Гүлдана кайтып келгенде, Айназ кетпегенин жана аны башкалар менен талкуулабаганын байкайт. Бул аны бир аз тынчтандырат."
+        }
+      },
+      {
+        "key": "E01_summary_text",
+        "value": {
+          "ru": "Айназ понимает, что за этими разговорами скрывается что-то важное, но пока никто не готов говорить об этом вслух.",
+          "en": "Ainaz realizes that something important lies behind these conversations, but no one is ready to talk about it openly yet.",
+          "ky": "Айназ бул сүйлөшүүлөрдүн артында маанилүү нерсе бар экенин түшүнөт, бирок азырынча эч ким бул тууралуу ачык айтууга даяр эмес."
+        }
+      },
+      {
+        "key": "episode_end_title",
+        "value": {
+          "ru": "ЭПИЗОД ЗАВЕРШЁН!",
+          "en": "EPISODE COMPLETED!",
+          "ky": "ЭПИЗОД БҮТТҮ!"
+        }
+      },
+      {
+        "key": "continue",
+        "value": {
+          "ru": "Продолжить",
+          "en": "Continue",
+          "ky": "Улантуу"
+        }
+      }
+    ]
+  },
+  "Notes": {
+    "pageName": "Notes",
+    "items": [
+      {
+        "key": "notes_page_title",
+        "value": {
+          "ru": "Заметки",
+          "en": "Notes",
+          "ky": "Белгелер"
+        }
+      },
+      {
+        "key": "note_page_title",
+        "value": {
+          "ru": "Заметка",
+          "en": "Note",
+          "ky": "Белги"
+        }
+      },
+      {
+        "key": "notes_intro",
+        "value": {
+          "ru": "Короткие материалы, которые помогут лучше понять тему",
+          "en": "Short materials to help you better understand the topic",
+          "ky": "Теманы жакшыраак түшүнүүгө жардам берген кыска материалдар"
+        }
+      },
+      {
+        "key": "note_status_test_passed",
+        "value": {
+          "ru": "Тест пройден",
+          "en": "Test completed",
+          "ky": "Тест өттү"
+        }
+      },
+      {
+        "key": "note_status_read",
+        "value": {
+          "ru": "Прочитано",
+          "en": "Read",
+          "ky": "Окулган"
+        }
+      },
+      {
+        "key": "note_status_new",
+        "value": {
+          "ru": "Новая",
+          "en": "New",
+          "ky": "Жаңы"
+        }
+      },
+      {
+        "key": "note_locked",
+        "value": {
+          "ru": "Недоступно",
+          "en": "Locked",
+          "ky": "Жеткиликсиз"
+        }
+      },
+      {
+        "key": "note_read",
+        "value": {
+          "ru": "Прочитано",
+          "en": "Read",
+          "ky": "Окулган"
+        }
+      },
+      {
+        "key": "note_read_more",
+        "value": {
+          "ru": "Читать далее",
+          "en": "Read more",
+          "ky": "Кененирээк окуу"
+        }
+      },
+      {
+        "key": "note_open_test",
+        "value": {
+          "ru": "Проверить себя",
+          "en": "Test yourself",
+          "ky": "Өзүңдү текшер"
+        }
+      },
+      {
+        "key": "read_time_1",
+        "value": {
+          "ru": "1 мин",
+          "en": "1 min",
+          "ky": "1 мин"
+        }
+      },
+      {
+        "key": "read_time_n",
+        "value": {
+          "ru": "{0} мин",
+          "en": "{0} min",
+          "ky": "{0} мин"
+        }
+      },
+      {
+        "key": "note_signs_title",
+        "value": {
+          "ru": "Что-то не так",
+          "en": "Something Feels Off",
+          "ky": "Бир нерсе туура эмес"
+        }
+      },
+      {
+        "key": "note_signs_preview",
+        "value": {
+          "ru": "Иногда ты просто чувствуешь: что-то изменилось.",
+          "en": "Sometimes you just feel like something has changed.",
+          "ky": "Кээде жөн гана бир нерсе өзгөргөнүн сезесиң."
+        }
+      },
+      {
+        "key": "note_signs_text",
+        "value": {
+          "ru": "Иногда что-то кажется странным, но сложно сразу понять — это нормально или нет.\nЧеловек может не говорить прямо, но его поведение меняется.\nЕсли кто-то рядом стал тише, тревожнее или избегает разговоров — это может быть сигналом, что ему тяжело.\nВажно обращать внимание не только на слова, но и на настроение, реакции и то, как человек ведёт себя в разных ситуациях.\n\nОбрати внимание на возможные признаки:\n− резкие изменения в поведении\n− страх, напряжение или постоянная тревога\n− замкнутость, избегание общения\n− попытки скрывать происходящее или не говорить о доме\n− фразы вроде «всё нормально», когда видно, что это не так\n\nЕсли ты это замечаешь — не игнорируй. Тебе не показалось.\nДаже если ты не знаешь, что именно происходит, важно признать: что-то не так.\n\nЧто можно сделать:\n− мягко спросить, как человек себя чувствует\n− дать понять, что ты рядом и готов(а) выслушать\n− не давить и не требовать объяснений\n− не обвинять и не делать поспешных выводов\n\nИногда первый шаг — это внимание и поддержка.\nДаже простой разговор может многое изменить.",
+          "en": "Sometimes something feels off, but it’s hard to immediately understand whether it’s normal or not.\nA person may not say it directly, but their behavior changes.\nIf someone around you becomes quieter, more anxious, or avoids conversations, it may be a sign they are struggling.\nIt’s important to pay attention not only to words, but also to mood, reactions, and how a person behaves in different situations.\n\nPay attention to possible signs:\n− sudden changes in behavior\n− fear, tension, or constant anxiety\n− withdrawal and avoidance of communication\n− attempts to hide what is happening or avoid talking about home\n− phrases like “everything is fine” when it clearly isn’t\n\nIf you notice this — don’t ignore it. You’re not imagining things.\nEven if you don’t know exactly what is happening, it’s important to recognize: something is wrong.\n\nWhat you can do:\n− gently ask how the person is feeling\n− let them know you are there and ready to listen\n− don’t pressure them or demand explanations\n− don’t blame them or jump to conclusions\n\nSometimes the first step is simply attention and support.\nEven a simple conversation can make a difference.",
+          "ky": "Кээде бир нерсе кызык же башкача сезилет, бирок анын нормалдуу же нормалдуу эмес экенин дароо түшүнүү кыйын.\nАдам түз айтпашы мүмкүн, бирок анын жүрүм-туруму өзгөрөт.\nЭгер жаныңдагы адам тынч болуп калса, көбүрөөк тынчсызданып же сүйлөшүүдөн качса — бул ага оор болуп жатканын билдириши мүмкүн.\nСөздөргө гана эмес, маанайга, реакцияларга жана адам ар кандай кырдаалда өзүн кандай алып жүргөнүнө көңүл буруу маанилүү.\n\nМүмкүн болгон белгилерге көңүл бур:\n− жүрүм-турумдагы кескин өзгөрүүлөр\n− коркуу, чыңалуу же туруктуу тынчсыздануу\n− өзүнө жабылуу, баарлашуудан качуу\n− болуп жаткан нерсени жашырууга аракет кылуу же үй жөнүндө сүйлөшпөө\n− «баары жакшы» деген сөздөр, бирок чындыгында андай эмес экендиги көрүнүп турат\n\nЭгер сен муну байкасаң — аны көз жаздымда калтырба. Бул сенин элесиң эмес.\nТак эмне болуп жатканын билбесең да, бир нерсе туура эмес экенин түшүнүү маанилүү.\n\nЭмне кылса болот:\n− адамдан жай жана жумшак сура: ал өзүн кандай сезип жатат\n− сен анын жанында экениңди жана угууга даяр экениңди көрсөт\n− басым жасаба жана түшүндүрмө талап кылба\n− айыптаба жана шашылыш жыйынтык чыгарба\n\nКээде биринчи кадам — бул көңүл буруу жана колдоо.\nЖөнөкөй эле сүйлөшүү да көп нерсени өзгөртө алат."
+        }
+      },
+
+      {
+        "key": "note_rumors_title",
+        "value": {
+          "ru": "Слухи",
+          "en": "Rumors",
+          "ky": "Ушактар"
+        }
+      },
+      {
+        "key": "note_rumors_preview",
+        "value": {
+          "ru": "Слухи начинаются тихо — но ранят сильно.",
+          "en": "Rumors start quietly — but hurt deeply.",
+          "ky": "Ушактар жай башталат — бирок катуу жаралайт."
+        }
+      },
+      {
+        "key": "note_rumors_text",
+        "value": {
+          "ru": "Иногда кажется, что окружающие всё видят, но ничего не делают.\nЭто может вызывать чувство растерянности и даже одиночества.\nЛюди часто молчат не потому, что им всё равно.\nИм может быть страшно вмешиваться, неловко говорить об этом или казаться, что это “чужое дело”.\nИногда они просто не знают, как правильно поступить.\n\nТем, кто находится в такой ситуации, тоже бывает трудно говорить.\nОни могут бояться последствий, стыдиться происходящего или надеяться, что всё скоро изменится.\nИногда их могут прямо просить: «не рассказывай никому».\n\nВажно понимать: молчание — не значит, что проблемы нет.\nЭто значит, что говорить об этом сложно и небезопасно.\n\nЧто можно сделать:\n− не игнорировать свои ощущения — если что-то кажется неправильным, это важно\n− оставаться внимательным(ой) к человеку\n− дать понять, что ты рядом и готов(а) выслушать\n− не распространять слухи и не обсуждать за спиной\n\nИногда самое важное — создать пространство, где человеку будет не страшно говорить.",
+          "en": "Sometimes it feels like others see everything but do nothing.\nThis can create a sense of confusion and even loneliness.\nPeople often stay silent not because they don’t care.\nThey may be afraid to intervene, feel uncomfortable talking about it, or think it’s “not their business.”\nSometimes they simply don’t know what the right thing to do is.\n\nFor those in such a situation, it can also be difficult to speak.\nThey may fear the consequences, feel ashamed of what is happening, or hope that everything will change soon.\nSometimes they are directly asked: “don’t tell anyone.”\n\nIt’s important to understand: silence does not mean there is no problem.\nIt means that talking about it is difficult and unsafe.\n\nWhat you can do:\n− don’t ignore your feelings — if something feels wrong, it matters\n− stay attentive to the person\n− let them know you are there and ready to listen\n− don’t spread rumors or talk behind their back\n\nSometimes the most important thing is to create a space where the person is not afraid to speak.",
+          "ky": "Кээде айланадагылар баарын к`өрүп тургандай сезилет, бирок эч нерсе кылышпайт.\nБул башаламандык жана жалгыздык сезимин жаратышы мүмкүн.\nАдамдар көп учурда кайдыгер болгондуктан унчукпай калышпайт.\nАлар кийлигишүүдөн коркушу мүмкүн, бул тууралуу айтуудан ыңгайсызданышы мүмкүн же бул “башканын иши” деп ойлошу мүмкүн.\nКээде алар жөн гана кантип туура аракет кылууну билишпейт.\n\nМындай кырдаалда болгон адамдарга да сүйлөө кыйын болот.\nАлар кесепеттерден коркушу мүмкүн, болуп жаткан нерседен уялышы мүмкүн же баары жакында өзгөрөт деп үмүт кылышы мүмкүн.\nКээде аларга түз эле: «эч кимге айтпа» деп айтышат.\n\nМаанилүүсү: унчукпай калуу — көйгөй жок дегенди билдирбейт.\nБул бул тууралуу сүйлөө кыйын жана кооптуу экенин билдирет.\n\nЭмне кылса болот:\n− өз сезимдериңди четке какпа — эгер бир нерсе туура эмес сезилсе, бул маанилүү\n− адамга көңүл буруп, байкап тур\n− сен анын жанында экениңди жана угууга даяр экениңди билдир\n− ушак таратпа жана артынан сүйлөбө\n\nКээде эң маанилүүсү — адамга сүйлөөдөн коркпогон мейкиндик түзүү."
+        }
+      }
+    ]
+  },
+  
+  "Tests": {
+    "pageName": "Tests",
+    "items": [
+      {
+        "key": "test_page_title",
+        "value": {
+          "ru": "Тест",
+          "en": "Test",
+          "ky": "Тест"
+        }
+      },
+      {
+        "key": "test_progress_label",
+        "value": {
+          "ru": "Прогресс теста",
+          "en": "Progress of test",
+          "ky": "Тестин прогресси"
+        }
+      },
+      {
+        "key": "test_instruction",
+        "value": {
+          "ru": "Выбери один правильный ответ",
+          "en": "Choose one correct answer",
+          "ky": "Бир туура жоопту танда"
+        }
+      },
+      {
+        "key": "test_progress",
+        "value": {
+          "ru": "Вопрос {0} из {1}",
+          "en": "Question {0} of {1}",
+          "ky": "Суроо {0} ичинен {1}"
+        }
+      },
+      {
+        "key": "test_continue",
+        "value": {
+          "ru": "Продолжить",
+          "en": "Continue",
+          "ky": "Улантуу"
+        }
+      },
+      {
+        "key": "test_finish",
+        "value": {
+          "ru": "Завершить",
+          "en": "Finish",
+          "ky": "Аяктоо"
+        }
+      },
+      {
+        "key": "test_result_title",
+        "value": {
+          "ru": "Ваш результат",
+          "en": "Your result",
+          "ky": "Сиздин жыйынтык"
+        }
+      },
+      {
+        "key": "test_retry",
+        "value": {
+          "ru": "Пройти заново",
+          "en": "Retry",
+          "ky": "Кайра аракет кылуу"
+        }
+      },
+      {
+        "key": "test_to_notes",
+        "value": {
+          "ru": "К заметкам",
+          "en": "Back to notes",
+          "ky": "Белгелерге кайтуу"
+        }
+      },
+      {
+        "key": "test_result_0",
+        "value": {
+          "ru": "Попробуй ещё раз",
+          "en": "Try again",
+          "ky": "Дагы аракет кыл"
+        }
+      },
+      {
+        "key": "test_result_1",
+        "value": {
+          "ru": "Неплохо, но есть над чем поработать",
+          "en": "Not bad, but there’s room to improve",
+          "ky": "Жаман эмес, бирок жакшыртса болот"
+        }
+      },
+      {
+        "key": "test_result_almost",
+        "value": {
+          "ru": "Почти получилось",
+          "en": "Almost there",
+          "ky": "Дээрлик туура"
+        }
+      },
+      {
+        "key": "test_result_perfect",
+        "value": {
+          "ru": "Отлично!!!",
+          "en": "Excellent!!!",
+          "ky": "Абдан жакшы!!!"
+        }
+      },
+      {
+        "key": "test_home",
+        "value": {
+          "ru": "На главный экран",
+          "en": "Main Menu",
+          "ky": "Башкы экранга"
+        }
+      },
+      {
+        "key": "test_signs_title",
+        "value": {
+          "ru": "Тревожные сигналы",
+          "en": "Warning Signs",
+          "ky": "Кооптуу белгилер"
+        }
+      },
+      {
+        "key": "test_signs_q1",
+        "value": {
+          "ru": "Какое изменение в поведении может быть тревожным сигналом?",
+          "en": "Which change in behavior can be a warning sign?",
+          "ky": "Кайсы жүрүм-турум өзгөрүүсү кооптуу белги болушу мүмкүн?"
+        }
+      },
+      {
+        "key": "test_signs_q1_a1",
+        "value": {
+          "ru": "Человек стал говорить меньше и избегает разговоров",
+          "en": "The person speaks less and avoids conversations",
+          "ky": "Адам азыраак сүйлөп, сүйлөшүүдөн качат"
+        }
+      },
+      {
+        "key": "test_signs_q1_a2",
+        "value": {
+          "ru": "Человек начал больше шутить",
+          "en": "The person started joking more",
+          "ky": "Адам көбүрөөк тамашалай баштады"
+        }
+      },
+      {
+        "key": "test_signs_q1_a3",
+        "value": {
+          "ru": "Человек стал чаще заниматься спортом",
+          "en": "The person started exercising more",
+          "ky": "Адам спорт менен көбүрөөк алектене баштады"
+        }
+      },
+      {
+        "key": "test_signs_q2",
+        "value": {
+          "ru": "Что из этого может указывать на внутреннюю тревогу?",
+          "en": "Which of these may indicate inner anxiety?",
+          "ky": "Булардын кайсынысы ички тынчсызданууну көрсөтөт?"
+        }
+      },
+      {
+        "key": "test_signs_q2_a1",
+        "value": {
+          "ru": "Резкая реакция на громкие звуки",
+          "en": "Strong reaction to loud sounds",
+          "ky": "Катуу үндөргө катуу реакция"
+        }
+      },
+      {
+        "key": "test_signs_q2_a2",
+        "value": {
+          "ru": "Любовь к тихой музыке",
+          "en": "Preference for quiet music",
+          "ky": "Жай музыканы жактыруу"
+        }
+      },
+      {
+        "key": "test_signs_q2_a3",
+        "value": {
+          "ru": "Желание больше спать на выходных",
+          "en": "Wanting to sleep more on weekends",
+          "ky": "Дем алышта көбүрөөк уктагысы келүү"
+        }
+      },
+    
+      {
+        "key": "test_signs_q3",
+        "value": {
+          "ru": "Почему улыбка может быть тревожным сигналом?",
+          "en": "Why can a smile be a warning sign?",
+          "ky": "Эмне үчүн жылмайуу кооптуу белги болушу мүмкүн?"
+        }
+      },
+    
+      {
+        "key": "test_signs_q3_a1",
+        "value": {
+          "ru": "Она может выглядеть натянутой и неискренней",
+          "en": "It may look forced and not genuine",
+          "ky": "Ал жасалма жана чыныгы эмес көрүнүшү мүмкүн"
+        }
+      },
+      {
+        "key": "test_signs_q3_a2",
+        "value": {
+          "ru": "Потому что человек всегда должен быть серьёзным",
+          "en": "Because a person should always be serious",
+          "ky": "Анткени адам дайыма олуттуу болушу керек"
+        }
+      },
+      {
+        "key": "test_signs_q3_a3",
+        "value": {
+          "ru": "Потому что улыбка означает радость",
+          "en": "Because a smile always means happiness",
+          "ky": "Анткени жылмайуу ар дайым кубанычты билдирет"
+        }
+      },
+    
+      {
+        "key": "test_signs_q4",
+        "value": {
+          "ru": "Какое поведение может говорить о том, что человеку тяжело дома?",
+          "en": "Which behavior may show that a person is struggling at home?",
+          "ky": "Кайсы жүрүм-турум адамга үйдө кыйын экенин көрсөтөт?"
+        }
+      },
+    
+      {
+        "key": "test_signs_q4_a1",
+        "value": {
+          "ru": "Он(-a) не хочет идти домой и придумывает причины не возвращаться",
+          "en": "They don’t want to go home and make excuses not to return",
+          "ky": "Ал үйгө баргысы келбей, кайтып барбоо үчүн себеп табат"
+        }
+      },
+      {
+        "key": "test_signs_q4_a2",
+        "value": {
+          "ru": "Он(-a) любит гулять с друзьями",
+          "en": "They enjoy spending time with friends",
+          "ky": "Ал достору менен убакыт өткөргөндү жакшы көрөт"
+        }
+      },
+      {
+        "key": "test_signs_q4_a3",
+        "value": {
+          "ru": "Он(-a) часто сидит в телефоне",
+          "en": "They often spend time on their phone",
+          "ky": "Ал телефонду көп колдонот"
+        }
+      },
+    
+      {
+        "key": "test_signs_q5",
+        "value": {
+          "ru": "Что важно сделать, если ты замечаешь тревожные сигналы?",
+          "en": "What is important to do if you notice warning signs?",
+          "ky": "Эгер сен кооптуу белгилерди байкасаң, эмне кылуу маанилүү?"
+        }
+      },
+    
+      {
+        "key": "test_signs_q5_a1",
+        "value": {
+          "ru": "Не игнорировать и понимать, что человеку может быть тяжело",
+          "en": "Do not ignore it and understand the person may be struggling",
+          "ky": "Аны көз жаздымда калтырбай, адамга кыйын болушу мүмкүн экенин түшүнүү"
+        }
+      },
+      {
+        "key": "test_signs_q5_a2",
+        "value": {
+          "ru": "Сразу обвинить человека в странном поведении",
+          "en": "Immediately blame the person for strange behavior",
+          "ky": "Дароо адамды күнөөлөө"
+        }
+      },
+      {
+        "key": "test_signs_q5_a3",
+        "value": {
+          "ru": "Полностью игнорировать ситуацию",
+          "en": "Completely ignore the situation",
+          "ky": "Абалды толугу менен көрмөксөнгө салуу"
+        }
+      },
+      {
+        "key": "test_rumors_title",
+        "value": {
+          "ru": "Слухи",
+          "en": "Rumors",
+          "ky": "Ушактар"
+        }
+      },
+      {
+        "key": "test_rumors_q1",
+        "value": {
+          "ru": "Почему слух может сильно измениться по сравнению с оригинальной историей?",
+          "en": "Why can a rumor change significantly compared to the original story?",
+          "ky": "Эмне үчүн ушак баштапкы окуяга салыштырмалуу абдан өзгөрүп кетиши мүмкүн?"
+        }
+      },
+      {
+        "key": "test_rumors_q1_a1",
+        "value": {
+          "ru": "Каждый пересказывает по-своему и добавляет детали",
+          "en": "Everyone retells it in their own way and adds details",
+          "ky": "Ар ким өзүнчө айтып, кошумча маалыматтарды кошот"
+        }
+      },
+      {
+        "key": "test_rumors_q1_a2",
+        "value": {
+          "ru": "Люди специально хотят соврать",
+          "en": "People intentionally want to lie",
+          "ky": "Адамдар атайын калп айткысы келет"
+        }
+      },
+      {
+        "key": "test_rumors_q1_a3",
+        "value": {
+          "ru": "Информация становится точнее со временем",
+          "en": "Information becomes more accurate over time",
+          "ky": "Маалымат убакыт өткөн сайын так болуп калат"
+        }
+      },
+    
+      {
+        "key": "test_rumors_q2",
+        "value": {
+          "ru": "Ты слышишь слух о знакомом человеке, и он звучит правдоподобно. Что сделать правильнее?",
+          "en": "You hear a rumor about someone you know, and it sounds believable. What is the best thing to do?",
+          "ky": "Сен тааныш адам жөнүндө ушак угасың, ал ишенимдүү угулат. Эмне кылуу туура?"
+        }
+      },
+      {
+        "key": "test_rumors_q2_a1",
+        "value": {
+          "ru": "Поделиться только с близкими друзьями, чтобы обсудить",
+          "en": "Share it only with close friends to discuss",
+          "ky": "Жакын достор менен гана бөлүшүп, талкуулоо"
+        }
+      },
+      {
+        "key": "test_rumors_q2_a2",
+        "value": {
+          "ru": "Не распространять и не делать выводов без фактов",
+          "en": "Do not spread it and do not make conclusions without facts",
+          "ky": "Таратпо жана далилсиз жыйынтык чыгарбо"
+        }
+      },
+      {
+        "key": "test_rumors_q2_a3",
+        "value": {
+          "ru": "Сразу поверить, если это звучит логично",
+          "en": "Immediately believe it if it sounds logical",
+          "ky": "Эгер логикалуу угулса, дароо ишенүү"
+        }
+      },
+    
+      {
+        "key": "test_rumors_q3",
+        "value": {
+          "ru": "Почему даже «просто слушать» слухи может быть проблемой?",
+          "en": "Why can even “just listening” to rumors be a problem?",
+          "ky": "Эмне үчүн ушакты “жөн гана угуу” да көйгөй болушу мүмкүн?"
+        }
+      },
+      {
+        "key": "test_rumors_q3_a1",
+        "value": {
+          "ru": "Потому что это поддерживает распространение и делает это нормой",
+          "en": "Because it supports spreading and makes it seem normal",
+          "ky": "Анткени бул таралуусун колдоп, аны кадимки нерседей көрсөтөт"
+        }
+      },
+      {
+        "key": "test_rumors_q3_a2",
+        "value": {
+          "ru": "Потому что это занимает много времени",
+          "en": "Because it takes a lot of time",
+          "ky": "Анткени бул көп убакыт алат"
+        }
+      },
+      {
+        "key": "test_rumors_q3_a3",
+        "value": {
+          "ru": "Потому что это всегда скучно",
+          "en": "Because it is always boring",
+          "ky": "Анткени бул дайыма кызыксыз"
+        }
+      },
+    
+      {
+        "key": "test_rumors_q4",
+        "value": {
+          "ru": "Ты замечаешь, что о человеке говорят за спиной, но никто не подходит к нему напрямую. Почему это происходит?",
+          "en": "You notice people talk about someone behind their back, but no one approaches them directly. Why does this happen?",
+          "ky": "Сен адамдар бирөөнү артынан сүйлөшүп жатканын көрөсүң, бирок эч ким түз сүйлөшпөйт. Эмне үчүн мындай болот?"
+        }
+      },
+      {
+        "key": "test_rumors_q4_a1",
+        "value": {
+          "ru": "Людям проще обсуждать, чем вступать в прямой разговор",
+          "en": "It is easier for people to discuss than to have a direct conversation",
+          "ky": "Адамдарга түз сүйлөшкөнгө караганда талкуулоо оңой"
+        }
+      },
+      {
+        "key": "test_rumors_q4_a2",
+        "value": {
+          "ru": "Потому что им всё равно",
+          "en": "Because they don’t care",
+          "ky": "Анткени аларга баары бир"
+        }
+      },
+      {
+        "key": "test_rumors_q4_a3",
+        "value": {
+          "ru": "Потому что они знают правду",
+          "en": "Because they know the truth",
+          "ky": "Анткени алар чындыкты билишет"
+        }
+      },
+      {
+        "key": "test_rumors_q5",
+        "value": {
+          "ru": "Ты в компании, где обсуждают слух. Если ты резко скажешь «перестаньте», это может создать напряжение. Что сделать лучше?",
+          "en": "You are in a group where a rumor is being discussed. If you sharply say “stop,” it may create tension. What is better to do?",
+          "ky": "Сен компаниядасың, анда ушак талкууланып жатат. Эгер “токтоткула” деп катуу айтсаң, чыңалуу жаралышы мүмкүн. Эмне кылуу жакшы?"
+        }
+      },
+      {
+        "key": "test_rumors_q5_a1",
+        "value": {
+          "ru": "Аккуратно сменить тему или не поддерживать разговор",
+          "en": "Gently change the topic or not support the conversation",
+          "ky": "Жай теманы өзгөртүү же сүйлөшүүнү колдобоо"
+        }
+      },
+      {
+        "key": "test_rumors_q5_a2",
+        "value": {
+          "ru": "Активно участвовать, чтобы не выделяться",
+          "en": "Actively participate so as not to stand out",
+          "ky": "Көзгө түшпөш үчүн активдүү катышуу"
+        }
+      },
+      {
+        "key": "test_rumors_q5_a3",
+        "value": {
+          "ru": "Сразу уйти, ничего не объяснив",
+          "en": "Leave immediately without explaining anything",
+          "ky": "Дароо эч нерсе түшүндүрбөстөн кетип калуу"
+        }
+      },
+    
+      {
+        "key": "test_rumors_q6",
+        "value": {
+          "ru": "Человек, о котором ходят слухи, говорит «всё нормально», но выглядит напряжённым. Как лучше отреагировать?",
+          "en": "A person who is the subject of rumors says “everything is fine,” but looks tense. What is the best way to respond?",
+          "ky": "Ушак тараган адам “баары жакшы” дейт, бирок чыңалгандай көрүнөт. Кантип туура жооп берүү керек?"
+        }
+      },
+      {
+        "key": "test_rumors_q6_a1",
+        "value": {
+          "ru": "Принять слова буквально и не вмешиваться",
+          "en": "Take their words literally and not intervene",
+          "ky": "Анын сөздөрүн түз кабыл алып, кийлигишпөө"
+        }
+      },
+      {
+        "key": "test_rumors_q6_a2",
+        "value": {
+          "ru": "Аккуратно показать поддержку, не давя на него",
+          "en": "Gently show support without pressuring them",
+          "ky": "Басым жасабай, жумшак колдоо көрсөтүү"
+        }
+      },
+      {
+        "key": "test_rumors_q6_a3",
+        "value": {
+          "ru": "Спросить прямо при всех, что происходит",
+          "en": "Ask directly in front of everyone what is happening",
+          "ky": "Баарынын алдында түз эле эмне болуп жатканын сура"
+        }
+      },
+    
+      {
+        "key": "test_rumors_q7",
+        "value": {
+          "ru": "Почему слухи могут усиливать чувство одиночества?",
+          "en": "Why can rumors increase the feeling of loneliness?",
+          "ky": "Эмне үчүн ушак жалгыздык сезимин күчөтүшү мүмкүн?"
+        }
+      },
+      {
+        "key": "test_rumors_q7_a1",
+        "value": {
+          "ru": "Потому что человек остаётся один с чужими словами о себе",
+          "en": "Because the person is left alone with others’ words about them",
+          "ky": "Анткени адам башкалардын сөздөрү менен жалгыз калат"
+        }
+      },
+      {
+        "key": "test_rumors_q7_a2",
+        "value": {
+          "ru": "Потому что люди начинают больше с ним общаться",
+          "en": "Because people start communicating with them more",
+          "ky": "Анткени адамдар аны менен көбүрөөк сүйлөшө баштайт"
+        }
+      },
+      {
+        "key": "test_rumors_q7_a3",
+        "value": {
+          "ru": "Потому что слухи быстро забываются",
+          "en": "Because rumors are quickly forgotten",
+          "ky": "Анткени ушактар бат унутулат"
+        }
+      }
+    ]
+  }
 }

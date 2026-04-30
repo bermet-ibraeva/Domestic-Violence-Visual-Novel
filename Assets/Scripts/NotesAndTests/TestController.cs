@@ -8,6 +8,9 @@ using UnityEngine.UI;
 public class TestController : MonoBehaviour
 {
     [Header("UI")]
+    [SerializeField] private TMP_Text pageTitleText;
+    [SerializeField] private TMP_Text progressLabelText;
+    [SerializeField] private TMP_Text instructionText;
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private Image progressBarFill;
@@ -19,6 +22,7 @@ public class TestController : MonoBehaviour
     [SerializeField] private TMP_Text continueButtonText;
 
     [Header("Result Popup")]
+    [SerializeField] private TMP_Text resultTitleText;
     [SerializeField] private GameObject resultPopup;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text resultMessageText;
@@ -26,47 +30,50 @@ public class TestController : MonoBehaviour
     [Header("Result Buttons")]
     [SerializeField] private Button retryButton;
     [SerializeField] private TMP_Text retryButtonText;
-    [SerializeField] private GameObject retryIcon; // иконка внутри кнопки
-
+    [SerializeField] private GameObject retryIcon;
     [SerializeField] private Button homeButton;
+    [SerializeField] private TMP_Text homeButtonText;
 
-    private TestData currentTest;
-    private int currentQuestionIndex = 0;
-    private int score = 0;
-
-    private List<AnswerButton> spawnedAnswers = new List<AnswerButton>();
-    private AnswerButton selectedAnswer;
-    private bool isTransitioning = false;
-
-    private Coroutine progressRoutine;
-    private List<QuestionData> questionsPool;
-
-    private int totalQuestions;
-
-    // ================= INIT =================
-
-
+    [Header("Data")]
     [SerializeField] private TextAsset testsJson;
 
     private TestDatabase testDatabase;
+    private TestData currentTest;
+
+    private int currentQuestionIndex = 0;
+    private int score = 0;
+    private int totalQuestions;
+
+    private List<QuestionData> questionsPool;
+    private List<AnswerButton> spawnedAnswers = new();
+
+    private AnswerButton selectedAnswer;
+    private bool isTransitioning = false;
+    private Coroutine progressRoutine;
+
+    // ================= INIT =================
 
     private void Start()
     {
         LoadDatabase();
+        UpdateStaticTexts();
         LoadSelectedTest();
-
-        Debug.Log("Received test: " + TestSession.SelectedTestId);
     }
 
     void LoadDatabase()
     {
+        if (testsJson == null)
+        {
+            Debug.LogError("testsJson is NULL");
+            return;
+        }
+
         testDatabase = JsonUtility.FromJson<TestDatabase>(testsJson.text);
     }
 
     void LoadSelectedTest()
     {
         string testId = TestSession.SelectedTestId;
-        Debug.Log("TestSession ID: " + testId);
 
         if (string.IsNullOrEmpty(testId))
         {
@@ -82,32 +89,24 @@ public class TestController : MonoBehaviour
             return;
         }
 
-        Init(test); 
+        Init(test);
     }
 
     public void Init(TestData test)
     {
         currentTest = test;
 
-        if (currentTest == null || currentTest.questions == null || currentTest.questions.Count == 0)
-        {
-            Debug.LogError("Test data missing");
-            return;
-        }
-
         totalQuestions = Mathf.Min(test.questionsPerRun, test.questions.Count);
 
-        // копия вопросов
         questionsPool = new List<QuestionData>(currentTest.questions);
-
         ShuffleQuestions();
-        if (totalQuestions <= 0) return;
         questionsPool = questionsPool.GetRange(0, totalQuestions);
 
         currentQuestionIndex = 0;
         score = 0;
 
         resultPopup.SetActive(false);
+
         continueButton.interactable = false;
         UpdateContinueVisual(false);
 
@@ -125,43 +124,39 @@ public class TestController : MonoBehaviour
         LoadQuestion();
     }
 
-    // ================= LOAD QUESTION =================
-
+    // ================= QUESTION =================
     void LoadQuestion()
     {
         ClearAnswers();
-
         selectedAnswer = null;
 
         QuestionData question = questionsPool[currentQuestionIndex];
-        questionText.text = question.questionText;
 
-        // прогресс текст
+        questionText.text = L(question.questionKey);
+
         int current = currentQuestionIndex + 1;
-        progressText.text = $"Вопрос {current} из {totalQuestions}";
 
-        // 🔥 анимация прогресса
-        float target = (float)(currentQuestionIndex + 1) / totalQuestions;
+        progressText.text = L("test_progress")
+            .Replace("{0}", current.ToString())
+            .Replace("{1}", totalQuestions.ToString());
+
+        float target = (float)current / totalQuestions;
+
         if (progressRoutine != null)
-        {
             StopCoroutine(progressRoutine);
-            progressRoutine = null;
-        }
 
         progressRoutine = StartCoroutine(AnimateProgress(target));
 
         // ответы
-        List<AnswerData> shuffledAnswers = new List<AnswerData>(question.answers);
+        List<AnswerData> shuffled = new(question.answers);
 
-        for (int i = 0; i < shuffledAnswers.Count; i++)
+        for (int i = 0; i < shuffled.Count; i++)
         {
-            int rand = Random.Range(i, shuffledAnswers.Count);
-            var temp = shuffledAnswers[i];
-            shuffledAnswers[i] = shuffledAnswers[rand];
-            shuffledAnswers[rand] = temp;
+            int rand = Random.Range(i, shuffled.Count);
+            (shuffled[i], shuffled[rand]) = (shuffled[rand], shuffled[i]);
         }
 
-        foreach (var answer in shuffledAnswers)
+        foreach (var answer in shuffled)
         {
             var btn = Instantiate(answerPrefab, answersContainer);
             btn.Setup(answer, this);
@@ -172,10 +167,10 @@ public class TestController : MonoBehaviour
         continueButton.interactable = false;
         UpdateContinueVisual(false);
 
-        // текст кнопки
-        continueButtonText.text = (currentQuestionIndex == totalQuestions - 1)
-            ? "Завершить"
-            : "Продолжить";
+        continueButtonText.text =
+            (currentQuestionIndex == totalQuestions - 1)
+            ? L("test_finish")
+            : L("test_continue");
 
         isTransitioning = false;
     }
@@ -192,46 +187,41 @@ public class TestController : MonoBehaviour
     {
         for (int i = 0; i < questionsPool.Count; i++)
         {
-            var temp = questionsPool[i];
-            int randomIndex = Random.Range(i, questionsPool.Count);
-            questionsPool[i] = questionsPool[randomIndex];
-            questionsPool[randomIndex] = temp;
+            int rand = Random.Range(i, questionsPool.Count);
+            (questionsPool[i], questionsPool[rand]) = (questionsPool[rand], questionsPool[i]);
         }
     }
 
-    // ================= ANSWER CLICK =================
 
+    // ================= ANSWER =================
     public void OnAnswerSelected(AnswerButton btn, AnswerData data)
     {
         if (selectedAnswer != null) return;
 
         selectedAnswer = btn;
 
-        // блокируем все
-        foreach (var answer in spawnedAnswers)
-            answer.Lock();
+        foreach (var a in spawnedAnswers)
+            a.Lock();
 
         if (data.isCorrect)
         {
-            btn.SetCorrect();
+            btn.MarkCorrect();
             score++;
         }
         else
         {
-            btn.SetWrong();
+            btn.MarkWrong();
 
-            // подсветка правильного
-            foreach (var answer in spawnedAnswers)
+            foreach (var a in spawnedAnswers)
             {
-                if (answer.IsCorrect())
+                if (a.IsCorrect())
                 {
-                    answer.SetCorrect();
+                    a.MarkCorrect();
                     break;
                 }
             }
         }
 
-        // 🔥 небольшая задержка перед активацией кнопки
         StartCoroutine(EnableContinueDelay());
     }
 
@@ -245,16 +235,12 @@ public class TestController : MonoBehaviour
     IEnumerator ResizeNextFrame(AnswerButton btn)
     {
         yield return null;
-        yield return null; 
+        yield return null;
 
         var resize = btn.GetComponent<SimpleCenterPanel>();
         if (resize != null)
-        {
             resize.RefreshSize();
-        }
     }
-
-    // ================= PROGRESS ANIMATION =================
 
     IEnumerator AnimateProgress(float target)
     {
@@ -274,10 +260,10 @@ public class TestController : MonoBehaviour
     // ================= CONTINUE =================
     public void OnContinue()
     {
-        if (isTransitioning) return;
-        if (selectedAnswer == null) return;
+        if (isTransitioning || selectedAnswer == null) return;
 
         isTransitioning = true;
+
         continueButton.interactable = false;
         UpdateContinueVisual(false);
 
@@ -296,7 +282,6 @@ public class TestController : MonoBehaviour
     void ShowResult()
     {
         progressBarFill.fillAmount = 1f;
-
         resultPopup.SetActive(true);
 
         SetResultMessage();
@@ -313,44 +298,33 @@ public class TestController : MonoBehaviour
 
         if (score < totalQuestions)
         {
-            retryButtonText.text = "Пройти заново";
-            if (retryIcon != null)
-                retryIcon.SetActive(true);
+            retryButtonText.text = L("test_retry");
+            retryIcon.SetActive(true);
         }
         else
         {
-            retryButtonText.text = "К заметкам";
-            if (retryIcon != null)
-                retryIcon.SetActive(false);
+            retryButtonText.text = L("test_to_notes");
+            retryIcon.SetActive(false);
         }
     }
 
-    
     int CalculateReward()
     {
-        return Mathf.RoundToInt(
-            (float)score / totalQuestions * currentTest.maxReward
-        );
+        return Mathf.RoundToInt((float)score / totalQuestions * currentTest.maxReward);
     }
 
     void SetResultMessage()
     {
+        float percent = (float)score / totalQuestions;
+
         if (score == 0)
-        {
-            resultMessageText.text = "Попробуй ещё раз";
-        }
-        else if (score == 1)
-        {
-            resultMessageText.text = "Неплохо, но есть над чем поработать";
-        }
-        else if (score == totalQuestions - 1)
-        {
-            resultMessageText.text = "Почти получилось";
-        }
-        else if (score == totalQuestions)
-        {
-            resultMessageText.text = "Отлично!!!";
-        }
+            resultMessageText.text = L("test_result_0");
+        else if (percent < 0.5f)
+            resultMessageText.text = L("test_result_1");
+        else if (percent < 1f)
+            resultMessageText.text = L("test_result_almost");
+        else
+            resultMessageText.text = L("test_result_perfect");
     }
 
     void ApplyReward()
@@ -362,22 +336,10 @@ public class TestController : MonoBehaviour
 
         int reward = CalculateReward();
 
-        bool shouldSave = false;
-
         if (score > test.bestScore)
-        {
             test.bestScore = score;
-            shouldSave = true;
-        }
 
-        if (note.rewardClaimed)
-        {
-            if (shouldSave)
-                SaveSystem.Save(save);
-            return;
-        }
-
-        if (reward > 0)
+        if (!note.rewardClaimed && reward > 0)
         {
             save.sparksTotal += reward;
 
@@ -390,55 +352,110 @@ public class TestController : MonoBehaviour
         }
     }
 
+    // ================= UI =================
     void UpdateContinueVisual(bool isActive)
     {
-        if (isActive)
-        {
-            continueButtonText.color = new Color32(253, 253, 249, 255); // #FDFDF9
-        }
-        else
-        {
-            continueButtonText.color = new Color32(143, 121, 198, 255); // #8F79C6
-        }
+        continueButtonText.color = isActive
+            ? new Color32(253, 253, 249, 255)
+            : new Color32(143, 121, 198, 255);
     }
 
     public void OnRetry()
     {
-        if (score < totalQuestions)
-        {
-            currentQuestionIndex = 0;
-            score = 0;
+        currentQuestionIndex = 0;
+        score = 0;
 
-            resultPopup.SetActive(false);
-            progressBarFill.fillAmount = 0f;
+        questionsPool = new List<QuestionData>(currentTest.questions);
+        ShuffleQuestions();
+        questionsPool = questionsPool.GetRange(0, totalQuestions);
 
-            // вернуть кнопку
-            continueButton.gameObject.SetActive(true);
-            continueButton.interactable = false;
-            UpdateContinueVisual(false);
+        resultPopup.SetActive(false);
+        progressBarFill.fillAmount = 0f;
 
-            // остановить анимацию
-            if (progressRoutine != null)
-            {
-                StopCoroutine(progressRoutine);
-                progressRoutine = null;
-            }
+        continueButton.gameObject.SetActive(true);
+        continueButton.interactable = false;
+        UpdateContinueVisual(false);
 
-            LoadQuestion();
-        }
-        else
-        {
-            GoToNotesList();
-        }
+        LoadQuestion();
     }
 
     public void GoToNotesList()
     {
-        SceneManager.LoadScene("NotesListPage"); // поменяй на своё имя сцены
+        SceneManager.LoadScene("NotesListPage");
     }
 
     public void GoToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    // ================= LOCALIZATION =================
+    string L(string key)
+    {
+        return LocalizationManager.Instance.GetText("Tests", key);
+    }
+
+    private void OnEnable()
+    {
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged(Language lang)
+    {
+        UpdateStaticTexts();
+        RefreshDynamicTexts();
+    }
+
+    private void UpdateStaticTexts()
+    {
+        pageTitleText.text = L("test_page_title");
+        progressLabelText.text = L("test_progress_label");
+        instructionText.text = L("test_instruction");
+        resultTitleText.text = L("test_result_title");
+        homeButtonText.text = L("test_home");
+    }
+
+    private void RefreshDynamicTexts()
+    {
+        if (currentTest == null || questionsPool == null)
+            return;
+
+        if (currentQuestionIndex >= questionsPool.Count)
+            return;
+
+        QuestionData question = questionsPool[currentQuestionIndex];
+
+        questionText.text = L(question.questionKey);
+
+        int current = currentQuestionIndex + 1;
+
+        progressText.text = L("test_progress")
+            .Replace("{0}", current.ToString())
+            .Replace("{1}", totalQuestions.ToString());
+
+        continueButtonText.text =
+            (currentQuestionIndex == totalQuestions - 1)
+            ? L("test_finish")
+            : L("test_continue");
+
+        if (resultPopup.activeSelf)
+        {
+            SetResultMessage();
+
+            retryButtonText.text =
+                (score < totalQuestions)
+                ? L("test_retry")
+                : L("test_to_notes");
+        }
+
+        foreach (var btn in spawnedAnswers)
+            btn.RefreshText();
     }
 }

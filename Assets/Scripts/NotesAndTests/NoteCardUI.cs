@@ -9,7 +9,7 @@ public class NoteCardUI : MonoBehaviour
     [SerializeField] private TMP_Text previewText;
 
     [Header("Footer")]
-    [SerializeField] private TMP_Text actionText; // "Читать далее" / "Прочитано"
+    [SerializeField] private TMP_Text actionText;
     [SerializeField] private Image actionIcon;
 
     [Header("Icons")]
@@ -19,6 +19,7 @@ public class NoteCardUI : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private Button openButton;
+
     private string noteId;
     private NotesListController controller;
 
@@ -27,15 +28,19 @@ public class NoteCardUI : MonoBehaviour
         noteId = data.noteId;
         controller = notesController;
 
-        //  TEXT
+        // ================= TEXT =================
+
         if (titleText != null)
-            titleText.text = data.title;
+            titleText.text = LocalizationManager.Instance.GetText("Notes", data.titleKey);
 
         if (previewText != null)
-            previewText.text = data.preview;
+            previewText.text = TrimPreview(
+                LocalizationManager.Instance.GetText("Notes", data.previewKey)
+            );
 
-        //  STATE LOGIC
-            bool isUnlocked = state.isUnlocked;
+        // ================= STATE =================
+
+        bool isUnlocked = state.isUnlocked;
         bool isRead = state.isRead;
 
         if (!isUnlocked)
@@ -51,19 +56,20 @@ public class NoteCardUI : MonoBehaviour
             SetNewState();
         }
 
-        // 🔘 BUTTON
+        // ================= BUTTON =================
+
         if (openButton != null)
         {
             openButton.onClick.RemoveAllListeners();
             openButton.onClick.AddListener(OnClickOpen);
-            openButton.interactable = true; // TODO: later change it to openButton.interactable = isUnlocked; if you want to disable button for locked notes
+            openButton.interactable = true; // changed to unlocked later
         }
     }
 
     private void SetLockedState()
     {
         if (actionText != null)
-            actionText.text = "Не доступно";
+            actionText.text = LocalizationManager.Instance.GetText("Notes", "note_locked");
 
         if (actionIcon != null)
             actionIcon.sprite = lockIcon;
@@ -72,7 +78,7 @@ public class NoteCardUI : MonoBehaviour
     private void SetReadState()
     {
         if (actionText != null)
-            actionText.text = "Прочитано";
+            actionText.text = LocalizationManager.Instance.GetText("Notes", "note_read");
 
         if (actionIcon != null)
             actionIcon.sprite = checkIcon;
@@ -81,7 +87,7 @@ public class NoteCardUI : MonoBehaviour
     private void SetNewState()
     {
         if (actionText != null)
-            actionText.text = "Читать далее";
+            actionText.text = LocalizationManager.Instance.GetText("Notes", "note_read_more");
 
         if (actionIcon != null)
             actionIcon.sprite = arrowIcon;

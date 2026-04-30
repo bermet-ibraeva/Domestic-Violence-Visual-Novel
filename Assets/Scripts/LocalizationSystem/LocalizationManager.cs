@@ -16,10 +16,7 @@ public class LocalizationManager : MonoBehaviour
 
                 if (instance == null)
                 {
-                    GameObject obj = new GameObject("LocalizationManager");
-                    instance = obj.AddComponent<LocalizationManager>();
-
-                    Debug.Log("[Localization] Auto-created LocalizationManager");
+                    Debug.LogError("[Localization] LocalizationManager not found in scene!");
                 }
             }
 
@@ -194,6 +191,8 @@ public class LocalizationManager : MonoBehaviour
         AddPage(localizationData.SettingsPage);
         AddPage(localizationData.Stats);
         AddPage(localizationData.Notifications);
+        AddPage(localizationData.Notes);
+        AddPage(localizationData.Tests);
 
         Debug.Log($"[Localization] Loaded pages: {pages.Count}");
     }

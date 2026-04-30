@@ -6,10 +6,10 @@ using System.Collections.Generic;
 public class NoteData
 {
     public string noteId;
-    public string title;
-    public string preview; /* maybe add later: check how it will look first */
+    public string titleKey;
+    public string previewKey; /* maybe add later: check how it will look first */
     public string image;
-    public string text;
+    public string textKey;
     public string testId;
     public int order;
 }
@@ -39,7 +39,7 @@ public class TestData
 {
     public string testId;
     public string noteId;
-    public string title;
+    public string titleKey;
     public int maxReward;
     public int questionsPerRun;
     public List<QuestionData> questions;
@@ -69,7 +69,7 @@ public static class TestSession
 public class QuestionData
 {
     public string questionId;
-    public string questionText;
+    public string questionKey;
     public List<AnswerData> answers;
 }
 
@@ -77,7 +77,7 @@ public class QuestionData
 public class AnswerData
 {
     public string answerId;
-    public string text;
+    public string textKey;
     public bool isCorrect;
 }
 

@@ -460,11 +460,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notesJson: {fileID: 4900000, guid: d9df1fd45caa56e41ad6bcd932fa02a4, type: 3}
+  pageTitleText: {fileID: 44322275}
   noteTitleText: {fileID: 1168657465}
   noteContentText: {fileID: 185456934}
   readTimeText: {fileID: 1879488932}
   noteImage: {fileID: 1746491877}
   openTestButton: {fileID: 1176453037}
+  openTestButtonText: {fileID: 1924533843}
   backButton: {fileID: 1836917397}
   fallbackImage: {fileID: 21300000, guid: ee154bf96d4171d4eafe4394d9b7e869, type: 3}
   notesSceneName: NotesListPage
@@ -806,7 +808,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &928458981
 MonoBehaviour:
@@ -1049,6 +1051,7 @@ GameObject:
   - component: {fileID: 1176453038}
   - component: {fileID: 1176453037}
   - component: {fileID: 1176453036}
+  - component: {fileID: 1176453040}
   m_Layer: 0
   m_Name: TestButton
   m_TagString: Untagged
@@ -1178,6 +1181,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1176453033}
   m_CullTransparentMesh: 1
+--- !u!114 &1176453040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176453033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43db2d3dab7ddf479c02237b5d81c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 0}
+  textUI: {fileID: 0}
+  minWidth: 800
+  minHeight: 160
+  maxWidth: 900
+  maxHeight: 160
+  paddingX: 60
+  paddingY: 40
 --- !u!1 &1231538517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2010,7 +2033,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 480.9742, y: 57.403}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1924533843
 MonoBehaviour:
@@ -2165,11 +2188,11 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 7
-  m_Spacing: 20
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_Spacing: 40
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
