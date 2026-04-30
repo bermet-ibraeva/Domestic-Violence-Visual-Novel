@@ -109,7 +109,7 @@ public class DialogueController : MonoBehaviour
 
     void Start()
     {
-        save = SaveSystem.Load() ?? new SaveData();
+        save = SaveManager.Instance.Data;
 
         NormalizeSave();
 
@@ -169,7 +169,7 @@ public class DialogueController : MonoBehaviour
                 safety = save.safetyTotal
             };
 
-            SaveSystem.Save(save);
+            SaveManager.Instance.Save();
         }
 
         ShowNode(save.currentNodeId);
@@ -447,7 +447,7 @@ public class DialogueController : MonoBehaviour
 
         // Autosave
         save.currentNodeId = nodeId;
-        SaveSystem.Save(save);
+        SaveManager.Instance.Save();
     }
 
     void SetupChoices(DialogueNode node)
@@ -484,7 +484,7 @@ public class DialogueController : MonoBehaviour
         if (picked != null && picked.effects != null && picked.effects.Count > 0)
         {
             ApplyChoiceEffects(picked.effects);
-            SaveSystem.Save(save);
+            SaveManager.Instance.Save();
         }
 
         if (picked != null && picked.notification != null && notificationController != null)
@@ -612,7 +612,7 @@ public class DialogueController : MonoBehaviour
         if (!save.shownNotificationIds.Contains(notification.id))
         {
             save.shownNotificationIds.Add(notification.id);
-            SaveSystem.Save(save);
+            SaveManager.Instance.Save();
         }
     }
 
@@ -678,7 +678,7 @@ public class DialogueController : MonoBehaviour
         {
             StatSystem.Instance.AddEpisodeReward(reward);
             save.episodeRewardGranted = true;
-            SaveSystem.Save(save);
+            SaveManager.Instance.Save();
         }
 
         ui.HideChoices();
@@ -736,8 +736,7 @@ public class DialogueController : MonoBehaviour
 
     public void StartNextEpisode(string newEpisodePath)
     {
-        SaveSystem.StartEpisode(newEpisodePath);
-
+        SaveManager.Instance.StartEpisode(newEpisodePath);
         SceneManager.LoadScene("EpisodePage");
     }
 
@@ -775,7 +774,7 @@ public class DialogueController : MonoBehaviour
         if (!note.isUnlocked)
         {
             save.UnlockNote(noteId);
-            SaveSystem.Save(save);
+            SaveManager.Instance.Save();
             Debug.Log("[DialogueController] Note unlocked: " + noteId);
         }
         else

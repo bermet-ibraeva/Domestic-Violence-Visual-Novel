@@ -34,7 +34,7 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        currentSave = SaveSystem.Load();
+        currentSave = SaveManager.Instance.Data;
 
         if (currentSave == null)
         {

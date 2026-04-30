@@ -1,28 +1,36 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 public class SettingsPageLocalizedUI : MonoBehaviour
 {
     [Header("Titles")]
-    [SerializeField] private TMP_Text titleText;           // Настройки
-    [SerializeField] private TMP_Text languageLabelText;   // Язык
-    [SerializeField] private TMP_Text audioLabelText;      // Аудио
-    [SerializeField] private TMP_Text progressLabelText;   // Прогресс игры
+    [SerializeField] private TMP_Text titleText;
+    [SerializeField] private TMP_Text languageLabelText;
+    [SerializeField] private TMP_Text audioLabelText;
+    [SerializeField] private TMP_Text progressLabelText;
 
     [Header("Audio")]
-    [SerializeField] private TMP_Text musicLabelText;      // Фоновая музыка
-    [SerializeField] private TMP_Text sfxLabelText;        // Звук в игре
+    [SerializeField] private TMP_Text musicLabelText;
+    [SerializeField] private TMP_Text sfxLabelText;
 
     [Header("Buttons")]
-    [SerializeField] private TMP_Text restartEpisodeText;  // Перезапустить эпизод
-    [SerializeField] private TMP_Text newGameText;         // Начать игру заново
+    [SerializeField] private TMP_Text restartEpisodeText;
+    [SerializeField] private TMP_Text newGameText;
 
     private void OnEnable()
     {
+        StartCoroutine(Init());
+    }
+
+    private IEnumerator Init()
+    {
+        while (LocalizationManager.Instance == null || !LocalizationManager.Instance.IsLoaded)
+            yield return null;
+
         RefreshUI();
 
-        if (LocalizationManager.Instance != null)
-            LocalizationManager.Instance.OnLanguageChanged += HandleLanguageChanged;
+        LocalizationManager.Instance.OnLanguageChanged += HandleLanguageChanged;
     }
 
     private void OnDisable()

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 public class AboutPageLocalizedUI : MonoBehaviour
 {
@@ -13,10 +14,17 @@ public class AboutPageLocalizedUI : MonoBehaviour
 
     private void OnEnable()
     {
+        StartCoroutine(Init());
+    }
+
+    private IEnumerator Init()
+    {
+        while (LocalizationManager.Instance == null || !LocalizationManager.Instance.IsLoaded)
+            yield return null;
+
         RefreshUI();
 
-        if (LocalizationManager.Instance != null)
-            LocalizationManager.Instance.OnLanguageChanged += HandleLanguageChanged;
+        LocalizationManager.Instance.OnLanguageChanged += HandleLanguageChanged;
     }
 
     private void OnDisable()
@@ -24,7 +32,6 @@ public class AboutPageLocalizedUI : MonoBehaviour
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged -= HandleLanguageChanged;
     }
-
 
     private void HandleLanguageChanged(Language language)
     {
@@ -36,11 +43,27 @@ public class AboutPageLocalizedUI : MonoBehaviour
         if (LocalizationManager.Instance == null)
             return;
 
-        titleText.text = LocalizationManager.Instance.GetText("AboutPage", "title");
-        descriptionText.text = LocalizationManager.Instance.GetText("AboutPage", "description");
-        feedbackText.text = LocalizationManager.Instance.GetText("AboutPage", "feedback_text");
-        leaveFeedbackButtonText.text = LocalizationManager.Instance.GetText("AboutPage", "leave_feedback");
-        termsButtonText.text = LocalizationManager.Instance.GetText("AboutPage", "terms");
-        privacyButtonText.text = LocalizationManager.Instance.GetText("AboutPage", "privacy");
+        if (titleText != null)
+            titleText.text = L("title");
+
+        if (descriptionText != null)
+            descriptionText.text = L("description");
+
+        if (feedbackText != null)
+            feedbackText.text = L("feedback_text");
+
+        if (leaveFeedbackButtonText != null)
+            leaveFeedbackButtonText.text = L("leave_feedback");
+
+        if (termsButtonText != null)
+            termsButtonText.text = L("terms");
+
+        if (privacyButtonText != null)
+            privacyButtonText.text = L("privacy");
+    }
+
+    private string L(string key)
+    {
+        return LocalizationManager.Instance.GetText("AboutPage", key);
     }
 }

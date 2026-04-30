@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 public class MainMenuLocalizedUI : MonoBehaviour
 {
@@ -10,10 +11,17 @@ public class MainMenuLocalizedUI : MonoBehaviour
 
     private void OnEnable()
     {
+        StartCoroutine(WaitForLocalization());
+    }
+
+    private IEnumerator WaitForLocalization()
+    {
+        while (LocalizationManager.Instance == null || !LocalizationManager.Instance.IsLoaded)
+            yield return null;
+
         RefreshUI();
 
-        if (LocalizationManager.Instance != null)
-            LocalizationManager.Instance.OnLanguageChanged += HandleLanguageChanged;
+        LocalizationManager.Instance.OnLanguageChanged += HandleLanguageChanged;
     }
 
     private void OnDisable()
@@ -32,8 +40,14 @@ public class MainMenuLocalizedUI : MonoBehaviour
         if (LocalizationManager.Instance == null)
             return;
 
-        settingsText.text = LocalizationManager.Instance.GetText("MainMenu", "settings");
-        aboutText.text = LocalizationManager.Instance.GetText("MainMenu", "about");
-        notesText.text = LocalizationManager.Instance.GetText("MainMenu", "notes");
-    }
+        if (aboutText != null)
+            aboutText.text = LocalizationManager.Instance.GetText("MainMenu", "about");
+
+        if (notesText != null)
+            notesText.text = LocalizationManager.Instance.GetText("MainMenu", "notes");
+
+        if (settingsText != null)
+            settingsText.text = LocalizationManager.Instance.GetText("MainMenu", "settings");
+
+    }   
 }

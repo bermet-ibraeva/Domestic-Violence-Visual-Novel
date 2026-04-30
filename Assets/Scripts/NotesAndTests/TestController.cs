@@ -329,7 +329,7 @@ public class TestController : MonoBehaviour
 
     void ApplyReward()
     {
-        SaveData save = SaveSystem.Load();
+        SaveData save = SaveManager.Instance.Data;
 
         NoteState note = save.GetOrCreateNote(currentTest.noteId);
         TestBestScore test = save.GetOrCreateTest(currentTest.testId);
@@ -348,7 +348,7 @@ public class TestController : MonoBehaviour
 
             note.testUnlocked = true;
 
-            SaveSystem.Save(save);
+            SaveManager.Instance.Save();
         }
     }
 

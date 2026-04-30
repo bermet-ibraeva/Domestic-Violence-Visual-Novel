@@ -31,7 +31,14 @@ public class NoteDetailController : MonoBehaviour
 
     private void Start()
     {
-        save = SaveSystem.Load();
+        save = SaveManager.Instance.Data;
+
+        if (save == null)
+        {
+            Debug.LogError("[NoteDetail] SaveData is NULL");
+            return;
+        }
+
         UpdateStaticTexts();
         LoadDatabase();
         LoadNote();
@@ -55,6 +62,12 @@ public class NoteDetailController : MonoBehaviour
     private void LoadNote()
     {
         string selectedNoteId = NoteSession.SelectedNoteId;
+
+        if (database == null)
+        {
+            Debug.LogError("[NoteDetail] Database is NULL");
+            return;
+        }
 
         currentNote = database.GetNoteById(selectedNoteId);
 
@@ -172,20 +185,22 @@ public class NoteDetailController : MonoBehaviour
 
         if (!note.isRead)
         {
-            note.isRead = true;
+            save.MarkNoteAsRead(noteId); 
 
             if (!note.rewardClaimed)
             {
                 note.rewardClaimed = true;
 
                 save.sparksTotal += 2;
+
                 if (TempGameContext.CurrentEpisode != null)
                     TempGameContext.CurrentEpisode.sparks += 2;
             }
 
-            SaveSystem.Save(save);
+            SaveManager.Instance.Save();
         }
     }
+
 
     private void OnEnable()
     {

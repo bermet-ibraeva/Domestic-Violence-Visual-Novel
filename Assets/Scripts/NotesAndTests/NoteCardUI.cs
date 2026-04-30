@@ -62,7 +62,7 @@ public class NoteCardUI : MonoBehaviour
         {
             openButton.onClick.RemoveAllListeners();
             openButton.onClick.AddListener(OnClickOpen);
-            openButton.interactable = true; // changed to unlocked later
+            openButton.interactable = isUnlocked; // changed to unlocked later
         }
     }
 
@@ -103,7 +103,15 @@ public class NoteCardUI : MonoBehaviour
 
     private void OnClickOpen()
     {
-        if (controller != null)
-            controller.OpenNote(noteId);
+        if (controller == null)
+            return;
+
+        NoteState state = SaveManager.Instance.Data.GetNote(noteId);
+
+        if (state == null || !state.isUnlocked)
+            return;
+
+        controller.OpenNote(noteId);
     }
+
 }

@@ -19,17 +19,28 @@ public class NotesListController : MonoBehaviour
     [Header("Optional")]
     [SerializeField] private bool showOnlyUnlocked = true;
 
-    private readonly List<GameObject> spawnedCards = new List<GameObject>();
-    private NotesDatabase database;
-    private SaveData save;
+    [Header("Texts")]
     [SerializeField] private TMP_Text pageTitleText;
     [SerializeField] private TMP_Text introText;
 
+    private readonly List<GameObject> spawnedCards = new();
+    private NotesDatabase database;
+    private SaveData save;
+
+    // ================= INIT =================
+
     private void Start()
     {
-        save = SaveSystem.Load();
-        UpdateTexts();
+        save = SaveManager.Instance.Data;
+
+        if (save == null)
+        {
+            Debug.LogError("[NotesList] SaveManager Data is NULL");
+            return;
+        }
+
         LoadDatabase();
+        UpdateTexts();
         BuildNotesList();
     }
 
@@ -37,7 +48,7 @@ public class NotesListController : MonoBehaviour
     {
         if (notesJson == null)
         {
-            Debug.LogError("[NotesListController] notesJson is not assigned.");
+            Debug.LogError("[NotesList] notesJson is not assigned.");
             return;
         }
 
@@ -45,33 +56,29 @@ public class NotesListController : MonoBehaviour
 
         if (database == null)
         {
-            Debug.LogError("[NotesListController] Failed to parse notes database.");
+            Debug.LogError("[NotesList] Failed to parse notes database.");
         }
     }
+
+    // ================= BUILD =================
 
     public void BuildNotesList()
     {
         if (database == null)
         {
-            Debug.LogError("[NotesListController] Notes Database is null.");
+            Debug.LogError("[NotesList] Database is null.");
             return;
         }
 
         if (save == null)
         {
-            Debug.LogWarning("[NotesListController] SaveData was null → creating new");
-            save = SaveSystem.CreateNew();
-        }
-
-        if (cardsParent == null)
-        {
-            Debug.LogError("[NotesListController] cardsParent is not assigned.");
+            Debug.LogError("[NotesList] Save is null.");
             return;
         }
 
-        if (noteCardPrefab == null)
+        if (cardsParent == null || noteCardPrefab == null)
         {
-            Debug.LogError("[NotesListController] noteCardPrefab is not assigned.");
+            Debug.LogError("[NotesList] UI references missing.");
             return;
         }
 
@@ -81,33 +88,38 @@ public class NotesListController : MonoBehaviour
 
         if (notes == null || notes.Count == 0)
         {
-            Debug.LogWarning("[NotesListController] No notes found.");
+            Debug.LogWarning("[NotesList] No notes found.");
             return;
         }
 
         notes.Sort((a, b) => a.order.CompareTo(b.order));
 
-        foreach (NoteData note in notes)
+        bool hasUnlocked = false;
+
+        foreach (var note in notes)
         {
-            if (note == null)
-                continue;
+            if (note == null) continue;
 
             if (showOnlyUnlocked && !IsNoteUnlocked(note))
                 continue;
 
             CreateCard(note);
+            hasUnlocked = true;
+        }
+
+        // fallback → показываем все locked если нет unlocked
+        if (!hasUnlocked)
+        {
+            foreach (var note in notes)
+            {
+                if (note == null) continue;
+                CreateCard(note);
+            }
         }
     }
 
-    // use NoteCardUI prefab to create a card for each note and set up its UI
     private void CreateCard(NoteData note)
     {
-
-        if (noteCardPrefab == null)
-        {
-            Debug.LogError("Prefab is NULL or destroyed!");
-            return;
-        }
         GameObject cardObject = Instantiate(noteCardPrefab, cardsParent);
         spawnedCards.Add(cardObject);
 
@@ -115,40 +127,27 @@ public class NotesListController : MonoBehaviour
 
         if (cardUI == null)
         {
-            Debug.LogError($"NoteCardUI not found: {note.noteId}");
+            Debug.LogError($"[NotesList] NoteCardUI missing: {note.noteId}");
             return;
         }
 
-        NoteState state = save.GetOrCreateNote(note.noteId);
+        NoteState state = save.GetNote(note.noteId);
+
+        if (state == null)
+        {
+            state = new NoteState
+            {
+                noteId = note.noteId,
+                isUnlocked = false,
+                isRead = false,
+                rewardClaimed = false
+            };
+        }
 
         cardUI.Setup(note, this, state);
     }
 
-    public void OpenNote(string noteId)
-    {
-        if (string.IsNullOrEmpty(noteId))
-        {
-            Debug.LogWarning("[NotesListController] Tried to open note with empty id.");
-            return;
-        }
-
-        NoteSession.SelectedNoteId = noteId;
-        SceneManager.LoadScene(noteDetailSceneName);
-    }
-
-    private string GetStatusText(NoteData note)
-    {
-        NoteState noteState = save.GetOrCreateNote(note.noteId);
-
-        if (IsTestPassed(note.testId))
-            return LocalizationManager.Instance.GetText("Notes", "note_status_test_passed");
-
-
-        if (noteState.isRead)
-            return LocalizationManager.Instance.GetText("Notes", "note_status_read");
-
-        return LocalizationManager.Instance.GetText("Notes", "note_status_new");
-    }
+    // ================= LOGIC =================
 
     private bool IsNoteUnlocked(NoteData note)
     {
@@ -169,54 +168,76 @@ public class NotesListController : MonoBehaviour
         return test.bestScore > 0;
     }
 
+    // ================= NAVIGATION =================
+
+    public void OpenNote(string noteId)
+    {
+        if (string.IsNullOrEmpty(noteId))
+        {
+            Debug.LogWarning("[NotesList] Empty noteId.");
+            return;
+        }
+
+        NoteSession.SelectedNoteId = noteId;
+        SceneManager.LoadScene(noteDetailSceneName);
+    }
+
+    // ================= UI =================
+
     private void ClearCards()
     {
-        for (int i = 0; i < spawnedCards.Count; i++)
+        for (int i = cardsParent.childCount - 1; i >= 0; i--)
         {
-            if (spawnedCards[i] != null)
-                Destroy(spawnedCards[i]);
+            Destroy(cardsParent.GetChild(i).gameObject);
         }
 
         spawnedCards.Clear();
-
-        for (int i = cardsParent.childCount - 1; i >= 0; i--)
-        {
-            DestroyImmediate(cardsParent.GetChild(i).gameObject);
-        }
     }
 
     public void RefreshList()
     {
-        BuildNotesList();
+        if (database != null)
+            BuildNotesList();
     }
 
     private void UpdateTexts()
     {
+        if (LocalizationManager.Instance == null)
+            return;
+
         if (pageTitleText != null)
             pageTitleText.text = LocalizationManager.Instance.GetText("Notes", "notes_page_title");
 
         if (introText != null)
             introText.text = LocalizationManager.Instance.GetText("Notes", "notes_intro");
     }
-    
+
+    // ================= EVENTS =================
+
     private void OnEnable()
     {
-        save = SaveSystem.Load(); 
-        RefreshList();
+        save = SaveManager.Instance.Data;
+
+        if (database != null)
+            RefreshList();
 
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
+
+        SaveData.OnNotesChanged += RefreshList;
     }
 
     private void OnDisable()
     {
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
+
+        SaveData.OnNotesChanged -= RefreshList;
     }
 
     private void OnLanguageChanged(Language lang)
     {
         UpdateTexts();
-        RefreshList(); 
+        RefreshList();
     }
 }

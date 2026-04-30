@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(TMP_Text))]
 public class LocalizedTextUI : MonoBehaviour
@@ -13,13 +14,23 @@ public class LocalizedTextUI : MonoBehaviour
         textComponent = GetComponent<TMP_Text>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
+        StartCoroutine(Initialize());
+    }
+
+    private IEnumerator Initialize()
+    {
+        // ждём пока LocalizationManager готов
+        while (LocalizationManager.Instance == null || !LocalizationManager.Instance.IsLoaded)
+            yield return null;
+
         UpdateText();
+
         LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (LocalizationManager.Instance != null)
             LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
@@ -32,6 +43,9 @@ public class LocalizedTextUI : MonoBehaviour
 
     private void UpdateText()
     {
+        if (LocalizationManager.Instance == null)
+            return;
+
         textComponent.text = LocalizationManager.Instance.GetText(key);
     }
 }

@@ -17,6 +17,7 @@ public class LocalizationManager : MonoBehaviour
                 if (instance == null)
                 {
                     Debug.LogError("[Localization] LocalizationManager not found in scene!");
+                    return null; 
                 }
             }
 
@@ -37,6 +38,7 @@ public class LocalizationManager : MonoBehaviour
 
     private LocalizationRoot localizationData;
     private readonly Dictionary<string, PageData> pages = new();
+    public bool IsLoaded { get; private set; }
 
     private void Awake()
     {
@@ -195,6 +197,7 @@ public class LocalizationManager : MonoBehaviour
         AddPage(localizationData.Tests);
 
         Debug.Log($"[Localization] Loaded pages: {pages.Count}");
+        IsLoaded = true;
     }
 
     private void AddPage(PageData page)
