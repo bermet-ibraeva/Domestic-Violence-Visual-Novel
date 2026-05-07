@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public class EpisodeSnapshot // temp value for current episode stats, will be reset on episode start
+public class EpisodeSnapshot
 {
     public int sparks;
     public int trustAG;
@@ -18,6 +18,4 @@ public static class TempGameContext
     {
         CurrentEpisode = new EpisodeSnapshot();
     }
-
-    public static SaveData saveToLoad;
 }

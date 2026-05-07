@@ -7,8 +7,6 @@ public class StatSystem : MonoBehaviour
 
     public static StatSystem Instance;
 
-    private SaveData saveData;
-
     private HashSet<string> appliedEffects = new();
 
     void Awake()
@@ -16,16 +14,11 @@ public class StatSystem : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
-
-    public void Init(SaveData data)
-    {
-        saveData = data;
-    }
-
+    
     public void ResetEpisodeStats()
     {
         TempGameContext.ResetEpisode();
-        appliedEffects.Clear(); 
+        appliedEffects.Clear();
         Debug.Log("[StatSystem] Episode stats reset.");
     }
 
@@ -88,9 +81,9 @@ public class StatSystem : MonoBehaviour
     // ================= CORE =================
     private void AddStat(string key, int value)
     {
-        if (saveData == null)
+        if (SaveManager.Instance == null || SaveManager.Instance.Data == null)
         {
-            Debug.LogError("[StatSystem] SaveData is null.");
+            Debug.LogError("[StatSystem] SaveManager.Instance.Data is null.");
             return;
         }
 
@@ -106,33 +99,33 @@ public class StatSystem : MonoBehaviour
         switch (key)
         {
             case "trustAG":
-                saveData.trustAGTotal += value;
+                SaveManager.Instance.Data.trustAGTotal += value;
                 ep.trustAG += value;
-                LogStat("stat_trustAG", value, ep.trustAG, saveData.trustAGTotal);
+                LogStat("stat_trustAG", value, ep.trustAG, SaveManager.Instance.Data.trustAGTotal);
                 break;
 
             case "trustJA":
-                saveData.trustJATotal += value;
+                SaveManager.Instance.Data.trustJATotal += value;
                 ep.trustJA += value;
-                LogStat("stat_trustJA", value, ep.trustJA, saveData.trustJATotal);
+                LogStat("stat_trustJA", value, ep.trustJA, SaveManager.Instance.Data.trustJATotal);
                 break;
 
             case "risk":
-                saveData.riskTotal += value;
+                SaveManager.Instance.Data.riskTotal += value;
                 ep.risk += value;
-                LogStat("stat_risk", value, ep.risk, saveData.riskTotal);
+                LogStat("stat_risk", value, ep.risk, SaveManager.Instance.Data.riskTotal);
                 break;
 
             case "safety":
-                saveData.safetyTotal += value;
+                SaveManager.Instance.Data.safetyTotal += value;
                 ep.safety += value;
-                LogStat("stat_safety", value, ep.safety, saveData.safetyTotal);
+                LogStat("stat_safety", value, ep.safety, SaveManager.Instance.Data.safetyTotal);
                 break;
 
             case "sparks":
-                saveData.sparksTotal += value;
+                SaveManager.Instance.Data.sparksTotal += value;
                 ep.sparks += value;
-                LogStat("stat_sparks", value, ep.sparks, saveData.sparksTotal);
+                LogStat("stat_sparks", value, ep.sparks, SaveManager.Instance.Data.sparksTotal);
                 break;
 
             default:
@@ -148,7 +141,7 @@ public class StatSystem : MonoBehaviour
 
     private void SetStat(string key, int value)
     {
-        if (saveData == null) return;
+        if (SaveManager.Instance == null || SaveManager.Instance.Data == null) return;
 
         var ep = TempGameContext.CurrentEpisode;
         if (ep == null) return;
@@ -158,28 +151,33 @@ public class StatSystem : MonoBehaviour
         switch (key)
         {
             case "trustAG":
-                ep.trustAG += value - saveData.trustAGTotal;
-                saveData.trustAGTotal = value;
+                SaveManager.Instance.Data.trustAGTotal += value;
+                ep.trustAG += value;
+                LogStat("trustAG", value, ep.trustAG, SaveManager.Instance.Data.trustAGTotal);
                 break;
 
             case "trustJA":
-                ep.trustJA += value - saveData.trustJATotal;
-                saveData.trustJATotal = value;
+                SaveManager.Instance.Data.trustJATotal += value;
+                ep.trustJA += value;
+                LogStat("trustJA", value, ep.trustJA, SaveManager.Instance.Data.trustJATotal);
                 break;
 
             case "risk":
-                ep.risk += value - saveData.riskTotal;
-                saveData.riskTotal = value;
+                SaveManager.Instance.Data.riskTotal += value;
+                ep.risk += value;
+                LogStat("risk", value, ep.risk, SaveManager.Instance.Data.riskTotal);
                 break;
 
             case "safety":
-                ep.safety += value - saveData.safetyTotal;
-                saveData.safetyTotal = value;
+                SaveManager.Instance.Data.safetyTotal += value;
+                ep.safety += value;
+                LogStat("safety", value, ep.safety, SaveManager.Instance.Data.safetyTotal);
                 break;
 
             case "sparks":
-                ep.sparks += value - saveData.sparksTotal;
-                saveData.sparksTotal = value;
+                SaveManager.Instance.Data.sparksTotal += value;
+                ep.sparks += value;
+                LogStat("sparks", value, ep.sparks, SaveManager.Instance.Data.sparksTotal);
                 break;
         }
     }

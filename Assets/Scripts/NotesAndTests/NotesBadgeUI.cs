@@ -15,7 +15,7 @@
 //         if (save == null)
 //             return;
 
-//         int count = save.GetUnreadNotesCount();
+//         int count = SaveManager.Instance.Data.GetUnreadNotesCount();
 
 //         if (count > 0)
 //         {

@@ -348,14 +348,22 @@
           "nodeId": "E01_S02_choice1_narration_5",
           "characterId": "Narrator",
           "textKey": "E01_S02_choice1_narration_5",
+        
           "notification": {
             "id": "note_unlock_rumors",
             "mode": "toast",
             "showOnce": true,
             "messageKey": "note_unlock_rumors_message"
           },
+        
+          "action": {
+            "type": "unlock_note",
+            "noteId": "note_rumors",
+            "status": "unlocked"
+          },
+        
           "nextNode": "E01_summary_text"
-        },    
+        },   
         {
           "nodeId": "E01_S02_choice2_result",
           "characterId": "Narrator",

@@ -42,21 +42,28 @@ public class LocalizationManager : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("[Localization] Awake");
+
         if (instance != null && instance != this)
         {
+            Debug.Log("[Localization] Duplicate destroyed");
+
             Destroy(gameObject);
             return;
         }
 
         instance = this;
+
         DontDestroyOnLoad(gameObject);
 
         LoadSavedLanguage();
         LoadLocalizationJson();
+
+        Debug.Log($"[Localization] Loaded pages count: {pages.Count}");
     }
 
-    // ================= LANGUAGE =================
 
+    // ================= LANGUAGE =================
     private void LoadSavedLanguage()
     {
         HasSelectedLanguage = PlayerPrefs.GetInt(LanguageSelectedPrefKey, 0) == 1;

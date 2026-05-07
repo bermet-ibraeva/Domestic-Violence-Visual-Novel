@@ -105,7 +105,6 @@ public class DialogueController : MonoBehaviour
 
     private DialogueNode currentNode;
     private bool waitingForAdvance = false;
-    private SaveData save;
 
     void Start()
     {
@@ -115,18 +114,16 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        save = SaveManager.Instance.Data;
-
         NormalizeSave();
 
-        if (string.IsNullOrEmpty(save.episodePath))
+        if (string.IsNullOrEmpty(SaveManager.Instance.Data.episodePath))
         {
             Debug.LogError("[DialogueController] No episodePath in save!");
             return;
         }
 
         episode = EpisodeLoader.LoadEpisode(
-            save.episodePath,
+            SaveManager.Instance.Data.episodePath,
             out nodeDict,
             out sceneDict,
             out nodeToScene
@@ -134,13 +131,15 @@ public class DialogueController : MonoBehaviour
 
         if (episode == null)
         {
-            Debug.LogError($"[DialogueController] Failed to load episode: {save.episodePath}");
+            Debug.LogError(
+                $"[DialogueController] Failed to load episode: {SaveManager.Instance.Data.episodePath}"
+            );
+
             return;
         }
 
         BuildCharacterMetaDict();
 
-        StatSystem.Instance.Init(save);
         InitializeEpisodeContext();
 
         episodeEndPanel?.Init(this);
@@ -163,32 +162,39 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        if (string.IsNullOrEmpty(save.currentNodeId))
+        if (string.IsNullOrEmpty(SaveManager.Instance.Data.currentNodeId))
         {
-            save.currentNodeId = startNode;
+            SaveManager.Instance.Data.currentNodeId = startNode;
 
-            save.episodeStartSnapshot = new EpisodeSnapshot
-            {
-                sparks = save.sparksTotal,
-                trustAG = save.trustAGTotal,
-                trustJA = save.trustJATotal,
-                risk = save.riskTotal,
-                safety = save.safetyTotal
-            };
+            SaveManager.Instance.Data.episodeStartSnapshot =
+                new EpisodeSnapshot
+                {
+                    sparks = SaveManager.Instance.Data.sparksTotal,
+                    trustAG = SaveManager.Instance.Data.trustAGTotal,
+                    trustJA = SaveManager.Instance.Data.trustJATotal,
+                    risk = SaveManager.Instance.Data.riskTotal,
+                    safety = SaveManager.Instance.Data.safetyTotal
+                };
 
             SaveManager.Instance.AutoSave();
         }
 
-        ShowNode(save.currentNodeId);
+        ShowNode(SaveManager.Instance.Data.currentNodeId);
     }
 
     void NormalizeSave()
     {
-        if (save.appliedEffectNodes == null)
-            save.appliedEffectNodes = new List<string>();
+        if (SaveManager.Instance.Data.appliedEffectNodes == null)
+        {
+            SaveManager.Instance.Data.appliedEffectNodes =
+                new List<string>();
+        }
 
-        if (save.shownNotificationIds == null)
-            save.shownNotificationIds = new List<string>();
+        if (SaveManager.Instance.Data.shownNotificationIds == null)
+        {
+            SaveManager.Instance.Data.shownNotificationIds =
+                new List<string>();
+        }
     }
 
     void InitializeEpisodeContext()
@@ -460,13 +466,13 @@ public class DialogueController : MonoBehaviour
         SetupChoices(node);
 
         // Autosave
-        save.currentNodeId = nodeId;
+        SaveManager.Instance.Data.currentNodeId = nodeId;
         CommitProgression(nodeId);
     }
 
     void CommitProgression(string nodeId)
     {
-        save.currentNodeId = nodeId;
+        SaveManager.Instance.Data.currentNodeId = nodeId;
         SaveManager.Instance.AutoSave();
     }
 
@@ -581,10 +587,10 @@ public class DialogueController : MonoBehaviour
     void ApplyEffectsOnce(string nodeId, DialogueNode node)
     {
         if (node == null || node.effects == null) return;
-        string key = $"{save.episodePath}:{nodeId}";
-        if (save.appliedEffectNodes.Contains(key)) return;
+        string key = $"{SaveManager.Instance.Data.episodePath}:{nodeId}";
+        if (SaveManager.Instance.Data.appliedEffectNodes.Contains(key)) return;
         ApplyEffects(node.effects);
-        save.appliedEffectNodes.Add(key);
+        SaveManager.Instance.Data.appliedEffectNodes.Add(key);
     }
 
     void ApplyEffects(NodeEffects e)
@@ -609,16 +615,16 @@ public class DialogueController : MonoBehaviour
         if (!notification.showOnce)
             return true;
 
-        if (save == null)
+        if (SaveManager.Instance.Data == null)
             return true;
 
-        if (save.shownNotificationIds == null)
-            save.shownNotificationIds = new List<string>();
+        if (SaveManager.Instance.Data.shownNotificationIds == null)
+            SaveManager.Instance.Data.shownNotificationIds = new List<string>();
 
         if (string.IsNullOrEmpty(notification.id))
             return true;
 
-        return !save.shownNotificationIds.Contains(notification.id);
+        return !SaveManager.Instance.Data.shownNotificationIds.Contains(notification.id);
     }
 
     void MarkNotificationShown(NotificationData notification)
@@ -626,12 +632,12 @@ public class DialogueController : MonoBehaviour
         if (notification == null || !notification.showOnce || string.IsNullOrEmpty(notification.id))
             return;
 
-        if (save.shownNotificationIds == null)
-            save.shownNotificationIds = new List<string>();
+        if (SaveManager.Instance.Data.shownNotificationIds == null)
+            SaveManager.Instance.Data.shownNotificationIds = new List<string>();
 
-        if (!save.shownNotificationIds.Contains(notification.id))
+        if (!SaveManager.Instance.Data.shownNotificationIds.Contains(notification.id))
         {
-            save.shownNotificationIds.Add(notification.id);
+            SaveManager.Instance.Data.shownNotificationIds.Add(notification.id);
         }
     }
 
@@ -693,10 +699,10 @@ public class DialogueController : MonoBehaviour
 
         int reward = 2;
 
-        if (!save.episodeRewardGranted)
+        if (!SaveManager.Instance.Data.episodeRewardGranted)
         {
             StatSystem.Instance.AddEpisodeReward(reward);
-            save.episodeRewardGranted = true;
+            SaveManager.Instance.Data.episodeRewardGranted = true;
             SaveManager.Instance.AutoSave();
         }
 
@@ -707,23 +713,19 @@ public class DialogueController : MonoBehaviour
         string nextEpisodePath = GetNextEpisodePath();
         string nextEpisodeStartNode = GetNextEpisodeStartNode();
 
-        episodeEndPanel.Show(
-            save,
-            nextEpisodePath,
-            nextEpisodeStartNode
-        );
+        episodeEndPanel.Show(nextEpisodePath);
     }
 
     string GetNextEpisodeStartNode()
     {
-        if (string.IsNullOrEmpty(save.episodePath))
+        if (string.IsNullOrEmpty(SaveManager.Instance.Data.episodePath))
             return null;
 
-        string fileName = save.episodePath.Substring(save.episodePath.LastIndexOf('_') + 1);
+        string fileName = SaveManager.Instance.Data.episodePath.Substring(SaveManager.Instance.Data.episodePath.LastIndexOf('_') + 1);
 
         if (!int.TryParse(fileName, out int currentEpisodeNumber))
         {
-            Debug.LogWarning("[DialogueController] Could not parse current episode number from path: " + save.episodePath);
+            Debug.LogWarning("[DialogueController] Could not parse current episode number from path: " + SaveManager.Instance.Data.episodePath);
             return null;
         }
 
@@ -733,17 +735,17 @@ public class DialogueController : MonoBehaviour
 
     string GetNextEpisodePath()
     {
-        if (string.IsNullOrEmpty(save.episodePath))
+        if (string.IsNullOrEmpty(SaveManager.Instance.Data.episodePath))
             return null;
 
-        int lastSlash = save.episodePath.LastIndexOf('/');
-        int lastUnderscore = save.episodePath.LastIndexOf('_');
+        int lastSlash = SaveManager.Instance.Data.episodePath.LastIndexOf('/');
+        int lastUnderscore = SaveManager.Instance.Data.episodePath.LastIndexOf('_');
 
         if (lastSlash < 0 || lastUnderscore < 0 || lastUnderscore <= lastSlash)
             return null;
 
-        string prefix = save.episodePath.Substring(0, lastUnderscore + 1); // "Demos/demo_"
-        string numberPart = save.episodePath.Substring(lastUnderscore + 1);
+        string prefix = SaveManager.Instance.Data.episodePath.Substring(0, lastUnderscore + 1); // "Demos/demo_"
+        string numberPart = SaveManager.Instance.Data.episodePath.Substring(lastUnderscore + 1);
 
         if (!int.TryParse(numberPart, out int currentNumber))
             return null;
@@ -789,17 +791,20 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        if (save == null)
+        if (SaveManager.Instance.Data == null)
         {
-            Debug.LogError("[DialogueController] SaveData is null");
+            Debug.LogError("[DialogueController] SaveManager is null");
             return;
         }
 
-        NoteState note = save.GetOrCreateNote(noteId);
+        NoteState note = SaveManager.Instance.Data.GetOrCreateNote(noteId);
 
         if (!note.isUnlocked)
         {
-            save.UnlockNote(noteId);
+            SaveManager.Instance.Data.UnlockNote(noteId);
+
+            SaveManager.Instance.AutoSave();
+
             Debug.Log("[DialogueController] Note unlocked: " + noteId);
         }
         else
@@ -807,6 +812,7 @@ public class DialogueController : MonoBehaviour
             Debug.Log("[DialogueController] Note already unlocked: " + noteId);
         }
     }
+
     
     private void ApplyNodeAudio(DialogueNode node)
     {

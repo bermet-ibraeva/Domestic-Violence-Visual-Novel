@@ -372,7 +372,7 @@ public class SettingsController : MonoBehaviour
 
                 SaveManager.Instance.Clear();
 
-                TempGameContext.CurrentEpisode = null;
+                TempGameContext.ResetEpisode();
 
                 if (StatSystem.Instance != null)
                 {

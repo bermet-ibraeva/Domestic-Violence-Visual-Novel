@@ -30,7 +30,6 @@ public class NoteDetailController : MonoBehaviour
 
     private NotesDatabase database;
     private NoteData currentNote;
-    private SaveData save;
 
     // ================= UNITY =================
     private void Start()
@@ -38,14 +37,6 @@ public class NoteDetailController : MonoBehaviour
         if (SaveManager.Instance == null)
         {
             Debug.LogError("[NoteDetail] SaveManager is NULL");
-            return;
-        }
-
-        save = SaveManager.Instance.Data;
-
-        if (save == null)
-        {
-            Debug.LogError("[NoteDetail] SaveData is NULL");
             return;
         }
 
@@ -162,7 +153,7 @@ public class NoteDetailController : MonoBehaviour
         if (string.IsNullOrEmpty(noteId))
             return;
 
-        NoteState note = save.GetOrCreateNote(noteId);
+        NoteState note = SaveManager.Instance.Data.GetOrCreateNote(noteId);
 
         if (note == null)
         {
@@ -181,7 +172,7 @@ public class NoteDetailController : MonoBehaviour
         {
             note.readRewardClaimed = true;
 
-            save.sparksTotal += 2;
+            SaveManager.Instance.Data.sparksTotal += 2;
 
             if (TempGameContext.CurrentEpisode != null)
             {

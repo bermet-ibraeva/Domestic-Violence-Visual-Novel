@@ -51,18 +51,15 @@ public class MainMenuController : MonoBehaviour
     }
 
     // ================= UI =================
-
     private void UpdateUI()
     {
-        bool hasValidSave =
-            currentSave != null &&
-            !string.IsNullOrEmpty(currentSave.episodePath);
+        bool showContinue = !IsAtGameStart();
 
         // Play / Continue button
         if (playButtonText != null &&
             LocalizationManager.Instance != null)
         {
-            string key = hasValidSave
+            string key = showContinue
                 ? "continue"
                 : "play";
 
@@ -79,8 +76,8 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        // no save -> show default episode preview
-        if (!hasValidSave)
+        // show default episode preview
+        if (!showContinue)
         {
             ShowDefaultEpisode();
             return;
@@ -93,7 +90,6 @@ public class MainMenuController : MonoBehaviour
             out _
         );
 
-        // broken episode path fallback
         if (episode == null)
         {
             Debug.LogWarning(
@@ -106,6 +102,7 @@ public class MainMenuController : MonoBehaviour
 
         chapterInfoUI.Show(currentSave, episode);
     }
+
 
     private void ShowDefaultEpisode()
     {
@@ -176,16 +173,41 @@ public class MainMenuController : MonoBehaviour
 
     private void OnPlayPressed()
     {
-        bool hasSave =
-            currentSave != null &&
-            !string.IsNullOrEmpty(currentSave.episodePath);
+        bool showContinue = !IsAtGameStart();
 
-        // start new game only if save doesn't exist
-        if (!hasSave)
+        // start new game only if player is at beginning
+        if (!showContinue)
         {
             SaveManager.Instance.StartEpisode(episodePath);
         }
 
         SceneManager.LoadScene(episodeSceneName);
+    }
+
+    private bool IsAtGameStart()
+    {
+        if (currentSave == null)
+            return true;
+
+        if (string.IsNullOrEmpty(currentSave.episodePath))
+            return true;
+
+        EpisodeData episode = EpisodeLoader.LoadEpisode(
+            episodePath,
+            out _,
+            out _,
+            out _
+        );
+
+        if (episode == null)
+            return true;
+
+        string firstNode = GetStartNode(episode);
+
+        if (string.IsNullOrEmpty(firstNode))
+            return true;
+
+        return currentSave.episodePath == episodePath &&
+               currentSave.currentNodeId == firstNode;
     }
 }

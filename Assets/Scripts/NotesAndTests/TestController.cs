@@ -75,16 +75,19 @@ public class TestController : MonoBehaviour
     {
         if (testsJson == null)
         {
-            Debug.LogError("testsJson is NULL");
+            Debug.LogError("[Test] testsJson is NULL");
             return;
         }
+
+        testDatabase = JsonUtility.FromJson<TestDatabase>(testsJson.text);
 
         if (testDatabase == null)
         {
             Debug.LogError("[Test] Failed to parse test database");
+            return;
         }
 
-        testDatabase = JsonUtility.FromJson<TestDatabase>(testsJson.text);
+        Debug.Log($"[Test] Loaded tests: {testDatabase.tests.Count}");
     }
 
     void LoadSelectedTest()
@@ -325,15 +328,17 @@ public class TestController : MonoBehaviour
 
         int reward = CalculateReward();
 
+        TestBestScore test =
+            SaveManager.Instance.Data.GetOrCreateTest(currentTest.testId);
+
+        int rewardDifference =
+            Mathf.Max(0, reward - test.claimedReward);
+
         scoreText.text =
-            $"<size=117%><color=#8F79C6>{reward}</color></size>" +
+            $"<size=117%><color=#8F79C6>{rewardDifference}</color></size>" +
             $"<size=85%><color=#D1CBDE>/{currentTest.maxReward}</color></size>";
 
         ApplyReward();
-
-        TestBestScore test =
-        SaveManager.Instance.Data.GetOrCreateTest(currentTest.testId);
-
 
         bool completedPerfectly =
             test.bestScore >= totalQuestions;
@@ -379,16 +384,14 @@ public class TestController : MonoBehaviour
 
     void ApplyReward()
     {
-        SaveData save = SaveManager.Instance.Data;
 
-        if (save == null)
+        if (SaveManager.Instance.Data == null)
         {
-            Debug.LogError("[Test] SaveData is NULL");
+            Debug.LogError("[Test] SaveManager.Instance.Data is NULL");
             return;
         }
 
-        TestBestScore test =
-            save.GetOrCreateTest(currentTest.testId);
+        TestBestScore test = SaveManager.Instance.Data.GetOrCreateTest(currentTest.testId);
 
         int reward = CalculateReward();
 
@@ -415,7 +418,7 @@ public class TestController : MonoBehaviour
         {
             test.claimedReward = reward;
 
-            save.sparksTotal += rewardDifference;
+            SaveManager.Instance.Data.sparksTotal += rewardDifference;
 
             if (TempGameContext.CurrentEpisode != null)
             {
@@ -427,7 +430,7 @@ public class TestController : MonoBehaviour
             );
 
             Debug.Log(
-                $"[Test] Total sparks: {save.sparksTotal}"
+                $"[Test] Total sparks: {SaveManager.Instance.Data.sparksTotal}"
             );
 
             changed = true;

@@ -26,22 +26,13 @@ public class NotesListController : MonoBehaviour
     private readonly List<GameObject> spawnedCards = new();
 
     private NotesDatabase database;
-    private SaveData save;
 
     // ================= UNITY =================
     private void Start()
     {
-        if (SaveManager.Instance == null)
+        if (SaveManager.Instance == null || SaveManager.Instance.Data == null)
         {
             Debug.LogError("[NotesList] SaveManager is NULL");
-            return;
-        }
-
-        save = SaveManager.Instance.Data;
-
-        if (save == null)
-        {
-            Debug.LogError("[NotesList] SaveData is NULL");
             return;
         }
 
@@ -65,12 +56,7 @@ public class NotesListController : MonoBehaviour
             LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
         }
 
-        // IMPORTANT:
-        // after scene return save reference may change
-        if (SaveManager.Instance != null)
-        {
-            save = SaveManager.Instance.Data;
-        }
+        SaveData.OnNotesChanged += RefreshList;
 
         if (database != null)
         {
@@ -84,6 +70,8 @@ public class NotesListController : MonoBehaviour
         {
             LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
         }
+
+        SaveData.OnNotesChanged -= RefreshList;
     }
 
     // ================= DATABASE =================
@@ -112,9 +100,9 @@ public class NotesListController : MonoBehaviour
             return;
         }
 
-        if (save == null)
+        if (SaveManager.Instance == null || SaveManager.Instance.Data == null)
         {
-            Debug.LogError("[NotesList] SaveData is NULL");
+            Debug.LogError("[NotesList] SaveManager is NULL");
             return;
         }
 
@@ -197,8 +185,7 @@ public class NotesListController : MonoBehaviour
             return;
         }
 
-        NoteState state =
-            save.GetOrCreateNote(note.noteId);
+        NoteState state = SaveManager.Instance.Data.GetOrCreateNote(note.noteId);
 
         cardUI.Setup(note, this, state);
     }
@@ -209,7 +196,7 @@ public class NotesListController : MonoBehaviour
         if (string.IsNullOrEmpty(noteId))
             return false;
 
-        NoteState state = save.GetNote(noteId);
+        NoteState state = SaveManager.Instance.Data.GetNote(noteId);
 
         return state != null && state.isUnlocked;
     }
@@ -223,7 +210,7 @@ public class NotesListController : MonoBehaviour
             return;
         }
 
-        NoteState state = save.GetNote(noteId);
+        NoteState state = SaveManager.Instance.Data.GetNote(noteId);
 
         if (state == null || !state.isUnlocked)
         {

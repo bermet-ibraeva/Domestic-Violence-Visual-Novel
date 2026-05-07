@@ -315,9 +315,9 @@
       {
         "key": "note_unlock_rumors_message",
         "value": {
-          "ru": "Вам доступна новая заметка: «Слухи»",
-          "en": "A new note is available: “Rumors”",
-          "ky": "Сизге жаңы жазуу жеткиликтүү: «Ушактар»"
+          "ru": "Вам доступна новая заметка",
+          "en": "A new note is available",
+          "ky": "Сизге жаңы жазуу жеткиликтүү"
         }
       }
     ]

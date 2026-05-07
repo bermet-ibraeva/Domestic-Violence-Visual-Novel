@@ -10,8 +10,12 @@ public class SaveManager : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log($"{TAG} Awake | Scene: {gameObject.scene.name}");
+
         if (Instance != null && Instance != this)
         {
+            Debug.Log($"{TAG} Duplicate destroyed");
+
             Destroy(gameObject);
             return;
         }
@@ -26,6 +30,17 @@ public class SaveManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         Initialize();
+    }
+
+
+    private void OnDestroy()
+    {
+        Debug.Log($"{TAG} Destroyed | Scene: {gameObject.scene.name}");
+
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     // ================= INIT =================
@@ -78,17 +93,9 @@ public class SaveManager : MonoBehaviour
 
         Data = SaveSystem.CreateNew();
 
-        TempGameContext.CurrentEpisode = null;
+        TempGameContext.ResetEpisode();
 
         Debug.Log($"{TAG} Save cleared");
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            Instance = null;
-        }
     }
 
     // ================= EPISODE RUNTIME =================

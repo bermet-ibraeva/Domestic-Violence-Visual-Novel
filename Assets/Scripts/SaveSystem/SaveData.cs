@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using System.Collections.Generic;
 
 
@@ -71,13 +72,22 @@ public class SaveData
 
     public void UnlockNote(string noteId)
     {
+        if (string.IsNullOrEmpty(noteId))
+        {
+            Debug.LogWarning("[SaveManager] UnlockNote -> empty noteId");
+            return;
+        }
+
         var note = GetOrCreateNote(noteId);
 
-        if (!note.isUnlocked)
-        {
-            note.isUnlocked = true;
-            OnNotesChanged?.Invoke(); 
-        }
+        if (note.isUnlocked)
+            return;
+
+        note.isUnlocked = true;
+
+        Debug.Log($"[SaveManager] Note unlocked: {noteId}");
+
+        OnNotesChanged?.Invoke();
     }
 
     public void MarkNoteAsRead(string noteId)

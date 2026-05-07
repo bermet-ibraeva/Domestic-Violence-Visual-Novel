@@ -148,18 +148,29 @@ public class NoteCardUI : MonoBehaviour
             return;
         }
 
-        SaveData save = SaveManager.Instance.Data;
-
-        if (save == null)
+        if (SaveManager.Instance == null)
         {
-            Debug.LogError("[NoteCardUI] SaveData is NULL");
+            Debug.LogError("[NoteCardUI] SaveManager is NULL");
             return;
         }
 
-        NoteState state = save.GetNote(noteId);
-
-        if (state == null || !state.isUnlocked)
+        if (SaveManager.Instance.Data == null)
+        {
+            Debug.LogError("[NoteCardUI] SaveManager is NULL");
             return;
+        }
+
+        NoteState state =
+            SaveManager.Instance.Data.GetOrCreateNote(noteId);
+
+        if (!state.isUnlocked)
+        {
+            Debug.LogWarning(
+                $"[NoteCardUI] Tried opening locked note: {noteId}"
+            );
+
+            return;
+        }
 
         controller.OpenNote(noteId);
     }
