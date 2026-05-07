@@ -72,22 +72,14 @@ public class SaveData
 
     public void UnlockNote(string noteId)
     {
-        if (string.IsNullOrEmpty(noteId))
-        {
-            Debug.LogWarning("[SaveManager] UnlockNote -> empty noteId");
-            return;
-        }
-
         var note = GetOrCreateNote(noteId);
 
-        if (note.isUnlocked)
-            return;
+        if (!note.isUnlocked)
+        {
+            note.isUnlocked = true;
 
-        note.isUnlocked = true;
-
-        Debug.Log($"[SaveManager] Note unlocked: {noteId}");
-
-        OnNotesChanged?.Invoke();
+            OnNotesChanged?.Invoke();
+        }
     }
 
     public void MarkNoteAsRead(string noteId)
@@ -97,7 +89,8 @@ public class SaveData
         if (!note.isRead)
         {
             note.isRead = true;
-            OnNotesChanged?.Invoke(); 
+
+            OnNotesChanged?.Invoke();
         }
     }
 

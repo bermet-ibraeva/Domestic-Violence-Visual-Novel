@@ -1,30 +1,51 @@
-// public class NotesBadgeUI : MonoBehaviour
-// {
-//     [SerializeField] private GameObject badgeRoot;
-//     [SerializeField] private TMPro.TextMeshProUGUI badgeText;
+using TMPro;
+using UnityEngine;
 
-//     private void OnEnable()
-//     {
-//         UpdateBadge();
-//     }
+public class NotesBadgeUI : MonoBehaviour
+{
+    [SerializeField] private GameObject badgeObject;
+    [SerializeField] private TMP_Text badgeText;
 
-//     public void UpdateBadge()
-//     {
-//         var save = SaveSystem.Load();
+    private void Start()
+    {
+        Refresh();
+    }
 
-//         if (save == null)
-//             return;
+    private void OnEnable()
+    {
+        SaveData.OnNotesChanged += Refresh;
+        Refresh();
+    }
 
-//         int count = SaveManager.Instance.Data.GetUnreadNotesCount();
 
-//         if (count > 0)
-//         {
-//             badgeRoot.SetActive(true);
-//             badgeText.text = count.ToString();
-//         }
-//         else
-//         {
-//             badgeRoot.SetActive(false);
-//         }
-//     }
-// }
+    private void OnDisable()
+    {
+        SaveData.OnNotesChanged -= Refresh;
+    }
+
+    public void Refresh()
+    {
+        if (SaveManager.Instance == null ||
+            SaveManager.Instance.Data == null)
+        {
+            SetCount(0);
+            return;
+        }
+
+        int unreadCount =
+            SaveManager.Instance.Data.GetUnreadNotesCount();
+
+        SetCount(unreadCount);
+    }
+
+    private void SetCount(int count)
+    {
+        bool show = count > 0;
+
+        if (badgeObject != null)
+            badgeObject.SetActive(show);
+
+        if (show && badgeText != null)
+            badgeText.text = count.ToString();
+    }
+}

@@ -165,7 +165,7 @@ public class NoteDetailController : MonoBehaviour
         if (note.isRead)
             return;
 
-        note.isRead = true;
+        SaveManager.Instance.Data.MarkNoteAsRead(noteId);
 
         // first read reward
         if (!note.readRewardClaimed)
