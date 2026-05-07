@@ -13,6 +13,9 @@ public class MainMenuController : MonoBehaviour
     [Header("Default Episode")]
     [SerializeField] private string episodePath = "Demos/demo_1";
 
+    [Header("Scene Names")]
+    [SerializeField] private string episodeSceneName = "EpisodePage";
+
     private SaveData currentSave;
 
     private void Start()
@@ -28,19 +31,22 @@ public class MainMenuController : MonoBehaviour
 
     private void LoadSave()
     {
-        if (!SaveSystem.HasSave())
+        if (SaveManager.Instance == null)
         {
-            currentSave = null;
+            Debug.LogError("[MainMenu] SaveManager is NULL");
             return;
         }
 
         currentSave = SaveManager.Instance.Data;
 
+        // corrupted save fallback
         if (currentSave == null)
         {
-            Debug.LogWarning("[MainMenu] Save corrupted → resetting");
-            SaveSystem.Clear();
-            currentSave = null;
+            Debug.LogWarning("[MainMenu] Save is NULL -> resetting");
+
+            SaveManager.Instance.Clear();
+
+            currentSave = SaveManager.Instance.Data;
         }
     }
 
@@ -52,11 +58,19 @@ public class MainMenuController : MonoBehaviour
             currentSave != null &&
             !string.IsNullOrEmpty(currentSave.episodePath);
 
-        // кнопка Play / Continue
-        if (playButtonText != null)
+        // Play / Continue button
+        if (playButtonText != null &&
+            LocalizationManager.Instance != null)
         {
-            string key = hasValidSave ? "continue" : "play";
-            playButtonText.text = LocalizationManager.Instance.GetText("MainMenu", key);
+            string key = hasValidSave
+                ? "continue"
+                : "play";
+
+            playButtonText.text =
+                LocalizationManager.Instance.GetText(
+                    "MainMenu",
+                    key
+                );
         }
 
         if (chapterInfoUI == null)
@@ -65,14 +79,13 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        //  если save нет или он сломан → показываем дефолт
+        // no save -> show default episode preview
         if (!hasValidSave)
         {
             ShowDefaultEpisode();
             return;
         }
 
-        // 🔹 пробуем загрузить эпизод из save
         EpisodeData episode = EpisodeLoader.LoadEpisode(
             currentSave.episodePath,
             out _,
@@ -80,9 +93,13 @@ public class MainMenuController : MonoBehaviour
             out _
         );
 
+        // broken episode path fallback
         if (episode == null)
         {
-            Debug.LogWarning("[MainMenu] Failed to load saved episode → fallback");
+            Debug.LogWarning(
+                "[MainMenu] Failed to load saved episode"
+            );
+
             ShowDefaultEpisode();
             return;
         }
@@ -101,7 +118,10 @@ public class MainMenuController : MonoBehaviour
 
         if (episode == null)
         {
-            Debug.LogError("[MainMenu] Default episode failed to load");
+            Debug.LogError(
+                "[MainMenu] Default episode failed to load"
+            );
+
             return;
         }
 
@@ -109,10 +129,14 @@ public class MainMenuController : MonoBehaviour
 
         if (string.IsNullOrEmpty(startNode))
         {
-            Debug.LogError("[MainMenu] Cannot determine start node");
+            Debug.LogError(
+                "[MainMenu] Start node not found"
+            );
+
             return;
         }
 
+        // temporary preview save
         SaveData temp = new SaveData
         {
             episodePath = episodePath,
@@ -152,12 +176,16 @@ public class MainMenuController : MonoBehaviour
 
     private void OnPlayPressed()
     {
-        //  если нет save → создаём новый
-        if (currentSave == null || string.IsNullOrEmpty(currentSave.episodePath))
+        bool hasSave =
+            currentSave != null &&
+            !string.IsNullOrEmpty(currentSave.episodePath);
+
+        // start new game only if save doesn't exist
+        if (!hasSave)
         {
-            SaveSystem.StartEpisode(episodePath);
+            SaveManager.Instance.StartEpisode(episodePath);
         }
 
-        SceneManager.LoadScene("EpisodePage");
+        SceneManager.LoadScene(episodeSceneName);
     }
 }

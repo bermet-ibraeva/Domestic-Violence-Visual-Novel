@@ -88,13 +88,16 @@ public class NoteState
     public string noteId;
     public bool isUnlocked;
     public bool isRead;
-    public bool testUnlocked;
-    public bool rewardClaimed;
+    public bool readRewardClaimed;
+
 }
 
 [System.Serializable]
 public class TestBestScore
 {
     public string testId;
+
     public int bestScore;
+
+    public int claimedReward;
 }

@@ -170,6 +170,51 @@ MonoBehaviour:
   playButtonText: {fileID: 1506832082}
   playButton: {fileID: 1059236663}
   episodePath: Demos/demo_1
+  episodeSceneName: EpisodePage
+--- !u!1 &222258548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 222258550}
+  - component: {fileID: 222258549}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &222258549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222258548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39d18a9aae1873545ac48e5e480848d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &222258550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222258548}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1012.669, y: 922.2759, z: -9.926642}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &266946728
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,8 +2240,9 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 222258550}
+  - {fileID: 2018348334}
   - {fileID: 1586574557}
   - {fileID: 899606264}
   - {fileID: 1588666389}
   - {fileID: 1464377599}
-  - {fileID: 2018348334}

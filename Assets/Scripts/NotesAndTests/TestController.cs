@@ -37,6 +37,11 @@ public class TestController : MonoBehaviour
     [Header("Data")]
     [SerializeField] private TextAsset testsJson;
 
+    [Header("Scene Names")]
+    [SerializeField] private string notesSceneName = "NotesListPage";
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
+
+
     private TestDatabase testDatabase;
     private TestData currentTest;
 
@@ -55,6 +60,12 @@ public class TestController : MonoBehaviour
 
     private void Start()
     {
+        if (LocalizationManager.Instance == null)
+        {
+            Debug.LogError("[Test] LocalizationManager is NULL");
+            return;
+        }
+
         LoadDatabase();
         UpdateStaticTexts();
         LoadSelectedTest();
@@ -68,6 +79,11 @@ public class TestController : MonoBehaviour
             return;
         }
 
+        if (testDatabase == null)
+        {
+            Debug.LogError("[Test] Failed to parse test database");
+        }
+
         testDatabase = JsonUtility.FromJson<TestDatabase>(testsJson.text);
     }
 
@@ -78,6 +94,12 @@ public class TestController : MonoBehaviour
         if (string.IsNullOrEmpty(testId))
         {
             Debug.LogError("No Test ID passed!");
+            return;
+        }
+
+        if (testDatabase == null)
+        {
+            Debug.LogError("[Test] Database is NULL");
             return;
         }
 
@@ -97,6 +119,12 @@ public class TestController : MonoBehaviour
         currentTest = test;
 
         totalQuestions = Mathf.Min(test.questionsPerRun, test.questions.Count);
+
+        if (totalQuestions <= 0)
+        {
+            Debug.LogError("[Test] totalQuestions <= 0");
+            return;
+        }
 
         questionsPool = new List<QuestionData>(currentTest.questions);
         ShuffleQuestions();
@@ -129,6 +157,13 @@ public class TestController : MonoBehaviour
     {
         ClearAnswers();
         selectedAnswer = null;
+
+        if (currentQuestionIndex < 0 ||
+            currentQuestionIndex >= questionsPool.Count)
+        {
+            Debug.LogError("[Test] Invalid question index");
+            return;
+        }
 
         QuestionData question = questionsPool[currentQuestionIndex];
 
@@ -296,15 +331,30 @@ public class TestController : MonoBehaviour
 
         ApplyReward();
 
-        if (score < totalQuestions)
+        TestBestScore test =
+        SaveManager.Instance.Data.GetOrCreateTest(currentTest.testId);
+
+
+        bool completedPerfectly =
+            test.bestScore >= totalQuestions;
+        
+        retryButton.onClick.RemoveAllListeners();
+
+        if (!completedPerfectly)
         {
             retryButtonText.text = L("test_retry");
+
             retryIcon.SetActive(true);
+
+            retryButton.onClick.AddListener(OnRetry);
         }
         else
         {
             retryButtonText.text = L("test_to_notes");
+
             retryIcon.SetActive(false);
+
+            retryButton.onClick.AddListener(GoToNotesList);
         }
     }
 
@@ -331,26 +381,64 @@ public class TestController : MonoBehaviour
     {
         SaveData save = SaveManager.Instance.Data;
 
-        NoteState note = save.GetOrCreateNote(currentTest.noteId);
-        TestBestScore test = save.GetOrCreateTest(currentTest.testId);
+        if (save == null)
+        {
+            Debug.LogError("[Test] SaveData is NULL");
+            return;
+        }
+
+        TestBestScore test =
+            save.GetOrCreateTest(currentTest.testId);
 
         int reward = CalculateReward();
 
+        bool changed = false;
+
+        // ================= BEST SCORE =================
+
         if (score > test.bestScore)
+        {
             test.bestScore = score;
 
-        if (!note.rewardClaimed && reward > 0)
+            Debug.Log(
+                $"[Test] New best score: {test.bestScore}/{totalQuestions}"
+            );
+
+            changed = true;
+        }
+
+        // ================= REWARD DIFFERENCE =================
+
+        int rewardDifference = reward - test.claimedReward;
+
+        if (rewardDifference > 0)
         {
-            save.sparksTotal += reward;
+            test.claimedReward = reward;
 
-            if (reward == currentTest.maxReward)
-                note.rewardClaimed = true;
+            save.sparksTotal += rewardDifference;
 
-            note.testUnlocked = true;
+            if (TempGameContext.CurrentEpisode != null)
+            {
+                TempGameContext.CurrentEpisode.sparks += rewardDifference;
+            }
 
-            SaveManager.Instance.Save();
+            Debug.Log(
+                $"[Test] Reward gained: +{rewardDifference} sparks"
+            );
+
+            Debug.Log(
+                $"[Test] Total sparks: {save.sparksTotal}"
+            );
+
+            changed = true;
+        }
+
+        if (changed)
+        {
+            SaveManager.Instance.AutoSave();
         }
     }
+
 
     // ================= UI =================
     void UpdateContinueVisual(bool isActive)
@@ -370,9 +458,9 @@ public class TestController : MonoBehaviour
         questionsPool = questionsPool.GetRange(0, totalQuestions);
 
         resultPopup.SetActive(false);
+        continueButton.gameObject.SetActive(true);
         progressBarFill.fillAmount = 0f;
 
-        continueButton.gameObject.SetActive(true);
         continueButton.interactable = false;
         UpdateContinueVisual(false);
 
@@ -381,12 +469,12 @@ public class TestController : MonoBehaviour
 
     public void GoToNotesList()
     {
-        SceneManager.LoadScene("NotesListPage");
+        SceneManager.LoadScene(notesSceneName);
     }
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 
     // ================= LOCALIZATION =================
@@ -415,6 +503,9 @@ public class TestController : MonoBehaviour
 
     private void UpdateStaticTexts()
     {
+        if (LocalizationManager.Instance == null)
+            return;
+
         pageTitleText.text = L("test_page_title");
         progressLabelText.text = L("test_progress_label");
         instructionText.text = L("test_instruction");
@@ -449,11 +540,17 @@ public class TestController : MonoBehaviour
         {
             SetResultMessage();
 
+            TestBestScore test =
+            SaveManager.Instance.Data.GetOrCreateTest(currentTest.testId);
+
+            bool completedPerfectly =
+                test.bestScore >= totalQuestions;
+
             retryButtonText.text =
-                (score < totalQuestions)
-                ? L("test_retry")
-                : L("test_to_notes");
-        }
+                completedPerfectly
+                ? L("test_to_notes")
+                : L("test_retry");
+                    }
 
         foreach (var btn in spawnedAnswers)
             btn.RefreshText();

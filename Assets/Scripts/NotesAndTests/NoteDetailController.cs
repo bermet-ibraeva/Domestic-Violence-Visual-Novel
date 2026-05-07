@@ -13,9 +13,12 @@ public class NoteDetailController : MonoBehaviour
     [SerializeField] private TMP_Text noteTitleText;
     [SerializeField] private TMP_Text noteContentText;
     [SerializeField] private TMP_Text readTimeText;
+
     [SerializeField] private Image noteImage;
+
     [SerializeField] private Button openTestButton;
     [SerializeField] private TMP_Text openTestButtonText;
+
     [SerializeField] private Button backButton;
 
     [Header("Image")]
@@ -25,12 +28,19 @@ public class NoteDetailController : MonoBehaviour
     [SerializeField] private string notesSceneName = "NotesListPage";
     [SerializeField] private string testSceneName = "TestPage";
 
-    private NoteData currentNote;
     private NotesDatabase database;
+    private NoteData currentNote;
     private SaveData save;
 
+    // ================= UNITY =================
     private void Start()
     {
+        if (SaveManager.Instance == null)
+        {
+            Debug.LogError("[NoteDetail] SaveManager is NULL");
+            return;
+        }
+
         save = SaveManager.Instance.Data;
 
         if (save == null)
@@ -39,33 +49,67 @@ public class NoteDetailController : MonoBehaviour
             return;
         }
 
+        if (LocalizationManager.Instance == null)
+        {
+            Debug.LogError("[NoteDetail] LocalizationManager is NULL");
+            return;
+        }
+
         UpdateStaticTexts();
+
         LoadDatabase();
         LoadNote();
+
         BindButtons();
     }
 
+    private void OnEnable()
+    {
+        if (LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
+        }
+    }
+
+    // ================= DATABASE =================
     private void LoadDatabase()
     {
         if (notesJson == null)
         {
-            Debug.LogError("notesJson is NULL");
+            Debug.LogError("[NoteDetail] notesJson is NULL");
             return;
         }
 
         database = JsonUtility.FromJson<NotesDatabase>(notesJson.text);
 
         if (database == null)
-            Debug.LogError("Failed to parse notes JSON");
+        {
+            Debug.LogError("[NoteDetail] Failed to parse notes JSON");
+        }
     }
 
+    // ================= NOTE =================
     private void LoadNote()
     {
-        string selectedNoteId = NoteSession.SelectedNoteId;
-
         if (database == null)
         {
             Debug.LogError("[NoteDetail] Database is NULL");
+            return;
+        }
+
+        string selectedNoteId = NoteSession.SelectedNoteId;
+
+        if (string.IsNullOrEmpty(selectedNoteId))
+        {
+            Debug.LogError("[NoteDetail] SelectedNoteId is NULL");
             return;
         }
 
@@ -73,27 +117,119 @@ public class NoteDetailController : MonoBehaviour
 
         if (currentNote == null)
         {
-            Debug.LogError("Note not found");
+            Debug.LogError("[NoteDetail] Note not found: " + selectedNoteId);
             return;
         }
 
         MarkNoteAsRead(currentNote.noteId);
+
         RefreshUI();
     }
 
     private void RefreshUI()
     {
-        string title = LocalizationManager.Instance.GetText("Notes", currentNote.titleKey);
-        string content = LocalizationManager.Instance.GetText("Notes", currentNote.textKey);
+        if (currentNote == null)
+            return;
 
-        noteTitleText.text = title;
-        noteContentText.text = FormatText(content);
+        string title =
+            LocalizationManager.Instance.GetText("Notes", currentNote.titleKey);
+
+        string content =
+            LocalizationManager.Instance.GetText("Notes", currentNote.textKey);
+
+        if (noteTitleText != null)
+        {
+            noteTitleText.text = title;
+        }
+
+        if (noteContentText != null)
+        {
+            noteContentText.text = FormatText(content);
+        }
 
         if (readTimeText != null)
+        {
             readTimeText.text = CalculateReadTime(content);
+        }
 
         SetupImage();
         SetupTestButton();
+    }
+
+    // ================= NOTE STATE =================
+    private void MarkNoteAsRead(string noteId)
+    {
+        if (string.IsNullOrEmpty(noteId))
+            return;
+
+        NoteState note = save.GetOrCreateNote(noteId);
+
+        if (note == null)
+        {
+            Debug.LogError("[NoteDetail] Failed to get/create note state");
+            return;
+        }
+
+        // already read -> no duplicate rewards
+        if (note.isRead)
+            return;
+
+        note.isRead = true;
+
+        // first read reward
+        if (!note.readRewardClaimed)
+        {
+            note.readRewardClaimed = true;
+
+            save.sparksTotal += 2;
+
+            if (TempGameContext.CurrentEpisode != null)
+            {
+                TempGameContext.CurrentEpisode.sparks += 2;
+            }
+        }
+
+        SaveManager.Instance.AutoSave();
+
+        Debug.Log("[NoteDetail] Note marked as read: " + noteId);
+    }
+
+    // ================= UI HELPERS =================
+    private void SetupImage()
+    {
+        if (noteImage == null)
+            return;
+
+        if (string.IsNullOrEmpty(currentNote.image))
+        {
+            noteImage.sprite = fallbackImage;
+            return;
+        }
+
+        Sprite loaded = Resources.Load<Sprite>(currentNote.image);
+
+        noteImage.sprite = loaded != null
+            ? loaded
+            : fallbackImage;
+    }
+
+    private void SetupTestButton()
+    {
+        if (openTestButton == null)
+            return;
+
+        bool hasTest = !string.IsNullOrEmpty(currentNote.testId);
+
+        openTestButton.gameObject.SetActive(hasTest);
+
+        if (hasTest && openTestButtonText != null)
+        {
+            openTestButtonText.text =
+                LocalizationManager.Instance.GetText(
+                    "Notes",
+                    "note_open_test"
+                );
+        }
     }
 
     private string FormatText(string raw)
@@ -101,7 +237,10 @@ public class NoteDetailController : MonoBehaviour
         if (string.IsNullOrEmpty(raw))
             return "";
 
-        string[] paragraphs = raw.Split(new string[] { "\n\n" }, System.StringSplitOptions.None);
+        string[] paragraphs = raw.Split(
+            new string[] { "\n\n" },
+            System.StringSplitOptions.None
+        );
 
         for (int i = 0; i < paragraphs.Length; i++)
         {
@@ -114,64 +253,69 @@ public class NoteDetailController : MonoBehaviour
     private string CalculateReadTime(string text)
     {
         if (string.IsNullOrEmpty(text))
-            return LocalizationManager.Instance.GetText("Notes", "read_time_1");
+        {
+            return LocalizationManager.Instance.GetText(
+                "Notes",
+                "read_time_1"
+            );
+        }
 
-        string cleanText = System.Text.RegularExpressions.Regex.Replace(text, "<.*?>", "");
+        string cleanText =
+            System.Text.RegularExpressions.Regex.Replace(
+                text,
+                "<.*?>",
+                ""
+            );
 
-        int wordCount = cleanText.Split(' ', System.StringSplitOptions.RemoveEmptyEntries).Length;
+        int wordCount = cleanText.Split(
+            ' ',
+            System.StringSplitOptions.RemoveEmptyEntries
+        ).Length;
+
         int minutes = Mathf.CeilToInt(wordCount / 200f);
 
         if (minutes <= 1)
-            return LocalizationManager.Instance.GetText("Notes", "read_time_1");
+        {
+            return LocalizationManager.Instance.GetText(
+                "Notes",
+                "read_time_1"
+            );
+        }
 
-        return LocalizationManager.Instance.GetText("Notes", "read_time_n")
+        return LocalizationManager.Instance
+            .GetText("Notes", "read_time_n")
             .Replace("{0}", minutes.ToString());
     }
 
-    private void SetupImage()
-    {
-        if (string.IsNullOrEmpty(currentNote.image))
-        {
-            noteImage.sprite = fallbackImage;
-            return;
-        }
-
-        Debug.Log("Loading image: " + currentNote.image);
-
-        Sprite loaded = Resources.Load<Sprite>(currentNote.image);
-
-        Debug.Log(loaded == null ? "NOT FOUND" : "LOADED");
-
-        noteImage.sprite = loaded != null ? loaded : fallbackImage;
-    }
-
-    private void SetupTestButton()
-    {
-        bool hasTest = !string.IsNullOrEmpty(currentNote.testId);
-
-        openTestButton.gameObject.SetActive(hasTest);
-
-        if (hasTest && openTestButtonText != null)
-        {
-            openTestButtonText.text =
-                LocalizationManager.Instance.GetText("Notes", "note_open_test");
-        }
-    }
-
+    // ================= BUTTONS =================
     private void BindButtons()
     {
-        openTestButton.onClick.RemoveAllListeners();
-        openTestButton.onClick.AddListener(OpenTest);
+        if (openTestButton != null)
+        {
+            openTestButton.onClick.RemoveAllListeners();
+            openTestButton.onClick.AddListener(OpenTest);
+        }
 
-        backButton.onClick.RemoveAllListeners();
-        backButton.onClick.AddListener(GoBack);
+        if (backButton != null)
+        {
+            backButton.onClick.RemoveAllListeners();
+            backButton.onClick.AddListener(GoBack);
+        }
     }
 
     private void OpenTest()
     {
+        if (currentNote == null)
+            return;
+
+        if (string.IsNullOrEmpty(currentNote.testId))
+            return;
+
         TestSession.SelectedTestId = currentNote.testId;
+
+        Debug.Log("[NoteDetail] Opening test: " + currentNote.testId);
+
         SceneManager.LoadScene(testSceneName);
-        Debug.Log("Opening test: " + currentNote.testId);
     }
 
     private void GoBack()
@@ -179,41 +323,7 @@ public class NoteDetailController : MonoBehaviour
         SceneManager.LoadScene(notesSceneName);
     }
 
-    private void MarkNoteAsRead(string noteId)
-    {
-        NoteState note = save.GetOrCreateNote(noteId);
-
-        if (!note.isRead)
-        {
-            save.MarkNoteAsRead(noteId); 
-
-            if (!note.rewardClaimed)
-            {
-                note.rewardClaimed = true;
-
-                save.sparksTotal += 2;
-
-                if (TempGameContext.CurrentEpisode != null)
-                    TempGameContext.CurrentEpisode.sparks += 2;
-            }
-
-            SaveManager.Instance.Save();
-        }
-    }
-
-
-    private void OnEnable()
-    {
-        if (LocalizationManager.Instance != null)
-            LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
-    }
-
-    private void OnDisable()
-    {
-        if (LocalizationManager.Instance != null)
-            LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
-    }
-
+    // ================= LOCALIZATION =================
     private void OnLanguageChanged(Language lang)
     {
         UpdateStaticTexts();
@@ -223,6 +333,12 @@ public class NoteDetailController : MonoBehaviour
     private void UpdateStaticTexts()
     {
         if (pageTitleText != null)
-            pageTitleText.text = LocalizationManager.Instance.GetText("Notes", "notes_page_title");
+        {
+            pageTitleText.text =
+                LocalizationManager.Instance.GetText(
+                    "Notes",
+                    "notes_page_title"
+                );
+        }
     }
 }

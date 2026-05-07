@@ -109,6 +109,12 @@ public class DialogueController : MonoBehaviour
 
     void Start()
     {
+        if (SaveManager.Instance == null)
+        {
+            Debug.LogError("[DialogueController] SaveManager is NULL");
+            return;
+        }
+
         save = SaveManager.Instance.Data;
 
         NormalizeSave();
@@ -135,6 +141,7 @@ public class DialogueController : MonoBehaviour
         BuildCharacterMetaDict();
 
         StatSystem.Instance.Init(save);
+        InitializeEpisodeContext();
 
         episodeEndPanel?.Init(this);
         episodeEndPanel?.Hide();
@@ -169,7 +176,7 @@ public class DialogueController : MonoBehaviour
                 safety = save.safetyTotal
             };
 
-            SaveManager.Instance.Save();
+            SaveManager.Instance.AutoSave();
         }
 
         ShowNode(save.currentNodeId);
@@ -182,6 +189,26 @@ public class DialogueController : MonoBehaviour
 
         if (save.shownNotificationIds == null)
             save.shownNotificationIds = new List<string>();
+    }
+
+    void InitializeEpisodeContext()
+    {
+        if (TempGameContext.CurrentEpisode != null)
+            return;
+
+        TempGameContext.CurrentEpisode =
+            new EpisodeSnapshot
+            {
+                sparks = 0,
+                trustAG = 0,
+                trustJA = 0,
+                risk = 0,
+                safety = 0
+            };
+
+        Debug.Log(
+            "[DialogueController] Episode context initialized"
+        );
     }
 
     void Update()
@@ -219,19 +246,6 @@ public class DialogueController : MonoBehaviour
             Input.mousePosition,
             null
         );
-    }
-
-    void LoadEpisode()
-    {
-        episode = EpisodeLoader.LoadEpisode(save.episodePath, out nodeDict, out sceneDict, out nodeToScene);
-
-        if (episode == null)
-        {
-            Debug.LogError("[DialogueController] Episode failed to load");
-            return;
-        }
-
-        BuildCharacterMetaDict();
     }
 
     void BuildCharacterMetaDict()
@@ -447,8 +461,15 @@ public class DialogueController : MonoBehaviour
 
         // Autosave
         save.currentNodeId = nodeId;
-        SaveManager.Instance.Save();
+        CommitProgression(nodeId);
     }
+
+    void CommitProgression(string nodeId)
+    {
+        save.currentNodeId = nodeId;
+        SaveManager.Instance.AutoSave();
+    }
+
 
     void SetupChoices(DialogueNode node)
     {
@@ -484,7 +505,6 @@ public class DialogueController : MonoBehaviour
         if (picked != null && picked.effects != null && picked.effects.Count > 0)
         {
             ApplyChoiceEffects(picked.effects);
-            SaveManager.Instance.Save();
         }
 
         if (picked != null && picked.notification != null && notificationController != null)
@@ -612,7 +632,6 @@ public class DialogueController : MonoBehaviour
         if (!save.shownNotificationIds.Contains(notification.id))
         {
             save.shownNotificationIds.Add(notification.id);
-            SaveManager.Instance.Save();
         }
     }
 
@@ -678,7 +697,7 @@ public class DialogueController : MonoBehaviour
         {
             StatSystem.Instance.AddEpisodeReward(reward);
             save.episodeRewardGranted = true;
-            SaveManager.Instance.Save();
+            SaveManager.Instance.AutoSave();
         }
 
         ui.HideChoices();
@@ -736,8 +755,15 @@ public class DialogueController : MonoBehaviour
 
     public void StartNextEpisode(string newEpisodePath)
     {
+        if (string.IsNullOrEmpty(newEpisodePath))
+        {
+            Debug.LogError("[DialogueController] nextEpisodePath is NULL");
+            return;
+        }
+
         SaveManager.Instance.StartEpisode(newEpisodePath);
         SceneManager.LoadScene("EpisodePage");
+
     }
 
     int ExtractEpisodeNumber(string path)
@@ -774,7 +800,6 @@ public class DialogueController : MonoBehaviour
         if (!note.isUnlocked)
         {
             save.UnlockNote(noteId);
-            SaveManager.Instance.Save();
             Debug.Log("[DialogueController] Note unlocked: " + noteId);
         }
         else

@@ -2718,6 +2718,8 @@ MonoBehaviour:
   homeButton: {fileID: 2118525770}
   homeButtonText: {fileID: 98044741}
   testsJson: {fileID: 4900000, guid: 13771f940dd8eb24f99f88302e29861d, type: 3}
+  notesSceneName: NotesListPage
+  mainMenuSceneName: MainMenu
 --- !u!4 &1816388181
 Transform:
   m_ObjectHideFlags: 0

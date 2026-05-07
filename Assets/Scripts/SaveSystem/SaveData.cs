@@ -60,7 +60,7 @@ public class SaveData
                 noteId = noteId,
                 isUnlocked = false,
                 isRead = false,
-                rewardClaimed = false
+                readRewardClaimed = false
             };
 
             notes.Add(note);
