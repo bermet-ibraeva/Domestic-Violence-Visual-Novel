@@ -59,4 +59,5 @@ public class LocalizationRoot
     public PageData Notifications;
     public PageData Notes;
     public PageData Tests;
+    public PageData Feedback;
 }

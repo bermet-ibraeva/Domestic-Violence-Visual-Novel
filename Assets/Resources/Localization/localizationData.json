@@ -130,6 +130,274 @@
     ]
   },
 
+  "Feedback": {
+    "pageName": "Feedback",
+    "items": [
+      {
+        "key": "feedback_title",
+        "value": {
+          "en": "Feedback",
+          "ru": "Отзывы",
+          "ky": "Пикири"
+        }
+      },
+  
+      {
+        "key": "feedback_q1",
+        "value": {
+          "en": "Was the story easy to understand?",
+          "ru": "Было ли историю легко понять?",
+          "ky": "Окуяны түшүнүү оңой болдубу?"
+        }
+      },
+      {
+        "key": "feedback_q1_a1",
+        "value": {
+          "en": "Yes",
+          "ru": "Да",
+          "ky": "Ооба"
+        }
+      },
+      {
+        "key": "feedback_q1_a2",
+        "value": {
+          "en": "Mostly",
+          "ru": "В основном да",
+          "ky": "Көбүнчө"
+        }
+      },
+      {
+        "key": "feedback_q1_a3",
+        "value": {
+          "en": "Sometimes confusing",
+          "ru": "Иногда было непонятно",
+          "ky": "Кээде түшүнүксүз болду"
+        }
+      },
+  
+      {
+        "key": "feedback_q2",
+        "value": {
+          "en": "Did the game help you better understand signs of domestic violence?",
+          "ru": "Помогла ли игра лучше понять признаки домашнего насилия?",
+          "ky": "Оюн үй-бүлөлүк зомбулуктун белгилерин жакшыраак түшүнүүгө жардам бердиби?"
+        }
+      },
+      {
+        "key": "feedback_q2_a1",
+        "value": {
+          "en": "Yes",
+          "ru": "Да",
+          "ky": "Ооба"
+        }
+      },
+      {
+        "key": "feedback_q2_a2",
+        "value": {
+          "en": "A little",
+          "ru": "Немного",
+          "ky": "Бир аз"
+        }
+      },
+      {
+        "key": "feedback_q2_a3",
+        "value": {
+          "en": "Not really",
+          "ru": "Не особо",
+          "ky": "Анчейин эмес"
+        }
+      },
+  
+      {
+        "key": "feedback_q3",
+        "value": {
+          "en": "Did you feel emotionally involved in the story?",
+          "ru": "Чувствовали ли вы эмоциональную вовлеченность в историю?",
+          "ky": "Окуяга эмоционалдык жактан аралаштыңызбы?"
+        }
+      },
+      {
+        "key": "feedback_q3_a1",
+        "value": {
+          "en": "Strongly",
+          "ru": "Очень сильно",
+          "ky": "Абдан"
+        }
+      },
+      {
+        "key": "feedback_q3_a2",
+        "value": {
+          "en": "Sometimes",
+          "ru": "Иногда",
+          "ky": "Кээде"
+        }
+      },
+      {
+        "key": "feedback_q3_a3",
+        "value": {
+          "en": "Not really",
+          "ru": "Не особо",
+          "ky": "Анчейин эмес"
+        }
+      },
+  
+      {
+        "key": "feedback_q4",
+        "value": {
+          "en": "Were the Notes helpful and interesting?",
+          "ru": "Были ли заметки полезными и интересными?",
+          "ky": "Эскертмелер пайдалуу жана кызыктуу болдубу?"
+        }
+      },
+      {
+        "key": "feedback_q4_a1",
+        "value": {
+          "en": "Very helpful",
+          "ru": "Очень полезные",
+          "ky": "Абдан пайдалуу"
+        }
+      },
+      {
+        "key": "feedback_q4_a2",
+        "value": {
+          "en": "Somewhat helpful",
+          "ru": "В какой-то степени полезные",
+          "ky": "Бир аз пайдалуу"
+        }
+      },
+      {
+        "key": "feedback_q4_a3",
+        "value": {
+          "en": "Not really helpful",
+          "ru": "Не особо полезные",
+          "ky": "Анчейин пайдалуу эмес"
+        }
+      },
+  
+      {
+        "key": "feedback_q5",
+        "value": {
+          "en": "Did you enjoy the Tests after the Notes?",
+          "ru": "Понравились ли вам тесты после заметок?",
+          "ky": "Эскертмелерден кийинки тесттер жактыбы?"
+        }
+      },
+      {
+        "key": "feedback_q5_a1",
+        "value": {
+          "en": "Yes",
+          "ru": "Да",
+          "ky": "Ооба"
+        }
+      },
+      {
+        "key": "feedback_q5_a2",
+        "value": {
+          "en": "They were okay",
+          "ru": "Нормально",
+          "ky": "Жакшы эле"
+        }
+      },
+      {
+        "key": "feedback_q5_a3",
+        "value": {
+          "en": "No",
+          "ru": "Нет",
+          "ky": "Жок"
+        }
+      },
+  
+      {
+        "key": "feedback_q6",
+        "value": {
+          "en": "What should be improved?",
+          "ru": "Что стоит улучшить?",
+          "ky": "Эмнени жакшыртуу керек?"
+        }
+      },
+  
+      {
+        "key": "feedback_q6_a1",
+        "value": {
+          "en": "Story pacing",
+          "ru": "Темп истории",
+          "ky": "Окуянын ыргагы"
+        }
+      },
+      {
+        "key": "feedback_q6_a2",
+        "value": {
+          "en": "UI/Design",
+          "ru": "Интерфейс/Дизайн",
+          "ky": "Интерфейс/Дизайн"
+        }
+      },
+      {
+        "key": "feedback_q6_a3",
+        "value": {
+          "en": "Music/SFX",
+          "ru": "Музыка/SFX",
+          "ky": "Музыка/SFX"
+        }
+      },
+      {
+        "key": "feedback_q6_a4",
+        "value": {
+          "en": "Choices",
+          "ru": "Выборы",
+          "ky": "Тандоолор"
+        }
+      },
+      {
+        "key": "feedback_q6_a5",
+        "value": {
+          "en": "Notes",
+          "ru": "Заметки",
+          "ky": "Эскертмелер"
+        }
+      },
+      {
+        "key": "feedback_q6_a6",
+        "value": {
+          "en": "Tests",
+          "ru": "Тесты",
+          "ky": "Тесттер"
+        }
+      },
+      {
+        "key": "feedback_q6_a7",
+        "value": {
+          "en": "Character writing",
+          "ru": "Персонажи",
+          "ky": "Каармандар"
+        }
+      },
+      {
+        "key": "feedback_q6_a8",
+        "value": {
+          "en": "Localization/translation",
+          "ru": "Локализация/перевод",
+          "ky": "Локализация/которуу"
+        }
+      },
+      {
+        "key": "feedback_q7",
+        "value": {
+          "en": "Additional thoughts or suggestions",
+          "ru": "Дополнительные мысли или предложения",
+          "ky": "Кошумча ойлор же сунуштар"
+        }
+      },
+      {
+        "key": "feedback_q7_placeholder",
+        "value": {
+          "ru": "Введите текст...",
+          "en": "Enter text...",
+          "ky": "Текст жазыңыз..."
+        }
+      }
+    ]
+  },
   "SettingsPage": {
     "pageName": "SettingsPage",
     "items": [

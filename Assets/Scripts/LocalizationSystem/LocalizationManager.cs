@@ -202,6 +202,7 @@ public class LocalizationManager : MonoBehaviour
         AddPage(localizationData.Notifications);
         AddPage(localizationData.Notes);
         AddPage(localizationData.Tests);
+        AddPage(localizationData.Feedback);
 
         Debug.Log($"[Localization] Loaded pages: {pages.Count}");
         IsLoaded = true;
