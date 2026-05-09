@@ -18,6 +18,8 @@
     {
       "sceneId": "E01_S01",
       "background": "street_crossroad_morning",
+      "sceneTitleKey": "scene_road_title",
+      "showSceneTransition": true,
       "leftCharacterId": "Ainaz",
       "rightCharacterIds": ["Guldana"],
       "startNode": "E01_S01_start",
@@ -26,6 +28,11 @@
           "nodeId": "E01_S01_start",
           "characterId": "Narrator",
           "textKey": "E01_S01_start",
+          "audio": {
+            "changeMusic": true,
+            "musicId": "morning-village",
+            "loopMusic": true
+          },
           "nextNode": "E01_S01_dialogue_0"
         },
         {
@@ -39,6 +46,10 @@
           "characterId": "Ainaz",
           "emotion": "Calm",
           "textKey": "E01_S01_dialogue_1",
+          "audio": {
+            "playSFX": true,
+            "sfxId": "footsteps-on-gravel"
+          },
           "nextNode": "E01_S01_dialogue_2"
         },
         {
@@ -155,6 +166,8 @@
       "background": "school_hall_day",
       "bgFade": true,
       "bgFadeDuration": 1.2,
+      "sceneTitleKey": "scene_school_title",
+      "showSceneTransition": true,
       "leftCharacterId": "Ainaz",
       "rightCharacterIds": ["Guldana", "Aigul", "Timur", "Bekzat"],
       "startNode": "E01_S02_start",
@@ -163,6 +176,11 @@
           "nodeId": "E01_S02_start",
           "characterId": "Narrator",
           "textKey": "E01_S02_start",
+          "audio": {
+            "changeMusic": true,
+            "musicId": "school-hall",
+            "loopMusic": true
+          },
           "nextNode": "E01_S02_dialogue_0"
         },
         {
@@ -281,6 +299,10 @@
           "nodeId": "E01_S02_choice1_dialogue_1",
           "characterId": "Timur",
           "textKey": "E01_S02_choice1_dialogue_1",
+          "audio": {
+            "playSFX": true,
+            "sfxId": "silence"
+          },
           "nextNode": "E01_S02_choice1_dialogue_2"
         },
         {
@@ -375,6 +397,7 @@
     {
       "sceneId": "E01_SUMMARY",
       "background": "guldana_house_night_quarell",
+      "showSceneTransition": false,
       "leftCharacterId": "Ainaz",
       "rightCharacterIds": [],
       "startNode": "E01_summary_text",
@@ -383,6 +406,11 @@
           "nodeId": "E01_summary_text",
           "characterId": "Narrator",
           "textKey": "E01_summary_text",
+          "audio": {
+            "changeMusic": true,
+            "musicId": "episode-end",
+            "loopMusic": false
+          },
           "nextNode": "E01_summary_start"
         },
         {

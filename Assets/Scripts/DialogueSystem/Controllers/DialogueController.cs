@@ -94,6 +94,9 @@ public class DialogueController : MonoBehaviour
     [Header("Notification Controller")]
     public NotificationController notificationController;
 
+    [SerializeField]
+    private SceneTransitionUI sceneTransitionUI;
+
     private EpisodeData episode;
     private Dictionary<string, DialogueNode> nodeDict;
     private Dictionary<string, SceneData> sceneDict;
@@ -128,6 +131,11 @@ public class DialogueController : MonoBehaviour
             out sceneDict,
             out nodeToScene
         );
+
+        if (BackgroundMusicController.Instance != null)
+        {
+            BackgroundMusicController.Instance.StopSmooth();
+        }
 
         if (episode == null)
         {
@@ -308,6 +316,17 @@ public class DialogueController : MonoBehaviour
         if (!sceneChanged) return;
 
         currentScene = newScene;
+
+        if (sceneTransitionUI != null && currentScene.showSceneTransition)
+        {
+            int sceneIndex =
+                GetSceneIndex(currentScene.sceneId);
+
+            sceneTransitionUI.Show(
+                sceneIndex,
+                currentScene.sceneTitleKey);
+        }
+
         RebuildRightAllowed(currentScene);
 
         if (backgroundController != null && !string.IsNullOrEmpty(currentScene.background))
@@ -324,6 +343,22 @@ public class DialogueController : MonoBehaviour
         }
 
         HideRight();
+    }
+
+    private int GetSceneIndex(string sceneId)
+    {
+        if (episode == null || episode.scenes == null)
+            return 0;
+
+        for (int i = 0; i < episode.scenes.Count; i++)
+        {
+            if (episode.scenes[i].sceneId == sceneId)
+            {
+                return i + 1;
+            }
+        }
+
+        return 0;
     }
 
     CharacterMeta GetCharacterMeta(string characterId)

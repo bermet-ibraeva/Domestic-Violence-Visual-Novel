@@ -24,6 +24,9 @@ public class CharacterMeta
 public class SceneData
 {
     public string sceneId;
+    public string sceneTitleKey;
+    public string sceneSubtitleKey;
+    public bool showSceneTransition = true;
 
     // Background
     public string background;

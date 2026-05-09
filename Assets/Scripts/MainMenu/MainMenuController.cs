@@ -22,6 +22,11 @@ public class MainMenuController : MonoBehaviour
     {
         Time.timeScale = 1f;
 
+        if (BackgroundMusicController.Instance != null)
+        {
+            BackgroundMusicController.Instance.PlayDefault();
+        }
+
         LoadSave();
         UpdateUI();
         BindButton();

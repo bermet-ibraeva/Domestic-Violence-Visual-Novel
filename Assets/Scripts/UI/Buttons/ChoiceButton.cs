@@ -39,6 +39,11 @@ public class ChoiceButton : MonoBehaviour
 
     private void HandleClick()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX("click");
+        }
+
         onClick?.Invoke();
     }
 

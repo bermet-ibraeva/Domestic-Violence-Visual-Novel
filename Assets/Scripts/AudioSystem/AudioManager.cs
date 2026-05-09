@@ -72,20 +72,23 @@ public class AudioManager : MonoBehaviour
     // =========================
     // Scene Music
     // =========================
-
     public void ApplyNodeAudio(AudioData audioData)
     {
         if (sceneMusic != null)
         {
             sceneMusic.ApplyNodeAudio(audioData);
         }
+        if (audioData.playSFX && !string.IsNullOrEmpty(audioData.sfxId))
+        {
+            PlaySFX(audioData.sfxId);
+        }
     }
 
-    public void PlaySceneMusic(string id)
+    public void PlaySceneMusic(string id, bool loop = true)
     {
         if (sceneMusic != null)
         {
-            sceneMusic.PlayById(id);
+            sceneMusic.PlayById(id, loop: true);
         }
     }
 
@@ -114,9 +117,13 @@ public class AudioManager : MonoBehaviour
     // =========================
     // SFX
     // =========================
-
     public void PlaySFX(string id)
     {
+        if (sceneMusic != null)
+        {
+            sceneMusic.DuckVolume();
+        }
+
         if (sfx != null)
         {
             sfx.Play(id);
