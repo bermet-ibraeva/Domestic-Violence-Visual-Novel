@@ -1,25 +1,31 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneMusicManager : MonoBehaviour
+public class SceneMusicController : MonoBehaviour
 {
-    public static SceneMusicManager Instance;
+    [Header("Audio")]
+    [SerializeField] private AudioSource musicSource;
 
-    [SerializeField] private AudioSource sceneMusicSource;
+    [Header("Music Library")]
     [SerializeField] private AudioEntry[] musicLibrary;
+
+    [Header("Fade Settings")]
+    [SerializeField] private float fadeDuration = 1.5f;
 
     private Dictionary<string, AudioClip> musicMap;
 
+    private Coroutine fadeCoroutine;
+
+    private float currentVolume = 1f;
+
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (musicSource == null)
         {
-            Destroy(gameObject);
-            return;
+            musicSource = GetComponent<AudioSource>();
         }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
         BuildMusicMap();
     }
 
@@ -32,10 +38,22 @@ public class SceneMusicManager : MonoBehaviour
 
         foreach (var entry in musicLibrary)
         {
-            if (entry != null && !string.IsNullOrEmpty(entry.id) && entry.clip != null)
+            if (entry != null &&
+                !string.IsNullOrEmpty(entry.id) &&
+                entry.clip != null)
             {
                 musicMap[entry.id] = entry.clip;
             }
+        }
+    }
+
+    public void Initialize(float volume)
+    {
+        currentVolume = Mathf.Clamp01(volume);
+
+        if (musicSource != null)
+        {
+            musicSource.volume = currentVolume;
         }
     }
 
@@ -46,46 +64,126 @@ public class SceneMusicManager : MonoBehaviour
 
         if (audio.stopMusic)
         {
-            StopSceneMusic();
+            StopSmooth();
             return;
         }
 
-        if (audio.changeMusic && !string.IsNullOrEmpty(audio.musicId))
+        if (audio.changeMusic &&
+            !string.IsNullOrEmpty(audio.musicId))
         {
-            PlaySceneMusicById(audio.musicId);
+            PlayById(audio.musicId);
         }
     }
 
-    public void PlaySceneMusicById(string id)
+    public void PlayById(string id)
     {
-        if (sceneMusicSource == null)
+        if (musicSource == null)
             return;
 
-        if (!musicMap.TryGetValue(id, out AudioClip clip) || clip == null)
+        if (!musicMap.TryGetValue(id, out AudioClip clip))
             return;
 
-        if (sceneMusicSource.clip == clip && sceneMusicSource.isPlaying)
+        if (musicSource.clip == clip &&
+            musicSource.isPlaying)
             return;
 
-        sceneMusicSource.clip = clip;
-        sceneMusicSource.loop = true;
-        sceneMusicSource.Play();
+        musicSource.clip = clip;
+        musicSource.loop = true;
+
+        musicSource.volume = 0f;
+
+        musicSource.Play();
+
+        StartFade(currentVolume);
     }
 
-    public void StopSceneMusic()
+    public void Stop()
     {
-        if (sceneMusicSource == null)
+        if (musicSource == null)
             return;
 
-        sceneMusicSource.Stop();
-        sceneMusicSource.clip = null;
+        musicSource.Stop();
+        musicSource.clip = null;
+    }
+
+    public void StopSmooth()
+    {
+        if (musicSource == null ||
+            !musicSource.isPlaying)
+            return;
+
+        StartFade(0f, true);
+    }
+
+    public void Pause()
+    {
+        if (musicSource != null)
+        {
+            musicSource.Pause();
+        }
+    }
+
+    public void Resume()
+    {
+        if (musicSource != null)
+        {
+            musicSource.UnPause();
+        }
     }
 
     public void SetVolume(float volume)
     {
-        if (sceneMusicSource == null)
-            return;
+        currentVolume = Mathf.Clamp01(volume);
 
-        sceneMusicSource.volume = Mathf.Clamp01(volume);
+        if (musicSource != null)
+        {
+            musicSource.volume = currentVolume;
+        }
+    }
+
+    private void StartFade(
+        float targetVolume,
+        bool stopAfterFade = false)
+    {
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+
+        fadeCoroutine = StartCoroutine(
+            FadeMusic(
+                targetVolume,
+                fadeDuration,
+                stopAfterFade));
+    }
+
+    private IEnumerator FadeMusic(
+        float targetVolume,
+        float duration,
+        bool stopAfterFade)
+    {
+        float startVolume = musicSource.volume;
+
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            musicSource.volume = Mathf.Lerp(
+                startVolume,
+                targetVolume,
+                time / duration);
+
+            yield return null;
+        }
+
+        musicSource.volume = targetVolume;
+
+        if (stopAfterFade)
+        {
+            musicSource.Stop();
+            musicSource.clip = null;
+        }
     }
 }

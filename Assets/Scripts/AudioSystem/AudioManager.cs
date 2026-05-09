@@ -4,16 +4,19 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
-    [Header("Managers")]
-    [SerializeField] private BackgroundMusicManager backgroundMusicManager;
-    [SerializeField] private SceneMusicManager sceneMusicManager;
-    [SerializeField] private SFXManager sfxManager;
+    [Header("Controllers")]
+    [SerializeField] private SceneMusicController sceneMusic;
 
-    private const string BG_VOLUME_KEY = "BG_VOLUME";
+    [SerializeField] private SFXController sfx;
+
     private const string SCENE_VOLUME_KEY = "SCENE_VOLUME";
+    private const string SFX_VOLUME_KEY = "SFX_VOLUME";
 
-    public float BackgroundVolume => PlayerPrefs.GetFloat(BG_VOLUME_KEY, 1f);
-    public float SceneVolume => PlayerPrefs.GetFloat(SCENE_VOLUME_KEY, 1f);
+    public float SceneVolume =>
+        PlayerPrefs.GetFloat(SCENE_VOLUME_KEY, 1f);
+
+    public float SFXVolume =>
+        PlayerPrefs.GetFloat(SFX_VOLUME_KEY, 1f);
 
     private void Awake()
     {
@@ -24,87 +27,127 @@ public class AudioManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
-        AutoAssignManagers();
+        AutoAssignControllers();
     }
 
     private void Start()
     {
-        ApplySavedSettings();
+        InitializeControllers();
     }
 
-    private void AutoAssignManagers()
+    private void OnApplicationQuit()
     {
-        if (backgroundMusicManager == null)
-            backgroundMusicManager = FindFirstObjectByType<BackgroundMusicManager>();
-
-        if (sceneMusicManager == null)
-            sceneMusicManager = FindFirstObjectByType<SceneMusicManager>();
-
-        if (sfxManager == null)
-            sfxManager = FindFirstObjectByType<SFXManager>();
-    }
-
-    public void ApplySavedSettings()
-    {
-        SetBackgroundVolume(PlayerPrefs.GetFloat(BG_VOLUME_KEY, 1f));
-        SetSceneVolume(PlayerPrefs.GetFloat(SCENE_VOLUME_KEY, 1f));
-    }
-
-    public void SetBackgroundVolume(float value)
-    {
-        float clamped = Mathf.Clamp01(value);
-        PlayerPrefs.SetFloat(BG_VOLUME_KEY, clamped);
         PlayerPrefs.Save();
+    }
 
-        if (backgroundMusicManager != null)
-            backgroundMusicManager.SetVolume(clamped);
+    private void AutoAssignControllers()
+    {
+        if (sceneMusic == null)
+        {
+            sceneMusic =
+                FindFirstObjectByType<SceneMusicController>();
+        }
+
+        if (sfx == null)
+        {
+            sfx =
+                FindFirstObjectByType<SFXController>();
+        }
+    }
+
+    private void InitializeControllers()
+    {
+        if (sceneMusic != null)
+        {
+            sceneMusic.Initialize(SceneVolume);
+        }
+
+        if (sfx != null)
+        {
+            sfx.Initialize(SFXVolume);
+        }
+    }
+
+    // =========================
+    // Scene Music
+    // =========================
+
+    public void ApplyNodeAudio(AudioData audioData)
+    {
+        if (sceneMusic != null)
+        {
+            sceneMusic.ApplyNodeAudio(audioData);
+        }
+    }
+
+    public void PlaySceneMusic(string id)
+    {
+        if (sceneMusic != null)
+        {
+            sceneMusic.PlayById(id);
+        }
+    }
+
+    public void StopSceneMusic()
+    {
+        if (sceneMusic != null)
+        {
+            sceneMusic.StopSmooth();
+        }
     }
 
     public void SetSceneVolume(float value)
     {
         float clamped = Mathf.Clamp01(value);
-        PlayerPrefs.SetFloat(SCENE_VOLUME_KEY, clamped);
-        PlayerPrefs.Save();
 
-        if (sceneMusicManager != null)
-            sceneMusicManager.SetVolume(clamped);
+        PlayerPrefs.SetFloat(
+            SCENE_VOLUME_KEY,
+            clamped);
+
+        if (sceneMusic != null)
+        {
+            sceneMusic.SetVolume(clamped);
+        }
     }
 
-    public void PlayDefaultMusic()
-    {
-        if (backgroundMusicManager != null)
-            backgroundMusicManager.PlayDefault();
-    }
-
-    public void StopBackgroundMusic()
-    {
-        if (backgroundMusicManager != null)
-            backgroundMusicManager.Stop();
-    }
-
-    public void PlaySceneMusic(string id)
-    {
-        if (sceneMusicManager != null)
-            sceneMusicManager.PlaySceneMusicById(id);
-    }
-
-    public void StopSceneMusic()
-    {
-        if (sceneMusicManager != null)
-            sceneMusicManager.StopSceneMusic();
-    }
-
-    public void ApplyNodeAudio(AudioData audioData)
-    {
-        if (sceneMusicManager != null)
-            sceneMusicManager.ApplyNodeAudio(audioData);
-    }
+    // =========================
+    // SFX
+    // =========================
 
     public void PlaySFX(string id)
     {
-        if (sfxManager != null)
-            sfxManager.PlaySFX(id);
+        if (sfx != null)
+        {
+            sfx.Play(id);
+        }
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        float clamped = Mathf.Clamp01(value);
+
+        PlayerPrefs.SetFloat(
+            SFX_VOLUME_KEY,
+            clamped);
+
+        if (sfx != null)
+        {
+            sfx.SetVolume(clamped);
+        }
+    }
+
+    // =========================
+    // Global Controls
+    // =========================
+
+    public void PauseAll()
+    {
+        sceneMusic?.Pause();
+    }
+
+    public void ResumeAll()
+    {
+        sceneMusic?.Resume();
     }
 }

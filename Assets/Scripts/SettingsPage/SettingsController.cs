@@ -45,9 +45,6 @@ public class SettingsController : MonoBehaviour
     [Header("Popup")]
     [SerializeField] private ConfirmPopup confirmPopup;
 
-    private const string MusicVolumeKey = "music_volume";
-    private const string SfxVolumeKey = "sfx_volume";
-
     // ================= INIT =================
 
     private void Start()
@@ -102,11 +99,8 @@ public class SettingsController : MonoBehaviour
 
     private void LoadSettings()
     {
-        float musicVolume =
-            PlayerPrefs.GetFloat(MusicVolumeKey, 0.8f);
-
-        float sfxVolume =
-            PlayerPrefs.GetFloat(SfxVolumeKey, 0.4f);
+        float musicVolume = BackgroundMusicController.Instance != null ? BackgroundMusicController.Instance.GetVolume() : 1f;
+        float sfxVolume = AudioManager.Instance != null ? AudioManager.Instance.SFXVolume : 1f;
 
         if (musicSlider != null)
             musicSlider.value = musicVolume;
@@ -219,19 +213,22 @@ public class SettingsController : MonoBehaviour
 
     private void ApplyMusicVolume(float value, bool save)
     {
-        if (save)
+        if (BackgroundMusicController.Instance != null)
         {
-            PlayerPrefs.SetFloat(MusicVolumeKey, value);
-            PlayerPrefs.Save();
+            BackgroundMusicController.Instance.SetVolume(value);
+        }
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.SetSceneVolume(value);
         }
     }
 
     private void ApplySfxVolume(float value, bool save)
     {
-        if (save)
+        if (AudioManager.Instance != null)
         {
-            PlayerPrefs.SetFloat(SfxVolumeKey, value);
-            PlayerPrefs.Save();
+            AudioManager.Instance.SetSFXVolume(value);
         }
     }
 

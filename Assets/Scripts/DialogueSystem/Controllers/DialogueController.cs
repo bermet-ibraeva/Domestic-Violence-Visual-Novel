@@ -813,15 +813,15 @@ public class DialogueController : MonoBehaviour
         }
     }
 
-    
+
     private void ApplyNodeAudio(DialogueNode node)
     {
         if (node == null || node.audio == null)
             return;
 
-        if (SceneMusicManager.Instance == null)
+        if (AudioManager.Instance == null)
             return;
 
-        SceneMusicManager.Instance.ApplyNodeAudio(node.audio);
+        AudioManager.Instance.ApplyNodeAudio(node.audio);
     }
 }

@@ -1,48 +1,66 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SFXManager : MonoBehaviour
+public class SFXController : MonoBehaviour
 {
-    public static SFXManager Instance;
-
+    [Header("Audio")]
     [SerializeField] private AudioSource sfxSource;
+
+    [Header("SFX Library")]
     [SerializeField] private AudioEntry[] sfxLibrary;
 
-    private Dictionary<string, AudioClip> sfxMap;
+    private Dictionary<string, AudioEntry> sfxMap;
+
+    private float currentVolume = 1f;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (sfxSource == null)
         {
-            Destroy(gameObject);
-            return;
+            sfxSource = GetComponent<AudioSource>();
         }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        BuildSFXMap();
+    }
 
-        sfxMap = new Dictionary<string, AudioClip>();
+    private void BuildSFXMap()
+    {
+        sfxMap = new Dictionary<string, AudioEntry>();
+
+        if (sfxLibrary == null)
+            return;
 
         foreach (var entry in sfxLibrary)
         {
-            if (!string.IsNullOrEmpty(entry.id) && entry.clip != null)
+            if (entry != null &&
+                !string.IsNullOrEmpty(entry.id) &&
+                entry.clip != null)
             {
-                sfxMap[entry.id] = entry.clip;
+                sfxMap[entry.id] = entry;
             }
         }
     }
 
-    public void PlaySFX(string id)
+    public void Initialize(float volume)
     {
-        if (sfxSource == null) return;
+        currentVolume = Mathf.Clamp01(volume);
+    }
 
-        foreach (var entry in sfxLibrary)
-        {
-            if (entry != null && entry.id == id && entry.clip != null)
-            {
-                sfxSource.PlayOneShot(entry.clip, entry.volume);
-                return;
-            }
-        }
+    public void Play(string id)
+    {
+        if (sfxSource == null)
+            return;
+
+        if (!sfxMap.TryGetValue(id, out AudioEntry entry))
+            return;
+
+        sfxSource.PlayOneShot(
+            entry.clip,
+            entry.volume * currentVolume);
+    }
+
+    public void SetVolume(float volume)
+    {
+        currentVolume = Mathf.Clamp01(volume);
     }
 }
