@@ -99,4 +99,16 @@ public class FeedbackCheckboxOptionUI : MonoBehaviour
     {
         return optionData.optionId;
     }
+
+    public void SetSelected(bool selected)
+    {
+        if (selected)
+        {
+            SetState(State.Active);
+        }
+        else
+        {
+            SetState(State.Inactive);
+        }
+    }
 }

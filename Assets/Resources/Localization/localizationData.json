@@ -145,9 +145,9 @@
       {
         "key": "feedback_q1",
         "value": {
-          "en": "Was the story easy to understand?",
-          "ru": "Было ли историю легко понять?",
-          "ky": "Окуяны түшүнүү оңой болдубу?"
+          "en": "1. Was the story easy to understand?",
+          "ru": "1. Было ли историю легко понять?",
+          "ky": "1. Окуяны түшүнүү оңой болдубу?"
         }
       },
       {
@@ -178,9 +178,9 @@
       {
         "key": "feedback_q2",
         "value": {
-          "en": "Did the game help you better understand signs of domestic violence?",
-          "ru": "Помогла ли игра лучше понять признаки домашнего насилия?",
-          "ky": "Оюн үй-бүлөлүк зомбулуктун белгилерин жакшыраак түшүнүүгө жардам бердиби?"
+          "en": "2. Did the game help you better understand signs of domestic violence?",
+          "ru": "2. Помогла ли игра лучше понять признаки домашнего насилия?",
+          "ky": "2. Оюн үй-бүлөлүк зомбулуктун белгилерин жакшыраак түшүнүүгө жардам бердиби?"
         }
       },
       {
@@ -211,9 +211,9 @@
       {
         "key": "feedback_q3",
         "value": {
-          "en": "Did you feel emotionally involved in the story?",
-          "ru": "Чувствовали ли вы эмоциональную вовлеченность в историю?",
-          "ky": "Окуяга эмоционалдык жактан аралаштыңызбы?"
+          "en": "3. Did you feel emotionally involved in the story?",
+          "ru": "3. Чувствовали ли вы эмоциональную вовлеченность в историю?",
+          "ky": "3. Окуяга эмоционалдык жактан аралаштыңызбы?"
         }
       },
       {
@@ -244,9 +244,9 @@
       {
         "key": "feedback_q4",
         "value": {
-          "en": "Were the Notes helpful and interesting?",
-          "ru": "Были ли заметки полезными и интересными?",
-          "ky": "Эскертмелер пайдалуу жана кызыктуу болдубу?"
+          "en": "4. Were the Notes helpful and interesting?",
+          "ru": "4. Были ли заметки полезными и интересными?",
+          "ky": "4. Эскертмелер пайдалуу жана кызыктуу болдубу?"
         }
       },
       {
@@ -277,9 +277,9 @@
       {
         "key": "feedback_q5",
         "value": {
-          "en": "Did you enjoy the Tests after the Notes?",
-          "ru": "Понравились ли вам тесты после заметок?",
-          "ky": "Эскертмелерден кийинки тесттер жактыбы?"
+          "en": "5. Did you enjoy the Tests after the Notes?",
+          "ru": "5. Понравились ли вам тесты после заметок?",
+          "ky": "5. Эскертмелерден кийинки тесттер жактыбы?"
         }
       },
       {
@@ -310,9 +310,9 @@
       {
         "key": "feedback_q6",
         "value": {
-          "en": "What should be improved?",
-          "ru": "Что стоит улучшить?",
-          "ky": "Эмнени жакшыртуу керек?"
+          "en": "6. What should be improved?",
+          "ru": "6. Что стоит улучшить?",
+          "ky": "6. Эмнени жакшыртуу керек?"
         }
       },
   
@@ -383,9 +383,9 @@
       {
         "key": "feedback_q7",
         "value": {
-          "en": "Additional thoughts or suggestions",
-          "ru": "Дополнительные мысли или предложения",
-          "ky": "Кошумча ойлор же сунуштар"
+          "en": "7. Additional thoughts or suggestions",
+          "ru": "7. Дополнительные мысли или предложения",
+          "ky": "7. Кошумча ойлор же сунуштар"
         }
       },
       {
@@ -394,6 +394,46 @@
           "ru": "Введите текст...",
           "en": "Enter text...",
           "ky": "Текст жазыңыз..."
+        }
+      },
+      {
+        "key": "submit",
+        "value": {
+          "en": "Submit",
+          "ru": "Отправить",
+          "ky": "Жөнөтүү"
+        }
+      },
+      {
+        "key": "feedback_success",
+        "value": {
+          "en": "Thank you!\nYour feedback has been submitted.",
+          "ru": "Спасибо!\nВаш отзыв был отправлен.",
+          "ky": "Рахмат!\nСиздин пикириңиз жөнөтүлдү."
+        }
+      },
+      {
+        "key": "feedback_failed",
+        "value": {
+          "en": "Failed to send feedback.",
+          "ru": "Не удалось отправить отзыв.",
+          "ky": "Пикирди жөнөтүү мүмкүн болгон жок."
+        }
+      },
+      {
+        "key": "ok",
+        "value": {
+          "en": "OK",
+          "ru": "OK",
+          "ky": "OK"
+        }
+      },
+      {
+        "key": "sending",
+        "value": {
+          "en": "Sending...",
+          "ru": "Отправляем...",
+          "ky": "Жөнөтүлүүдө..."
         }
       }
     ]

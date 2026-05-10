@@ -100,6 +100,14 @@ public class FeedbackRadioQuestionUI :
         return false;
     }
 
+    public void ClearSelection()
+    {
+        foreach (var option in spawnedOptions)
+        {
+            option.SetSelected(false);
+        }
+    }
+
     private string L(string key)
     {
         return LocalizationManager.Instance

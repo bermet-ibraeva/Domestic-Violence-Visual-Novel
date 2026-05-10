@@ -11,8 +11,6 @@ public class AboutPageLocalizedUI : MonoBehaviour
     [SerializeField] private TMP_Text leaveFeedbackButtonText;
     [SerializeField] private TMP_Text termsButtonText;
     [SerializeField] private TMP_Text privacyButtonText;
-    [SerializeField] private TMP_Text feedbackTabButtonText;
-
 
     private void OnEnable()
     {

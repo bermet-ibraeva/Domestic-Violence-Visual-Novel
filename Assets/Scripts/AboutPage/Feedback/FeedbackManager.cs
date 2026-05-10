@@ -11,7 +11,6 @@ public class FeedbackManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private TMP_Text titleText;
-
     [SerializeField] private Transform questionsParent;
 
     [Header("Prefabs")]
@@ -21,6 +20,22 @@ public class FeedbackManager : MonoBehaviour
 
     [Header("Buttons")]
     [SerializeField] private Button submitButton;
+    [SerializeField] private TMP_Text submitButtonText;
+
+    [Header("Result Popup")]
+    [SerializeField] private GameObject resultPopup;
+
+    [SerializeField] private TMP_Text resultMessageText;
+
+    [SerializeField] private TMP_Text okButtonText;
+
+    [SerializeField] private Image resultIcon;
+
+    [SerializeField] private Sprite successIcon;
+
+    [SerializeField] private Sprite failedIcon;
+
+    [SerializeField] private Button okButton;
 
     [Header("Optional")]
     [SerializeField] private string formId = "main_feedback";
@@ -28,6 +43,8 @@ public class FeedbackManager : MonoBehaviour
 
     private FeedbackDatabase database;
     private FeedbackFormData currentForm;
+    private bool lastSubmitWasSuccessful;
+    private bool isSubmitting;
 
     private readonly List<IFeedbackQuestionUI> spawnedQuestions = new();
 
@@ -35,8 +52,16 @@ public class FeedbackManager : MonoBehaviour
     {
         LoadDatabase();
         BuildForm();
+        RefreshLocalization();
 
-        submitButton.onClick.AddListener(SubmitFeedback);
+        if (submitButton != null)
+            submitButton.onClick.AddListener(SubmitFeedback);
+        
+        if (okButton != null)
+            okButton.onClick.AddListener(CloseResultPopup);
+
+        if (resultPopup != null) 
+            resultPopup.SetActive(false);
     }
 
     private void LoadDatabase()
@@ -75,8 +100,6 @@ public class FeedbackManager : MonoBehaviour
         {
             CreateQuestion(question);
         }
-
-        submitButton.transform.SetAsLastSibling();
     }
 
 
@@ -128,11 +151,13 @@ public class FeedbackManager : MonoBehaviour
     private void SubmitFeedback()
     {
         if (!ValidateForm())
-        {
             return;
-        }
 
-        FeedbackResponse response = new FeedbackResponse {
+        if (!submitButton.interactable)
+            return;
+
+        FeedbackResponse response = new FeedbackResponse
+        {
             formId = currentForm.formId,
             timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
             language = LocalizationManager.Instance.CurrentLanguage.ToString(),
@@ -140,7 +165,8 @@ public class FeedbackManager : MonoBehaviour
             sessionId = Guid.NewGuid().ToString()
         };
 
-        foreach (var questionUI in spawnedQuestions){
+        foreach (var questionUI in spawnedQuestions)
+        {
             var answer = questionUI.GetAnswer();
 
             if (answer != null)
@@ -151,6 +177,13 @@ public class FeedbackManager : MonoBehaviour
 
         SaveFeedback(response);
         submitButton.interactable = false;
+        isSubmitting = true;
+
+        if (submitButtonText != null)
+        {
+            submitButtonText.text = L("sending");
+        }
+
         StartCoroutine(feedbackService.SendFeedback(response, OnFeedbackSent));
         Debug.Log("[Feedback] Feedback submitted.");
     }
@@ -160,19 +193,15 @@ public class FeedbackManager : MonoBehaviour
         if (success)
         {
             Debug.Log("[Feedback] Upload complete.");
-
-            submitButton.interactable = false;
-
-            // TODO:
-            // Show success popup
+            ShowResultPopup(L("feedback_success"), successIcon);
+            lastSubmitWasSuccessful = true;
         }
         else
         {
             Debug.LogError("[Feedback] Upload failed.");
             submitButton.interactable = true;
-
-            // TODO:
-            // Show error popup
+            ShowResultPopup(L("feedback_failed"), failedIcon);
+            lastSubmitWasSuccessful = false;
         }
     }
 
@@ -212,4 +241,114 @@ public class FeedbackManager : MonoBehaviour
         return true;
     }
 
+    private void ClearForm()
+    {
+        foreach (var questionUI in spawnedQuestions)
+        {
+            if (questionUI is FeedbackRadioQuestionUI radio)
+            {
+                radio.ClearSelection();
+            }
+
+            if (questionUI is FeedbackCheckboxQuestionUI checkbox)
+            {
+                checkbox.ClearSelection();
+            }
+
+            if (questionUI is FeedbackTextQuestionUI text)
+            {
+                text.ClearText();
+            }
+        }
+    }
+
+    private void ShowResultPopup(string message, Sprite icon) {
+        if (resultPopup != null)
+        {
+            resultPopup.SetActive(true);
+        }
+
+        if (resultMessageText != null)
+        {
+            resultMessageText.text = message;
+        }
+
+        if (resultIcon != null)
+        {
+            resultIcon.sprite = icon;
+        }
+    }
+
+    private void CloseResultPopup()
+    {
+        if (resultPopup != null)
+        {
+            resultPopup.SetActive(false);
+        }
+
+        if (resultMessageText != null)
+        {
+            resultMessageText.text = "";
+        }
+
+        if (lastSubmitWasSuccessful)
+        {
+            ClearForm();
+        }
+
+        lastSubmitWasSuccessful = false;
+
+        submitButton.interactable = true;
+        isSubmitting = false;
+
+        if (submitButtonText != null)
+            submitButtonText.text = isSubmitting ? L("sending") : L("submit");
+        
+    }
+    
+    private void OnEnable()
+    {
+        if (LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged +=
+                HandleLanguageChanged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged -=
+                HandleLanguageChanged;
+        }
+
+        if (submitButton != null)
+        {
+            submitButton.onClick.RemoveListener(SubmitFeedback);
+        }
+
+        if (okButton != null)
+        {
+            okButton.onClick.RemoveListener(CloseResultPopup);
+        }
+    }
+
+    private void HandleLanguageChanged(Language language)
+    {
+        RefreshLocalization();
+    }
+
+    private void RefreshLocalization()
+    {
+        if (submitButtonText != null)
+        {
+            submitButtonText.text = L("submit");
+        }
+
+        if (okButtonText != null)
+        {
+            okButtonText.text = L("ok");
+        }
+    }
 }

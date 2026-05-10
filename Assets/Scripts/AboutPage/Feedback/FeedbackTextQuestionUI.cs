@@ -63,6 +63,11 @@ public class FeedbackTextQuestionUI :
         return !string.IsNullOrEmpty(text);
     }
 
+    public void ClearText()
+    {
+        inputField.text = "";
+    }
+
     private string L(string key)
     {
         return LocalizationManager.Instance

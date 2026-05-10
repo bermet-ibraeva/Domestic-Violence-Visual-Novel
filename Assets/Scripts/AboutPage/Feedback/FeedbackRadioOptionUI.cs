@@ -91,6 +91,18 @@ public class FeedbackRadioOptionUI : MonoBehaviour
         return currentState == State.Selected;
     }
 
+    public void SetSelected(bool selected)
+    {
+        if (selected)
+        {
+            SetState(State.Selected);
+        }
+        else
+        {
+            SetState(State.Default);
+        }
+    }
+
     public string GetOptionId()
     {
         return optionData.optionId;

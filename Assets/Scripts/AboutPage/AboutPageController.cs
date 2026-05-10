@@ -14,9 +14,22 @@ public class AboutPageController : MonoBehaviour
     [SerializeField] private TMP_Text termsButtonText;
     [SerializeField] private TMP_Text privacyButtonText;
 
+    [Header("Popups")]
+    [SerializeField] private GameObject feedbackPopup;
+
     private void Start()
     {
         RefreshLocalization();
+
+        if (feedbackButton != null)
+        {
+            feedbackButton.onClick.AddListener(OpenFeedbackPopup);
+        }
+
+        if (feedbackPopup != null)
+        {
+            feedbackPopup.SetActive(false);
+        }
     }
 
     private void OnEnable()
@@ -53,5 +66,21 @@ public class AboutPageController : MonoBehaviour
     private void HandleLanguageChanged(Language language)
     {
         RefreshLocalization();
+    }
+
+    private void OpenFeedbackPopup()
+    {
+        if (feedbackPopup != null)
+        {
+            feedbackPopup.SetActive(true);
+        }
+    }
+
+    public void CloseFeedbackPopup()
+    {
+        if (feedbackPopup != null)
+        {
+            feedbackPopup.SetActive(false);
+        }
     }
 }
