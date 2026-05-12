@@ -44,7 +44,6 @@ public class SaveManager : MonoBehaviour
     }
 
     // ================= INIT =================
-
     private void Initialize()
     {
         Data = SaveSystem.Load();
@@ -55,7 +54,11 @@ public class SaveManager : MonoBehaviour
 
             Data = SaveSystem.CreateNew();
         }
+
+        SaveData.NotifySparksChanged();
+        SaveData.NotifyNotesChanged();
     }
+
 
     // ================= SAVE CORE =================
 
@@ -78,6 +81,8 @@ public class SaveManager : MonoBehaviour
     public void Reload()
     {
         Data = SaveSystem.Load();
+        SaveData.NotifySparksChanged();
+        SaveData.NotifyNotesChanged();
 
         if (Data == null)
         {
@@ -92,6 +97,8 @@ public class SaveManager : MonoBehaviour
         SaveSystem.Clear();
 
         Data = SaveSystem.CreateNew();
+        SaveData.NotifySparksChanged();
+        SaveData.NotifyNotesChanged();
 
         TempGameContext.ResetEpisode();
 
@@ -121,6 +128,8 @@ public class SaveManager : MonoBehaviour
             Debug.LogError($"{TAG} Data is NULL");
             return;
         }
+
+        Data.episodePath = episodePath;
 
         Data.ResetEpisodeState();
 
@@ -177,7 +186,7 @@ public class SaveManager : MonoBehaviour
         // rollback totals to snapshot
         if (Data.episodeStartSnapshot != null)
         {
-            Data.sparksTotal = Data.episodeStartSnapshot.sparks;
+            Data.SetSparks(Data.episodeStartSnapshot.sparks);
             Data.trustAGTotal = Data.episodeStartSnapshot.trustAG;
             Data.trustJATotal = Data.episodeStartSnapshot.trustJA;
             Data.riskTotal = Data.episodeStartSnapshot.risk;

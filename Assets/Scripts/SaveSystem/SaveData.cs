@@ -17,6 +17,7 @@ public class SaveData
     public int trustJATotal;
     public int riskTotal;
     public int safetyTotal;
+    public static event Action OnSparksChanged;
     
     // Flags and Service Data
     public EpisodeSnapshot episodeStartSnapshot; // super important: used for episode restart and for calculating rewards at the end of episode
@@ -30,6 +31,30 @@ public class SaveData
     public List<NoteState> notes = new List<NoteState>();
     public static event Action OnNotesChanged;
     public List<TestBestScore> testsBest = new List<TestBestScore>();
+
+    public void AddSparks(int amount)
+    {
+        sparksTotal += amount;
+
+        OnSparksChanged?.Invoke();
+    }
+
+    public void SetSparks(int amount)
+    {
+        sparksTotal = amount;
+
+        OnSparksChanged?.Invoke();
+    }
+
+    public static void NotifySparksChanged()
+    {
+        OnSparksChanged?.Invoke();
+    }
+
+    public static void NotifyNotesChanged()
+    {
+        OnNotesChanged?.Invoke();
+    }
 
     public void ResetEpisodeState()
     {

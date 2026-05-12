@@ -23,6 +23,11 @@ public class NotesListController : MonoBehaviour
     [SerializeField] private TMP_Text pageTitleText;
     [SerializeField] private TMP_Text introText;
 
+    [Header("Progress")]
+    [SerializeField] private Button progressButton;
+    [SerializeField] private ProgressPopupController progressPopup;
+
+
     private readonly List<GameObject> spawnedCards = new();
 
     private NotesDatabase database;
@@ -42,10 +47,13 @@ public class NotesListController : MonoBehaviour
             return;
         }
 
+        if (progressButton != null)
+        {
+            progressButton.onClick.AddListener(OpenProgressPopup);
+        }
+
         LoadDatabase();
-
         UpdateTexts();
-
         BuildNotesList();
     }
 
@@ -69,6 +77,11 @@ public class NotesListController : MonoBehaviour
         if (LocalizationManager.Instance != null)
         {
             LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
+        }
+
+        if (progressButton != null)
+        {
+            progressButton.onClick.RemoveListener(OpenProgressPopup);
         }
 
         SaveData.OnNotesChanged -= RefreshList;
@@ -269,6 +282,14 @@ public class NotesListController : MonoBehaviour
                     "Notes",
                     "notes_intro"
                 );
+        }
+    }
+
+    private void OpenProgressPopup()
+    {
+        if (progressPopup != null)
+        {
+            progressPopup.OpenPopup();
         }
     }
 

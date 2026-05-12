@@ -16,11 +16,10 @@ public class AboutPageController : MonoBehaviour
 
     [Header("Popups")]
     [SerializeField] private GameObject feedbackPopup;
+    [SerializeField] private DocumentPopupController documentPopup;
 
     private void Start()
     {
-        RefreshLocalization();
-
         if (feedbackButton != null)
         {
             feedbackButton.onClick.AddListener(OpenFeedbackPopup);
@@ -30,31 +29,69 @@ public class AboutPageController : MonoBehaviour
         {
             feedbackPopup.SetActive(false);
         }
+
+        if (termsButton != null)
+        {
+            termsButton.onClick.AddListener(OpenTermsPopup);
+        }
+
+        if (privacyButton != null)
+        {
+            privacyButton.onClick.AddListener(OpenPrivacyPopup);
+        }
+
     }
 
     private void OnEnable()
     {
+        RefreshLocalization();
+
         if (LocalizationManager.Instance != null)
         {
             LocalizationManager.Instance.OnLanguageChanged += HandleLanguageChanged;
         }
     }
-
+    
     private void OnDisable()
     {
         if (LocalizationManager.Instance != null)
         {
             LocalizationManager.Instance.OnLanguageChanged -= HandleLanguageChanged;
         }
+
+        if (feedbackButton != null)
+        {
+            feedbackButton.onClick.RemoveListener(OpenFeedbackPopup);
+        }
+
+        if (termsButton != null)
+        {
+            termsButton.onClick.RemoveListener(OpenTermsPopup);
+        }
+
+        if (privacyButton != null)
+        {
+            privacyButton.onClick.RemoveListener(OpenPrivacyPopup);
+        }
+
     }
 
     private void RefreshLocalization()
     {
-        feedbackButtonText.text = L("leave_feedback");
+        if (feedbackButtonText != null)
+        {
+            feedbackButtonText.text = L("leave_feedback");
+        }
 
-        termsButtonText.text = L("terms");
+        if (termsButtonText != null)
+        {
+            termsButtonText.text = L("terms");
+        }
 
-        privacyButtonText.text = L("privacy");
+        if (privacyButtonText != null)
+        {
+            privacyButtonText.text = L("privacy");
+        }
     }
 
     private string L(string key)
@@ -75,6 +112,29 @@ public class AboutPageController : MonoBehaviour
             feedbackPopup.SetActive(true);
         }
     }
+
+    public void OpenTermsPopup()
+    {
+        if (documentPopup != null)
+        {
+            documentPopup.OpenPopup(
+                L("terms"),
+                L("terms_content"),
+                L("read"));
+        }
+    }
+
+    public void OpenPrivacyPopup()
+    {
+        if (documentPopup != null)
+        {
+            documentPopup.OpenPopup(
+                L("privacy"),
+                L("privacy_content"),
+                L("read"));
+        }
+    }
+
 
     public void CloseFeedbackPopup()
     {

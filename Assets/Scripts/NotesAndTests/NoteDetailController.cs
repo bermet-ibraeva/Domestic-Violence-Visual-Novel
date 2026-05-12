@@ -46,12 +46,10 @@ public class NoteDetailController : MonoBehaviour
             return;
         }
 
-        UpdateStaticTexts();
-
         LoadDatabase();
-        LoadNote();
-
         BindButtons();
+        LoadNote();
+        UpdateStaticTexts();
     }
 
     private void OnEnable()
@@ -68,7 +66,18 @@ public class NoteDetailController : MonoBehaviour
         {
             LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
         }
+
+        if (openTestButton != null)
+        {
+            openTestButton.onClick.RemoveListener(OpenTest);
+        }
+
+        if (backButton != null)
+        {
+            backButton.onClick.RemoveListener(GoBack);
+        }
     }
+
 
     // ================= DATABASE =================
     private void LoadDatabase()
@@ -172,11 +181,13 @@ public class NoteDetailController : MonoBehaviour
         {
             note.readRewardClaimed = true;
 
-            SaveManager.Instance.Data.sparksTotal += 2;
-
-            if (TempGameContext.CurrentEpisode != null)
+            if (StatSystem.Instance != null)
             {
-                TempGameContext.CurrentEpisode.sparks += 2;
+                StatSystem.Instance.AddEpisodeReward(2);
+            }
+            else
+            {
+                SaveManager.Instance.Data.AddSparks(2);
             }
         }
 
@@ -238,7 +249,7 @@ public class NoteDetailController : MonoBehaviour
             paragraphs[i] = paragraphs[i].Trim() + "\n\n";
         }
 
-        return string.Join("", paragraphs);
+        return string.Join("\n\n", paragraphs);
     }
 
     private string CalculateReadTime(string text)

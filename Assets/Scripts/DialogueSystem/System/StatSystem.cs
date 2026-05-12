@@ -7,18 +7,21 @@ public class StatSystem : MonoBehaviour
 
     public static StatSystem Instance;
 
-    private HashSet<string> appliedEffects = new();
 
-    void Awake()
+    private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
     }
-    
+
     public void ResetEpisodeStats()
     {
         TempGameContext.ResetEpisode();
-        appliedEffects.Clear();
         Debug.Log("[StatSystem] Episode stats reset.");
     }
 
@@ -45,26 +48,20 @@ public class StatSystem : MonoBehaviour
 
     public void ApplyEffect(EffectOp effect)
     {
-        if (effect == null) return;
-
-        string uniqueKey = $"{effect.key}_{effect.op}_{effect.value}";
-
-        if (appliedEffects.Contains(uniqueKey))
+        if (effect == null)
             return;
-
-        appliedEffects.Add(uniqueKey);
 
         int value = effect.op switch
         {
             "inc" => effect.value,
             "dec" => -effect.value,
-            "set" => 0,
+            "set" => effect.value,
             _ => 0
         };
 
         if (effect.op == "set")
         {
-            SetStat(effect.key, effect.value);
+            SetStat(effect.key, value);
             return;
         }
 
@@ -123,7 +120,7 @@ public class StatSystem : MonoBehaviour
                 break;
 
             case "sparks":
-                SaveManager.Instance.Data.sparksTotal += value;
+                SaveManager.Instance.Data.AddSparks(value);
                 ep.sparks += value;
                 LogStat("stat_sparks", value, ep.sparks, SaveManager.Instance.Data.sparksTotal);
                 break;
@@ -141,49 +138,56 @@ public class StatSystem : MonoBehaviour
 
     private void SetStat(string key, int value)
     {
-        if (SaveManager.Instance == null || SaveManager.Instance.Data == null) return;
+        if (SaveManager.Instance == null || SaveManager.Instance.Data == null)
+            return;
 
         var ep = TempGameContext.CurrentEpisode;
-        if (ep == null) return;
+
+        if (ep == null)
+            return;
 
         key = NormalizeKey(key);
 
         switch (key)
         {
             case "trustAG":
-                SaveManager.Instance.Data.trustAGTotal += value;
-                ep.trustAG += value;
-                LogStat("trustAG", value, ep.trustAG, SaveManager.Instance.Data.trustAGTotal);
+                SaveManager.Instance.Data.trustAGTotal = value;
+                ep.trustAG = value;
+                LogStat("stat_trustAG", value, ep.trustAG, SaveManager.Instance.Data.trustAGTotal);
                 break;
 
             case "trustJA":
-                SaveManager.Instance.Data.trustJATotal += value;
-                ep.trustJA += value;
-                LogStat("trustJA", value, ep.trustJA, SaveManager.Instance.Data.trustJATotal);
+                SaveManager.Instance.Data.trustJATotal = value;
+                ep.trustJA = value;
+                LogStat("stat_trustJA", value, ep.trustJA, SaveManager.Instance.Data.trustJATotal);
                 break;
 
             case "risk":
-                SaveManager.Instance.Data.riskTotal += value;
-                ep.risk += value;
-                LogStat("risk", value, ep.risk, SaveManager.Instance.Data.riskTotal);
+                SaveManager.Instance.Data.riskTotal = value;
+                ep.risk = value;
+                LogStat("stat_risk", value, ep.risk, SaveManager.Instance.Data.riskTotal);
                 break;
 
             case "safety":
-                SaveManager.Instance.Data.safetyTotal += value;
-                ep.safety += value;
-                LogStat("safety", value, ep.safety, SaveManager.Instance.Data.safetyTotal);
+                SaveManager.Instance.Data.safetyTotal = value;
+                ep.safety = value;
+                LogStat("stat_safety", value, ep.safety, SaveManager.Instance.Data.safetyTotal);
                 break;
 
             case "sparks":
-                SaveManager.Instance.Data.sparksTotal += value;
-                ep.sparks += value;
-                LogStat("sparks", value, ep.sparks, SaveManager.Instance.Data.sparksTotal);
+                SaveManager.Instance.Data.SetSparks(value);
+                ep.sparks = value;
+                LogStat("stat_sparks", value, ep.sparks, SaveManager.Instance.Data.sparksTotal);
+                break;
+
+            default:
+                Debug.LogWarning($"[StatSystem] Unknown stat key: {key}");
                 break;
         }
     }
 
-    // ================= HELPERS =================
 
+    // ================= HELPERS =================
     private string NormalizeKey(string key)
     {
         return key?.Replace(".", "").Trim();
@@ -217,5 +221,13 @@ public class StatSystem : MonoBehaviour
     private string FormatSigned(int value)
     {
         return value >= 0 ? $"+{value}" : value.ToString();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 }

@@ -334,14 +334,21 @@ public class TestController : MonoBehaviour
         int rewardDifference =
             Mathf.Max(0, reward - test.claimedReward);
 
-        scoreText.text =
-            $"<size=117%><color=#8F79C6>{rewardDifference}</color></size>" +
-            $"<size=85%><color=#D1CBDE>/{currentTest.maxReward}</color></size>";
+        if (rewardDifference > 0)
+        {
+            scoreText.text =
+                $"<size=117%><color=#8F79C6>{rewardDifference}</color></size>" +
+                $"<size=85%><color=#D1CBDE>/{currentTest.maxReward}</color></size>";
+        }
+        else
+        {
+            scoreText.text =
+                $"<size=90%><color=#D1CBDE>{L("test_reward_claimed")}</color></size>";
+        }
 
         ApplyReward();
 
-        bool completedPerfectly =
-            test.bestScore >= totalQuestions;
+        bool completedPerfectly = test.claimedReward >= currentTest.maxReward;
         
         retryButton.onClick.RemoveAllListeners();
 
@@ -391,9 +398,9 @@ public class TestController : MonoBehaviour
             return;
         }
 
-        TestBestScore test = SaveManager.Instance.Data.GetOrCreateTest(currentTest.testId);
-
         int reward = CalculateReward();
+
+        TestBestScore test = SaveManager.Instance.Data.GetOrCreateTest(currentTest.testId);
 
         bool changed = false;
 
@@ -418,11 +425,13 @@ public class TestController : MonoBehaviour
         {
             test.claimedReward = reward;
 
-            SaveManager.Instance.Data.sparksTotal += rewardDifference;
-
-            if (TempGameContext.CurrentEpisode != null)
+            if (StatSystem.Instance != null)
             {
-                TempGameContext.CurrentEpisode.sparks += rewardDifference;
+                StatSystem.Instance.AddEpisodeReward(rewardDifference);
+            }
+            else
+            {
+                SaveManager.Instance.Data.AddSparks(rewardDifference);
             }
 
             Debug.Log(
