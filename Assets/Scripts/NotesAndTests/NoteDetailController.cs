@@ -144,7 +144,8 @@ public class NoteDetailController : MonoBehaviour
 
         if (noteContentText != null)
         {
-            noteContentText.text = FormatText(content);
+            string formatted = TextFormatter.Format(content);
+            noteContentText.text = FormatText(formatted);
         }
 
         if (readTimeText != null)

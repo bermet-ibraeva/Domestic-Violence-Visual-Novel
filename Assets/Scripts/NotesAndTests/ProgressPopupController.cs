@@ -142,16 +142,16 @@ public class ProgressPopupController : MonoBehaviour
         int totalNotes = 0;
         int readNotes = 0;
 
-        if (notesDatabase != null)
-        {
-            totalNotes = notesDatabase.notes.Count;
-        }
-
         if (data.notes != null)
         {
             foreach (var note in data.notes)
             {
-                if (note != null && note.isRead)
+                if (note == null || !note.isUnlocked)
+                    continue;
+
+                totalNotes++;
+
+                if (note.isRead)
                 {
                     readNotes++;
                 }
@@ -167,10 +167,20 @@ public class ProgressPopupController : MonoBehaviour
         {
             foreach (var test in testsDatabase.tests)
             {
-                if (test != null)
-                {
-                    totalRewards += test.maxReward;
-                }
+                if (test == null)
+                    continue;
+
+                NoteState noteState =
+                    data.GetNote(test.noteId);
+
+                bool unlocked =
+                    noteState != null &&
+                    noteState.isUnlocked;
+
+                if (!unlocked)
+                    continue;
+
+                totalRewards += test.maxReward;
             }
         }
 

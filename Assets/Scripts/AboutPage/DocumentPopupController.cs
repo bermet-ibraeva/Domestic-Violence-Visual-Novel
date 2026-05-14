@@ -52,7 +52,7 @@ public class DocumentPopupController : MonoBehaviour
 
         if (contentText != null)
         {
-            contentText.text = content;
+            contentText.text = TextFormatter.Format(content);
         }
 
         if (readButtonText != null)

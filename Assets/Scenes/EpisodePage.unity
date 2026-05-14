@@ -1219,7 +1219,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &251900016
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3171,7 +3171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &605445686
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3614,15 +3614,15 @@ MonoBehaviour:
   - id: morning-village
     clip: {fileID: 8300000, guid: 1e2f90fc657951840b385dfaa7626a98, type: 3}
     volume: 0.8
-    maxDuration: 0
+    maxDuration: 180
   - id: school-hall
     clip: {fileID: 8300000, guid: 8b9a71cf876bd8449be1a2bc363686c2, type: 3}
     volume: 0.8
-    maxDuration: 0
+    maxDuration: 180
   - id: episode-end
     clip: {fileID: 8300000, guid: fe9ea4ef6b62a374c99b9497484eda30, type: 3}
     volume: 0.8
-    maxDuration: 0
+    maxDuration: 180
   fadeDuration: 1.2
 --- !u!82 &706391600
 AudioSource:
@@ -4535,7 +4535,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1117267866
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4852,7 +4852,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1158704183
 RectTransform:
   m_ObjectHideFlags: 0

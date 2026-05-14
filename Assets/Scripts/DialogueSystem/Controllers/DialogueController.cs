@@ -860,3 +860,5 @@ public class DialogueController : MonoBehaviour
         AudioManager.Instance.ApplyNodeAudio(node.audio);
     }
 }
+
+

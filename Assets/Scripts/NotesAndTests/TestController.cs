@@ -178,7 +178,7 @@ public class TestController : MonoBehaviour
             .Replace("{0}", current.ToString())
             .Replace("{1}", totalQuestions.ToString());
 
-        float target = (float)current / totalQuestions;
+        float target = (float)currentQuestionIndex / totalQuestions;
 
         if (progressRoutine != null)
             StopCoroutine(progressRoutine);

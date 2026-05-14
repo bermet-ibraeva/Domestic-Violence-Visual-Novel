@@ -47,7 +47,10 @@ public class AboutPageLocalizedUI : MonoBehaviour
             titleText.text = L("title");
 
         if (descriptionText != null)
-            descriptionText.text = L("description");
+        {
+            descriptionText.text =
+                TextFormatter.Format(L("description"));
+        }
 
         if (feedbackText != null)
             feedbackText.text = L("feedback_text");
