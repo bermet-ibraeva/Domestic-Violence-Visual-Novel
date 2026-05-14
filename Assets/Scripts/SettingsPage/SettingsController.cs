@@ -20,10 +20,10 @@ public class SettingsController : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private Slider musicSlider;
-    [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Slider sceneMusicSlider;
 
     [SerializeField] private TMP_Text musicPercentText;
-    [SerializeField] private TMP_Text sfxPercentText;
+    [SerializeField] private TMP_Text sceneMusicPercentText;
 
     [Header("Progress Buttons")]
     [SerializeField] private Button restartEpisodeButton;
@@ -90,26 +90,26 @@ public class SettingsController : MonoBehaviour
             musicSlider.maxValue = 1f;
         }
 
-        if (sfxSlider != null)
+        if (sceneMusicSlider != null)
         {
-            sfxSlider.minValue = 0f;
-            sfxSlider.maxValue = 1f;
+            sceneMusicSlider.minValue = 0f;
+            sceneMusicSlider.maxValue = 1f;
         }
     }
 
     private void LoadSettings()
     {
         float musicVolume = BackgroundMusicController.Instance != null ? BackgroundMusicController.Instance.GetVolume() : 1f;
-        float sfxVolume = AudioManager.Instance != null ? AudioManager.Instance.SFXVolume : 1f;
+        float sceneVolume = AudioManager.Instance != null ? AudioManager.Instance.SceneVolume : 1f;
 
         if (musicSlider != null)
             musicSlider.value = musicVolume;
 
-        if (sfxSlider != null)
-            sfxSlider.value = sfxVolume;
+        if (sceneMusicSlider != null)
+            sceneMusicSlider.value = sceneVolume;
 
-        ApplyMusicVolume(musicVolume, false);
-        ApplySfxVolume(sfxVolume, false);
+        ApplyMusicVolume(musicVolume);
+        ApplySceneVolume(sceneVolume);
     }
 
     // ================= BUTTONS =================
@@ -188,11 +188,11 @@ public class SettingsController : MonoBehaviour
             );
         }
 
-        if (sfxSlider != null)
+        if (sceneMusicSlider != null)
         {
-            sfxSlider.onValueChanged.RemoveAllListeners();
-            sfxSlider.onValueChanged.AddListener(
-                OnSfxSliderChanged
+            sceneMusicSlider.onValueChanged.RemoveAllListeners();
+            sceneMusicSlider.onValueChanged.AddListener(
+                OnSceneMusicChanged
             );
         }
     }
@@ -201,33 +201,29 @@ public class SettingsController : MonoBehaviour
 
     private void OnMusicSliderChanged(float value)
     {
-        ApplyMusicVolume(value, true);
+        ApplyMusicVolume(value);
         RefreshAudioUI();
     }
 
-    private void OnSfxSliderChanged(float value)
+    private void OnSceneMusicChanged(float value)
     {
-        ApplySfxVolume(value, true);
+        ApplySceneVolume(value);
         RefreshAudioUI();
     }
 
-    private void ApplyMusicVolume(float value, bool save)
+    private void ApplyMusicVolume(float value)
     {
         if (BackgroundMusicController.Instance != null)
         {
             BackgroundMusicController.Instance.SetVolume(value);
         }
-
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.SetSceneVolume(value);
-        }
     }
 
-    private void ApplySfxVolume(float value, bool save)
+    private void ApplySceneVolume(float value)
     {
         if (AudioManager.Instance != null)
         {
+            AudioManager.Instance.SetSceneVolume(value);
             AudioManager.Instance.SetSFXVolume(value);
         }
     }
@@ -286,22 +282,14 @@ public class SettingsController : MonoBehaviour
 
     private void RefreshAudioUI()
     {
-        if (musicPercentText != null &&
-            musicSlider != null)
+        if (musicPercentText != null && musicSlider != null)
         {
-            musicPercentText.text =
-                Mathf.RoundToInt(
-                    musicSlider.value * 100f
-                ) + "%";
+            musicPercentText.text = Mathf.RoundToInt(musicSlider.value * 100f) + "%";
         }
 
-        if (sfxPercentText != null &&
-            sfxSlider != null)
+        if (sceneMusicPercentText != null && sceneMusicSlider != null)
         {
-            sfxPercentText.text =
-                Mathf.RoundToInt(
-                    sfxSlider.value * 100f
-                ) + "%";
+            sceneMusicPercentText.text = Mathf.RoundToInt(sceneMusicSlider.value * 100f) + "%";
         }
     }
 

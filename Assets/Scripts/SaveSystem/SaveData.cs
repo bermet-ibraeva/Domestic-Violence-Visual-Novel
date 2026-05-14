@@ -10,6 +10,7 @@ public class SaveData
     // Player Progress
     public string episodePath;
     public string currentNodeId;
+    public bool introCompleted;
 
     // Player Total Stats
     public int sparksTotal;
