@@ -144,8 +144,8 @@ public class NoteDetailController : MonoBehaviour
 
         if (noteContentText != null)
         {
-            string formatted = TextFormatter.Format(content);
-            noteContentText.text = FormatText(formatted);
+            noteContentText.text =
+                TextFormatter.Format(content);
         }
 
         if (readTimeText != null)
@@ -233,24 +233,6 @@ public class NoteDetailController : MonoBehaviour
                     "note_open_test"
                 );
         }
-    }
-
-    private string FormatText(string raw)
-    {
-        if (string.IsNullOrEmpty(raw))
-            return "";
-
-        string[] paragraphs = raw.Split(
-            new string[] { "\n\n" },
-            System.StringSplitOptions.None
-        );
-
-        for (int i = 0; i < paragraphs.Length; i++)
-        {
-            paragraphs[i] = paragraphs[i].Trim() + "\n\n";
-        }
-
-        return string.Join("\n\n", paragraphs);
     }
 
     private string CalculateReadTime(string text)

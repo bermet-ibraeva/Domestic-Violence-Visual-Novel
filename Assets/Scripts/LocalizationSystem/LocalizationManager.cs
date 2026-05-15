@@ -17,7 +17,7 @@ public class LocalizationManager : MonoBehaviour
                 if (instance == null)
                 {
                     Debug.LogError("[Localization] LocalizationManager not found in scene!");
-                    return null; 
+                    return null;
                 }
             }
 
@@ -30,6 +30,7 @@ public class LocalizationManager : MonoBehaviour
 
     public Language CurrentLanguage { get; private set; } = Language.Russian;
     public bool HasSelectedLanguage { get; private set; }
+    public bool IsLoaded { get; private set; }
 
     public event Action<Language> OnLanguageChanged;
 
@@ -37,8 +38,8 @@ public class LocalizationManager : MonoBehaviour
     private const string LanguageSelectedPrefKey = "game_language_selected";
 
     private LocalizationRoot localizationData;
+
     private readonly Dictionary<string, PageData> pages = new();
-    public bool IsLoaded { get; private set; }
 
     private void Awake()
     {
@@ -62,11 +63,14 @@ public class LocalizationManager : MonoBehaviour
         Debug.Log($"[Localization] Loaded pages count: {pages.Count}");
     }
 
+    // =========================
+    // LANGUAGE
+    // =========================
 
-    // ================= LANGUAGE =================
     private void LoadSavedLanguage()
     {
-        HasSelectedLanguage = PlayerPrefs.GetInt(LanguageSelectedPrefKey, 0) == 1;
+        HasSelectedLanguage =
+            PlayerPrefs.GetInt(LanguageSelectedPrefKey, 0) == 1;
 
         if (!PlayerPrefs.HasKey(LanguagePrefKey))
         {
@@ -74,24 +78,43 @@ public class LocalizationManager : MonoBehaviour
             return;
         }
 
-        string saved = PlayerPrefs.GetString(LanguagePrefKey, Language.Russian.ToString());
+        string saved =
+            PlayerPrefs.GetString(
+                LanguagePrefKey,
+                Language.Russian.ToString()
+            );
 
         if (Enum.TryParse(saved, out Language parsedLanguage))
+        {
             CurrentLanguage = parsedLanguage;
+        }
         else
+        {
             CurrentLanguage = Language.Russian;
+        }
     }
 
     public void SetLanguage(Language language)
     {
-        if (CurrentLanguage == language)
+        // IMPORTANT FIX:
+        // Allows selecting Russian on first launch.
+        if (CurrentLanguage == language && HasSelectedLanguage)
             return;
 
         CurrentLanguage = language;
+
         HasSelectedLanguage = true;
 
-        PlayerPrefs.SetString(LanguagePrefKey, CurrentLanguage.ToString());
-        PlayerPrefs.SetInt(LanguageSelectedPrefKey, 1);
+        PlayerPrefs.SetString(
+            LanguagePrefKey,
+            CurrentLanguage.ToString()
+        );
+
+        PlayerPrefs.SetInt(
+            LanguageSelectedPrefKey,
+            1
+        );
+
         PlayerPrefs.Save();
 
         Debug.Log($"[Localization] Language set to: {CurrentLanguage}");
@@ -114,22 +137,29 @@ public class LocalizationManager : MonoBehaviour
         return !HasSelectedLanguage;
     }
 
-    // ================= GET TEXT =================
+    // =========================
+    // GET TEXT
+    // =========================
 
     public string GetText(string pageName, string key)
     {
-        if (string.IsNullOrWhiteSpace(pageName) || string.IsNullOrWhiteSpace(key))
+        if (string.IsNullOrWhiteSpace(pageName) ||
+            string.IsNullOrWhiteSpace(key))
+        {
             return string.Empty;
+        }
 
         if (!pages.TryGetValue(pageName, out PageData page))
         {
             Debug.LogWarning($"[Localization] Page not found: {pageName}");
+
             return $"#{pageName}.{key}";
         }
 
         if (!page.TryGetEntry(key, out LocalizedEntry entry))
         {
             Debug.LogWarning($"[Localization] Key not found: {pageName}.{key}");
+
             return $"#{pageName}.{key}";
         }
 
@@ -141,18 +171,26 @@ public class LocalizationManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(fullKey))
             return string.Empty;
 
-        string[] parts = fullKey.Split('.');
+        // Split only first dot
+        string[] parts = fullKey.Split('.', 2);
 
         if (parts.Length != 2)
         {
-            Debug.LogWarning($"[Localization] Invalid key format: {fullKey}. Use Page.Key");
+            Debug.LogWarning(
+                $"[Localization] Invalid key format: {fullKey}. Use Page.Key"
+            );
+
             return $"#{fullKey}";
         }
 
         return GetText(parts[0], parts[1]);
     }
 
-    private string GetLocalizedValue(LocalizedEntry entry, string pageName, string key)
+    private string GetLocalizedValue(
+        LocalizedEntry entry,
+        string pageName,
+        string key
+    )
     {
         string value = CurrentLanguage switch
         {
@@ -165,32 +203,56 @@ public class LocalizationManager : MonoBehaviour
         if (!string.IsNullOrEmpty(value))
             return value;
 
-        if (!string.IsNullOrEmpty(entry.ru)) return entry.ru;
-        if (!string.IsNullOrEmpty(entry.en)) return entry.en;
-        if (!string.IsNullOrEmpty(entry.ky)) return entry.ky;
+        // fallback chain
+        if (!string.IsNullOrEmpty(entry.ru))
+            return entry.ru;
 
-        Debug.LogWarning($"[Localization] Empty translations for key: {pageName}.{key}");
+        if (!string.IsNullOrEmpty(entry.en))
+            return entry.en;
+
+        if (!string.IsNullOrEmpty(entry.ky))
+            return entry.ky;
+
+        Debug.LogWarning(
+            $"[Localization] Empty translations for key: {pageName}.{key}"
+        );
+
         return $"#{pageName}.{key}";
     }
 
-    // ================= LOAD JSON =================
+    // =========================
+    // LOAD JSON
+    // =========================
 
     private void LoadLocalizationJson()
     {
         pages.Clear();
 
-        TextAsset jsonFile = Resources.Load<TextAsset>($"Localization/{jsonFileName}");
+        TextAsset jsonFile =
+            Resources.Load<TextAsset>(
+                $"Localization/{jsonFileName}"
+            );
+
         if (jsonFile == null)
         {
-            Debug.LogError($"[Localization] JSON file not found at Resources/Localization/{jsonFileName}");
+            Debug.LogError(
+                $"[Localization] JSON file not found at Resources/Localization/{jsonFileName}"
+            );
+
             return;
         }
 
-        localizationData = JsonUtility.FromJson<LocalizationRoot>(jsonFile.text);
+        localizationData =
+            JsonUtility.FromJson<LocalizationRoot>(
+                jsonFile.text
+            );
 
         if (localizationData == null)
         {
-            Debug.LogError("[Localization] Failed to parse localization JSON.");
+            Debug.LogError(
+                "[Localization] Failed to parse localization JSON."
+            );
+
             return;
         }
 
@@ -205,12 +267,16 @@ public class LocalizationManager : MonoBehaviour
         AddPage(localizationData.Feedback);
 
         Debug.Log($"[Localization] Loaded pages: {pages.Count}");
+
         IsLoaded = true;
     }
 
     private void AddPage(PageData page)
     {
-        if (page == null || string.IsNullOrWhiteSpace(page.pageName))
+        if (page == null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(page.pageName))
             return;
 
         pages[page.pageName] = page;

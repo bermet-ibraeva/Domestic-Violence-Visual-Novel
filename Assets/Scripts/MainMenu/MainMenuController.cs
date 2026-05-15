@@ -7,7 +7,9 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private ChapterInfoFromJson chapterInfoUI;
+
     [SerializeField] private TextMeshProUGUI playButtonText;
+
     [SerializeField] private Button playButton;
 
     [Header("Default Episode")]
@@ -27,12 +29,31 @@ public class MainMenuController : MonoBehaviour
             BackgroundMusicController.Instance.PlayDefault();
         }
 
+        if (LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged +=
+                HandleLanguageChanged;
+        }
+
         LoadSave();
+
         UpdateUI();
+
         BindButton();
     }
 
-    // ================= SAVE =================
+    private void OnDestroy()
+    {
+        if (LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged -=
+                HandleLanguageChanged;
+        }
+    }
+
+    // =========================
+    // SAVE
+    // =========================
 
     private void LoadSave()
     {
@@ -47,7 +68,9 @@ public class MainMenuController : MonoBehaviour
         // corrupted save fallback
         if (currentSave == null)
         {
-            Debug.LogWarning("[MainMenu] Save is NULL -> resetting");
+            Debug.LogWarning(
+                "[MainMenu] Save is NULL -> resetting"
+            );
 
             SaveManager.Instance.Clear();
 
@@ -55,10 +78,43 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    // ================= UI =================
+    private bool HasGameplayProgress()
+    {
+        if (currentSave == null)
+            return false;
+
+        if (string.IsNullOrEmpty(currentSave.episodePath))
+            return false;
+
+        if (string.IsNullOrEmpty(currentSave.currentNodeId))
+            return false;
+
+        return true;
+    }
+
+    private bool HasValidContinueSave()
+    {
+        if (!HasGameplayProgress())
+            return false;
+
+        EpisodeData episode =
+            EpisodeLoader.LoadEpisode(
+                currentSave.episodePath,
+                out _,
+                out _,
+                out _
+            );
+
+        return episode != null;
+    }
+
+    // =========================
+    // UI
+    // =========================
+
     private void UpdateUI()
     {
-        bool showContinue = !IsAtGameStart();
+        bool showContinue = HasValidContinueSave();
 
         // Play / Continue button
         if (playButtonText != null &&
@@ -77,7 +133,10 @@ public class MainMenuController : MonoBehaviour
 
         if (chapterInfoUI == null)
         {
-            Debug.LogError("[MainMenu] chapterInfoUI is NULL");
+            Debug.LogError(
+                "[MainMenu] chapterInfoUI is NULL"
+            );
+
             return;
         }
 
@@ -88,12 +147,13 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        EpisodeData episode = EpisodeLoader.LoadEpisode(
-            currentSave.episodePath,
-            out _,
-            out _,
-            out _
-        );
+        EpisodeData episode =
+            EpisodeLoader.LoadEpisode(
+                currentSave.episodePath,
+                out _,
+                out _,
+                out _
+            );
 
         if (episode == null)
         {
@@ -102,21 +162,22 @@ public class MainMenuController : MonoBehaviour
             );
 
             ShowDefaultEpisode();
+
             return;
         }
 
         chapterInfoUI.Show(currentSave, episode);
     }
 
-
     private void ShowDefaultEpisode()
     {
-        EpisodeData episode = EpisodeLoader.LoadEpisode(
-            episodePath,
-            out _,
-            out _,
-            out _
-        );
+        EpisodeData episode =
+            EpisodeLoader.LoadEpisode(
+                episodePath,
+                out _,
+                out _,
+                out _
+            );
 
         if (episode == null)
         {
@@ -156,31 +217,39 @@ public class MainMenuController : MonoBehaviour
         foreach (var scene in episode.scenes)
         {
             if (!string.IsNullOrEmpty(scene.startNode))
+            {
                 return scene.startNode;
+            }
         }
 
         return null;
     }
 
-    // ================= BUTTON =================
+    // =========================
+    // BUTTON
+    // =========================
 
     private void BindButton()
     {
         if (playButton == null)
         {
-            Debug.LogError("[MainMenu] PlayButton is NULL");
+            Debug.LogError(
+                "[MainMenu] PlayButton is NULL"
+            );
+
             return;
         }
 
         playButton.onClick.RemoveAllListeners();
+
         playButton.onClick.AddListener(OnPlayPressed);
     }
 
     private void OnPlayPressed()
     {
-        bool showContinue = !IsAtGameStart();
+        bool showContinue = HasValidContinueSave();
 
-        // start new game only if player is at beginning
+        // no valid progress -> start new game
         if (!showContinue)
         {
             SaveManager.Instance.StartEpisode(episodePath);
@@ -189,30 +258,12 @@ public class MainMenuController : MonoBehaviour
         SceneManager.LoadScene(episodeSceneName);
     }
 
-    private bool IsAtGameStart()
+    // =========================
+    // LOCALIZATION
+    // =========================
+
+    private void HandleLanguageChanged(Language language)
     {
-        if (currentSave == null)
-            return true;
-
-        if (string.IsNullOrEmpty(currentSave.episodePath))
-            return true;
-
-        EpisodeData episode = EpisodeLoader.LoadEpisode(
-            episodePath,
-            out _,
-            out _,
-            out _
-        );
-
-        if (episode == null)
-            return true;
-
-        string firstNode = GetStartNode(episode);
-
-        if (string.IsNullOrEmpty(firstNode))
-            return true;
-
-        return currentSave.episodePath == episodePath &&
-               currentSave.currentNodeId == firstNode;
+        UpdateUI();
     }
 }
