@@ -4,57 +4,59 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 /*
-Dialogue Controller
+DialogueController
 
-This class manages the dialogue system for the visual novel.
+Central controller responsible for managing the narrative flow of the visual novel.
 
-Main responsibilities:
-- Loads episode data from Resources using EpisodeLoader
-- Builds dictionaries for quick access to nodes and scenes
-- Controls dialogue flow between nodes
-- Displays dialogue text using UIController
-- Manages character portraits (left and right slots)
+Core functionality:
 
-Scene rules:
-- Left character is fixed per scene
-- Only allowed right characters can appear
-- Narrator lines hide both character portraits
+* Loads episode data from JSON files using EpisodeLoader
+* Creates dictionaries for efficient access to dialogue nodes and scenes
+* Controls dialogue progression and scene transitions
+* Coordinates interaction between gameplay logic and UI components
+* Restores and saves player progression
 
-Visual handling:
-- Changes backgrounds and applies background effects (bgFx)
-- Updates UI panels for author, left, and right characters
+Dialogue system:
 
-Choices & branching:
-- Displays player choices
-- Handles choice selection and transitions to the next node
-- Applies choice effects (e.g., trust, risk, safety)
+* Displays localized dialogue text through UIController
+* Processes player choices and branching paths
+* Supports transitions between nodes and scenes
+* Waits for player input to continue dialogue flow
 
-Effects system:
-- Applies node effects only once per save file
-- Applies choice effects immediately on selection
+Character management:
+
+* Controls left and right character portrait slots
+* Updates character expressions depending on dialogue state
+* Supports narrator mode with hidden character portraits
+* Applies scene-based character visibility rules
+
+Visual systems:
+
+* Updates backgrounds and visual effects via BackgroundController
+* Controls dialogue panels and choice interfaces
+* Handles scene transition animations
+
+Gameplay systems:
+
+* Applies node and choice effects through the statistics system
+* Prevents repeated application of one-time effects
+* Supports educational note unlocking and summary screens
 
 Notification system:
-- Supports two types of notifications:
-    • Modal — temporarily replaces dialogue (shown before or after node/choice)
-    • Toast — short message shown over UI without interrupting flow
-- Notifications can be triggered:
-    • On nodes
-    • On choices
-- Modal notifications pause dialogue flow until closed
-- Toast notifications do not interrupt dialogue flow
-- Supports "showOnce" logic to prevent repeated notifications
 
-Flow control:
-- Allows jumping between nodes across different scenes
-- Ensures correct scene transitions when node changes
-- Waits for player input to advance dialogue
+* Supports modal and toast notifications
+* Allows notifications to be triggered by nodes or player choices
+* Supports "show once" behavior for unique events
 
 Saving system:
-- Automatically saves progress after each node
-- Restores progress using SaveSystem (nodeId, episodePath, stats)
 
-Additional features:
-- Supports episode end / summary screen nodes
+* Automatically saves progression after node transitions
+* Restores episode state, dialogue position, and statistics from save data
+
+Architecture role:
+DialogueController acts as the central integration layer connecting
+JSON narrative data, gameplay systems, UI presentation, scene logic,
+and player progression management within the Unity environment.
 */
 
 public class DialogueController : MonoBehaviour
@@ -284,17 +286,47 @@ public class DialogueController : MonoBehaviour
     string NormalizeEmotion(string em) => string.IsNullOrEmpty(em) ? "Calm" : em;
 
     void HideLeft() { if (LeftCharacter != null) LeftCharacter.SetActive(false); }
-    void ShowLeft(string characterName, string emotion)
+    void ShowLeft(string portraitKey, string emotion)
     {
-        if (LeftCharacter != null) LeftCharacter.SetActive(true);
-        LeftPortrait?.Show(characterName, NormalizeEmotion(emotion));
+        if (LeftCharacter != null)
+            LeftCharacter.SetActive(true);
+
+        if (LeftPortrait == null)
+        {
+            Debug.LogError("[DialogueController] LeftPortrait is NULL. Assign it in Inspector.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(portraitKey))
+        {
+            Debug.LogError("[DialogueController] Left portraitKey is NULL or empty.");
+            HideLeft();
+            return;
+        }
+
+        LeftPortrait.Show(portraitKey, NormalizeEmotion(emotion));
     }
 
     void HideRight() { if (RightCharacter != null) RightCharacter.SetActive(false); }
-    void ShowRight(string characterName, string emotion)
+    void ShowRight(string portraitKey, string emotion)
     {
-        if (RightCharacter != null) RightCharacter.SetActive(true);
-        RightPortrait?.Show(characterName, NormalizeEmotion(emotion));
+        if (RightCharacter != null)
+            RightCharacter.SetActive(true);
+
+        if (RightPortrait == null)
+        {
+            Debug.LogError("[DialogueController] RightPortrait is NULL. Assign it in Inspector.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(portraitKey))
+        {
+            Debug.LogError("[DialogueController] Right portraitKey is NULL or empty.");
+            HideRight();
+            return;
+        }
+
+        RightPortrait.Show(portraitKey, NormalizeEmotion(emotion));
     }
 
     void HideAllCharacters() { HideLeft(); HideRight(); }
@@ -847,7 +879,6 @@ public class DialogueController : MonoBehaviour
             Debug.Log("[DialogueController] Note already unlocked: " + noteId);
         }
     }
-
 
     private void ApplyNodeAudio(DialogueNode node)
     {

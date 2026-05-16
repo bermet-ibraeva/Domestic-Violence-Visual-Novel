@@ -17,7 +17,19 @@ public class NamePlateAutoWidth : MonoBehaviour
 
     public void SetName(string name)
     {
-        nameText.text = name;
+        if (nameText == null)
+        {
+            Debug.LogError("[NamePlate] nameText is NULL");
+            return;
+        }
+
+        if (rect == null)
+        {
+            Debug.LogError("[NamePlate] rect is NULL");
+            return;
+        }
+
+        nameText.text = name ?? "";
         nameText.ForceMeshUpdate();
 
         float width = nameText.preferredWidth + padding;
