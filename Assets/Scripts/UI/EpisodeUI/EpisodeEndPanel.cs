@@ -23,6 +23,8 @@ public class EpisodeEndPanel : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button continueButton;
     [SerializeField] private TMP_Text continueButtonText;
+    [SerializeField] private Button backToMenuButton;
+    [SerializeField] private TMP_Text backToMenuButtonText; 
 
     [Header("Colors")]
     [SerializeField] private Color totalValueColor = new Color32(58, 52, 68, 255);
@@ -110,6 +112,7 @@ public class EpisodeEndPanel : MonoBehaviour
         );
 
         SetupContinueButton(nextEpisodePath);
+        SetupBackToMenuButton();
 
         Canvas.ForceUpdateCanvases();
 
@@ -207,6 +210,28 @@ public class EpisodeEndPanel : MonoBehaviour
 
         textField.text =
             FormatStatText(label, totalValue, deltaValue);
+    }
+
+    private void SetupBackToMenuButton()
+    {
+        if (backToMenuButton == null)
+            return;
+
+        backToMenuButton.onClick.RemoveAllListeners();
+
+        backToMenuButton.onClick.AddListener(() =>
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        });
+
+        if (backToMenuButtonText != null)
+        {
+            backToMenuButtonText.text =
+                LocalizationManager.Instance.GetText(
+                    "Episode",
+                    "back_to_menu"
+                );
+        }
     }
 
     private string FormatStatText(
