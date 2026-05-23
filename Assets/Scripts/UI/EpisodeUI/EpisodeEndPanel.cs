@@ -231,6 +231,7 @@ public class EpisodeEndPanel : MonoBehaviour
                     "Episode",
                     "back_to_menu"
                 );
+                
         }
     }
 

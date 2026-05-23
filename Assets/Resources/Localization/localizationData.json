@@ -1186,6 +1186,158 @@
           "en": "Back to Menu",
           "ky": "Менюга кайтуу"
         }
+      },
+      {
+        "key": "episode_2_title",
+        "value": {
+          "ru": "Соседняя дверь",
+          "en": "The Door Next Door",
+          "ky": "Коңшу эшик"
+        }
+      },
+      { 
+        "key": "scene_e02_s01_title", 
+        "value": { 
+          "ru": "Соседний дом",
+          "en": "The Neighboring House", 
+          "ky": "Коңшу үй" 
+        } 
+      },
+      {
+        "key": "scene_e02_s02_title",
+        "value": {
+          "ru": "Бессонная Ночь",
+          "en": "Sleepless Night",
+          "ky": "Уйкусуз Түн"
+        }
+      },
+      {
+        "key": "e02_s01_start",
+        "value": {
+          "ru": "Вечер. Айназ идёт домой. В воздухе холод, где-то лает собака.",
+          "en": "Evening. Ainaz walks home. The air is cold, and somewhere a dog is barking.",
+          "ky": "Кеч. Айназ үйүнө бара жатат. Аба суук, алыстан ит үргөнү угулат."
+        }
+      },
+      {
+        "key": "e02_s01_narration_1",
+        "value": {
+          "ru": "Она останавливается у знакомого дома. Изнутри слышится крик.",
+          "en": "She stops near a familiar house. A scream can be heard from inside.",
+          "ky": "Ал тааныш үйдүн жанында токтойт. Үйдүн ичинен кыйкырык угулат."
+        }
+      },
+      {
+        "key": "e02_s01_thought_1",
+        "value": {
+          "ru": "Это… из дома Гульданы?",
+          "en": "Is that… coming from Guldana’s house?",
+          "ky": "Бул… Гүлдананын үйүнөн чыгып жатабы?"
+        }
+      },
+      {
+        "key": "e02_s01_choice_setup",
+        "value": {
+          "ru": "Айназ замирает, не зная, как поступить.",
+          "en": "Ainaz freezes, unsure what to do.",
+          "ky": "Айназ эмне кыларын билбей токтоп калат."
+        }
+      },
+      {
+        "key": "e02_s01_choice_leave",
+        "value": {
+          "ru": "Уйти домой",
+          "en": "Go home",
+          "ky": "Үйгө кетүү"
+        }
+      },
+      {
+        "key": "e02_s01_choice_call",
+        "value": {
+          "ru": "Позвонить Гульдане",
+          "en": "Call Guldana",
+          "ky": "Гүлданага чалуу"
+        }
+      },
+      {
+        "key": "e02_s01_choice1",
+        "value": {
+          "ru": "Айназ отворачивается и быстро уходит домой, стараясь не думать о том, что услышала.",
+          "en": "Ainaz turns away and quickly walks home, trying not to think about what she heard.",
+          "ky": "Айназ бурулуп, укканын ойлобогонго аракет кылып, тез үйүнө кетет."
+        }
+      },
+      {
+        "key": "e02_s01_choice2",
+        "value": {
+          "ru": "Айназ достаёт телефон и набирает номер.",
+          "en": "Ainaz takes out her phone and dials the number.",
+          "ky": "Айназ телефонун чыгарып, номерди терет."
+        }
+      },
+      {
+        "key": "e02_toast_intervention_risk",
+        "value": {
+          "ru": "Иногда вмешательство может быть рискованным",
+          "en": "Sometimes intervening can be risky",
+          "ky": "Кээде кийлигишүү кооптуу болушу мүмкүн"
+        }
+      },
+      {
+        "key": "e02_s01_call_1",
+        "value": {
+          "ru": "Гудки идут долго… ответа нет.",
+          "en": "The phone keeps ringing… no answer.",
+          "ky": "Телефон көпкө чейин шыңгырайт… жооп жок."
+        }
+      },
+      {
+        "key": "e02_s02_start",
+        "value": {
+          "ru": "Ночь. Айназ лежит в кровати и не может уснуть.",
+          "en": "Night. Ainaz lies in bed, unable to sleep.",
+          "ky": "Түн. Айназ төшөктө жатат, бирок уктай албайт."
+        }
+      },
+      {
+        "key": "e02_s02_thought_1",
+        "value": {
+          "ru": "Мне это не показалось…",
+          "en": "I didn’t imagine it…",
+          "ky": "Бул мага элестеп кеткен жок…"
+        }
+      },
+      {
+        "key": "e02_s02_thought_2",
+        "value": {
+          "ru": "Но что я должна сделать?",
+          "en": "But what am I supposed to do?",
+          "ky": "Бирок мен эмне кылышым керек?"
+        }
+      },
+      {
+        "key": "e02_s02_end_text",
+        "value": {
+          "ru": "Ответа нет. Но чувство тревоги остаётся.",
+          "en": "There is no answer. But the feeling of anxiety remains.",
+          "ky": "Жооп жок. Бирок тынчсыздануу сезими кала берет."
+        }
+      },
+      {
+        "key": "e02_episode_end_title",
+        "value": {
+          "ru": "Эпизод завершён",
+          "en": "Episode Complete",
+          "ky": "Эпизод аяктады"
+        }
+      },
+      {
+        "key": "e02_episode_end_message",
+        "value": {
+          "ru": "Иногда самые сложные решения — это те, которые мы откладываем.",
+          "en": "Sometimes the hardest decisions are the ones we postpone.",
+          "ky": "Кээде эң оор чечимдер — биз кийинкиге калтырган чечимдер."
+        }
       }
     ]
   },

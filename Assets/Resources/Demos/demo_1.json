@@ -285,6 +285,7 @@
         },    
         {
           "nodeId": "E01_S02_choice1_start",
+          "bgFx": "drift_left",
           "characterId": "Narrator",
           "textKey": "E01_S02_choice1_start",
           "nextNode": "E01_S02_choice1_narration_1"

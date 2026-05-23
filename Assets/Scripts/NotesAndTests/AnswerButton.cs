@@ -109,8 +109,9 @@ public class AnswerButton : MonoBehaviour
             return;
 
         text.text = LocalizationManager.Instance.GetText("Tests", data.textKey);
-    }
 
+        GetComponent<SimpleButtonResize>()?.RefreshSize();
+    }
 
     // ================= INTERACTION =================
     private void OnClick()
